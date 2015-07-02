@@ -1,0 +1,2 @@
+class SystematicName < Name
+end

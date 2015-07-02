@@ -1,0 +1,46 @@
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Fatty Acids</h1>
+<% end %>
+
+<% content_for :item_bar do %>
+    <%= link_to 'New Fatty acid', new_fatty_acid_path, class: 'button'%>
+    <%= form_tag fatty_acids_path, method: :get do %>
+      <div style="float:right;padding-left:1em"><%= submit_tag "Go", class: "button"%></div>
+      <div style="float:right">Search: <%= text_field_tag :query, params[:query] %></div>
+    <% end %>
+<% end %>
+  <div class="pagination">
+    <span style="float:left"><%= paginate @fatty_acids %></span>
+    <span style="float:right;margin-right:2em"><%= page_entries_info @fatty_acids %> Matching Results</span>
+  </div>
+
+<div class='table'>
+  <table class='listing'>
+    <thead>
+      <tr>
+          <th>Delta notation</th>
+          <th>Cas number</th>
+          <th>Sofa mol</th>
+          <th>Systematic Name(s)</th>
+          <th>Trivial Name(s)</th>
+          <th>Options</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @fatty_acids.each do |fatty_acid| %>
+        <tr>
+            <td><%= fatty_acid.delta_notation %></td>
+            <td><%= fatty_acid.cas_number %></td>
+            <td><%= fatty_acid.sofa_mol_id %></td>
+            <td><%= fatty_acid.systematic_names.map(&:name).join("<br/>").html_safe %></td>
+            <td><%= fatty_acid.trivial_names.map(&:name).join("<br/>").html_safe %></td>
+            <td>
+            <%= link_to 'Show', fatty_acid %> |
+            <%= link_to 'Edit', edit_fatty_acid_path(fatty_acid) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

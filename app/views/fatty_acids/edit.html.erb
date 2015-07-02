@@ -1,0 +1,9 @@
+<% content_for :top_bar do %>
+  <h1 class="pagetitle">Editing Fatty Acid</h1>
+<% end %>
+
+<% content_for :item_bar do %>
+  <%= link_to 'Back', fatty_acids_path, class: 'button' %>
+<% end %>
+
+<%= render 'form' %>

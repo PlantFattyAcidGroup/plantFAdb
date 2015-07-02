@@ -1,0 +1,38 @@
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Systematic Names</h1>
+<% end %>
+
+<% content_for :item_bar do %>
+    <%= link_to 'New Systematic name', new_systematic_name_path, class: 'button'%>
+    <%= form_tag systematic_names_path, method: :get do %>
+      <div style="float:right;padding-left:1em"><%= submit_tag "Go", class: "button"%></div>
+      <div style="float:right">Search: <%= text_field_tag :query, params[:query] %></div>
+    <% end %>
+<% end %>
+  <div class="pagination">
+    <span style="float:left"><%= paginate @systematic_names %></span>
+    <span style="float:right;margin-right:2em"><%= page_entries_info @systematic_names %> Matching Results</span>
+  </div>
+
+<div class='table'>
+  <table class='listing'>
+    <thead>
+      <tr>
+          <th>Name</th>
+          <th>Options</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @systematic_names.each do |systematic_name| %>
+        <tr>
+            <td><%= systematic_name.name %></td>
+            <td>
+            <%= link_to 'Show', systematic_name %> |
+            <%= link_to 'Edit', edit_systematic_name_path(systematic_name) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

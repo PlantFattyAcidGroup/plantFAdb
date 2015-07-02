@@ -1,0 +1,2 @@
+class TrivialName < Name
+end

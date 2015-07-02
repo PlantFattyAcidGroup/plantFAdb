@@ -1,0 +1,2 @@
+class Parameter < Measure
+end

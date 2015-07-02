@@ -1,0 +1,27 @@
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Name: <%= @name.id %></h1>
+<% end %>
+
+<% content_for :item_bar do %>
+	<%= link_to 'Back', names_path, class: 'button' %>
+  <%= link_to 'Edit', edit_name_path(@name), class: 'button' %>
+<% end %>
+
+<p>
+  <strong>Type:</strong>
+  <%= @name.type %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @name.name %>
+</p>
+
+<p>
+  <strong>Measure:</strong>
+  <%= @name.measure %>
+</p>
+
+
+
+

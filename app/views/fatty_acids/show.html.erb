@@ -1,0 +1,33 @@
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Fatty Acid: <%= @fatty_acid.id %></h1>
+<% end %>
+
+<% content_for :item_bar do %>
+	<%= link_to 'Back', fatty_acids_path, class: 'button' %>
+  <%= link_to 'Edit', edit_fatty_acid_path(@fatty_acid), class: 'button' %>
+<% end %>
+
+<p>
+  <strong>Type:</strong>
+  <%= @fatty_acid.type %>
+</p>
+
+<p>
+  <strong>Delta notation:</strong>
+  <%= @fatty_acid.delta_notation %>
+</p>
+
+<p>
+  <strong>Cas number:</strong>
+  <%= @fatty_acid.cas_number %>
+</p>
+
+<p>
+  <strong>Sofa mol:</strong>
+  <%= @fatty_acid.sofa_mol_id %>
+</p>
+
+<hr/>
+<%= render partial: "measures/results", locals: {results: @fatty_acid.results} %>
+
+

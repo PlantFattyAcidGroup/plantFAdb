@@ -1,0 +1,23 @@
+<h2 class='smalltitle'>Results</h2>
+<table class="listing-solid-grey">
+  <thead>
+    <!-- <th>Delta Notation / Name</th> -->
+    <th>Plant</th>
+    <th>Publication</th>
+    <th>Remarks</th>
+    <th style='width:10%'>Value</th>
+    <th style='width:10%'>Unit</th>
+  </thead>
+  <tbody>
+    <% results.includes(publication: :plant).order('plants.family asc, publications.authors asc').each do |result| %>
+    <tr>
+      <!-- <td><%= result.measure.delta_notation %></td> -->
+      <td><%= result.publication.plant.display_name %></td>
+      <td><%= link_to result.publication.display_name, result.publication %></td>
+      <td><%= result.publication.remarks %></td>
+      <td><%= result.value %></td>
+      <td><%= result.unit %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

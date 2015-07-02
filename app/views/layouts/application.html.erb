@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PhyloFAdb</title>
+	<%= stylesheet_link_tag 'application', media: 'all', data: {turbolinks_track: false} %>
+  <%= yield :head %>
+  <%= javascript_include_tag 'application' %>
+	<%= favicon_link_tag %>
+  <%= csrf_meta_tags %>
+</head>
+
+<% body_onload = (yield :body_onload) %>
+<body onload="<%= body_onload || "" %>">
+  <%= yield :body %>
+	<div id="header-bkg"></div>
+	<div id="main">	
+		<div id="logo" style="font-size:150%">
+      PhyloFAdb
+		</div>		
+		<div class="logo-right">
+			<% if user_signed_in? %>
+			  <b><%= current_user.email %></b> | <%= link_to "Log Out", destroy_user_session_url, method: :delete %>
+			<% else %>
+			  <b><%= link_to "Sign In",new_user_session_path %></b>
+			<% end %>
+		</div>
+		<div style="clear:both"></div>
+		<div id="header">
+			<%= application_top_navbar_items %>
+		</div>		
+		<div id="middle">
+			<% # the sidebar is only rendered if it has data %>
+			<%# sidebar_data = yield :sidebar %>
+			<% if content_for?(:sidebar) %>
+  			<div id="left-column">
+  				<%= yield :sidebar %>
+  				<%= yield :left_column %>
+  			</div>
+			<% end %>
+			<% # expand the div width if sidebar is not present %>
+			<div id="center-column" style="<%= content_for?(:sidebar) ? '' : "background:none;width:96%;margin-left:1%;margin-top:-10px;" %>">
+				<div style="position:absolute;z-index:1000;right:5%;top:10%;">
+					<% flash.each do |name, msg| %>
+					<div id="<%= name %>_flash_msg" style="cursor:pointer" onclick="$('#<%= name %>_flash_msg').hide();">
+						<%= content_tag :div, msg.html_safe, id: "flash_#{name}" if msg.is_a?(String) %>
+					</div>
+					<% end %>
+				</div>
+        <% if content_for?(:top_bar) || content_for?(:breadcrumbs) %>
+          <span class="top-bar">
+					  <%= yield :top_bar %>
+					  <div class="breadcrumbs" style="float:left"><%= yield :breadcrumbs %></div>
+				  </span>
+				<% end %>
+				<% if content_for?(:item_bar) %>
+				  <div class="item-bar" style='position:relative'>
+					  <%= yield :item_bar %>
+					  <div style="clear:both"></div>
+				  </div>
+				<% end %>
+				<%= yield  %> 
+			</div>
+		</div>
+		<div id="footer">
+		  <%= yield :footer %>
+			<div class="footer-links">
+			</div>
+			<div class="footer-copyright">			
+				<div style="padding-top:10px;color:rgb(75,75,75)">Copyright © 2015 Michigan State University Board of Trustees</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,2 @@
+class Sterol < Measure
+end

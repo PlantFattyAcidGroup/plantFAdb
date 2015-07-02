@@ -1,0 +1,2 @@
+class Triacylglycerol < Measure
+end

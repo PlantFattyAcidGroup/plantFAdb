@@ -1,0 +1,70 @@
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Publication: <%= @publication.id %></h1>
+<% end %>
+
+<% content_for :item_bar do %>
+	<%= link_to 'Back', publications_path, class: 'button' %>
+  <%= link_to 'Edit', edit_publication_path(@publication), class: 'button' %>
+<% end %>
+
+<p>
+  <strong>Year:</strong>
+  <%= @publication.year %>
+</p>
+
+<p>
+  <strong>Authors:</strong>
+  <%= @publication.authors %>
+</p>
+
+<p>
+  <strong>Journal:</strong>
+  <%= @publication.journal %>
+</p>
+
+<p>
+  <strong>Volume:</strong>
+  <%= @publication.volume %>
+</p>
+
+<p>
+  <strong>Page:</strong>
+  <%= @publication.page %>
+</p>
+
+<p>
+  <strong>Remarks:</strong>
+  <%= @publication.remarks %>
+</p>
+
+<p>
+  <strong>Plant:</strong>
+  <%= @publication.plant.display_name %>
+</p>
+
+<hr/>
+<h2 class='smalltitle'>Results</h2>
+<table class="listing-solid-grey">
+  <thead>
+    <th>Type</th>
+    <th>Delta Notation / Name</th>
+    <th>Value</th>
+    <th>Unit</th>
+  </thead>
+  <tbody>
+    <% @publication.results.order("measure_id").each do |result| %>
+    <tr>
+      <td><%= result.measure.type %></td>
+      <td><%= result.measure.delta_notation %></td>
+      <td><%= result.value %></td>
+      <td><%= result.unit %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
+
+
+
