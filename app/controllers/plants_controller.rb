@@ -7,6 +7,7 @@ class PlantsController < ApplicationController
     .joins("left outer join (select count(p.id) pub_count, l.id plant_id from publications p left outer join plants l on p.plant_id = l.id group by l.id) pub on pub.plant_id = plants.id ")
     .joins("left outer join (select count(r.id) result_count, l.id plant_id from publications p left outer join plants l on p.plant_id = l.id left outer join results r on r.publication_id = p.id group by l.id) res on res.plant_id = plants.id ")
     .page(params[:page])
+    .select("plants.*, pub.pub_count, res.result_count")
     if(params[:query])
       q = params[:query].upcase
       @plants = @plants.where('
@@ -14,6 +15,24 @@ class PlantsController < ApplicationController
         OR upper(family) LIKE ?',
         "%#{q}%", "%#{q}%"
       )
+    end
+    respond_to do |format|
+      # Base html query
+      format.html{ @plants = @plants.page params[:page]}
+      # CSV download
+      format.csv{
+        render_csv do |out|
+          out << CSV.generate_line(["Family","Name","Publication Count","Result Count"])
+          @plants.find_each(batch_size: 500) do |item|
+            out << CSV.generate_line([
+              item.family,
+              item.name,
+              item.pub_count,
+              item.result_count
+            ])
+          end
+        end
+      }
     end
   end
 

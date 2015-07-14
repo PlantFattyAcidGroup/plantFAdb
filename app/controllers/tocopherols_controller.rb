@@ -6,7 +6,6 @@ class TocopherolsController < ApplicationController
     @tocopherols = Tocopherol.order(sort_column + ' ' + sort_direction)
     .includes([:trivial_names,:systematic_names])
     .references([:trivial_names,:systematic_names])
-    .page params[:page]
     if(params[:query])
       q = params[:query].upcase
       @tocopherols = @tocopherols.where('
@@ -14,6 +13,22 @@ class TocopherolsController < ApplicationController
         OR upper(sofa_mol_id) LIKE ?',
         "%#{q}%","%#{q}%","%#{q}%", "%#{q}%"
       )
+    end
+    respond_to do |format|
+      # Base html query
+      format.html{ @tocopherols = @tocopherols.page params[:page]}
+      # CSV download
+      format.csv{
+        render_csv do |out|
+          out << CSV.generate_line(["Name", "Sofa mol ID"])
+          @tocopherols.find_each(batch_size: 500) do |item|
+            out << CSV.generate_line([
+              item.delta_notation,
+              item.sofa_mol_id,
+            ])
+          end
+        end
+      }
     end
   end
 

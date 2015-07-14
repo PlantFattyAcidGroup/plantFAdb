@@ -32,6 +32,7 @@ gem 'kaminari'
 gem 'nokogiri'
 gem 'progress_bar'
 gem 'better_errors'
+gem 'puma'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

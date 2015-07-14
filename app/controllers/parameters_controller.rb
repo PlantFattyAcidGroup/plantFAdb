@@ -4,14 +4,29 @@ class ParametersController < ApplicationController
   # GET /parameters
   def index
     @parameters = Parameter.order(sort_column + ' ' + sort_direction)
-    .page params[:page]
     if(params[:query])
       q = params[:query].upcase
       @parameters = @parameters.where('
-        OR upper(delta_notation) LIKE ?
+        upper(delta_notation) LIKE ?
         OR upper(sofa_mol_id) LIKE ?',
-        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%"
+        "%#{q}%","%#{q}%"
       )
+    end
+    respond_to do |format|
+      # Base html query
+      format.html{ @parameters = @parameters.page params[:page]}
+      # CSV download
+      format.csv{
+        render_csv do |out|
+          out << CSV.generate_line(["Name", "Sofa mol ID"])
+          @parameters.find_each(batch_size: 500) do |item|
+            out << CSV.generate_line([
+              item.delta_notation,
+              item.sofa_mol_id,
+            ])
+          end
+        end
+      }
     end
   end
 

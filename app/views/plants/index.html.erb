@@ -4,6 +4,7 @@
 
 <% content_for :item_bar do %>
     <%= link_to 'New Plant', new_plant_path, class: 'button'%>
+    <%= link_to 'Download', params.merge(format: 'csv'), class: 'button'%>
     <%= form_tag plants_path, method: :get do %>
       <div style="float:right;padding-left:1em"><%= submit_tag "Go", class: "button"%></div>
       <div style="float:right">Search: <%= text_field_tag :query, params[:query] %></div>
@@ -31,8 +32,8 @@
         <tr>
             <td><%= plant.family %></td>
             <td><%= plant.name %></td>
-            <td><%= link_to plant.publications.count, publications_path(plant_id: plant.id) %></td>
-            <td><%= link_to plant.results.count, results_path(plant_id: plant.id) %></td>
+            <td><%= link_to plant.pub_count, publications_path(plant_id: plant.id) %></td>
+            <td><%= link_to plant.result_count, results_path(plant_id: plant.id) %></td>
             <td>
             
             <%#= link_to 'Show', plant %>

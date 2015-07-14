@@ -6,7 +6,6 @@ class TriacylglycerolsController < ApplicationController
     @triacylglycerols = Triacylglycerol.order(sort_column + ' ' + sort_direction)
     .includes([:trivial_names,:systematic_names])
     .references([:trivial_names,:systematic_names])
-    .page params[:page]
     if(params[:query])
       q = params[:query].upcase
       @triacylglycerols = @triacylglycerols.where('
@@ -16,6 +15,22 @@ class TriacylglycerolsController < ApplicationController
         OR upper(sofa_mol_id) LIKE ?',
         "%#{q}%","%#{q}%","%#{q}%", "%#{q}%"
       )
+    end
+    respond_to do |format|
+      # Base html query
+      format.html{ @triacylglycerols = @triacylglycerols.page params[:page]}
+      # CSV download
+      format.csv{
+        render_csv do |out|
+          out << CSV.generate_line(["Name", "Sofa mol ID"])
+          @triacylglycerols.find_each(batch_size: 500) do |item|
+            out << CSV.generate_line([
+              item.delta_notation,
+              item.sofa_mol_id,
+            ])
+          end
+        end
+      }
     end
   end
 

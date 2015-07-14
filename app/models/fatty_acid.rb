@@ -1,2 +1,2 @@
-class FattyAcid < Measure
+class FattyAcid < Measure  
 end

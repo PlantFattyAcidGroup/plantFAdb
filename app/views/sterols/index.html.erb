@@ -4,6 +4,7 @@
 
 <% content_for :item_bar do %>
     <%= link_to 'New Sterol', new_sterol_path, class: 'button'%>
+    <%= link_to 'Download', params.merge(format: 'csv'), class: 'button'%>
     <%= form_tag sterols_path, method: :get do %>
       <div style="float:right;padding-left:1em"><%= submit_tag "Go", class: "button"%></div>
       <div style="float:right">Search: <%= text_field_tag :query, params[:query] %></div>

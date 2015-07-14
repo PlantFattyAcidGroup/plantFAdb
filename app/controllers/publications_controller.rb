@@ -22,6 +22,28 @@ class PublicationsController < ApplicationController
     if params[:plant_id]
       @publications = @publications.where('plant_id = ?',params[:plant_id])
     end
+    respond_to do |format|
+      # Base html query
+      format.html{ @publications = @publications.page params[:page]}
+      # CSV download
+      format.csv{
+        render_csv do |out|
+          out << CSV.generate_line(["Plant","Year","Authors","Journal","Volume","Page","Remarks","Result Count"])
+          @publications.find_each(batch_size: 500) do |item|
+            out << CSV.generate_line([
+              item.plant.display_name,
+              item.year,
+              item.authors,
+              item.journal,
+              item.volume,
+              item.page,
+              item.remarks,
+              item.results.count
+            ])
+          end
+        end
+      }
+    end
   end
 
   # GET /publications/1

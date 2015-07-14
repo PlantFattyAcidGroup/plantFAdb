@@ -4,6 +4,7 @@
 
 <% content_for :item_bar do %>
     <%= link_to 'New Fatty acid', new_fatty_acid_path, class: 'button'%>
+    <%= link_to 'Download', params.merge(format: 'csv'), class: 'button'%>
     <%= form_tag fatty_acids_path, method: :get do %>
       <div style="float:right;padding-left:1em"><%= submit_tag "Go", class: "button"%></div>
       <div style="float:right">Search: <%= text_field_tag :query, params[:query] %></div>
@@ -23,6 +24,7 @@
           <th><%= sortable 'sofa_mol_id', 'Sofa mol #' %></th>
           <th><%= sortable 'SYSTEMATIC_NAMES_MEASURES.name', 'Systematic Name(s)' %></th>
           <th><%= sortable 'Names.name', 'Trivial Name(s)' %></th>
+          <th><%= sortable 'result_count', "Results" %></th>
           <th>Options</th>
       </tr>
     </thead>
@@ -35,6 +37,7 @@
             <td><%= fatty_acid.sofa_mol_id %></td>
             <td><%= fatty_acid.systematic_names.map(&:name).join("<br/>").html_safe %></td>
             <td><%= fatty_acid.trivial_names.map(&:name).join("<br/>").html_safe %></td>
+            <td><%= fatty_acid.result_count %></td>
             <td>
             <%= link_to 'Show', fatty_acid %> |
             <%= link_to 'Edit', edit_fatty_acid_path(fatty_acid) %>

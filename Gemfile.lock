@@ -97,6 +97,8 @@ GEM
     progress_bar (1.0.3)
       highline (~> 1.6.1)
       options (~> 2.3.0)
+    puma (2.11.3)
+      rack (>= 1.1, < 2.0)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -177,6 +179,7 @@ DEPENDENCIES
   kaminari
   nokogiri
   progress_bar
+  puma
   rails (= 4.2.3)
   ruby-oci8
   sass-rails (~> 5.0)

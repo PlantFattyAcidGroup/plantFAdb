@@ -6,7 +6,6 @@ class ResultsController < ApplicationController
     @results = Result.order(sort_column + ' ' + sort_direction)
     .includes(:measure, publication: [:plant])
     .references(:measure, publication: [:plant])
-    .page params[:page]
     if params[:query]
       q = params[:query].upcase
       @results = @results.where('
@@ -28,6 +27,25 @@ class ResultsController < ApplicationController
     end
     if params[:publication_id]
       @results = @results.where(publication_id: params[:publication_id])
+    end
+    respond_to do |format|
+      # Base html query
+      format.html{ @results = @results.page params[:page]}
+      # CSV download
+      format.csv{
+        render_csv do |out|
+          out << CSV.generate_line(["Measure", "Notation", "Publication", "Value", "Unit"])
+          @results.find_each(batch_size: 500) do |item|
+            out << CSV.generate_line([
+              item.measure.type,
+              item.measure.delta_notation,
+              item.publication.display_name,
+              item.value,
+              item.unit
+            ])
+          end
+        end
+      }
     end
   end
 

@@ -3,20 +3,42 @@ class FattyAcidsController < ApplicationController
 
   # GET /fatty_acids
   def index
-    @fatty_acids = FattyAcid.includes([:trivial_names,:systematic_names])
-    .references([:trivial_names,:systematic_names])
-    .order(sort_column + ' ' + sort_direction)
-    .page params[:page]
+    @fatty_acids = FattyAcid.order(sort_column + ' ' + sort_direction + ' Nulls last')
+    .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id group by m.id) res on res.measure_id = measures.id ")
+    .joins("left outer join names systematic_names_measures on systematic_names_measures.measure_id = measures.id AND systematic_names_measures.type = 'SystematicName'")
+    .joins("left outer join names on names.measure_id = measures.id AND names.type = 'TrivialName'")
+    .select("measures.*, res.result_count")
     if(params[:query])
       q = params[:query].upcase
       @fatty_acids = @fatty_acids.where('
         upper(names.name) like ?
         OR upper(SYSTEMATIC_NAMES_MEASURES.name) like ?
+        OR result_count like ?
         OR upper(delta_notation) LIKE ?
         OR upper(cas_number) LIKE ?
         OR upper(sofa_mol_id) LIKE ?',
-        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%"
+        "%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%"
       )
+    end
+    respond_to do |format|
+      # Base html query
+      format.html{ @fatty_acids = @fatty_acids.page params[:page]}
+      # CSV download
+      format.csv{
+        render_csv do |out|
+          out << CSV.generate_line(["Delta notation", "Cas number", "Sofa mol ID", "Systematic Names(s)", "Trivial Name(s)","Result Count"])
+          @fatty_acids.find_each(batch_size: 500) do |item|
+            out << CSV.generate_line([
+              item.delta_notation,
+              item.cas_number,
+              item.sofa_mol_id,
+              item.systematic_names.map(&:name).join("; "),
+              item.trivial_names.map(&:name).join("; "),
+              item.result_count
+            ])
+          end
+        end
+      }
     end
   end
 
