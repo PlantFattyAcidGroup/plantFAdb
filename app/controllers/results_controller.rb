@@ -3,13 +3,16 @@ class ResultsController < ApplicationController
 
   # GET /results
   def index
-    @results = Result.includes(:measure, publication: [:plant]).references(:measure, publication: [:plant])
-    .order("authors desc, measures.type asc")
+    @results = Result.order(sort_column + ' ' + sort_direction)
+    .includes(:measure, publication: [:plant])
+    .references(:measure, publication: [:plant])
     .page params[:page]
     if params[:query]
-      q = params[:query]
+      q = params[:query].upcase
       @results = @results.where('
         upper(value) LIKE ?
+        OR upper(measures.type) LIKE ?
+        OR upper(measures.delta_notation) LIKE ?
         OR upper(unit) LIKE ?
         OR upper(year) LIKE ?
         OR upper(authors) LIKE ?
@@ -17,11 +20,14 @@ class ResultsController < ApplicationController
         OR upper(volume) LIKE ?
         OR upper(page) LIKE ?
         OR upper(remarks) LIKE ?',
-        "%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
+        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
       )
     end
     if params[:plant_id]
       @results = @results.where('plant_id = ?',params[:plant_id])
+    end
+    if params[:publication_id]
+      @results = @results.where(publication_id: params[:publication_id])
     end
   end
 

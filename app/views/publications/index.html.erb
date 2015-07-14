@@ -11,38 +11,41 @@
 <% end %>
   <div class="pagination">
     <span style="float:left"><%= paginate @publications %></span>
-    <span style="float:right;margin-right:2em"><%= page_entries_info @publications %> Matching Results</span>
+    <span style="float:right;margin-right:2em"><%= page_entries_info @publications %></span>
   </div>
 
 <div class='table'>
   <table class='listing'>
     <thead>
       <tr>
-          <th>Year</th>
-          <th>Authors</th>
-          <th>Journal</th>
-          <th>Volume</th>
-          <th>Page</th>
-          <th>Remarks</th>
-          <th>Plant</th>
-          <th>Options</th>
+        <th style="width:20%"><%= sortable "plant.family", "Plant" %></th>
+        <th style="width:5%"><%= sortable "year" %></th>
+        <th style="width:10%"><%= sortable "authors" %></th>
+        <th style="width:10%"><%= sortable "journal" %></th>
+        <th style="width:10%"><%= sortable "volume" %></th>
+        <th style="width:5%"><%= sortable "page" %></th>
+        <th style="width:25%"><%= sortable "remarks" %></th>
+        <th style="width:5%"><%= sortable "result_count", "Results" %></th>
+        <th style="width:10%">Options</th>
       </tr>
     </thead>
 
     <tbody>
       <% @publications.each do |publication| %>
         <tr>
-            <td><%= publication.year %></td>
-            <td><%= publication.authors %></td>
-            <td><%= publication.journal %></td>
-            <td><%= publication.volume %></td>
-            <td><%= publication.page %></td>
-            <td><%= publication.remarks %></td>
-            <td><%= publication.plant.display_name %></td>
-            <td style="white-space:nowrap">
-              <%= link_to 'Show Results', publication %> |
-              <%= link_to 'Edit', edit_publication_path(publication) %>
-            </td>
+          <td><%= publication.plant.display_name %></td>
+          <td><%= publication.year %></td>
+          <td><%= publication.authors %></td>
+          <td><%= publication.journal %></td>
+          <td><%= publication.volume %></td>
+          <td><%= publication.page %></td>
+          <td><%= publication.remarks %></td>
+          
+          <td><%= link_to publication.results.count, results_path(publication_id: publication.id) %></td>
+          <td style="white-space:nowrap">
+            <%= link_to 'Show Results', publication %> |
+            <%= link_to 'Edit', edit_publication_path(publication) %>
+          </td>
         </tr>
       <% end %>
     </tbody>

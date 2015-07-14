@@ -23,4 +23,11 @@ module ApplicationHelper
       #((current_user && current_user.is_admin?) ? content_tag(:li, link_to("Admin", admin_root_path, class: ('active' if params[:controller]=~/^admin/))) : '')
     end
   end
+  # table sort helper
+  def sortable(column, title = nil)  
+    title ||= column.titleize  
+    css_class = (column == sort_column) ? "sortable #{sort_direction}" : "sortable unsorted"  
+    direction = (column == sort_column && sort_direction == "asc") ? "desc" : "asc"
+    link_to title, params.merge({sort: column, direction: direction}), {:class => css_class}  
+  end
 end

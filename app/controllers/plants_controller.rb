@@ -3,7 +3,10 @@ class PlantsController < ApplicationController
 
   # GET /plants
   def index
-    @plants = Plant.all.page params[:page]
+    @plants = Plant.order(sort_column + ' ' + sort_direction)
+    .joins("left outer join (select count(p.id) pub_count, l.id plant_id from publications p left outer join plants l on p.plant_id = l.id group by l.id) pub on pub.plant_id = plants.id ")
+    .joins("left outer join (select count(r.id) result_count, l.id plant_id from publications p left outer join plants l on p.plant_id = l.id left outer join results r on r.publication_id = p.id group by l.id) res on res.plant_id = plants.id ")
+    .page(params[:page])
     if(params[:query])
       q = params[:query].upcase
       @plants = @plants.where('

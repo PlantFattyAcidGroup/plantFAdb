@@ -18,10 +18,9 @@
   <table class='listing'>
     <thead>
       <tr>
-          <th>Delta notation</th>
-          <th>Sofa mol</th>
-          <th>Systematic Name</th>
-          <th>Trivial Name</th>
+          <th><%= sortable "delta_notation","Name" %></th>
+          <th><%= sortable "sofa_mol_id" %></th>
+          <th><%= sortable "SYSTEMATIC_NAMES_MEASURES.name", "Systematic Name" %></th>
           <th>Options</th>
       </tr>
     </thead>
@@ -32,7 +31,6 @@
             <td><%= sterol.delta_notation %></td>
             <td><%= sterol.sofa_mol_id %></td>
             <td><%= sterol.systematic_names.map(&:name).join("<br/>").html_safe %></td>
-            <td><%= sterol.trivial_names.map(&:name).join("<br/>").html_safe %></td>
             <td>
             <%= link_to 'Show', sterol %> |
             <%= link_to 'Edit', edit_sterol_path(sterol) %>

@@ -5,6 +5,7 @@ class FattyAcidsController < ApplicationController
   def index
     @fatty_acids = FattyAcid.includes([:trivial_names,:systematic_names])
     .references([:trivial_names,:systematic_names])
+    .order(sort_column + ' ' + sort_direction)
     .page params[:page]
     if(params[:query])
       q = params[:query].upcase
@@ -21,6 +22,10 @@ class FattyAcidsController < ApplicationController
 
   # GET /fatty_acids/1
   def show
+    @results = @fatty_acid.results.includes(publication: :plant)
+    .order(sort_column + ' ' + sort_direction)
+    .page(params[:page])
+    .joins("left outer join (select count(pub_results.id) result_count, this_result.id result_id from publications p left outer join results this_result on p.id = this_result.publication_id left outer join results pub_results on pub_results.publication_id = p.id group by this_result.id) res on res.result_id = results.id ")  
   end
 
   # GET /fatty_acids/new

@@ -11,17 +11,17 @@
 <% end %>
   <div class="pagination">
     <span style="float:left"><%= paginate @plants %></span>
-    <span style="float:right;margin-right:2em"><%= page_entries_info @plants %> Matching Results</span>
+    <span style="float:right;margin-right:2em"><%= page_entries_info @plants %></span>
   </div>
 
 <div class='table'>
   <table class='listing'>
     <thead>
       <tr>
-        <th>Family</th>
-        <th>Name</th>
-        <th>Publications</th>
-        <th>Results</th>
+        <th><%= sortable('Family') %></th>
+        <th><%= sortable('Name') %></th>
+        <th><%= sortable('pub_count','Publications') %></th>
+        <th><%= sortable('result_count','Results') %></th>
         <th>Options</th>
       </tr>
     </thead>
@@ -29,8 +29,8 @@
     <tbody>
       <% @plants.each do |plant| %>
         <tr>
-            <td><%= plant.name %></td>
             <td><%= plant.family %></td>
+            <td><%= plant.name %></td>
             <td><%= link_to plant.publications.count, publications_path(plant_id: plant.id) %></td>
             <td><%= link_to plant.results.count, results_path(plant_id: plant.id) %></td>
             <td>

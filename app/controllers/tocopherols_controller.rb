@@ -3,14 +3,13 @@ class TocopherolsController < ApplicationController
 
   # GET /tocopherols
   def index
-    @tocopherols = Tocopherol.includes([:trivial_names,:systematic_names])
+    @tocopherols = Tocopherol.order(sort_column + ' ' + sort_direction)
+    .includes([:trivial_names,:systematic_names])
     .references([:trivial_names,:systematic_names])
     .page params[:page]
     if(params[:query])
       q = params[:query].upcase
       @tocopherols = @tocopherols.where('
-        upper(names.name) like ?
-        OR upper(SYSTEMATIC_NAMES_MEASURES.name) like ?
         OR upper(delta_notation) LIKE ?
         OR upper(sofa_mol_id) LIKE ?',
         "%#{q}%","%#{q}%","%#{q}%", "%#{q}%"
@@ -20,6 +19,10 @@ class TocopherolsController < ApplicationController
 
   # GET /tocopherols/1
   def show
+    @results = @tocopherol.results.includes(publication: :plant)
+    .order(sort_column + ' ' + sort_direction)
+    .page(params[:page])
+    .joins("left outer join (select count(pub_results.id) result_count, this_result.id result_id from publications p left outer join results this_result on p.id = this_result.publication_id left outer join results pub_results on pub_results.publication_id = p.id group by this_result.id) res on res.result_id = results.id ")
   end
 
   # GET /tocopherols/new

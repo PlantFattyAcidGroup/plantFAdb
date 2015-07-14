@@ -18,10 +18,8 @@
   <table class='listing'>
     <thead>
       <tr>
-          <th>Delta notation</th>
-          <th>Sofa mol</th>
-          <th>Systematic Name(s)</th>
-          <th>Trivial Name(s)</th>
+          <th><%= sortable "delta_notation", "Name" %></th>
+          <th><%= sortable "sofa_mol_id" %></th>
           <th>Options</th>
       </tr>
     </thead>
@@ -31,8 +29,6 @@
         <tr>
             <td><%= tocopherol.delta_notation %></td>
             <td><%= tocopherol.sofa_mol_id %></td>
-            <td><%= tocopherol.systematic_names.map(&:name).join("<br/>").html_safe %></td>
-            <td><%= tocopherol.trivial_names.map(&:name).join("<br/>").html_safe %></td>
             <td>
             <%= link_to 'Show', tocopherol %> |
             <%= link_to 'Edit', edit_tocopherol_path(tocopherol) %>
