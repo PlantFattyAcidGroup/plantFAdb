@@ -8,10 +8,17 @@ class FattyAcidsController < ApplicationController
     .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id group by m.id) res on res.measure_id = measures.id ")
     .joins("left outer join names systematic_names_measures on systematic_names_measures.measure_id = measures.id AND systematic_names_measures.type = 'SystematicName'")
     .joins("left outer join names on names.measure_id = measures.id AND names.type = 'TrivialName'")
-    .joins("left outer join results r on r.measure_id = measures.id")
-    .joins("left outer join publications p on p.id = r.publication_id")
-    .select("#{cols}, res.result_count")
-    .group("#{cols}, res.result_count")
+    .joins("left outer join (
+        select count(p.id) published_count, m.id measure_id
+        from measures m
+        left outer join results r on m.id = r.measure_id
+        left outer join publications p  on r.publication_id = p.id 
+        where (p.authors is null or upper(p.authors) not like 'UNPUBLISHED%')
+        and (p.remarks is null or upper(p.remarks) not like 'PRIVATE%')
+        group by m.id
+      ) pub on pub.measure_id = measures.id")
+    .select("#{cols}, res.result_count, pub.published_count")
+    .group("#{cols}, res.result_count, pub.published_count")
     .where("res.result_count is not null")
     #.where("cas_number is null")
     if(params[:query])
@@ -28,10 +35,15 @@ class FattyAcidsController < ApplicationController
     end
     case params[:published]
     when 'true'
-      @fatty_acids = @fatty_acids.where("p.authors not like 'unpublished%' ")
-      .where("upper(p.remarks) not like 'PRIVATE%'")
+      @fatty_acids = @fatty_acids.where("pub.published_count is not null")
     when 'false'
-      @fatty_acids = @fatty_acids.where("p.authors like 'unpublished%' or upper(p.remarks) like 'PRIVATE%'")
+      @fatty_acids = @fatty_acids.where("pub.published_count is null")
+    end
+    case params[:has_cas]
+    when 'true'
+      @fatty_acids = @fatty_acids.where("cas_number is not null")
+    when 'false'
+      @fatty_acids = @fatty_acids.where("cas_number is null")
     end
     respond_to do |format|
       # Base html query

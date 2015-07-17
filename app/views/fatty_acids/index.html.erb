@@ -11,6 +11,9 @@
       <div style="float:right;padding-right:1em">
         Published: <%= select_tag :published, options_for_select(['true','false'], params[:published]), include_blank: "No filter" %>
       </div>
+      <div style="float:right;padding-right:1em">
+        Has Cas?: <%= select_tag :has_cas, options_for_select(['true','false'], params[:has_cas]), include_blank: "No filter" %>
+      </div>
     <% end %>
 <% end %>
   <div class="pagination">
@@ -40,7 +43,7 @@
             <td><%= fatty_acid.sofa_mol_id %></td>
             <td><%= fatty_acid.systematic_names.map(&:name).join("<br/>").html_safe %></td>
             <td><%= fatty_acid.trivial_names.map(&:name).join("<br/>").html_safe %></td>
-            <td><%= fatty_acid.result_count %></td>
+            <td><%= fatty_acid.published_count %>: <%= fatty_acid.result_count %></td>
             <td>
             <%= link_to 'Show', fatty_acid %> |
             <%= link_to 'Edit', edit_fatty_acid_path(fatty_acid) %>
