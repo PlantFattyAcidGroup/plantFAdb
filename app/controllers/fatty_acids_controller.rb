@@ -8,8 +8,10 @@ class FattyAcidsController < ApplicationController
     .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id group by m.id) res on res.measure_id = measures.id ")
     .joins("left outer join names systematic_names_measures on systematic_names_measures.measure_id = measures.id AND systematic_names_measures.type = 'SystematicName'")
     .joins("left outer join names on names.measure_id = measures.id AND names.type = 'TrivialName'")
+    .joins("left outer join results r on r.measure_id = measures.id")
     .select("#{cols}, res.result_count")
     .group("#{cols}, res.result_count")
+    .where("res.result_count is not null")
     if(params[:query])
       q = params[:query].upcase
       @fatty_acids = @fatty_acids.where('
@@ -26,9 +28,6 @@ class FattyAcidsController < ApplicationController
       # Base html query
       format.html{
         @fatty_acids = Kaminari.paginate_array(@fatty_acids.to_a).page(params[:page])
-        # logger.info { "\n\nFAtty Acids!!\n\n" }
-        # logger.info { "#{@fatty_acids.all.length}" }
-        # logger.info { "\n\n\n hahahahahh" }
       }
       # CSV download
       format.csv{
