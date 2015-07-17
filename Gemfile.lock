@@ -94,6 +94,10 @@ GEM
       mini_portile (~> 0.6.0)
     options (2.3.2)
     orm_adapter (0.5.0)
+    paper_trail (4.0.0.rc1)
+      activerecord (>= 3.0, < 6.0)
+      activesupport (>= 3.0, < 6.0)
+      request_store (~> 1.1.0)
     progress_bar (1.0.3)
       highline (~> 1.6.1)
       options (~> 2.3.0)
@@ -129,6 +133,7 @@ GEM
     rake (10.4.2)
     rdoc (4.2.0)
       json (~> 1.4)
+    request_store (1.1.0)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
     ruby-oci8 (2.1.8)
@@ -178,6 +183,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   nokogiri
+  paper_trail (~> 4.0.0.rc)
   progress_bar
   puma
   rails (= 4.2.3)
