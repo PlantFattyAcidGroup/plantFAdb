@@ -8,6 +8,9 @@
     <%= form_tag fatty_acids_path, method: :get do %>
       <div style="float:right;padding-left:1em"><%= submit_tag "Go", class: "button"%></div>
       <div style="float:right">Search: <%= text_field_tag :query, params[:query] %></div>
+      <div style="float:right;padding-right:1em">
+        Published: <%= select_tag :published, options_for_select(['true','false'], params[:published]), include_blank: "No filter" %>
+      </div>
     <% end %>
 <% end %>
   <div class="pagination">

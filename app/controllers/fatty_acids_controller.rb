@@ -9,9 +9,11 @@ class FattyAcidsController < ApplicationController
     .joins("left outer join names systematic_names_measures on systematic_names_measures.measure_id = measures.id AND systematic_names_measures.type = 'SystematicName'")
     .joins("left outer join names on names.measure_id = measures.id AND names.type = 'TrivialName'")
     .joins("left outer join results r on r.measure_id = measures.id")
+    .joins("left outer join publications p on p.id = r.publication_id")
     .select("#{cols}, res.result_count")
     .group("#{cols}, res.result_count")
     .where("res.result_count is not null")
+    #.where("cas_number is null")
     if(params[:query])
       q = params[:query].upcase
       @fatty_acids = @fatty_acids.where('
@@ -23,6 +25,13 @@ class FattyAcidsController < ApplicationController
         OR upper(sofa_mol_id) LIKE ?',
         "%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%"
       )
+    end
+    case params[:published]
+    when 'true'
+      @fatty_acids = @fatty_acids.where("p.authors not like 'unpublished%' ")
+      .where("upper(p.remarks) not like 'PRIVATE%'")
+    when 'false'
+      @fatty_acids = @fatty_acids.where("p.authors like 'unpublished%' or upper(p.remarks) like 'PRIVATE%'")
     end
     respond_to do |format|
       # Base html query
