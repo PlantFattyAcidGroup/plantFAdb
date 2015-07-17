@@ -19,14 +19,14 @@
   <table class='listing'>
     <thead>
       <tr>
-        <th style="width:20%"><%= sortable "plant.family", "Plant" %></th>
+        <th style="width:15%"><%= sortable "plant.family", "Plant" %></th>
         <th style="width:5%"><%= sortable "year" %></th>
-        <th style="width:10%"><%= sortable "authors" %></th>
-        <th style="width:10%"><%= sortable "journal" %></th>
-        <th style="width:10%"><%= sortable "volume" %></th>
+        <th style="width:15%"><%= sortable "authors" %></th>
+        <th style="width:15%"><%= sortable "journal" %></th>
+        <th style="width:5%"><%= sortable "volume" %></th>
         <th style="width:5%"><%= sortable "page" %></th>
         <th style="width:25%"><%= sortable "remarks" %></th>
-        <th style="width:5%"><%= sortable "result_count", "Results" %></th>
+        <th style="width:5%;white-space:nowrap"><%= sortable "result_count", "Data points" %></th>
         <th style="width:10%">Options</th>
       </tr>
     </thead>
@@ -44,7 +44,7 @@
           
           <td><%= link_to publication.results.count, results_path(publication_id: publication.id) %></td>
           <td style="white-space:nowrap">
-            <%= link_to 'Show Results', publication %> |
+            <%= link_to 'Show', publication %> |
             <%= link_to 'Edit', edit_publication_path(publication) %>
           </td>
         </tr>
