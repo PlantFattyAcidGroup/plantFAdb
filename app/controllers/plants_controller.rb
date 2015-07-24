@@ -12,8 +12,10 @@ class PlantsController < ApplicationController
       q = params[:query].upcase
       @plants = @plants.where('
         upper(name) LIKE ?
-        OR upper(family) LIKE ?',
-        "%#{q}%", "%#{q}%"
+        OR upper(family) LIKE ?
+        OR upper(tnrs_family) LIKE ?
+        OR upper(tnrs_name) LIKE ?',
+        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
       )
     end
     respond_to do |format|

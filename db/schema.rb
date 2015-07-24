@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150630205402) do
+ActiveRecord::Schema.define(version: 20150717134033) do
 
   create_table "measures", force: :cascade do |t|
     t.string   "type"
@@ -20,6 +20,9 @@ ActiveRecord::Schema.define(version: 20150630205402) do
     t.string   "sofa_mol_id"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.string   "lipidmap_id"
+    t.string   "pubchem_id"
+    t.string   "chebi_id"
   end
 
   create_table "names", force: :cascade do |t|
@@ -35,8 +38,10 @@ ActiveRecord::Schema.define(version: 20150630205402) do
   create_table "plants", force: :cascade do |t|
     t.string   "name"
     t.string   "family"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "tnrs_name"
+    t.string   "tnrs_family"
   end
 
   create_table "publications", force: :cascade do |t|
@@ -82,6 +87,18 @@ ActiveRecord::Schema.define(version: 20150630205402) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "i_users_reset_password_token", unique: true
+
+  create_table "versions", force: :cascade do |t|
+    t.string   "item_type",                     null: false
+    t.integer  "item_id",        precision: 38, null: false
+    t.string   "event",                         null: false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.text     "object_changes"
+    t.datetime "created_at"
+  end
+
+  add_index "versions", ["item_type", "item_id"], name: "i_versions_item_type_item_id"
 
   add_foreign_key "names", "measures"
   add_foreign_key "publications", "plants"

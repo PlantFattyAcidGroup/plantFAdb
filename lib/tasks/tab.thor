@@ -16,6 +16,7 @@ class Tab < Thor
         pbar.increment!
         next unless tab =~ /TAB/
         #next unless tab == "TAB_001479.html"
+        next unless tab == "TAB_010669"
         
         file = File.open(folder+'/'+tab,'r')
         doc = Nokogiri::HTML.parse(file.readlines.join("\n"))
@@ -29,10 +30,12 @@ class Tab < Thor
         
         # plant / pub
         rows = tables[0].css('tr')
+        
         # plant
         family = rows[0].css('td')[1].content
         plant_name = rows[1].css('td')[1].content
         plant = Plant.find_or_create_by(family: family.encode('UTF-8', 'UTF-8', :invalid => :replace).gsub("\uFFFD","?"), name: plant_name.encode('UTF-8', 'UTF-8', :invalid => :replace).gsub("\uFFFD","?"))
+        next
         # pub
         authors = rows[2].css('td')[1].content
         journal = rows[3].css('td')[1].content

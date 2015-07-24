@@ -34,6 +34,8 @@ gem 'progress_bar'
 gem 'better_errors'
 gem 'puma'
 gem 'paper_trail', '~> 4.0.0.rc'
+gem 'httparty'
+gem 'parallel'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

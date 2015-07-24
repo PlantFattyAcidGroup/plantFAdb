@@ -19,8 +19,10 @@
   <table class='listing'>
     <thead>
       <tr>
-        <th><%= sortable('Family') %></th>
-        <th><%= sortable('Name') %></th>
+        <th><%= sortable('tnrs_family','TNRS Family') %></th>
+        <th><%= sortable('tnrs_name','TNRS Name') %></th>
+        <th><%= sortable('family','SOFA Family') %></th>
+        <th><%= sortable('name','SOFA Name') %></th>
         <th><%= sortable('pub_count','Publications') %></th>
         <th><%= sortable('result_count','Data points') %></th>
         <th>Options</th>
@@ -30,15 +32,17 @@
     <tbody>
       <% @plants.each do |plant| %>
         <tr>
-            <td><%= plant.family %></td>
-            <td><%= plant.name %></td>
-            <td><%= link_to plant.pub_count, publications_path(plant_id: plant.id) %></td>
-            <td><%= link_to plant.result_count, results_path(plant_id: plant.id) %></td>
-            <td>
-            
-            <%#= link_to 'Show', plant %>
-            <%= link_to 'Edit', edit_plant_path(plant) %>
-          </td>
+          <td><%= plant.tnrs_family %></td>
+          <td><%= plant.tnrs_name %></td>
+          <td><%= plant.family %></td>
+          <td><%= plant.name %></td>
+          <td><%= link_to plant.pub_count, publications_path(plant_id: plant.id) %></td>
+          <td><%= link_to plant.result_count, results_path(plant_id: plant.id) %></td>
+          <td>
+          
+          <%#= link_to 'Show', plant %>
+          <%= link_to 'Edit', edit_plant_path(plant) %>
+        </td>
         </tr>
       <% end %>
     </tbody>
