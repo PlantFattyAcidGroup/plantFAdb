@@ -29,8 +29,9 @@ class FattyAcidsController < ApplicationController
         OR result_count like ?
         OR upper(delta_notation) LIKE ?
         OR upper(cas_number) LIKE ?
-        OR upper(sofa_mol_id) LIKE ?',
-        "%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%"
+        OR upper(sofa_mol_id) LIKE ?
+        OR upper(lipidmap_id) LIKE ?',
+        "%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
       )
     end
     case params[:published]

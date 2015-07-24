@@ -16,6 +16,10 @@
       </div>
     <% end %>
 <% end %>
+  <div class='clear:both'>
+    *CAS Registry Number is a Registered Trademark of the American Chemical Society: <%= link_to "http://www.cas.org/legal/infopolicy#authorized" %>
+  </div>
+  <br/>
   <div class="pagination">
     <span style="float:left"><%= paginate @fatty_acids %></span>
     <span style="float:right;margin-right:2em"><%= page_entries_info @fatty_acids %> Matching Results</span>
@@ -25,26 +29,44 @@
   <table class='listing'>
     <thead>
       <tr>
-          <th><%= sortable 'delta_notation', 'Delta notation' %></th>
-          <th><%= sortable 'cas_number', 'Cas number' %></th>
-          <th><%= sortable 'sofa_mol_id', 'Sofa mol #' %></th>
-          <th><%= 'Systematic Name(s)' %></th>
-          <th><%= 'Trivial Name(s)' %></th>
-          <th><%= sortable 'result_count', "Data points" %></th>
-          <th>Options</th>
+        <th><%= 'Systematic Name(s)' %></th>
+        <th><%= 'Trivial Name(s)' %></th>
+        <th><%= sortable 'delta_notation', 'Delta notation' %></th>
+        <th>External IDs</th>
+        <th>Data Points</th>
+        <th>Options</th>
       </tr>
     </thead>
 
     <tbody>
       <% @fatty_acids.each do |fatty_acid| %>
         <tr>
-            <td><%= fatty_acid.delta_notation %></td>
-            <td><%= fatty_acid.cas_number %></td>
-            <td><%= fatty_acid.sofa_mol_id %></td>
-            <td><%= fatty_acid.systematic_names.map(&:name).join("<br/>").html_safe %></td>
-            <td><%= fatty_acid.trivial_names.map(&:name).join("<br/>").html_safe %></td>
-            <td><%= fatty_acid.published_count %>: <%= fatty_acid.result_count %></td>
-            <td>
+          <td><%= fatty_acid.systematic_names.map(&:name).join("<br/>").html_safe %></td>
+          <td style='width:20%'><%= fatty_acid.trivial_names.map(&:name).join("<br/>").html_safe %></td>
+          <td style='width:15%'><%= fatty_acid.delta_notation %></td>
+          <td style='text-align:left;width:25%'>
+              <span style='display:inline-block;width:8em'>CAS number:</span>
+                <%= link_to fatty_acid.cas_number,
+                "http://www.chem.sis.nlm.nih.gov/chemidplus/rn/#{fatty_acid.cas_number}",
+                :target => '_blank' if fatty_acid.cas_number%><br/>
+              <span style='display:inline-block;width:8em'>Sofa Mol:</span>
+                <%= link_to fatty_acid.sofa_mol_id,
+                "http://sofa.mri.bund.de/Show_ResultTable.php?Mol_ID=#{fatty_acid.sofa_mol_id}&Nota=MOL_ID",
+                :target => '_blank' %><br/>
+              <span style='display:inline-block;width:8em'>Lipid Map:</span>
+                <%= link_to fatty_acid.lipidmap_id, "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=#{fatty_acid.lipidmap_id}",
+                :target => '_blank' if fatty_acid.lipidmap_id %><br/>
+              <span style='display:inline-block;width:8em'>PubChem:</span>
+                <%= link_to fatty_acid.pubchem_id,
+                "https://pubchem.ncbi.nlm.nih.gov/compound/#{fatty_acid.pubchem_id}",
+                :target => '_blank' if fatty_acid.pubchem_id%><br/>
+              <span style='display:inline-block;width:8em'>ChEBI:</span>
+                <%= link_to fatty_acid.chebi_id,
+                "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:#{fatty_acid.chebi_id}",
+                :target => '_blank' if fatty_acid.chebi_id%><br/>
+          </td>
+          <td style='width:5%'><%= fatty_acid.result_count %></td>
+          <td style='width:15%'>
             <%= link_to 'Show', fatty_acid %> |
             <%= link_to 'Edit', edit_fatty_acid_path(fatty_acid) %>
           </td>
@@ -53,3 +75,6 @@
     </tbody>
   </table>
 </div>
+
+<% content_for :footer do -%>
+<% end -%>
