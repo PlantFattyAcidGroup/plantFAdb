@@ -7,6 +7,11 @@ class Id < Thor
     file = File.open(filename,'r')
     # parse and load new names
     puts "loading file data"
+    ambig = 0
+    not_found = 0
+    unknown = 0
+    count = 0
+    good=0
     pbar = ProgressBar.new(`wc -l < "#{filename}"`.to_i)
     ::FattyAcid.transaction do
       PaperTrail.enabled=false
@@ -17,24 +22,28 @@ class Id < Thor
         new_id = data[1]
         sofa_mol_id = data[2]
         fa = FattyAcid.find_by(sofa_mol_id: sofa_mol_id)
-        puts fa.id
+        count+=1
         case new_id
         when "LM not found"
           fa.update_attribute(:lipidmap_id, "not found")
-          puts "not found"
+          not_found+=1
         when "ambiguous"
-          fa.update_attribute(:chebi_id, "ambiguous")
           fa.update_attribute(:lipidmap_id, "ambiguous")
-          fa.update_attribute(:pubchem_id, "ambiguous")
-          fa.update_attribute(:cas_number, "ambiguous")
-          puts "ambiguous"
-        else
+          ambig+=1
+        when /LM/
           fa.update_attribute(:lipidmap_id, new_id)
-          puts new_id
+          good+=1
+        else
+          fa.update_attribute(:lipidmap_id,new_id)
+          unknown +=1
         end
       end
-
     end
+    puts "- #{count} items processed"
+    puts "- #{good} with ID"
+    puts "- #{ambig} indefinite"
+    puts "- #{not_found} not found"
+    puts "- #{unknown} unknown"
   end
   
   desc 'load_pubchem', "Load pubchem IDS"
@@ -46,11 +55,13 @@ class Id < Thor
     pbar = ProgressBar.new(`wc -l < "#{filename}"`.to_i)
     cas_no_pub=0
     with_pub=0
+    count=0
     ::FattyAcid.transaction do
       PaperTrail.enabled=false
       file.each_with_index do |line,idx|
         pbar.increment!
         next if idx == 0
+        count+=1
         data = line.parse_csv
         pubc_id = data[7]
         cas_number = data[6]
@@ -65,8 +76,9 @@ class Id < Thor
         fa.save!
       end
     end
-    puts "NO pub: #{cas_no_pub}"
-    puts "Pub: #{with_pub}"
+    puts "- #{count} items processed"
+    puts "- #{with_pub} matches loaded"
+    puts "- #{cas_no_pub} with cas had no pub"
   end
   
 end

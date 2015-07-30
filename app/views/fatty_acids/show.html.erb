@@ -7,42 +7,64 @@
   <%= link_to 'Edit', edit_fatty_acid_path(@fatty_acid), class: 'button' %>
 <% end %>
 
-<p>
-  <strong>Type:</strong>
-  <%= @fatty_acid.type %>
-</p>
+<div style='float:left;width:200px'>
+  <p>
+    <strong>Type:</strong>
+    <%= @fatty_acid.type %>
+  </p>
 
-<p>
-  <strong>Delta notation:</strong>
-  <%= @fatty_acid.delta_notation %>
-</p>
+  <p>
+    <strong>Delta notation:</strong>
+    <%= @fatty_acid.delta_notation %>
+  </p>
 
-<p>
-  <strong>Cas number:</strong>
-  <%= @fatty_acid.cas_number %>
-</p>
+  <p>
+    <strong>Cas number:</strong>
+    <%= @fatty_acid.cas_number %>
+  </p>
 
-<p>
-  <strong>Sofa mol ID:</strong>
-  <%= @fatty_acid.sofa_mol_id %>
-</p>
+  <p>
+    <strong>Sofa mol ID:</strong>
+    <%= @fatty_acid.sofa_mol_id %>
+  </p>
 
-<p>
-  <strong>Lipidmap ID:</strong>
-  <%= @fatty_acid.lipidmap_id %>
-</p>
+  <p>
+    <strong>Lipidmap ID:</strong>
+    <%= @fatty_acid.lipidmap_id %>
+  </p>
 
-<p>
-  <strong>PubChem ID:</strong>
-  <%= @fatty_acid.pubchem_id %>
-</p>
+  <p>
+    <strong>PubChem ID:</strong>
+    <%= @fatty_acid.pubchem_id %>
+  </p>
 
-<p>
-  <strong>CHEBI ID:</strong>
-  <%= @fatty_acid.chebi_id %>
-</p>
+  <p>
+    <strong>CHEBI ID:</strong>
+    <%= @fatty_acid.chebi_id %>
+  </p>
+</div>
 
-<hr/>
+<div style='float:right;width:600px'>
+  <canvas class="ChemDoodleWebComponent" id="viewACS" width="600" height="200" alt="ChemDoodle Web Component" style="width: 100px; height: 100px; background-color: rgb(255, 255, 255);">This browser does not support HTML5/Canvas.</canvas>
+  <script>
+  $().ready(function(){
+    ChemDoodle.default_bondLength_2D = 35;
+    ChemDoodle.default_bonds_width_2D = 1.5;
+    ChemDoodle.default_bonds_saturationWidth_2D = .3;
+    ChemDoodle.default_atoms_font_size_2D = 14;
+    ChemDoodle.default_atoms_font_families_2D = ['Arial', 'sans-serif'];
+    ChemDoodle.default_atoms_displayTerminalCarbonLabels_2D = true;
+    ChemDoodle.default_atoms_useJMOLColors = true; 
+    var viewACS = new ChemDoodle.ViewerCanvas('viewACS', 600, 200);
+    var MolFile = <%= @fatty_acid.structure.inspect.gsub("\\r",'').html_safe %>;
+    var caffeine = ChemDoodle.readMOL(MolFile);
+    //caffeine.scaleToAverageBondLength(30);
+    viewACS.loadMolecule(caffeine);
+    console.log(viewACS)
+  });
+  </script>
+</div>
+<hr style='clear:both'/>
 <%= render partial: "measures/results", locals: {results: @fatty_acid.results} %>
 
 

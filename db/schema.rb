@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150717134033) do
+ActiveRecord::Schema.define(version: 20150730204826) do
 
   create_table "measures", force: :cascade do |t|
     t.string   "type"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 20150717134033) do
     t.string   "lipidmap_id"
     t.string   "pubchem_id"
     t.string   "chebi_id"
+    t.text     "structure"
+    t.string   "mass"
   end
 
   create_table "names", force: :cascade do |t|
@@ -51,9 +53,10 @@ ActiveRecord::Schema.define(version: 20150717134033) do
     t.string   "volume"
     t.string   "page"
     t.string   "remarks"
-    t.integer  "plant_id",   precision: 38
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "plant_id",    precision: 38
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.string   "sofa_tab_id"
   end
 
   add_index "publications", ["plant_id"], name: "index_publications_on_plant_id"

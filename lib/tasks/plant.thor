@@ -14,6 +14,11 @@ class Plant < Thor
     end
     with_t =0
     no_t = 0
+    accepted=0
+    synonym=0
+    no_opinion=0
+    orth_var=0
+    error=0
     # parse and load new names
     puts "loading file data"
     pbar = ProgressBar.new(`wc -l < "#{filename}"`.to_i)
@@ -27,12 +32,31 @@ class Plant < Thor
         accepted_family=data[7]
         plant_id=data[11]
         plant = db_plants[plant_id]
-        if data[4] == 'Accepted'
-          plant.update_attribute(:tnrs_name, accepted_name)
-          plant.update_attribute(:tnrs_family, accepted_family)
+        case data[4]
+        when 'Accepted'
+          accepted+=1
+        when 'Synonym'
+          synonym+=1
+        when 'Orth. var.'
+          orth_var+=1
+        when 'No opinion'
+          no_opinion+=1
+          next
+        else
+          error +=1
+          next
         end
+        
+        plant.update_attribute(:tnrs_name, accepted_name)
+        plant.update_attribute(:tnrs_family, accepted_family)
       end
     end
+    puts "_ #{accepted+synonym+no_opinion+orth_var+error} total names processed"
+    puts "- #{accepted} Accepted names"
+    puts "- #{synonym} Synonym (used accepted name)"
+    puts "- #{orth_var} Orthographic variants"
+    puts "- #{no_opinion} No opinion"
+    puts "- #{error} No matches found (Illegitimate,Invalid,Rejected,No Matches Found)"
   end
   
   # ONLY USED FOR LOOKUP / COUNTING OF KATENOV UPDATED NAMES

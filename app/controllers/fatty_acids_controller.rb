@@ -3,7 +3,8 @@ class FattyAcidsController < ApplicationController
 
   # GET /fatty_acids
   def index
-    cols = FattyAcid.columns.map{|c| "measures.#{c.name}"}.join(',')
+    cols = FattyAcid.columns.reject{|c| c.name=='structure'}.map{|c| "measures.#{c.name}"}.join(',')
+    
     @fatty_acids = FattyAcid.order(sort_column + ' ' + sort_direction + ' Nulls last')
     .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id group by m.id) res on res.measure_id = measures.id ")
     .joins("left outer join names systematic_names_measures on systematic_names_measures.measure_id = measures.id AND systematic_names_measures.type = 'SystematicName'")
@@ -121,6 +122,6 @@ class FattyAcidsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:fatty_acid).permit(:type, :delta_notation, :cas_number, :sofa_mol_id, :lipidmap_id, :pubchem_id, :chebi_id)
+      params.require(:fatty_acid).permit(:type, :delta_notation, :cas_number, :sofa_mol_id, :lipidmap_id, :pubchem_id, :chebi_id, :structure)
     end
 end
