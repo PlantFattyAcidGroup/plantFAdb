@@ -5,7 +5,7 @@ class FattyAcidsController < ApplicationController
   def index
     cols = FattyAcid.columns.reject{|c| c.name=='structure'}.map{|c| "measures.#{c.name}"}.join(',')
     
-    @fatty_acids = FattyAcid.order(sort_column + ' ' + sort_direction + ' Nulls last')
+    @fatty_acids = FattyAcid.order(sort_column + ' ' + sort_direction + ', id asc')
     .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id group by m.id) res on res.measure_id = measures.id ")
     .joins("left outer join names systematic_names_measures on systematic_names_measures.measure_id = measures.id AND systematic_names_measures.type = 'SystematicName'")
     .joins("left outer join names on names.measure_id = measures.id AND names.type = 'TrivialName'")
@@ -20,7 +20,7 @@ class FattyAcidsController < ApplicationController
       ) pub on pub.measure_id = measures.id")
     .select("#{cols}, res.result_count, pub.published_count")
     .group("#{cols}, res.result_count, pub.published_count")
-    .where("res.result_count is not null")
+    .where("res.result_count is null")
     #.where("cas_number is null")
     if(params[:query])
       q = params[:query].upcase

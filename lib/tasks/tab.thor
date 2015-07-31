@@ -76,13 +76,13 @@ class Tab < Thor
             #Results - tables are 'nested' oddly
             # first table - use xpath for direct children tr's
             rows = tables[3].xpath('./tr')
-            res, needed_create, ambiguous_flag = process_rows rows, pub, new_measures, ambiguous_measures            
-            res_count+=1 if res
+            rcnt, needed_create, ambiguous_flag = process_rows rows, pub, new_measures, ambiguous_measures            
+            res_count+=rcnt
             # additional tables (if any)
             tables[3].css('table').each do |result_table|
               rows = result_table.xpath('./tr')
-              res, needed_create, ambiguous_flag = process_rows rows, pub, new_measures, ambiguous_measures
-              res_count+=1 if res       
+              rcnt, needed_create, ambiguous_flag = process_rows rows, pub, new_measures, ambiguous_measures
+              res_count+=rcnt    
             end
           
             # update count
@@ -115,6 +115,9 @@ class Tab < Thor
   
   def process_rows rows, pub, new_outfile, ambig_outfile
     klass = get_class rows
+    rcnt = 0
+    needed_create = false
+    ambiguous_flag = false
     rows[1..-1].each do |row|
       name, value, unit = row.css('td').map(&:content)
       name = name.encode('UTF-8', 'UTF-8', :invalid => :replace).strip
@@ -140,9 +143,10 @@ class Tab < Thor
           value: value.strip,
           unit: unit.strip,
         )
+        rcnt+=1
       end
-      return res, needed_create, ambiguous_flag
     end
+    return rcnt, needed_create, ambiguous_flag
   end
   
   def get_class rows

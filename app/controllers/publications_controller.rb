@@ -3,10 +3,9 @@ class PublicationsController < ApplicationController
 
   # GET /publications
   def index
-    @publications = Publication.order(sort_column + ' ' + sort_direction)
+    @publications = Publication.order(sort_column + ' ' + sort_direction + ", id asc")
     .includes(:plant)
     .joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join publications p on r.publication_id = p.id group by p.id) pub on pub.pub_id = publications.id ")
-    .page params[:page]
     if(params[:query])
       q = params[:query].upcase
       @publications = @publications.where('

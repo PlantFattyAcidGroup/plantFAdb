@@ -80,16 +80,25 @@ class Pub < Thor
     require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
     file = File.open(filename,'r')
     puts "loading file data"
-    pbar = ProgressBar.new(`wc -l < "#{filename}"`.to_i)
+    #pbar = ProgressBar.new(`wc -l < "#{filename}"`.to_i)
     plants = {}
     pubs = []
+    
+    doc = Nokogiri::HTML.parse(file.readlines.join("\n"))
+    doc.search('br').each do |n|
+      n.replace("\n")
+    end
+    pbar = ProgressBar.new(doc.css('tr').length)
+    
     PaperTrail.enabled = false
     ::Publication.transaction do
-      file.each_with_index do |line,idx|
+      doc.css('tr').each_with_index do |row,idx|
+      #file.each_with_index do |line,idx|
         pbar.increment!
         next if idx == 0
-        next if line[0]==','
-        data = line.parse_csv
+        #next if line[0]==','
+        data = row.css('td').map(&:content)
+        #data = line.parse_csv
           # Get Plant
           species = (data[2]||"").strip.gsub(/\s+/, ' ').humanize.encode('US-ASCII', {:invalid => :replace, :undef => :replace, :replace => '?'})
           family = (data[3]||"").strip.gsub(/\s+/, ' ').humanize.encode('US-ASCII', {:invalid => :replace, :undef => :replace, :replace => '?'})

@@ -16,10 +16,10 @@ Plant based database of fatty acid compounds.
 ---
 
 Loaded SOFA literature listing. Skip authors and journal, will grab from TAB files (better formatting)
-`thor pub:stub lib/data/sofa_lit.csv`
+`thor pub:stub lib/data/literature.html`
 
-- Created 15170 publications
-- Created 8829 unique plants
+- Created 14400 publications
+- Created 8299 unique plants
 
 ---
 
@@ -45,12 +45,13 @@ Loaded SOFA TAB_xxx files. Grab publication by tab_id, update its author/journal
 * convert greek characters to words
 
 - 15601 total files
-- 13628 files loaded without error
-- 44 files loaded with an ambiguous measure (first match chosen)
-- 337 files with data but no matching pub (hidden in SOFA)
+- 11992 files loaded without error
+- 518 files partially loaded - a measure was not found
+- 433 files loaded with an ambiguous measure (first match chosen)
+- 1066 files with data but no matching pub (hidden in SOFA)
 - 1592 files empty
 
-- 19736 new data points loaded
+- 97365 new data points loaded
 
 ---
 
@@ -60,18 +61,18 @@ exported all plant names for TNRS annotation
 
 http://tnrs.iplantcollaborative.org/TNRSapp.html
 email: throwern@msu.edu
-key: c5e86298f7194373a84d5c9df5d2285b
+key: 3aba6da519414c04b0b8f211555b683b
 
 ---
 
 Load TNRS names
 `thor plant:load_tnrs lib/data/tnrs_results.txt`
-_ 8829 total names processed
-- 5689 Accepted names
-- 1870 Synonym (used accepted name)
+_ 8299 total names processed
+- 5428 Accepted names
+- 1695 Synonym (used accepted name)
 - 1 Orthographic variants
-- 956 No opinion
-- 313 No matches found (Illegitimate,Invalid,Rejected,No Matches Found)
+- 893 No opinion
+- 282 No matches found (Illegitimate,Invalid,Rejected,No Matches Found)
 
 ---
 
@@ -94,24 +95,24 @@ Load pubchem IDs based on cas lookup
 ---
 
 Get InchiKEY from CAS rn on Toxnet. Output found ids to `cas_found_inchi.txt`. not found ids to `cas_not_found_tox.txt`
-`thor mol:get_lm`
-- 73 FattyAcids with cas number and data points
-- 47 Found on chemidplus toxnet database
+- 155 FattyAcids with cas number and data points
+- 96 Found on chemidplus toxnet database
   
 Load lipidmaps data based on inchikey (structure, lm_ID, mass, formula, pubchem cid, systematic name, trivial name)
 `thor mol:load_lm_data lib/data/LMSDFDownload6Apr15FinalAll.sdf lib/data/cas_found_inchi.txt`
-- 47 inchi keys supplied
-- 39 LM entries found and FA's updated
-
-> Not in LM: 
-> WLIGEPWCQYIUNZ-QGZVFWFLSA-N :: delta - 12-OH-18:1-delta-9a, pubchem - 5312857 
-> CGTVVCFTVVGYPL-UHFFFAOYSA-N :: delta - 6-OH-6-Me-9=O-28:0, pubchem - 194014 
-> MTWGWIOCIREVRF-KRWDZBQOSA-N :: delta - 17-OH-18:4-delta-9a,11a,13a,15a, pubchem - 4204 
-> BDAGIHXWWSANSR-UHFFFAOYSA-N :: delta - 1:0, pubchem - 284 
-> XMVQWNRDPAAMJB-UHFFFAOYSA-N :: delta - 18:1cy, pubchem - 72853 
-> CUXYLFPMQMFGPL-MRZTUZPCSA-N :: delta - 18:3-delta-9c,11t,13t, pubchem - 93077 
-> SRELFLQJDOTNLJ-HNNXBMFYSA-N :: delta - 16:1cy, pubchem - 164601 
-> WBHHMMIMDMUBKC-XFXZXTDPSA-N :: delta - 12-OH-18:1-delta-9c, pubchem - 643684 
+- 96 inchi keys supplied
+- 86 LM entries found and FA's updated
+Not in LM: 
+CUXYLFPMQMFGPL-MRZTUZPCSA-N :: delta - 18:3-delta-9c,11t,13t, pubchem - 93077 
+WBHHMMIMDMUBKC-XFXZXTDPSA-N :: delta - 12-OH-18:1-delta-9c, pubchem - 643684 
+SRELFLQJDOTNLJ-HNNXBMFYSA-N :: delta - 16:1cy, pubchem - 164601 
+MTWGWIOCIREVRF-KRWDZBQOSA-N :: delta - 17-OH-18:4-delta-9a,11a,13a,15a, pubchem - 4204 
+BDAGIHXWWSANSR-UHFFFAOYSA-N :: delta - 1:0, pubchem - 284 
+XMVQWNRDPAAMJB-UHFFFAOYSA-N :: delta - 18:1cy, pubchem - 72853 
+MUZYOAHCGSIXJH-UHFFFAOYSA-N :: delta - 9,10-cpa-17:0, pubchem - 160786 
+AUBZNAUZNGCKAN-GWKQRERASA-N :: delta - S-9-OH-18:2-delta-10t,12a, pubchem - 20054934 
+WLIGEPWCQYIUNZ-QGZVFWFLSA-N :: delta - 12-OH-18:1-delta-9a, pubchem - 5312857 
+CGTVVCFTVVGYPL-UHFFFAOYSA-N :: delta - 6-OH-6-Me-9=O-28:0, pubchem - 194014 
 
 
 
