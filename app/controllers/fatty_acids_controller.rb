@@ -20,7 +20,6 @@ class FattyAcidsController < ApplicationController
       ) pub on pub.measure_id = measures.id")
     .select("#{cols}, res.result_count, pub.published_count")
     .group("#{cols}, res.result_count, pub.published_count")
-    .where("res.result_count is null")
     #.where("cas_number is null")
     if(params[:query])
       q = params[:query].upcase
@@ -34,6 +33,12 @@ class FattyAcidsController < ApplicationController
         OR upper(lipidmap_id) LIKE ?',
         "%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
       )
+    end
+    case params[:has_data]
+    when 'true'
+      @fatty_acids = @fatty_acids.where("res.result_count is not null")
+    when 'false'
+      @fatty_acids = @fatty_acids.where("res.result_count is null")
     end
     case params[:published]
     when 'true'

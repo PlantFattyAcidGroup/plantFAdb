@@ -1,5 +1,5 @@
 <% content_for :top_bar do %>
-	<h1 class="pagetitle">Fatty Acid: <%= @fatty_acid.id %></h1>
+	<h1 class="pagetitle"><%= @fatty_acid.name || @fatty_acid.delta_notation %></h1>
 <% end %>
 
 <% content_for :item_bar do %>
@@ -8,11 +8,22 @@
 <% end %>
 
 <div style='float:left;width:200px'>
+	
   <p>
-    <strong>Type:</strong>
-    <%= @fatty_acid.type %>
+    <strong>Name:</strong>
+    <%= @fatty_acid.name %>
   </p>
-
+	
+  <p>
+    <strong>Other Names:</strong>
+    <%= @fatty_acid.other_names %>
+  </p>
+	
+  <p>
+    <strong>Formula:</strong>
+    <%= @fatty_acid.formula %>
+  </p>
+	
   <p>
     <strong>Delta notation:</strong>
     <%= @fatty_acid.delta_notation %>

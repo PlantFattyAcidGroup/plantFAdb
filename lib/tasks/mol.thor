@@ -140,12 +140,13 @@ class Mol < Thor
       cas,formula,name,mass,other = line.chomp.split("\t");
       fa = FattyAcid.find_by(cas_number: cas)
       if fa
-        fa.update_attributes(
+        result = fa.update_attributes(
           formula: formula,
           name: name.gsub("\u03B1","-alpha-").gsub("\u0394","-delta-").gsub("\u03B3","-gamma-").gsub("\u03BD","-nu-"),
           mass: mass,
           other_names: other.try(:gsub, "\u03B1","-alpha-").try(:gsub,"\u0394","-delta-").try(:gsub,"\u03B3","-gamma-").try(:gsub,"\u03BD","-nu-")
         )
+        puts "#{cas}::#{result}"
       else
         puts "NOT FOUND"
         puts "#{cas}:: #{formula}, #{name}, #{mass}, #{other}\n\n"

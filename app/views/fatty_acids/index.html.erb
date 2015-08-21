@@ -14,6 +14,9 @@
       <div style="float:right;padding-right:1em">
         Has Cas?: <%= select_tag :has_cas, options_for_select(['true','false'], params[:has_cas]), include_blank: "No filter" %>
       </div>
+      <div style="float:right;padding-right:1em">
+        Has Data?: <%= select_tag :has_data, options_for_select(['true','false'], params[:has_data]||'true'), include_blank: "No filter" %>
+      </div>
     <% end %>
 <% end %>
   <div class='clear:both'>
@@ -30,6 +33,8 @@
     <thead>
       <tr>
         <th><%= 'Systematic Name(s)' %></th>
+				<th><%= sortable 'Name' %></th>
+				<th><%= sortable 'Formula' %></th>
         <th><%= 'Trivial Name(s)' %></th>
         <th><%= sortable 'delta_notation', 'Delta notation' %></th>
         <th>External IDs</th>
@@ -42,6 +47,8 @@
       <% @fatty_acids.each do |fatty_acid| %>
         <tr>
           <td><%= fatty_acid.systematic_names.map(&:name).join("<br/>").html_safe %></td>
+					<td><%= fatty_acid.name %></td>
+					<td><%= fatty_acid.formula %></td>
           <td style='width:20%'><%= fatty_acid.trivial_names.map(&:name).join("<br/>").html_safe %></td>
           <td style='width:15%'><%= fatty_acid.delta_notation %></td>
           <td style='text-align:left;width:25%'>
