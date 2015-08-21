@@ -60,12 +60,18 @@ class FattyAcidsController < ApplicationController
       # CSV download
       format.csv{
         render_csv do |out|
-          out << CSV.generate_line(["Delta notation", "Cas number", "Sofa mol ID", "Systematic Names(s)", "Trivial Name(s)","Result Count"])
+          out << CSV.generate_line(["Delta notation","Name","Other Names","Formula","Mass", "Cas number", "Sofa mol ID", "LipidMaps ID", "PubChem ID","Systematic Names(s)", "Trivial Name(s)","Result Count"])
           @fatty_acids.find_each(batch_size: 500) do |item|
             out << CSV.generate_line([
               item.delta_notation,
+              item.name,
+              item.other_names,
+              item.formula,
+              item.mass,
               item.cas_number,
               item.sofa_mol_id,
+              item.lipidmap_id,
+              item.pubchem_id,
               item.systematic_names.map(&:name).join("; "),
               item.trivial_names.map(&:name).join("; "),
               item.result_count
