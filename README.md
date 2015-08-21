@@ -114,7 +114,36 @@ AUBZNAUZNGCKAN-GWKQRERASA-N :: delta - S-9-OH-18:2-delta-10t,12a, pubchem - 2005
 WLIGEPWCQYIUNZ-QGZVFWFLSA-N :: delta - 12-OH-18:1-delta-9a, pubchem - 5312857 
 CGTVVCFTVVGYPL-UHFFFAOYSA-N :: delta - 6-OH-6-Me-9=O-28:0, pubchem - 194014 
 
+> August 2015
 
+---
+
+Upload cas_numbers_to_sofa_Aug7.txt
+`file = File.open("lib/data/cas_numbers_to_sofa_Aug7.txt",'r')`
+`file.each do |line|; cas,mol = line.chomp.split("\t"); fa = FattyAcid.find_by(sofa_mol_id: mol); cas=cas.delete 8203.chr; fa.update_attribute(:cas_number, cas); end`
+- 63 cas_numbers from sofa_ids
+- Manually added PubChem CID -  5282782	M_435
+- Now 218 FA have a CAS RN
+
+---
+
+Add name, other_names and formula to FA table
+NLS_LANG='AMERICAN_AMERICA.WE8ISO8859P1'
+export NLS_LANG
+
+Upload cas_number_substance_Aug21.txt
+`thor mol:add_cas_data lib/data/cas_number_substance_Aug21.txt`
+
+- 218 entries
+- 214 found in database
+- 4 MISSING CAS numbers!
+
+  17711-08-9:: C18 H30 O2, 8,11,14-Octadecatrienoic acid, 278.43
+  1188395-78-9:: C24 H46 O2, 19-Tetracosenoic acid, 366.62
+  1426159-11-6:: C22 H42 O2, 17-Docosenoic acid, 338.57
+  7329-42-2:: C20 H38 O2, 5-Eicosenoic acid, 310.51
+
+---
 
 ### License
 

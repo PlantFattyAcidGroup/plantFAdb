@@ -11,20 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150730204826) do
+ActiveRecord::Schema.define(version: 20150821160112) do
 
   create_table "measures", force: :cascade do |t|
     t.string   "type"
     t.string   "delta_notation"
     t.string   "cas_number"
     t.string   "sofa_mol_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.string   "lipidmap_id"
     t.string   "pubchem_id"
     t.string   "chebi_id"
     t.text     "structure"
     t.string   "mass"
+    t.string   "name"
+    t.string   "other_names",    limit: 3999
+    t.string   "formula"
   end
 
   create_table "names", force: :cascade do |t|

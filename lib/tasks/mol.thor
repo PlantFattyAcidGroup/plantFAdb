@@ -94,6 +94,65 @@ class Mol < Thor
     puts "- #{good} Found on chemidplus toxnet database"
   end
   
+  desc 'parse_scifinder', "Parse data from scifinder entries"
+  def parse_scifinder file
+    file = File.open(file,'r')
+    data = {}
+    parsed = []
+    after_cas = 0
+    after_weight = false
+    puts "CAS Registry Number\tFormula\tName\tWeight\tOther names"
+    file.each do |line|
+      if after_cas == 1
+        after_cas = 2
+        data[:formula]=line.chomp
+        next
+      elsif after_cas == 2
+        after_cas = 0
+        data[:name]=line.chomp
+        next
+      elsif after_weight
+        after_weight = false
+        data[:weight] = line.chomp
+        next
+      end
+      
+      if cas_match = line.match(/CAS Registry Number:(.*)$/)
+        puts "#{data[:cas]}\t#{data[:formula]}\t#{data[:name]}\t#{data[:weight]}\t#{data[:other_names]}" if data[:cas]
+        data = {}
+        data[:cas] = cas_match[1].strip.chomp
+        after_cas = 1
+      end
+      if line =~ /Molecular Weight/
+        after_weight = true
+      end
+      if name_match = line.match(/Other Names:(.*)$/)
+        data[:other_names] = name_match[1].strip.chomp
+      end
+    end
+  end
+  
+  desc 'add_cas_data', 'add data by cas id'
+  def add_cas_data file
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    file = File.open(file,'r')
+    file.each do |line|
+      cas,formula,name,mass,other = line.chomp.split("\t");
+      fa = FattyAcid.find_by(cas_number: cas)
+      if fa
+        fa.update_attributes(
+          formula: formula,
+          name: name.gsub("\u03B1","-alpha-").gsub("\u0394","-delta-").gsub("\u03B3","-gamma-").gsub("\u03BD","-nu-"),
+          mass: mass,
+          other_names: other.try(:gsub, "\u03B1","-alpha-").try(:gsub,"\u0394","-delta-").try(:gsub,"\u03B3","-gamma-").try(:gsub,"\u03BD","-nu-")
+        )
+      else
+        puts "NOT FOUND"
+        puts "#{cas}:: #{formula}, #{name}, #{mass}, #{other}\n\n"
+      end
+    end
+  end
+    
   desc 'load_lm_data', "Load data from lipidmaps dump file"
   def load_lm_data lm_file, inchi_file
     require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
