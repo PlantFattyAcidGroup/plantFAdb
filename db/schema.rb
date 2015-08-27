@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150821160112) do
+ActiveRecord::Schema.define(version: 20150826191108) do
 
   create_table "measures", force: :cascade do |t|
     t.string   "type"
@@ -41,12 +41,22 @@ ActiveRecord::Schema.define(version: 20150821160112) do
   add_index "names", ["measure_id"], name: "index_names_on_measure_id"
 
   create_table "plants", force: :cascade do |t|
-    t.string   "name"
-    t.string   "family"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string   "sofa_name"
+    t.string   "sofa_family"
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.string   "tnrs_name"
     t.string   "tnrs_family"
+    t.string   "note",          limit: 3999
+    t.string   "tnrs_match"
+    t.string   "name_status"
+    t.string   "family"
+    t.string   "genus"
+    t.string   "species"
+    t.string   "tropicos_url"
+    t.integer  "ott_id",                     precision: 38
+    t.string   "accepted_rank"
+    t.string   "matched_rank"
   end
 
   create_table "publications", force: :cascade do |t|

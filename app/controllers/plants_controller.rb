@@ -11,12 +11,25 @@ class PlantsController < ApplicationController
     if(params[:query])
       q = params[:query].upcase
       @plants = @plants.where('
-        upper(name) LIKE ?
+        upper(sofa_name) LIKE ?
+        OR upper(note) LIKE ?
+        OR upper(sofa_family) LIKE ?
         OR upper(family) LIKE ?
+        OR upper(genus) LIKE ?
+        OR upper(species) LIKE ?
         OR upper(tnrs_family) LIKE ?
         OR upper(tnrs_name) LIKE ?',
-        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
+        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%"
       )
+    end
+    unless params[:status].blank?
+      @plants = @plants.where(name_status: params[:status])
+    end
+    unless params[:accepted_rank].blank?
+      @plants = @plants.where(accepted_rank: params[:accepted_rank])
+    end
+    unless params[:matched_rank].blank?
+      @plants = @plants.where(matched_rank: params[:matched_rank])
     end
     respond_to do |format|
       # Base html query
@@ -65,7 +78,7 @@ class PlantsController < ApplicationController
   # PATCH/PUT /plants/1
   def update
     if @plant.update(resource_params)
-      redirect_to @plant, notice: 'Plant was successfully updated.'
+      redirect_to [:edit,@plant], notice: 'Plant was successfully updated.'
     else
       render :edit
     end
@@ -85,6 +98,6 @@ class PlantsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:plant).permit(:name, :family)
+      params.require(:plant).permit(:tnrs_family, :tnrs_name, :accepted_rank, :name_status, :matched_rank, :family, :genus, :species, :tropicos_url, :note)
     end
 end

@@ -137,44 +137,36 @@ Upload cas_number_substance_Aug21.txt
 - 218 entries
 - 214 found in database
 - 4 'no data' found
-	9-Hydroxy-10,12-octadecadienoic acid
-	9-Hydroxyoctadeca-10,12-dienoic acid	10,12-Octadecadienoic acid, 9-hydroxy-	C18 H32 O3	Dimorphecolic acid:undefined
-	Dimorphecolsaeure:undefiniert	9-OH-18:2-delta-10,12
 	CAS number: 15514-85-9
-	Sofa Mol: M_416
-	PubChem: 1927
-
-	Deca-2c,8c-dien-4,6-diynoic acid
-	2c,8c-Decadiene-4,6-diynoic acid	2,8-Decadiene-4,6-diynoic acid, (Z,Z)- (9CI)	C10 H8 O2	Matricaric acid, Z,Z-
-	Z,Z-Matricariasaeure	10:4-delta-2c,4a,6a,8c
 	CAS number: 13030-78-9
-	Sofa Mol: M_503
-	PubChem: 85609370
-
-	Z,Z-9,14-Octadecadien-12-ynoic acid
-	9c,14c-Octadecadiene-12-ynoic acid
-	9c,14c-Octadecadiene-12-insaeure	9,14-Octadecadien-12-ynoic acid, (9Z,14Z)-	C18 H28 O2	14,15-Dehydrocrepenynic acid
-	14,15-Dehydrocrepeninsaeure	18:3-delta-9c,12a,14c	
 	CAS number: 4154-44-3
-	Sofa Mol: M_104
-	PubChem: 14427323
-
-	9Z,12R,13S-Epoxy-9-octadecenoic acid
-	9Z,12R,13S-Epoxy-9-octadecensaeure
-	12R,13S-Epoxy-9c-octadecenoic acid
-	12R,13S-Epoxy-9c-octadecensaeure	9-Undecenoic acid, 11-[(2S,3R)-3-pentyl-2-oxiranyl]-, (9Z)-	C18 H32 O3	(-)-Vernolic acid
-	(-)-Vernolsaeure	12R,13S-O-18:1-delta-9c
 	CAS number: 503-07-1
-	Sofa Mol: M_180
-	PubChem: 12444772
-	
 - 210 FA annotated
 - 4 MISSING CAS numbers!
-
   17711-08-9:: C18 H30 O2, 8,11,14-Octadecatrienoic acid, 278.43
   1188395-78-9:: C24 H46 O2, 19-Tetracosenoic acid, 366.62
   1426159-11-6:: C22 H42 O2, 17-Docosenoic acid, 338.57
   7329-42-2:: C20 H38 O2, 5-Eicosenoic acid, 310.51
+
+---
+
+Add new TNRS plant names
+`thor plant:load_tnrs_full lib/data/plant_names/TNRS\ plant\ names\ Aug13.txt`
+
+Total Plants: 8299
+- Accepted: 5428
+- Synonym: 1695
+- No opinion: 893
+- Invalid: 48
+- Illegitimate: 127
+- : 100
+- Rejected name: 7
+- Orth. var.: 1
+- Accepted families: 7164
+- Name matched families: 8299
+
+---
+
 
 ---
 

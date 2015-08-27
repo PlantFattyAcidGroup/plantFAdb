@@ -4,6 +4,6 @@ class Plant < ActiveRecord::Base
   has_paper_trail
   
   def display_name
-    "#{family} #{name}"
+    "#{genus} #{species} (#{sofa_family} #{sofa_name})"
   end
 end

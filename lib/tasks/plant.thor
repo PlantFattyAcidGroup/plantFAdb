@@ -2,6 +2,145 @@ class Plant < Thor
   require 'csv'
   ENV['RAILS_ENV'] ||= 'development'
   
+  # THIS no opinion file was resubmitted with only genus/species
+  # check if different family names were found
+  desc 'check_tnrs_no_op', "Check No opinion data from TNRS"
+  def check_tnrs_no_op filename
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    file = File.open(filename,'r')
+    # get database plants
+    STDERR.puts "Loading plants"
+    db_plants = {}
+    ::Plant.find_each do |plant|
+      db_plants[plant.id.to_s]=plant
+    end
+    
+    changed_count = 0
+    family_change = 0
+    note_only=0
+    # parse and load new names
+    STDERR.puts "loading file data"
+    ::Plant.transaction do
+      PaperTrail.enabled=false
+      file.each_with_index do |line,idx|
+        next if idx == 0
+        data = line.parse_csv({ :col_sep => "\t" })
+				
+        selected = data[33]
+        next unless selected =='TRUE'
+        
+        new_attr = {
+          note: data[0],
+          name_status: data[26]||'none',
+          tnrs_family: data[32],
+          tnrs_name: data[27],
+  				accepted_rank: data[29]||'none',
+  				matched_rank: data[5]||'none',
+          tropicos_url: data[8],
+          family: data[13],
+          genus: data[14],
+          species: data[16] 
+        }
+        
+        plant_id = data[37]
+                
+        # check plant
+        plant = db_plants[plant_id]
+        plant.assign_attributes new_attr
+        if plant.changed?
+          changed_count+=1
+          if plant.changed==['note']
+            note_only+=1
+            next
+          end
+          
+          puts "\n"
+          puts "Plant:\thttp://phylofadb.bch.msu.edu/plants/#{plant.id}/edit"
+          puts "Sofa Family/Name\t#{plant.sofa_family}\t#{plant.sofa_name}"
+          puts "Name Submitted:\t#{data[2]}"
+          puts "\tAttribute\tOld\tNew"
+          plant.changes.each do |method,val|
+            old,change = val
+            puts "\t#{method}\t#{old}\t#{change}"
+          end
+          puts "\n"
+        end
+        
+      end
+    end
+    STDERR.puts "Total changed: #{changed_count}"
+    STDERR.puts "- Note only: #{note_only}"
+  end
+
+  desc 'load_tnrs_full', "Load detailed tnrs data"
+  def load_tnrs_full filename
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    file = File.open(filename,'r')
+    # get database plants
+    puts "Loading plants"
+    db_plants = {}
+    ::Plant.find_each do |plant|
+      db_plants[plant.id.to_s]=plant
+    end
+    status_count = {}
+    tnrs_family_c = 0
+    matched_family_c = 0
+    # parse and load new names
+    puts "loading file data"
+    pbar = ProgressBar.new(`wc -l < "#{filename}"`.to_i)
+    ::Plant.transaction do
+      PaperTrail.enabled=false
+      file.each_with_index do |line,idx|
+        pbar.increment!
+        next if idx == 0
+        data = line.parse_csv({ :col_sep => "\t" })
+				
+        selected = data[32]
+        next unless selected =='TRUE'
+        
+        name_status = data[25]
+        # Accepted
+        tnrs_family = data[31]
+        tnrs_name = data[26]
+				accepted_rank = data[28]
+        # Matched
+				matched_rank = data[4]
+        url = data[7]
+        family = data[12]
+        genus = data[13]
+        species = data[15]
+        plant_id = data[36]
+        
+        # update counts
+        status_count[name_status]||=0
+        status_count[name_status]+=1
+        tnrs_family_c +=1 unless tnrs_family.blank?
+        matched_family_c +=1 unless matched_family_c.blank?
+        
+        # update plant
+        plant = db_plants[plant_id]        
+        plant.update_attributes(
+          name_status: name_status||'none',
+          tnrs_family: tnrs_family,
+          tnrs_name: tnrs_name,
+          accepted_rank: accepted_rank||'none',
+          matched_rank: matched_rank||'none',
+          tropicos_url: url,
+          family: family,
+          genus: genus,
+          species: species
+        )
+      end
+    end
+    puts "Total Plants: #{::Plant.count}"
+    status_count.each do |key,val|
+      puts "- #{key}: #{val}"
+    end
+    puts "- Accepted families: #{tnrs_family_c}"
+    puts "- Name matched families: #{matched_family_c}"
+    
+  end
+  
   desc 'load_tnrs', "Load new tropicos names"
   def load_tnrs filename
     require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")

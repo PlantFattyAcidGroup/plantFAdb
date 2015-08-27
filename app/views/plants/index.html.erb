@@ -6,8 +6,32 @@
     <%= link_to 'New Plant', new_plant_path, class: 'button'%>
     <%= link_to 'Download', params.merge(format: 'csv'), class: 'button'%>
     <%= form_tag plants_path, method: :get do %>
+		
       <div style="float:right;padding-left:1em"><%= submit_tag "Go", class: "button"%></div>
       <div style="float:right">Search: <%= text_field_tag :query, params[:query] %></div>
+			
+	    <div style="float:right;padding-right:1em">
+	      Status: <%= select_tag :status,
+					options_for_select(Plant.select("name_status").group(:name_status).count
+					.to_a.sort{|a,b| b[1]<=>a[1]}
+					.collect{|key,cnt| ["#{key} : #{cnt}", key]},
+					params[:status]), include_blank: "No filter" %>
+	    </div>
+	    <div style="float:right;padding-right:1em">
+	      Accepted Rank: <%= select_tag :accepted_rank,
+					options_for_select(Plant.select("accepted_rank").group(:accepted_rank).count
+					.to_a.sort{|a,b| b[1]<=>a[1]}
+					.collect{|key,cnt| ["#{key} : #{cnt}", key]},
+					params[:accepted_rank]), include_blank: "No filter" %>
+	    </div>
+	    <div style="float:right;padding-right:1em">
+	      Matched Rank: <%= select_tag :matched_rank,
+					options_for_select(Plant.select("matched_rank").group(:matched_rank).count
+					.to_a.sort{|a,b| b[1]<=>a[1]}
+					.collect{|key,cnt| ["#{key} : #{cnt}", key]},
+					params[:matched_rank]), include_blank: "No filter" %>
+	    </div>
+			
     <% end %>
 <% end %>
   <div class="pagination">
@@ -19,11 +43,18 @@
   <table class='listing'>
     <thead>
       <tr>
-        <th><%= sortable('tnrs_family','TNRS Family') %></th>
-        <th><%= sortable('tnrs_name','TNRS Name') %></th>
-        <th><%= sortable('family','SOFA Family') %></th>
-        <th><%= sortable('name','SOFA Name') %></th>
-        <th><%= sortable('pub_count','Publications') %></th>
+				<th>URL</th>
+				<th><%= sortable('name_status','Status') %></th>
+        <th><%= sortable('tnrs_family','TNRS Accepted Family') %></th>
+        <th><%= sortable('tnrs_name','TNRS Accepted Name') %></th>
+				<th><%= sortable('accepted_rank','Accepted Rank') %></th>
+        <th><%= sortable('sofa_family','SOFA Family') %></th>
+        <th><%= sortable('sofa_name','SOFA Name') %></th>
+				<th><%= sortable('matched_rank','Matched Rank') %></th>
+        <th><%= sortable('family','Family Matched') %></th>
+        <th><%= sortable('genus','Genus Matched') %></th>
+        <th><%= sortable('species','Species Matched') %></th>
+        <th><%= sortable('pub_count','Pubs') %></th>
         <th><%= sortable('result_count','Data points') %></th>
         <th>Options</th>
       </tr>
@@ -32,10 +63,21 @@
     <tbody>
       <% @plants.each do |plant| %>
         <tr>
+          <td style='padding:.4em'>
+						<% (plant.tropicos_url||"").split(";").each do |link| %>
+							<div style='padding:.2em'><%= link_to truncate(link),link %></div>
+						<% end %>
+					</td>
+					<td><%= plant.name_status %></td>
           <td><%= plant.tnrs_family %></td>
           <td><%= plant.tnrs_name %></td>
-          <td><%= plant.family %></td>
-          <td><%= plant.name %></td>
+          <td><%= plant.accepted_rank %></td>
+          <td><%= plant.sofa_family %></td>
+          <td><%= plant.sofa_name %></td>
+          <td><%= plant.matched_rank %></td>
+					<td><%= plant.family %></td>
+					<td><%= plant.genus %></td>
+					<td><%= plant.species %></td>
           <td><%= link_to plant.pub_count, publications_path(plant_id: plant.id) %></td>
           <td><%= link_to plant.result_count, results_path(plant_id: plant.id) %></td>
           <td>
