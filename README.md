@@ -167,8 +167,20 @@ Total Plants: 8299
 
 ---
 
+Add order from mobot apweb
+`f = File.open("lib/data/taxonomy/family_to_order_clean.txt")`
+`families = {}`
+`f.each do |line|;fam,order = line.split("\t");families[fam]=order.chomp;end`
+`Plant.find_each do |plant|; plant.order_name = families[plant.family]; plant.save; end;nil`
 
 ---
+
+Add custom taxonomy tree
+Data from poster: http://www2.biologie.fu-berlin.de/sysbot/poster/poster1.pdf
+and MOBOT AP tree: http://www.mobot.org/MOBOT/research/APweb/welcome.html
+plus web searches
+
+`rake db:seed:single SEED=db/seed_tree.rb`
 
 ### License
 

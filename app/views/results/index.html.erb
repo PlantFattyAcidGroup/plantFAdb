@@ -3,20 +3,18 @@
 <% end %>
 
 <% content_for :item_bar do %>
-    <%= link_to 'New Result', new_result_path, class: 'button'%>
-    <%= link_to 'Download', params.merge(format: 'csv'), class: 'button'%>
-    <%= form_tag results_path, method: :get do %>
-      <div style="float:right;padding-left:1em"><%= submit_tag "Go", class: "button"%></div>
-      <div style="float:right">Search: <%= text_field_tag :query, params[:query] %></div>
-    <% end %>
+    <%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
 <% end %>
-  <div class="pagination">
-    <span style="float:left"><%= paginate @results %></span>
-    <span style="float:right;margin-right:2em"><%= page_entries_info @results %> Matching Results</span>
-  </div>
 
-<div class='table'>
-  <table class='listing'>
+<%= render 'shared/page_and_search', items: @results  %>
+
+<div class='panel panel-primary table-responsive'>
+	
+	<div class="panel-heading clearfix">
+		<div class='pull-left'><%= page_entries_info @results %></div>
+	</div>
+	
+  <table class='table table-striped'>
     <thead>
       <tr>
         <th><%= sortable "measures.type", "Measure" %></th>
@@ -31,9 +29,9 @@
     <tbody>
       <% @results.each do |result| %>
         <tr>
-          <td><%= result.measure.type %></td>
-          <td><%= result.measure.delta_notation %></td>
-          <td><%= result.publication.display_name %></td>
+          <td><%= result.measure.try :type %></td>
+          <td><%= result.measure.try :delta_notation %></td>
+          <td><%= result.publication.try :display_name %></td>
           <td><%= result.value %></td>
           <td><%= result.unit %></td>         
             <!-- <td>

@@ -115,21 +115,21 @@ class Plant < Thor
         status_count[name_status]||=0
         status_count[name_status]+=1
         tnrs_family_c +=1 unless tnrs_family.blank?
-        matched_family_c +=1 unless matched_family_c.blank?
+        matched_family_c +=1 unless family.blank?
         
         # update plant
         plant = db_plants[plant_id]        
-        plant.update_attributes(
-          name_status: name_status||'none',
-          tnrs_family: tnrs_family,
-          tnrs_name: tnrs_name,
-          accepted_rank: accepted_rank||'none',
-          matched_rank: matched_rank||'none',
-          tropicos_url: url,
-          family: family,
-          genus: genus,
-          species: species
-        )
+        # plant.update_attributes(
+        #   name_status: name_status||'none',
+        #   tnrs_family: tnrs_family,
+        #   tnrs_name: tnrs_name,
+        #   accepted_rank: accepted_rank||'none',
+        #   matched_rank: matched_rank||'none',
+        #   tropicos_url: url,
+        #   family: family,
+        #   genus: genus,
+        #   species: species
+        # )
       end
     end
     puts "Total Plants: #{::Plant.count}"

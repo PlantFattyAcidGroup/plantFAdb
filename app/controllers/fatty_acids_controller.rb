@@ -5,7 +5,7 @@ class FattyAcidsController < ApplicationController
   def index
     cols = FattyAcid.columns.reject{|c| c.name=='structure'}.map{|c| "measures.#{c.name}"}.join(',')
     
-    @fatty_acids = FattyAcid.order(sort_column + ' ' + sort_direction + ', id asc')
+    @fatty_acids = FattyAcid.order(sort_column + ' ' + sort_direction + ', measures.id asc')
     .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id group by m.id) res on res.measure_id = measures.id ")
     .joins("left outer join names systematic_names_measures on systematic_names_measures.measure_id = measures.id AND systematic_names_measures.type = 'SystematicName'")
     .joins("left outer join names on names.measure_id = measures.id AND names.type = 'TrivialName'")
@@ -56,6 +56,8 @@ class FattyAcidsController < ApplicationController
       # Base html query
       format.html{
         @fatty_acids = Kaminari.paginate_array(@fatty_acids.to_a).page(params[:page])
+        #@fatty_acids = @fatty_acids.page(params[:page])
+        
       }
       # CSV download
       format.csv{

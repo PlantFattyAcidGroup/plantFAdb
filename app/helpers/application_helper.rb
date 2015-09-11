@@ -4,30 +4,63 @@ module ApplicationHelper
   def top_navbar_items
     {
       plants: [plants_path,[:plants]],
-      publications: [publications_path,[:publications]],
-      parameters: [parameters_path, [:parameters]],
-      triacylglycerols: [triacylglycerols_path, [:triacylglycerols]],
-      tocopherols: [tocopherols_path, [:tocopherols]],
-      sterols: [sterols_path, [:sterols]],
+      literature: [publications_path,[:publications]],
       fatty_acids: [fatty_acids_path, [:fatty_acids]],
-      all_measured_results: [results_path,[:results]]
     }
   end
   # return top nav bar html
   # set the active class for any items matching the controller name
   def application_top_navbar_items
-    content_tag( :ul, id: "top-navigation") do
+    content_tag( :ul, id: "top-navigation", class: "nav navbar-nav") do
       top_navbar_items.collect{ |k,v|
-        content_tag :li, link_to(k.to_s.titleize,v[0], class: ('active' if v[1].find{|key| params[:controller] =~ /#{key}/}) )
+        content_tag :li, link_to(k.to_s.titleize,v[0]), class: ('active' if v[1].find{|key| params[:controller] =~ /#{key}/} )
       }.join.html_safe + ''
       #((current_user && current_user.is_admin?) ? content_tag(:li, link_to("Admin", admin_root_path, class: ('active' if params[:controller]=~/^admin/))) : '')
     end
   end
+  
   # table sort helper
   def sortable(column, title = nil)  
     title ||= column.titleize  
-    css_class = (column == sort_column) ? "sortable #{sort_direction}" : "sortable unsorted"  
+    icon = ""
+    if column == sort_column
+      if sort_direction=='asc'
+        icon = " <i class='glyphicon glyphicon-triangle-top'/>"
+      else
+        icon = " <i class='glyphicon glyphicon-triangle-bottom'/>"
+      end
+    end
     direction = (column == sort_column && sort_direction == "asc") ? "desc" : "asc"
-    link_to title, params.merge({sort: column, direction: direction}), {:class => css_class}  
+    link_to (title+icon).html_safe, params.merge({sort: column, direction: direction}), style: 'white-space: nowrap'
+  end
+  
+  # github style filters
+  def dropdown_select label, param, array
+    hsh_clear={}
+    hsh_clear[param]=nil
+    html = "<li class='dropdown'>
+			<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
+				#{label} <span class='caret'></span>
+			</a>
+      <ul class='dropdown-menu'>
+        <li>#{link_to 'Clear', params.merge(hsh_clear)}</li>
+				<li role='separator' class='divider'></li>
+    "
+    array.each do |option|
+      hsh={}
+      if option.is_a? Array
+        hsh[param]=option[1].to_s
+        html += "<li>#{link_to ((params[param].to_s==option[1].to_s ? "<span class='glyphicon glyphicon-ok' style='margin-left:-18px'></span> " : '')+option[0]).html_safe, params.merge(hsh)}</li>"
+      else
+        hsh[param]=option
+        html += "<li>#{link_to option, params.merge(hsh) }</li>"
+      end
+    end
+    
+    (html+"</ul></li>").html_safe
+  end
+  # pull right and give right padding
+  def right_dropdown_select label, param, array
+    "<div class='pull-right' style='margin-left:1em'> #{dropdown_select label, param, array} </div>".html_safe
   end
 end

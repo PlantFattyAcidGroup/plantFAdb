@@ -1,35 +1,24 @@
 <% content_for :top_bar do %>
-	<h1 class="pagetitle">Fatty Acids</h1>
+	<h1 class="pagetitle">Fatty Acids</h1>	
 <% end %>
 
 <% content_for :item_bar do %>
-    <%= link_to 'New Fatty acid', new_fatty_acid_path, class: 'button'%>
-    <%= link_to 'Download', params.merge(format: 'csv'), class: 'button'%>
-    <%= form_tag fatty_acids_path, method: :get do %>
-      <div style="float:right;padding-left:1em"><%= submit_tag "Go", class: "button"%></div>
-      <div style="float:right">Search: <%= text_field_tag :query, params[:query] %></div>
-      <div style="float:right;padding-right:1em">
-        Published: <%= select_tag :published, options_for_select(['true','false'], params[:published]), include_blank: "No filter" %>
-      </div>
-      <div style="float:right;padding-right:1em">
-        Has Cas?: <%= select_tag :has_cas, options_for_select(['true','false'], params[:has_cas]), include_blank: "No filter" %>
-      </div>
-      <div style="float:right;padding-right:1em">
-        Has Data?: <%= select_tag :has_data, options_for_select(['true','false'], params[:has_data]||'true'), include_blank: "No filter" %>
-      </div>
-    <% end %>
+	<%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
+  <%#= link_to 'New Fatty acid', new_fatty_acid_path, class: 'btn btn-primary pull-left'%>
 <% end %>
-  <div class='clear:both'>
-    *CAS Registry Number is a Registered Trademark of the American Chemical Society: <%= link_to "http://www.cas.org/legal/infopolicy#authorized" %>
-  </div>
-  <br/>
-  <div class="pagination">
-    <span style="float:left"><%= paginate @fatty_acids %></span>
-    <span style="float:right;margin-right:2em"><%= page_entries_info @fatty_acids %> Matching Results</span>
-  </div>
 
-<div class='table'>
-  <table class='listing'>
+<%= render 'shared/page_and_search', items: @fatty_acids  %>
+
+<div class='panel panel-primary table-responsive'>
+	
+	<div class="panel-heading clearfix">
+		<div class='pull-left'><%= page_entries_info @fatty_acids %></div>
+		<%= right_dropdown_select "data", :has_data, [['Has data points','true'],['No data points','false']] %>
+		<%= right_dropdown_select "registry number", :has_cas, [['Has CAS registry number','true'],['No CAS registry number','false']] %>
+		<%= right_dropdown_select "published", :published, [['Is published','true'],['Not published','false']] %>
+	</div>
+	
+  <table class='table table-striped'>
     <thead>
       <tr>
         <th><%= 'Systematic Name(s)' %></th>

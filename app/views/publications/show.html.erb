@@ -3,8 +3,8 @@
 <% end %>
 
 <% content_for :item_bar do %>
-	<%= link_to 'Back', publications_path, class: 'button' %>
-  <%= link_to 'Edit', edit_publication_path(@publication), class: 'button' %>
+	<%= link_to 'Back', publications_path, class: 'btn btn-primary' %>
+  <%= link_to 'Edit', edit_publication_path(@publication), class: 'btn btn-primary' %>
 <% end %>
 
 <p>
@@ -44,7 +44,7 @@
 
 <hr/>
 <h2 class='smalltitle'>Results</h2>
-<table class="listing-solid-grey">
+<table class="table">
   <thead>
     <th>Type</th>
     <th>Delta Notation / Name</th>

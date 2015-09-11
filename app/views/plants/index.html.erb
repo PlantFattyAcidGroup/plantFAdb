@@ -3,44 +3,25 @@
 <% end %>
 
 <% content_for :item_bar do %>
-    <%= link_to 'New Plant', new_plant_path, class: 'button'%>
-    <%= link_to 'Download', params.merge(format: 'csv'), class: 'button'%>
-    <%= form_tag plants_path, method: :get do %>
-		
-      <div style="float:right;padding-left:1em"><%= submit_tag "Go", class: "button"%></div>
-      <div style="float:right">Search: <%= text_field_tag :query, params[:query] %></div>
-			
-	    <div style="float:right;padding-right:1em">
-	      Status: <%= select_tag :status,
-					options_for_select(Plant.select("name_status").group(:name_status).count
-					.to_a.sort{|a,b| b[1]<=>a[1]}
-					.collect{|key,cnt| ["#{key} : #{cnt}", key]},
-					params[:status]), include_blank: "No filter" %>
-	    </div>
-	    <div style="float:right;padding-right:1em">
-	      Accepted Rank: <%= select_tag :accepted_rank,
-					options_for_select(Plant.select("accepted_rank").group(:accepted_rank).count
-					.to_a.sort{|a,b| b[1]<=>a[1]}
-					.collect{|key,cnt| ["#{key} : #{cnt}", key]},
-					params[:accepted_rank]), include_blank: "No filter" %>
-	    </div>
-	    <div style="float:right;padding-right:1em">
-	      Matched Rank: <%= select_tag :matched_rank,
-					options_for_select(Plant.select("matched_rank").group(:matched_rank).count
-					.to_a.sort{|a,b| b[1]<=>a[1]}
-					.collect{|key,cnt| ["#{key} : #{cnt}", key]},
-					params[:matched_rank]), include_blank: "No filter" %>
-	    </div>
-			
-    <% end %>
+    <%#= link_to 'New Plant', new_plant_path, class: 'btn btn-primary'%>
+    <%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
 <% end %>
-  <div class="pagination">
-    <span style="float:left"><%= paginate @plants %></span>
-    <span style="float:right;margin-right:2em"><%= page_entries_info @plants %></span>
-  </div>
 
-<div class='table'>
-  <table class='listing'>
+<%= render 'shared/page_and_search', items: @plants  %>
+
+<div class='panel panel-primary table-responsive'>
+	
+	<div class="panel-heading clearfix">
+		<div class='pull-left'><%= page_entries_info @plants %></div>
+		<%= right_dropdown_select "status", :name_status, Plant.select("name_status").group(:name_status)
+			.count.to_a.sort{|a,b| b[1]<=>a[1]}.collect{|key,cnt| ["#{key} : #{cnt}", key]} %>
+		<%= right_dropdown_select "accepted rank", :accepted_rank, Plant.select("accepted_rank").group(:accepted_rank)
+			.count.to_a.sort{|a,b| b[1]<=>a[1]}.collect{|key,cnt| ["#{key} : #{cnt}", key]} %>
+		<%= right_dropdown_select "matched rank", :matched_rank, Plant.select("accepted_rank").group(:matched_rank)
+			.count.to_a.sort{|a,b| b[1]<=>a[1]}.collect{|key,cnt| ["#{key} : #{cnt}", key]} %>
+	</div>
+	
+  <table class='table table-striped'>
     <thead>
       <tr>
 				<th>URL</th>
@@ -51,6 +32,7 @@
         <th><%= sortable('sofa_family','SOFA Family') %></th>
         <th><%= sortable('sofa_name','SOFA Name') %></th>
 				<th><%= sortable('matched_rank','Matched Rank') %></th>
+				<th><%= sortable('order_name', 'Order') %></th>
         <th><%= sortable('family','Family Matched') %></th>
         <th><%= sortable('genus','Genus Matched') %></th>
         <th><%= sortable('species','Species Matched') %></th>
@@ -75,6 +57,7 @@
           <td><%= plant.sofa_family %></td>
           <td><%= plant.sofa_name %></td>
           <td><%= plant.matched_rank %></td>
+					<td><%= plant.order_name %></td>
 					<td><%= plant.family %></td>
 					<td><%= plant.genus %></td>
 					<td><%= plant.species %></td>

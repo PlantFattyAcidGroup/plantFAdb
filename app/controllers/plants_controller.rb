@@ -14,12 +14,13 @@ class PlantsController < ApplicationController
         upper(sofa_name) LIKE ?
         OR upper(note) LIKE ?
         OR upper(sofa_family) LIKE ?
+        OR upper(order_name) LIKE ?
         OR upper(family) LIKE ?
         OR upper(genus) LIKE ?
         OR upper(species) LIKE ?
         OR upper(tnrs_family) LIKE ?
         OR upper(tnrs_name) LIKE ?',
-        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%"
+        "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%"
       )
     end
     unless params[:status].blank?

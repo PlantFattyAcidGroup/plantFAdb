@@ -1,0 +1,1298 @@
+Pub ID	TAB	Measure	Name	Value	Unit
+20910	TAB_010003	Tocopherol	Sum of the specified content values: 215 ppm
+-gamma--Tocopherol angegeben als Summe aus -gamma-- und -beta--Tocopherol.
+Gesamttocopherolgehalt: 215 ppm	-	-
+20911	TAB_010004	Tocopherol	Sum of the specified content values: 392 ppm
+-gamma--Tocopherol angegeben als Summe aus -gamma-- und -beta--Tocopherol.
+Gesamttocopherolgehalt: 392 ppm	-	-
+11877	TAB_015113	Sterol	beta-Sitosterol: 31,75
+delta-Sitosterol: 3,41	-	GLC-Area-%
+11877	TAB_015113	Tocopherol	Sum of the specified content values: 393.84 mg/kg	-	-
+23161	TAB_015114	Tocopherol	total: 841 mg/kg	-	-
+23162	TAB_015115	Tocopherol	total: 328 mg/kg	-	-
+23163	TAB_015116	Tocopherol	total: 1765 mg/kg	-	-
+23164	TAB_015117	Tocopherol	total: 1416 mg/kg	-	-
+23165	TAB_015118	Tocopherol	total: 1236 mg/kg	-	-
+23166	TAB_015119	Tocopherol	total: 1519 mg/kg	-	-
+10278	TAB_014054	Tocopherol	Additional peak visible by HPLC-FL between
+gamma-T (1125.3 mg/kg) and gamma-T3 (4.7 mg/kg).	-	-
+23167	TAB_015120	Tocopherol	total: 1729 mg/kg	-	-
+23168	TAB_015121	Tocopherol	total: 1267 mg/kg	-	-
+23169	TAB_015122	Tocopherol	total: 1019 mg/kg	-	-
+23170	TAB_015123	Tocopherol	total: 602 mg/kg	-	-
+23171	TAB_015124	Tocopherol	total: 537 mg/kg	-	-
+23172	TAB_015125	Tocopherol	total: 668 mg/kg	-	-
+23173	TAB_015127	Tocopherol	total: 629 mg/kg	-	-
+23174	TAB_015128	Tocopherol	total: 446 mg/kg	-	-
+23175	TAB_015129	Tocopherol	total: 373 mg/kg	-	-
+23176	TAB_015130	Tocopherol	total: 468 mg/kg	-	-
+23177	TAB_015131	Tocopherol	total: 181 mg/kg	-	-
+23178	TAB_015132	Tocopherol	total: 863 mg/kg	-	-
+23179	TAB_015133	Tocopherol	total: 605 mg/kg	-	-
+23180	TAB_015134	Tocopherol	total: 531 mg/kg	-	-
+23181	TAB_015135	Tocopherol	total: 554 mg/kg	-	-
+23151	TAB_015136	Tocopherol	total: 131 mg/kg	-	-
+23223	TAB_015137	Tocopherol	total: 231 mg/kg	-	-
+23152	TAB_015138	Tocopherol	total: 540 mg/kg	-	-
+23153	TAB_015139	Tocopherol	total: 726 mg/kg	-	-
+23154	TAB_015140	Tocopherol	total: 176 mg/kg	-	-
+23155	TAB_015141	Tocopherol	total: 267 mg/kg	-	-
+23156	TAB_015142	Tocopherol	total: 940 mg/kg	-	-
+23157	TAB_015143	Tocopherol	total: 1184 mg/kg	-	-
+22328	TAB_014230	Sterol	beta-Sitosterol 27.28
+Stigmastanol 0.63
+Sum of the specified fatty acids: 99.99 %	-	GLC-Area-%
+23158	TAB_015144	Tocopherol	total: 483 mg/kg	-	-
+22328	TAB_014230	Triacylglycerol	PLSt 5.123
+Sum of the specified fatty acids: 98.13 %	-	-
+23159	TAB_015145	Tocopherol	total: 729 mg/kg	-	-
+23160	TAB_015146	Tocopherol	total: 425 mg/kg	-	-
+21410	TAB_014231	Sterol	Sum of the specified fatty acids: 14.5 %
+Chlesrosterol 0,77
+beta-Sitosterol 83,71
+delta7-Stigmasterol 0,0
+Sum of the specified fatty acids: 98.98 %	-	GLC-Area-%
+23182	TAB_015147	Tocopherol	total: 693 mg/kg	-	-
+23183	TAB_015148	Tocopherol	total: 911 mg/kg	-	-
+23184	TAB_015149	Tocopherol	total: 1062 mg/kg	-	-
+23185	TAB_015150	Tocopherol	total: 530 mg/kg	-	-
+23186	TAB_015151	Tocopherol	total: 541 mg/kg	-	-
+23187	TAB_015152	Tocopherol	total: 1005 mg/kg	-	-
+23188	TAB_015153	Tocopherol	total: 1114 mg/kg	-	-
+23189	TAB_015154	Tocopherol	total: 91 mg/kg	-	-
+23190	TAB_015155	Tocopherol	total: 593 mg/kg	-	-
+23191	TAB_015156	Tocopherol	total: 814 mg/kg	-	-
+23192	TAB_015157	Tocopherol	total: 964 mg/kg	-	-
+23193	TAB_015158	Tocopherol	total: 346 mg/kg	-	-
+23194	TAB_015159	Tocopherol	total: 241 mg/kg	-	-
+18941	TAB_014268	Sterol	Sum of the specified fatty acids: 44.79 %
+Ergostadienol = 0.22
+Beta-Sitosterol = 52.19
+Stigmastanol = 0.95
+28, Isoavenasterol = 0.98
+Delta7,14-Stigmastanol = 0,72	-	GLC-Area-%
+18941	TAB_014268	Tocopherol	Sum of the specified content values: 220.43mg/kg	-	-
+18942	TAB_014269	Sterol	Sum of the specified fatty acids: 50.65 %
+Ergostadienol = 0,30
+Beta-Sitosterol = 45,58
+Stigmastanol = 0,76
+Delta7,14-Stigmastadienol = 0,52
+28, Isoavenasterol = 0,27
+Delta7,14-Stigmastanol = 0,35	-	GLC-Area-%
+18942	TAB_014269	Tocopherol	Sum of the specified content values: 34.01mg/kg	-	-
+22330	TAB_014270	Sterol	Sum of the specified fatty acids: 46.96 %
+-delta--sitosterol 49,19 %
+stigmastanol 1,05 %
+28-isoavenasterol 1,01 %
+Delta-7,14-stigmastanol 0.83 %	-	GLC-Area-%
+22330	TAB_014270	Tocopherol	Sum of the specified content values: 216.67mg/kg	-	-
+22331	TAB_014271	Sterol	Sum of the specified fatty acids: 45.72 %
+-delta--sitosterol 50,07 %
+stigmastanol 0,86 %
+28-isoavenasterol 1,40 %
+Delta-7,14-stigmastanol 1,11 %
+ergostadienol 0,39 %	-	GLC-Area-%
+22331	TAB_014271	Tocopherol	Sum of the specified content values: 197.88mg/kg	-	-
+22332	TAB_014272	Sterol	Sum of the specified fatty acids: 45.7 %
+-delta--sitosterol 50,00 %
+stigmastanol 0,80 %
+28-isoavenasterol 1,14 %
+Delta-7,14-stigmastanol 0,52 %
+ergostadienol 0,28 %	-	GLC-Area-%
+22332	TAB_014272	Tocopherol	Sum of the specified content values: 216.07mg/kg	-	-
+22211	TAB_014282	Triacylglycerol	Sum of the specified fatty acids: 76.13 %
+LnLnO 27,15 %
+PLLn 3,13 %
+OLnP 2,24 %
+OLnS 0,00 %
+SLO 0,00 %	-	-
+22212	TAB_014283	Triacylglycerol	Sum of the specified fatty acids: 54.62 %
+LnLnO 37,71 %
+PLLn 4,05 %
+OLnP 2,75 %
+OLnS 0,72 %
+SLO 0,00 %	-	-
+22329	TAB_011593	Tocopherol	Sum of the specified content values: 190.94 mg/kg	-	-
+10018	TAB_012202	Sterol	Sum of all percentage values: 85.6 %
+Isofucosterin = 14.4 %	-	GLC-Area-%
+21494	TAB_002241	Sterol	Sterine % (Kern)	-	-
+20543	TAB_014306	Sterol	Sum of the specified fatty acids: 100 %	-	GLC-Area-%
+20543	TAB_014306	Triacylglycerol	HPLC using a refractive index detector
+Sum of the specified fatty acids: 80 %
+LLLn 0,7 %
+OOL 4,6 %
+SLL 6,4 %
+POL 4,3 %
+PPL 0,3 %
+SOL 2,2 %
+PPO 0,6 %
+SSL 0,2 %	-	-
+18625	TAB_014307	Sterol	Sum of the specified fatty acids: 99.93 %	-	GLC-Area-%
+12288	TAB_013626	Sterol	Sum of all percentage values: 99.9 %	-	GLC-Area-%
+12261	TAB_013627	Triacylglycerol	Sum of the specified percentage values: 80.8 %	-	-
+18626	TAB_014308	Tocopherol	Sum of the specified content values: 100.01 mg/kg	-	-
+16330	TAB_013628	Sterol	Sum of all percentage values: 99.8 %	-	GLC-Area-%
+18627	TAB_014309	Sterol	Sum of the specified fatty acids: 100 %	-	GLC-Area-%
+18627	TAB_014309	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+16613	TAB_013631	Triacylglycerol	Sum of the specified percentage values: 25.24 %	-	-
+18628	TAB_014310	Sterol	Sum of the specified fatty acids: 99.76 %	-	GLC-Area-%
+18628	TAB_014310	Tocopherol	Sum of the specified content values: 99.99 mg/kg	-	-
+16614	TAB_013632	Triacylglycerol	Sum of the specified percentage values: 24.11 %	-	-
+16615	TAB_013633	Triacylglycerol	Sum of the specified percentage values: 22.63 %	-	-
+18629	TAB_014311	Sterol	Sum of the specified fatty acids: 99.99 %	-	GLC-Area-%
+18629	TAB_014311	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+16609	TAB_013634	Triacylglycerol	Sum of the specified percentage values: 17.71 %	-	-
+18630	TAB_014312	Sterol	Sum of the specified fatty acids: 100 %	-	GLC-Area-%
+18630	TAB_014312	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+16610	TAB_013635	Triacylglycerol	Sum of the specified percentage values: 26.53 %	-	-
+18631	TAB_014313	Sterol	Sum of the specified fatty acids: 100.46%	-	GLC-Area-%
+16611	TAB_013636	Triacylglycerol	Sum of the specified percentage values: 28.69 %	-	-
+18631	TAB_014313	Tocopherol	Sum of the specified content values: 100.01 mg/kg	-	-
+16612	TAB_013637	Triacylglycerol	Sum of the specified percentage values: 31.26 %	-	-
+18634	TAB_014316	Sterol	Sum of the specified fatty acids: 100.18%	-	GLC-Area-%
+18634	TAB_014316	Tocopherol	Sum of the specified content values: 99.99 mg/kg	-	-
+18637	TAB_014319	Sterol	Sum of the specified fatty acids: 89.21 %	-	GLC-Area-%
+18637	TAB_014319	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+17917	TAB_003225	Sterol	Cholesterin %
+Campesterin%
+24-Methylencholesterin%
+Stigmasterin%
+?7-Camperstin%
+-delta--Sitosterin %
+Fucosterin%
+?5-Avenasterin%
+?7-Stigmasterin%
+?7-Avenasterin%	-	Sterine %
+12551	TAB_014387	Triacylglycerol	AAL 1,3
+ALL 21,2
+ALO 12,7
+ALP 4,3
+AOO + LLP 12,8
+ALS 2,7
+APP 1,4
+LLS + LOP 3,2
+LPS + OPP 0,5	-	-
+12560	TAB_014390	Triacylglycerol	XXL 1.8
+XLL 9.5
+XLO 5.9
+XLP 2.3
+XLS 1.6
+LOS/OOP 7.7	-	-
+12561	TAB_014391	Triacylglycerol	XXL 1.8
+XLL 13.0
+XLO 8.8
+XLP 3,9
+XLS 1,5
+LOS/OOP 7,8	-	-
+12562	TAB_014392	Triacylglycerol	XXL 1,3
+XLL 10,6
+XLO 10,6
+XLP 1,0
+XLS 1,0
+LOS/OOP 1,3	-	-
+12563	TAB_014393	Triacylglycerol	LOS/OOP 2,3	-	-
+12564	TAB_014394	Triacylglycerol	Sum of the specified fatty acids: 92.9 %
+LOS/OOP 8,0	-	-
+12565	TAB_014395	Triacylglycerol	Sum of the specified fatty acids: 93.2 %
+LOS/OOP 6,7	-	-
+12566	TAB_014396	Triacylglycerol	Sum of the specified fatty acids: 93.7 %
+LOS/OOP 7,2	-	-
+12567	TAB_014397	Triacylglycerol	Sum of the specified fatty acids: 98 %
+LOS/OOP 2,9	-	-
+12568	TAB_014398	Triacylglycerol	Sum of the specified fatty acids: 89.7 %
+LOS/OOP 10,0	-	-
+16831	TAB_015251	Triacylglycerol	Sum of the specified percentage values: 92.7 %
+SOA 1.7
+AOO 2.3	-	-
+10038	TAB_014403	Triacylglycerol	POO+SOL 12,4
+OOGa 4,1
+OLA 0,6
+OOA 7,7
+POB 2,1
+others 13,9	-	-
+21266	TAB_015254	Sterol	Sum of the specified fatty acids: 99.9 %	-	GLC-Area-%
+21267	TAB_015255	Sterol	Sum of the specified fatty acids: 99.9 %	-	GLC-Area-%
+10492	TAB_014409	Sterol	Stigmastanol 0,6
+Beta-Sitosterol 52,20
+Delta5-Avenasterin 8,84
+28-Isoavenasterin 1,0	-	GLC-Area-%
+10492	TAB_014409	Tocopherol	Sum of the specified content values: 247.21 mg/kg	-	-
+10493	TAB_014410	Sterol	Delta7-Campestanol 0,70
+Stigmastanol 0,96
+Beta-Sitosterin 48,00
+28-Isoavenasterol 0,85	-	GLC-Area-%
+10493	TAB_014410	Tocopherol	Sum of the specified content values: 254.92 mg/kg	-	-
+18944	TAB_015260	Sterol	Ergostadienol 0.34
+Beta-Sitosterol 51.60
+Stigmastanol 0.74
+28, Isoavenasterol 1.37
+Delta-7,14-Stigmastanol 0.33
+Sum of the specified fatty acids: 99.64%	-	GLC-Area-%
+18944	TAB_015260	Tocopherol	Sum of the specified content values: 220.43mg/kg	-	-
+10494	TAB_014411	Sterol	Delta7-Campestanol 0,40
+Stigmastanol 1,09
+Beta-Sitosterol 45,30
+28-Isoavenasterol 0,50	-	GLC-Area-%
+10494	TAB_014411	Tocopherol	Sum of the specified content values: 289.12 mg/kg	-	-
+24321	TAB_014415	Sterol	Beta-Sitosterol 87,0
+Delta7-Avenasterol 3.2	-	GLC-Area-%
+24320	TAB_013693	Sterol	Sum of all percentage values: 3 %	-	GLC-Area-%
+24320	TAB_013693	Tocopherol	Sum of the specified content values: 3mg/kg	-	-
+19085	TAB_014417	Sterol	Beta-Sitosterol 88,21
+Delta7-Stigmasterol 0,26
+Total: 4478	-	GLC-Area-%
+19085	TAB_014417	Triacylglycerol	OOL+OOPo+SLL 16,7
+PPoO 1,5	-	%
+19085	TAB_014417	Tocopherol	Gamma- and Delta-tocopherols 527
+Total: 1006	-	-
+15312	TAB_003299	Sterol	Campesterin %
+Stigmasterin %
+-delta--Sitosterin %	-	-
+19086	TAB_014418	Sterol	Beta-Sitosterol 83,52
+Delta7-Stigmasterol 0,11
+Total: 4764	-	GLC-Area-%
+19086	TAB_014418	Triacylglycerol	OOL+OOPo+SLL 16,7
+PPoO 1,5	-	%
+19086	TAB_014418	Tocopherol	Gamma- and Delta-Tocopherols 1281
+Total: 1486	-	-
+21123	TAB_015277	Sterol	beta-Sitosterol 3,83	-	GLC-Area-%
+18767	TAB_015278	Tocopherol	beta- and gamma-Tocopherol: 3,1	-	-
+18768	TAB_015279	Tocopherol	beta- and gamma-Tocopherol: 13,2	-	-
+18769	TAB_015280	Tocopherol	beta- and gamma-Tocopherol: 5,1	-	-
+18770	TAB_015281	Tocopherol	beta- and gamma-Tocopherol: 6,9	-	-
+18772	TAB_015283	Tocopherol	beta- and gamma-Tocopherol 8,1	-	-
+18773	TAB_015284	Tocopherol	beta- and gamma-tocopherol 14,8	-	-
+18774	TAB_015285	Tocopherol	beta- and gamma-tocopherol 8,1	-	-
+18775	TAB_015286	Tocopherol	beta- and gamma-tocopherol 29,3	-	-
+18776	TAB_015287	Tocopherol	beta- and gamma-tocopherol 21,9	-	-
+10495	TAB_014432	Sterol	Delta7-Campestanol 0,5
+Stigmastanol 1,00
+Beta-Sitosterol 46,65
+Delta5-Avenasterol 10,7
+28-Isoavenasterol 0,5	-	GLC-Area-%
+10495	TAB_014432	Tocopherol	Sum of the specified content values: 276.12 mg/kg	-	-
+22333	TAB_014433	Sterol	24-methylcholest-7-enol 4,50
+Delta7,22,25-Stigmastatrien-3beta-ol 22.8
+Alpha-Spinasterol 20.20
+Delta7,25-Stigmastadienol 23.62	-	GLC-Area-%
+22334	TAB_014434	Sterol	24-methylcholest-7-enol 4,57
+Delta7,22,25-Stigmastatrien-3beta-ol 23,17
+Alpha-Spinasterol 20.52
+Delta7,25-Stigmastadienol 24,00	-	GLC-Area-%
+10543	TAB_013718	Sterol	Sum of all percentage values: 60.7 %
+Spinasterin 33.2%
+Fucosterin 1.9%	-	GLC-Area-%
+10544	TAB_013721	Sterol	Sum of all percentage values: 63.7 %
+Spinasterin 30.5%
+Fucosterin 3.0%	-	GLC-Area-%
+10545	TAB_013722	Sterol	Sum of all percentage values: 43.4 %
+Spinasterin 50.1%
+Fucosterin 1.4%	-	GLC-Area-%
+10546	TAB_013724	Sterol	Sum of all percentage values: 56.9 %
+Spinasterin 42.8%	-	GLC-Area-%
+10547	TAB_013725	Sterol	Sum of all percentage values: 60.8 %
+Sinasterin 33.7%
+Fucosterin 1.0%	-	GLC-Area-%
+20689	TAB_014455	Tocopherol	Sum of the specified content values: 888.5 mg/kg	-	-
+20690	TAB_014456	Tocopherol	Sum of the specified content values: 406.7 mg/kg	-	-
+20691	TAB_014457	Tocopherol	Sum of the specified content values: 941.4 mg/kg	-	-
+20692	TAB_014458	Tocopherol	Sum of the specified content values: 110.7 mg/kg	-	-
+20569	TAB_014459	Tocopherol	total: 833 mg/kg
+harvested in 1998
+Angustifolia commercial:
+alpha-tocopherol 783
+beta-tocopherol 165
+gamma-tocopherol 17
+total: 957	-	-
+20649	TAB_000224	Triacylglycerol	Triglyceride %	-	-
+20570	TAB_014460	Tocopherol	total: 350
+harvested in 1998
+Pallida commercial:
+alpha-tocopherol 314
+beta-tocopherol 92
+total: 407	-	-
+20571	TAB_014461	Tocopherol	total: 470
+Purpurea commercial	-	-
+20572	TAB_014462	Tocopherol	total: 388
+harvested in 1998	-	-
+20792	TAB_013744	Tocopherol	Sum of the specified content values: 358mg/kg	-	-
+21624	TAB_013747	Sterol	Sum of all percentage values: 99.9 %
+Delta-7-Stigmasterin 1.2	-	GLC-Area-%
+12311	TAB_013748	Sterol	Sum of all percentage values: 68.23 %
+unidentified 0.77%
+Die Summe der Prozentwerte von Campesterin und 24-Methylen-
+cholesterin betraegt 25.15%.
+Delta-7-Stigmasterin 3.53%
+unidentified 1.32%	-	GLC-Area-%
+18990	TAB_013749	Sterol	Sum of all percentage values: 96.7 %
+unidentified 1.2 %
+unidentified 1.6 %
+Fucosterin 0.5 %	-	GLC-Area-%
+18943	TAB_014466	Tocopherol	Sum of the specified content values: 201.74 mg/kg	-	-
+21619	TAB_004103	Sterol	Sterine %	-	-
+16336	TAB_013750	Sterol	Sum of all percentage values: 100 %	-	GLC-Area-%
+15705	TAB_013751	Triacylglycerol	Sum of the specified percentage values 101 %.
+Note: P is reported as "saturated" (S).	-	-
+12376	TAB_014467	Sterol	beta-sitosterol 428,7
+beta-sitostanol 3,9	-	GLC-Area-%
+18985	TAB_004109	Sterol	Sterine %	-	-
+14563	TAB_013753	Sterol	Sum of all percentage values: 100 %	-	GLC-Area-%
+19081	TAB_013760	Sterol	Sum of all percentage values: 100 %	-	GLC-Area-%
+10421	TAB_014471	Sterol	beta-sitosterol 222,0
+other sterols 51,0
+total: 303.41	-	GLC-Area-%
+10421	TAB_014471	Tocopherol	total: 1.19	-	-
+19082	TAB_013761	Sterol	Sum of all percentage values: 99.9 %	-	GLC-Area-%
+10422	TAB_014472	Sterol	beta-sitosterol 192,50
+other sterols 48,40
+total: 257,73	-	GLC-Area-%
+10422	TAB_014472	Tocopherol	total: 1,33	-	-
+17989	TAB_013764	Triacylglycerol	PLL+PLnO 2.43 %
+OOL+PoOO 2.38 %
+POO+PSL 25.5 %
+POP+MSO 21.2 %
+SOS+SSO 2.24 %	-	-
+12678	TAB_010743	Sterol	Sum of all percentage values: 96.8 %	-	GLC-Area-%
+12679	TAB_010744	Sterol	Sum of all percentage values: 96.8 %	-	GLC-Area-%
+18935	TAB_013780	Sterol	Sum of all percentage values 100.1 %.	-	GLC-Area-%
+14889	TAB_005001	Sterol	Cholesterin %
+Campestrin %
+Stigmasterin %
+?7-Campesterin
+Sitosterin
+Fucosterin %
+?5-Avenasterin%
+?7-Stigmasternol	-	-
+18039	TAB_010761	Sterol	Sum of all percentage values: 100 %
+Additional data in reference.	-	GLC-Area-%
+18040	TAB_010762	Sterol	Sum of all percentage values: 93.7 %
+Additional data in reference.	-	GLC-Area-%
+18041	TAB_010763	Sterol	Sum of all percentage values: 98.4 %
+Additional data in reference.	-	GLC-Area-%
+18042	TAB_010764	Sterol	Sum of all percentage values: 96.3 %
+Additional data in reference.	-	GLC-Area-%
+24346	TAB_013785	Triacylglycerol	Sum of the specified percentage values: 98.3 %
+unidentified 1.7 %	-	%
+24346	TAB_013785	Tocopherol	Sum of the specified content values: 192.7mg/kg	-	-
+19602	TAB_013786	Triacylglycerol	Sum of the specified percentage values: 93.3 %	-	-
+14772	TAB_005015	Sterol	Cholesterin %
+Campestrin %
+Stigmasterin %
+28-iso-fucosterin	-	-
+10574	TAB_005016	Sterol	Campestrin %
+Stigmasterin %
+-delta--Sitosterin	-	-
+24359	TAB_013869	Sterol	Sum of all percentage values: 99.5 %
+Delta-7-Stigmasterol 0.5
+Delta-7,25-Stigmasterol 0.0	-	GLC-Area-%
+24359	TAB_013869	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+24360	TAB_013870	Sterol	Sum of all percentage values: 97.8 %
+Delta-7-Stigmasterol 0.9
+Delta-7,25-Stigmasterol 1.1	-	GLC-Area-%
+24360	TAB_013870	Tocopherol	Sum of the specified content values: 100mg/kg	-	-
+24361	TAB_013871	Sterol	Sum of all percentage values: 98.2 %
+Delta-7,25-Stigmasterol 1.8	-	GLC-Area-%
+24361	TAB_013871	Tocopherol	Sum of the specified content values: 100mg/kg	-	-
+20890	TAB_004251	Tocopherol	Gesamt-Tocopherole ppm
+alpha-Tocopherol %
+beta-Tocopherol %
+gamma-Tocopherol %	-	-
+11807	TAB_004252	Tocopherol	Gesamt-Tocopherole ppm
+alpha-Tocopherol %
+gamma-Tocopherol %	-	-
+23131	TAB_004256	Sterol	Campesterin %	-	-
+18073	TAB_004257	Sterol	Campesterin %	-	-
+20000	TAB_013882	Sterol	Sum of all percentage values: 100 %
+Delta-7-Stigmasterin 0.0	-	GLC-Area-%
+24380	TAB_014586	Sterol	Sum of all percentage values: 98.7 %
+-Alpha--Spinasterol 1.0 %
+Further data in reference	-	GLC-Area-%
+24381	TAB_014587	Sterol	Sum of all percentage values: 100 %
+-Alpha--Sinasterol 2.2 %
+Further data in reference	-	GLC-Area-%
+24382	TAB_014588	Sterol	Sum of all percentage values: 99.4 %
+-Alpha--Spinasterol 0.0 %
+Further data in reference	-	GLC-Area-%
+24383	TAB_014589	Sterol	Sum of all percentage values: 99.8 %
+-Alpha--Spinasterol 0.0 %
+Further data in reference	-	GLC-Area-%
+24384	TAB_014590	Sterol	Sum of all percentage values: 99.4 %
+-Alpha--Spinasterol 0.0 %
+Further data in reference	-	GLC-Area-%
+24385	TAB_014591	Sterol	Sum of all percentage values: 97.1 %
+-Alpha--Spinasterol 0.0 %
+Further data in reference	-	GLC-Area-%
+24386	TAB_014592	Sterol	Sum of all percentage values: 90.8 %
+-Alpha--Spinasterol 0.0 %
+Further data in reference	-	GLC-Area-%
+24387	TAB_014593	Sterol	-Alpha--Spinasterol 1.0 %
+Further data in reference	-	GLC-Area-%
+24388	TAB_014594	Sterol	Sum of all percentage values: 99.5 %
+-Alpha--Spinasterol 0.0 %
+Further data in reference	-	GLC-Area-%
+24389	TAB_014595	Sterol	Sum of all percentage values: 99 %
+-Alpha--Spinasterol 1.0 %
+Further data in reference	-	GLC-Area-%
+12289	TAB_004280	Sterol	Cholesterin%
+Campersterin %
+Stigmasterin %
+-delta--Sitosterin %
+?5-Avenasterin
+?7-Stigmastenol %
+?7-Avenasterin %	-	-
+24390	TAB_014596	Sterol	Sum of all percentage values: 98.4 %
+-Alpha--Spinasterol 0.0 %
+Further data in reference	-	GLC-Area-%
+24391	TAB_014597	Sterol	Sum of all percentage values: 92.6 %
+-Alpha--Spinasterol 0.8 %
+Further data in reference	-	GLC-Area-%
+12290	TAB_004281	Sterol	Cholesterin%
+Campersterin %
+Stigmasterin %
+-delta--Sitosterin %
+?5-Avenasterin
+?7-Stigmastenol %
+?7-Avenasterin %	-	-
+24392	TAB_014598	Sterol	Sum of all percentage values: 96.3 %
+-Alpha--Spinasterol 1.0 %
+Further data in reference	-	GLC-Area-%
+12291	TAB_004282	Sterol	Cholesterin%
+Campersterin %
+Stigmasterin %
+-delta--Sitosterin %
+?5-Avenasterin
+?7-Stigmastenol %
+?7-Avenasterin %	-	-
+12388	TAB_014600	Tocopherol	Sum of the specified content values: 185mg/kg	-	-
+14642	TAB_004283	Sterol	Campersterin %
+Stigmasterin %
+-delta--Sitosterin %
+?7-Avenasterin %	-	-
+11828	TAB_004284	Sterol	Campersterin %
+Stigmasterin %
+-delta--Sitosterin %
+?7-Avenasterin %	-	-
+16326	TAB_004285	Sterol	Sterine %	-	-
+12389	TAB_014601	Tocopherol	Sum of the specified content values: 15mg/kg	-	-
+12781	TAB_007001	Triacylglycerol	SOPDie Summe aller Prozentwerte betraegt 100.1 %
+Iran
+weitere Angaben zu Triglyceriden siehe unter Literaturstelle	-	-
+18928	TAB_014656	Triacylglycerol	LnLnG--0,46 PoOLn--0,75 LLnG--1,18 OOLn--5,74
+PoOL--0,98 LnGG--0,66 OLnG--3,88 PoOO--1,61 OLG--5,03
+OOG--8,29 POG--3,37 OOA--2,25 OAG--1,53 SOG--1,13
+Further Triglycerides to take from the reference	-	-
+19562	TAB_014716	Tocopherol	Sum of the specified content values: 540 mg/kg
+Plastochromanol-8 20.0	-	-
+19563	TAB_014717	Tocopherol	Sum of the specified content values: 572 mg/kg
+Plastochromanol8 56.0	-	-
+11806	TAB_007121	Tocopherol	Sum of the specified content values: 100%
+Gesamttocopherol: 299 ppm	-	-
+19564	TAB_014718	Tocopherol	Sum of the specified content values: 463 mg/kg
+Plastochromanol8 19,0	-	-
+12286	TAB_007123	Sterol	Sum of all percentage values: 100 %
+auf SE-30-Saeule gemessen (Italien)
+auf-17-Saeule gemessen (Italien) 0.5 % vorhanden
+dazu sind in der Literaturstelle weitere Angaben	100.00    	GLC-Area-%
+19565	TAB_014719	Tocopherol	Sum of the specified content values: 439 mg/kg
+Plastochromanol-8 46,0	-	-
+21249	TAB_007124	Tocopherol	Sum of the specified content values: 29.4 mg/100g	-	-
+19566	TAB_014720	Tocopherol	Sum of the specified content values: 567 mg/kg
+Plastochromanol-8 34,0	-	-
+21371	TAB_007125	Sterol	Sum of all percentage values: 99.2 %	99.20     	GLC-Area-%
+19567	TAB_014721	Tocopherol	Sum of the specified content values: 381 mg/kg
+Plastochromanol-8 64,0	-	-
+19568	TAB_014722	Tocopherol	Sum of the specified content values: 334 mg/kg	-	-
+19569	TAB_014723	Tocopherol	Sum of the specified content values: 921 mg/kg	-	-
+19570	TAB_014724	Tocopherol	Sum of the specified content values: 315 mg/kg	-	-
+19571	TAB_014725	Tocopherol	Sum of the specified content values: 274 mg/kg	-	-
+19572	TAB_014726	Tocopherol	Sum of the specified content values: 1069 mg/kg
+Plastochromanol-8 16,0	-	-
+19573	TAB_014727	Tocopherol	Sum of the specified content values: 34 mg/kg	-	-
+14445	TAB_007144	Sterol	Sum of all percentage values: 36.5 %
+Spinasterol: 17.0 %
+Isofucosterol: 0.8 %
+7-Stigmastenol: 42.0 %
+7-Avenasterol: 3.7 %	36.50     	GLC-Area-%
+19574	TAB_014728	Tocopherol	Sum of the specified content values: 238 mg/kg	-	-
+14445	TAB_007144	Triacylglycerol	Sum of the specified percentage values: 36.4 %
+XLL = 2.3, XLO = 2.2, XLP = 0.8
+LLO = 21.2, LLP = 15.3, LOO = 7.1
+LLS = 4.8, LOP = 5.8, LPP = 0.4
+LOS = 0.6, OOP = 1.7, LSP = 0.7
+OOS = 0.2, LSS = 0.2, SPP = 0.3	36.40     	%
+14445	TAB_007144	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+19575	TAB_014729	Tocopherol	Sum of the specified content values: 9362 mg/kg	-	-
+19576	TAB_014730	Tocopherol	Sum of the specified content values: 26 mg/kg	-	-
+19577	TAB_014731	Tocopherol	Sum of the specified content values: 331 mg/kg	-	-
+19578	TAB_014732	Tocopherol	Sum of the specified content values: 1342 mg/kg
+Plastochromanol-8 69,0	-	-
+19579	TAB_014733	Tocopherol	Sum of the specified content values: 336 mg/kg	-	-
+19580	TAB_014734	Tocopherol	Sum of the specified content values: 1103 mg/kg	-	-
+19581	TAB_014735	Tocopherol	Sum of the specified content values: 372 mg/kg
+Plastochromanol-8 36,0	-	-
+19582	TAB_014736	Tocopherol	Sum of the specified content values: 80 mg/kg	-	-
+19583	TAB_014737	Tocopherol	Sum of the specified content values: 107 mg/kg	-	-
+19584	TAB_014738	Tocopherol	Sum of the specified content values: 1539 mg/kg	-	-
+19585	TAB_014739	Tocopherol	Sum of the specified content values: 880 mg/kg
+Plastochromanol-8 167,0	-	-
+19586	TAB_014740	Tocopherol	Sum of the specified content values: 814 mg/kg	-	-
+19587	TAB_014741	Tocopherol	Sum of the specified content values: 674 mg/kg
+Plastochromanol-8 36,0	-	-
+14567	TAB_004449	Sterol	Campersterin %
+Stigmasterin %
+-delta--Sitosterin %	-	-
+19588	TAB_014742	Tocopherol	Sum of the specified content values: 1704 mg/kg
+Plastochromanol-8 109,0	-	-
+19589	TAB_014743	Tocopherol	Sum of the specified content values: 457 mg/kg
+Plastochromanol-8 32,0	-	-
+19590	TAB_014744	Tocopherol	Sum of the specified content values: 502 mg/kg
+Plastochromanol-8 34,0	-	-
+19591	TAB_014745	Tocopherol	Sum of the specified content values: 948 mg/kg
+Plastochromanol-8 52,0	-	-
+19376	TAB_006252	Sterol	Cholesterin %
+Campesterin %
+Stigmasterin %
+-delta--Sitosterin %
+?5-Avenasterin %
+?7-Stigmastenol %	-	-
+19592	TAB_014746	Tocopherol	Sum of the specified content values: 355 mg/kg
+Plastochromanol-8 45,0	-	-
+19593	TAB_014747	Tocopherol	Sum of the specified content values: 445 mg/kg	-	-
+19594	TAB_014748	Tocopherol	Sum of the specified content values: 647 mg/kg
+Plastochromanol-8 33,0	-	-
+19595	TAB_014749	Tocopherol	Sum of the specified content values: 927 mg/kg	-	-
+19596	TAB_014750	Tocopherol	Sum of the specified content values: 672 mg/kg	-	-
+19597	TAB_014751	Tocopherol	Sum of the specified content values: 1103 mg/kg	-	-
+19598	TAB_014752	Tocopherol	Sum of the specified content values: 97 mg/kg
+Plastochromanol-8 32,0	-	-
+14457	TAB_007210	Sterol	Sum of all percentage values: 91.3 %	91.30     	GLC-Area-%
+19599	TAB_014753	Tocopherol	Sum of the specified content values: 1000 mg/kg	-	-
+19600	TAB_014754	Tocopherol	Sum of the specified content values: 282 mg/kg	-	-
+19601	TAB_014755	Tocopherol	Sum of the specified content values: 481 mg/kg
+Plastochromanol-8 76,0	-	-
+16307	TAB_014757	Sterol	Sum of the specified fatty acids: 100 %
+total sterols: 6,1
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16308	TAB_014758	Sterol	Sum of the specified fatty acids: 100 %
+total sterols (mg/g oil) 5.2
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16309	TAB_014759	Sterol	Sum of the specified fatty acids: 100 %
+total sterols (mg/g oil) 7.8
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16310	TAB_014760	Sterol	Sum of the specified fatty acids: 99.9 %
+total sterols (mg/g oil) 5.9
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16311	TAB_014761	Sterol	Sum of the specified fatty acids: 99.8%total sterols (mg/g oil) 5.8
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16312	TAB_014762	Sterol	Sum of the specified fatty acids: 100 %
+total sterols (mg/g oil) 5.0
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16313	TAB_014763	Sterol	Sum of the specified fatty acids: 100%
+total sterols (mg/g oil) 4,6
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16314	TAB_014764	Sterol	Sum of the specified fatty acids: 100 %
+total sterols: 6,1
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16315	TAB_014765	Sterol	Sum of the specified fatty acids: 100 %
+total sterols: 6,1
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16316	TAB_014766	Sterol	Sum of the specified fatty acids: 100 %
+total sterols: 7.2
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16317	TAB_014767	Sterol	Sum of the specified fatty acids: 100 %
+total sterols: 5.5
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16318	TAB_014768	Sterol	Sum of the specified fatty acids: 100 %
+total sterols: 5.9
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16319	TAB_014769	Sterol	Sum of the specified fatty acids: 100 %
+total sterols: 4.6
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16320	TAB_014770	Sterol	Sum of the specified fatty acids: 99.9%
+total sterols: 5.5
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16321	TAB_014771	Sterol	Sum of the specified fatty acids: 100 %
+total sterols: 6.1
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16322	TAB_014772	Sterol	Sum of the specified fatty acids: 100 %
+total sterols: 4.9
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16323	TAB_014773	Sterol	Sum of the specified fatty acids: 99.9%
+total sterols: 4.9
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+16324	TAB_014774	Sterol	Sum of the specified fatty acids: 100 %
+total sterols: 4.9
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+19317	TAB_006308	Sterol	Sitosterin %
+Campersterin %
+Brassicasterin %###)Cholesterin %	-	-
+16325	TAB_014775	Sterol	Sum of the specified fatty acids: 100 %
+total sterols: 5.0
+Reported values are averages of duplicate analyses	-	GLC-Area-%
+10452	TAB_014776	Sterol	Beta-Sitosterol 138.3
+Delta7-Stigmasterol 0,7	-	GLC-Area-%
+10453	TAB_014777	Sterol	Beta-Sitosterol 175,7	-	GLC-Area-%
+10454	TAB_014778	Sterol	Beta-Sitosterol 151,4
+Delta7-Stigmasterol 0,9	-	GLC-Area-%
+10455	TAB_014779	Sterol	Beta-Sitosterol 109,8	-	GLC-Area-%
+10456	TAB_014780	Sterol	Beta-Sitosterol 170,6	-	GLC-Area-%
+12142	TAB_007242	Sterol	Sum of all percentage values: 99.9 %	99.90     	GLC-Area-%
+10457	TAB_014781	Sterol	Beta-Sitosterol 109,3	-	GLC-Area-%
+21566	TAB_014787	Triacylglycerol	ALL 3.51
+SSLn 2.91	-	-
+10458	TAB_014790	Triacylglycerol	Sum of the specified fatty acids: 99.79 %
+Braganca, Portugal 2001	-	-
+10459	TAB_014791	Triacylglycerol	Braganca, Portugal 2002	-	-
+10460	TAB_014792	Triacylglycerol	Braganca, Portugal 2003	-	-
+10461	TAB_014793	Triacylglycerol	Sum of the specified fatty acids: 99.77 %
+Coimbra, Portugal 2003	-	-
+11960	TAB_014862	Sterol	Cholerosterol 0,8
+Beta-Sitosterol 56,5
+Sterol content 2472 mg/kg oil	-	GLC-Area-%
+11960	TAB_014862	Tocopherol	36,7 % beta and gamma
+traces of delta
+total tocopherol content: 2259 mg/kg	-	-
+12377	TAB_014863	Sterol	Beta-sitosterol 823,5	-	GLC-Area-%
+12378	TAB_014864	Sterol	beta-sitosterol 682,6	-	GLC-Area-%
+24180	TAB_007302	Sterol	Sum of all percentage values: 99.3 %
+Delta5-25-Stigmastenol 0,4
+Tallow	99.30     	GLC-Area-%
+24181	TAB_007303	Sterol	Sum of all percentage values: 98.4 %
+Delta5-25-Stigmastenol 1,0
+Tallow	98.40     	GLC-Area-%
+12379	TAB_014865	Sterol	beta-sitosterol 632,2	-	GLC-Area-%
+19561	TAB_014872	Sterol	mean value of 14 samples
+beta-sitosterin 1268,5
+total: 1556,7	-	GLC-Area-%
+19561	TAB_014872	Tocopherol	mean value of 14 samples
+Plastocromanol-8 5,8
+total: 465.7	-	-
+10384	TAB_014875	Sterol	Lanosterol(tr)+Sitosterol 673,0
+beta-Amyrin+Sitostanol 94,3
+delta5-Avenasterol+obtusifoliol(tr) 165,9
+delta(24,28)-Stigmasta-en-ol 12,9	-	GLC-Area-%
+19087	TAB_007326	Sterol	Sum of all percentage values: 9.9 %
+Sterine = 9.9 % des Unverseifbaren	9.90      	GLC-Area-%
+14780	TAB_014884	Sterol	RRT0.90 0.81
+RRT0.91 0.18
+beta-Sitosterol 42.51
+Stigmastanol 1.18
+Sum of the specified fatty acids: 55.32 %	-	GLC-Area-%
+11754	TAB_014885	Tocopherol	Sum of the specified content values: 358.75 mg/kg	-	-
+12087	TAB_015543	Sterol	total: 2164	-	mg/kg
+20762	TAB_015575	Sterol	beta-sitosterol 143,4
+other sterols 19,6
+total: 199	-	mg/100g
+20763	TAB_015576	Sterol	beta-sitosterol 65,5
+other sterols 3,4
+total: 95	-	mg/100g
+20764	TAB_015577	Sterol	beta-sitosterol 112,6
+other sterols 13,3
+total: 150	-	mg/100g
+20765	TAB_015578	Sterol	beta-sitosterol 119,3
+other sterols 12,6
+total: 158	-	mg/100g
+20766	TAB_015579	Sterol	beta-sitosterol 103,9
+other sterols 3,0
+total: 167	-	mg/100g
+20767	TAB_015580	Sterol	beta-sitosterol 83.6
+other sterols 26,0
+total: 183	-	mg/100g
+20768	TAB_015581	Sterol	beta-sitosterol 96.0
+other sterols 26,5
+total: 210	-	mg/100g
+20769	TAB_015582	Sterol	beta-sitosterol 102,2
+other sterols 2,5
+total: 121	-	mg/100g
+20770	TAB_015583	Sterol	beta-sitosterol 143,7
+other sterols 17,0
+total: 187	-	mg/100g
+20771	TAB_015584	Sterol	beta-sitosterol 74,9
+other sterols 14,0
+total: 135	-	mg/100g
+20772	TAB_015585	Sterol	beta-sitosterol 76,8
+other sterols 15,0
+total: 137	-	mg/100g
+20773	TAB_015586	Sterol	beta-sitosterol 85,5
+other sterols 12,9
+total: 146	-	GLC-Area-%
+20774	TAB_015587	Sterol	beta-sitosterol 77,7
+other sterols 13,0
+total: 135	-	mg/100g
+20775	TAB_015588	Sterol	beta-sitosterol 77,2
+other sterols 12,0
+total: 132	-	mg/100g
+20776	TAB_015589	Sterol	beta-sitosterol 116,5
+other sterols 14,1
+total: 157	-	mg/100g
+20777	TAB_015590	Sterol	beta-sitosterol 132,0
+other sterols 34,2
+total: 236	-	mg/100g
+20778	TAB_015591	Sterol	beta-sitosterol 104,4
+other sterols 12,3
+total: 147	-	mg/100g
+20779	TAB_015592	Sterol	beta-sitosterol 209,8
+other sterols 24,6
+total: 279	-	GLC-Area-%
+20780	TAB_015593	Sterol	beta-sitosterol 109.3
+other sterols 19,6
+total: 185	-	mg/100g
+23361	TAB_008001	Sterol	Sum of all percentage values: 100 %
+SE-52	100.00    	GLC-Area-%
+20781	TAB_015594	Sterol	beta-sitosterol 13,1
+other sterols 241,0
+total: 265	-	mg/100g
+20782	TAB_015595	Sterol	beta-sitosterol 231,7
+other sterols 47,4
+total: 400	-	mg/100g
+20783	TAB_015596	Sterol	beta-sitosterol 168,5
+other sterols 39,5
+total: 271	-	mg/100g
+20784	TAB_015597	Sterol	beta-sitosterol 165,1
+other sterols 43,2
+total: 270	-	mg/100g
+20785	TAB_015598	Sterol	beta-sitosterol 178,3
+other sterols 44,0
+total: 289	-	mg/100g
+20786	TAB_015599	Sterol	beta-sitosterol 114,4
+other sterols 25,8
+total: 177	-	mg/100g
+20787	TAB_015600	Sterol	beta-sitosterol 88,9
+other sterols 9,1
+total: 113	-	mg/100g
+20788	TAB_015601	Sterol	beta-sitosterol 228,6
+other sterols 66,2
+total: 413	-	mg/100g
+12676	TAB_008017	Sterol	Sum of all percentage values: 90.8 %
+-Delta--7-Stigmasterol = 6,0 %	90.80     	GLC-Area-%
+12677	TAB_008018	Tocopherol	Sum of the specified content values: 17.1mg/kg
+-beta--Tocopherol + -gamma--Tocopherol = 82,7 mg/kg	-	-
+16534	TAB_008048	Sterol	Sum of all percentage values: 78.5 %
+Fucosterin 21.5
+o.09 % i. T. Seegras	78.50     	GLC-Area-%
+16535	TAB_008054	Sterol	Fucosterin 75.7
+Saringosterin 0.7
+0.24 % i.T. Seegras	23.50     	GLC-Area-%
+18978	TAB_007422	Sterol	Sum of all percentage values: 98.4 %
+auf =V-17-Saeule gemessen	98.40     	GLC-Area-%
+18034	TAB_007567	Triacylglycerol	Sum of the specified percentage values: 98.6 %
+SLA 0.4
+ALO 0.6
+LnLO 0.4	-	-
+18036	TAB_007568	Sterol	Obtusifoliol 6,3
+Gramisterin 2,7
+24-Methylenecycloarta
+Zu der vorliegenden Literaturstelle sind noch weitere Daten vorhanden	86.90     	GLC-Area-%
+18036	TAB_007568	Tocopherol	OB-2
+UR: alpha-Tocopherol 2.5, gamma-Tocopherol 97.3, delta-Tocopherol 0.2	-	-
+18035	TAB_007569	Triacylglycerol	Sum of the specified percentage values: 99.4 %
+ALO 0.4
+LnLL 0.2	-	-
+18037	TAB_007570	Sterol	Obtusoifoliol 0,0
+14-Methylenecycloartanol 0,0
+Citrostadienol 3,4
+Zu der vorliegenden Literaturstelle liegen noch weitere Daten vor	92.60     	GLC-Area-%
+18037	TAB_007570	Tocopherol	Sum of the specified percentage values: 99.5 %
+Zu der vorliegenden Literaturstelle sind noch weitere Daten vorhanden	-	-
+23362	TAB_008165	Sterol	Sum of all percentage values: 99 %	99.00     	GLC-Area-%
+21567	TAB_007579	Sterol	Delta7,24(25)-Stigmastadienol 0,0
+Auf OV-17-Saeule gemessen	100.00    	GLC-Area-%
+23422	TAB_008166	Sterol	Sum of all percentage values: 99 %	99.00     	GLC-Area-%
+23423	TAB_008167	Sterol	Sum of all percentage values: 99 %	99.00     	GLC-Area-%
+23424	TAB_008168	Sterol	Sum of all percentage values: 99 %	99.00     	GLC-Area-%
+23425	TAB_008169	Sterol	Sum of all percentage values: 99 %	99.00     	GLC-Area-%
+21623	TAB_007594	Sterol	0.59 % des Oeles
+auf OV-17-Saeule gemessen	100.10    	GLC-Area-%
+10496	TAB_007595	Sterol	Cholesterin 0.0-0.8 %
+auf S-30-Saeule gemessen
+Delta7-Stigmasterin 0.8 %	99.60     	GLC-Area-%
+16578	TAB_007596	Sterol	auf Ov-17-Saeule gemessen
+roh, Aethiopien	100.00    	GLC-Area-%
+19366	TAB_007597	Sterol	Sum of all percentage values: 97.7 %
+auf OV-17-Saeule gemessen	97.70     	GLC-Area-%
+16328	TAB_007599	Sterol	Sum of all percentage values: 98.4 %
+Delta7-Stigmasterin 1.6 %	98.40     	GLC-Area-%
+22284	TAB_007600	Sterol	Sum of all percentage values 100 %
+Venezuela	100.00    	GLC-Area-%
+22285	TAB_007601	Sterol	Sum of all percentage values 100 %
+Venezuela
+Auf SE-30-Saeulle gemessen	100.00    	GLC-Area-%
+22286	TAB_007602	Sterol	Sum of all percentage values 100 %
+Sudan
+Auf SE-30-Saeule gemessen	100.00    	GLC-Area-%
+22287	TAB_007603	Sterol	Sum of all percentage values: 100 %
+Nigeria
+Auf SE-30-Saeule gemessen	100.00    	GLC-Area-%
+22288	TAB_007604	Sterol	Sum of all percentage values 100 %%
+Auf SE-30-Saeule gemessen
+Alto Volta	100.10    	GLC-Area-%
+18979	TAB_007605	Sterol	Sum of all percentage values: 84.2 %
+Fucosterin 0.2 %
+auf OV-17-Saeule gemessen	84.20     	GLC-Area-%
+18765	TAB_007606	Sterol	Sum of all percentage values: 89 %
+Delta7-Stigmasterin 1,0 %
+4-Demethylsterine (WCOT-OV-1)
+Steringehalt im Oel:
+4-Demethylsterine 331mg/100 g Oel
+4-Monomethylsterine 47 mg/100 g Oel
+4.4-Dimethylsterine 20 mg/100 g Oel	89.00     	GLC-Area-%
+16333	TAB_007607	Sterol	freie Sterine :
+Delta7-Stigmasterin 0,8 %
+Sterinster : Cholesterin 0.4, Campersterin 23.6, Stigmasterin 5.2, Sitosterin 54,4
+Delta5-Avenasterin 11.8, Delta7-Stigmasterin 2.3, Delta7-Avenasterin 2.3
+Zu der vorliegenden Literaturstelle sind auch Daten zu freie und acylierte Steringlucoside,
+Lipoproteine vorhanden.	99.20     	GLC-Area-%
+20639	TAB_008212	Sterol	Sum of all percentage values: 99 %
+-Delta-7-Stigmastenol + -Delta-7-Avenasterin = 0,6 %
+SE-30
+Zu der vorliegenden Literaturstelle sind auch Daten zu Sterine OV-17 vorhanden, ausserdem Tabelle ueber Zusammensetzung der triterpen und aliph. Alkohole. Nutzung des Alkaloids Tabersonin in der pharm. Industrie.	99.00     	GLC-Area-%
+11775	TAB_006661	Tocopherol	Sum of the specified percentage values: 100 %
+Gesamt - 147 ppm	-	-
+20886	TAB_006662	Tocopherol	Sum of the specified content values: 27%
+-alpha--Tocopherol = 18-27 %
+-beta--und -delta--Tocopherol = 73-82 %
+Gesamttocopherole: 20-30 mg/ml	-	-
+14451	TAB_007686	Sterol	Sum of all percentage values: 56.17 %	56.17     	GLC-Area-%
+16822	TAB_006664	Sterol	Sum of all percentage values: 97 %
+roh, auf OV-17-Saeule gemessen	97.00     	GLC-Area-%
+21622	TAB_006665	Sterol	0.25 % des Oels
+Delta7-Stigmasterin 0,0
+auf OV-17-Saeule gemessen
+Sum of all percentage values 100.1 %	100.10    	GLC-Area-%
+16906	TAB_006666	Sterol	Sum of all percentage values: 100 %
+'Soma' (Schweden) nach praep. DC, freie Sterine	100.00    	GLC-Area-%
+16907	TAB_006667	Sterol	Die Summe aller Prozentwerrte betraegt 100.1 %
+'Soma' (Schweden) nach praep. DC, verest. Sterine	100.10    	GLC-Area-%
+16908	TAB_006668	Sterol	Sum of all percentage values 100 %
+Fluessigkeitsphase nnach Tiefentemp.-Kristallis, freie Sterine	100.00    	GLC-Area-%
+16909	TAB_006669	Sterol	Sum of all percentage values: 99.9 %
+Fluessigkeitsphase nach Tiefentemp.-Kristallis, verest. Sterine	99.90     	GLC-Area-%
+16910	TAB_006670	Sterol	Fluessigphase nach Tieftemp.Kristallisation
+'Indra' Schweden, freie Sterine	100.00    	GLC-Area-%
+16911	TAB_006671	Sterol	Fluessigphase nach Tieftemp.Kristallisation
+'Indra' Schweden, verest. Sterine	100.00    	GLC-Area-%
+16912	TAB_006672	Sterol	Sum of all percentage values 100 %
+Fluessigphase nach Tieftemp.Kristallisation
+'Bialy Oleisty, Schweden, freie Sterine	100.00    	GLC-Area-%
+21617	TAB_004769	Sterol	Campestrin %
+Stigmasterin %
+Sitosterin
+?5-Avenasterin %
+?7-Stigmasternol	-	-
+16913	TAB_006673	Sterol	Sum of all percentage values: 100 %
+Fluessigphase nach Tieftemp.Kristallisation
+'Bialy Oleisty, Schweden, verest. Sterine	100.00    	GLC-Area-%
+16917	TAB_006674	Sterol	Sum of all percentage values: 100 %
+frische Saat, freie Sterine	100.00    	GLC-Area-%
+16918	TAB_006675	Sterol	Sum of all percentage values 100.1 %
+frische Saat, Sterinester	100.10    	GLC-Area-%
+16919	TAB_006676	Sterol	Sum of all percentage values: 100 %
+6 Monate Lagerzeit, freie Sterine	100.00    	GLC-Area-%
+16920	TAB_006677	Sterol	Sum of all percentage values 100.1 %
+6 Monate Lagerzeit, Sterinester	100.10    	GLC-Area-%
+16921	TAB_006678	Sterol	Sum of all percentage values 100.1 %
+10 Monate Lagerzeit, freie Sterine	100.10    	GLC-Area-%
+16922	TAB_006679	Sterol	Sum of all percentage values: 100 %
+10 Monate Lagerzeit, Sterinester	100.00    	GLC-Area-%
+12025	TAB_009195	Sterol	Sum of all content values: 2360 mg/kg oil	2360.00   	mg/kg oil
+12025	TAB_009195	Tocopherol	Sum of the specified content values: 27.5 mg/100g oil	-	-
+12026	TAB_009196	Sterol	Sum of all content values: 1884 mg/kg oil	1884.00   	mg/kg oil
+12026	TAB_009196	Tocopherol	Sum of the specified content values: 23.93 mg/100g oil	-	-
+12027	TAB_009197	Sterol	Sum of all content values: 1632 mg/kg oil	1632.00   	mg/kg oil
+12027	TAB_009197	Tocopherol	Sum of the specified content values: 20.91 mg/100g oil	-	-
+12028	TAB_009198	Sterol	Sum of all content values: 2270 mg/kg oil	2270.00   	mg/kg oil
+12028	TAB_009198	Tocopherol	Sum of the specified content values: 28.81 mg/100g oil	-	-
+12029	TAB_009199	Sterol	Sum of all content values: 2058 mg/kg oil	2058.00   	mg/kg oil
+12029	TAB_009199	Tocopherol	Sum of the specified content values: 25.51 mg/100g oil	-	-
+19299	TAB_007740	Sterol	Sum of all percentage values 107.5 %
+Sitosterin 43.8-57.9
+Campersterin 18.7-29.1
+Stigmasterin 12.4-20.5	107.50    	GLC-Area-%
+12030	TAB_009200	Sterol	Sum of all content values: 1863 mg/kg oil	1863.00   	mg/kg oil
+12030	TAB_009200	Tocopherol	Sum of the specified content values: 25.51 mg/100g oil	-	-
+16580	TAB_008410	Sterol	24-Methylcholest-7-enol = 6.0 %
+alpha-Spinasterin = 43.0 %	48.00     	GLC-Area-%
+12031	TAB_009201	Sterol	Sum of all content values: 1836 mg/kg oil	1836.00   	mg/kg oil
+12031	TAB_009201	Tocopherol	Sum of the specified content values: 24.87 mg/100g oil	-	-
+12032	TAB_009202	Sterol	Sum of all content values: 1922 mg/kg oil	1922.00   	mg/kg oil
+12032	TAB_009202	Tocopherol	Sum of the specified content values: 15.78 mg/100g oil	-	-
+12033	TAB_009203	Sterol	Sum of all content values: 2019 mg/kg oil	2019.00   	mg/kg oil
+12033	TAB_009203	Tocopherol	Sum of the specified content values: 16.89 mg/100g oil	-	-
+11911	TAB_008434	Sterol	2 Sorten, Thailand
+Sum of all percentage values: 81.3 %
+Zu der vorliegenden Literaturstelle auch noch :
+Campesterin = 6.0 %
+Stigmasterin = 37.8 %
+Sitosterin = 40.5 %	81.30     	GLC-Area-%
+19068	TAB_006760	Sterol	Sum of all percentage values: 99.93 %
+OV - 17	99.93     	GLC-Area-%
+19068	TAB_006760	Triacylglycerol	Sum of the specified percentage values: 74.76 %
+OOL = 8,84 %
+SOL = 3,72 %
+LLnO = 1,80 %	74.76     	%
+19068	TAB_006760	Tocopherol	Sum of the specified content values: 7mg/kg
+-beta--Tocopherol + -gamma--Tocopherol = 93 mg/kg	-	-
+19069	TAB_006761	Sterol	Sum of all percentage values: 99.96 %
+OV - 17	99.96     	GLC-Area-%
+19069	TAB_006761	Triacylglycerol	Sum of the specified percentage values: 80.01 %
+OOL = 7,05
+SOL = 2,59
+LLnO = 2,10	80.01     	%
+19069	TAB_006761	Tocopherol	Sum of the specified percentage values: 7 %
+-beta-- + -gamm--Tocopherol = 93 %	-	-
+12761	TAB_006765	Sterol	Sum of all percentage values: 100,1 %
+OV-17
+Sterine: 52 % des Unverseifbaren	100.10    	GLC-Area-%
+24375	TAB_007801	Sterol	Auf OV--17-Saeule gemessen ( g.kg-1-Oel)
+-Delta-7-Stigmasteri = 0.1 %
+Streubreiten in Originalliteratur.	16.00     	GLC-Area-%
+21239	TAB_007804	Sterol	Sum of all percentage values: 16.1 g/kg Oel
+Auf OV-17-Saeule gemessen.
+Streubreiten s. Originalliteratur.	16.10     	g/kg Öl
+21414	TAB_008464	Sterol	Unverseifbares : -delta--Sitosterin 0,23 %
+-delta--Amyrin 0.1 %	0.23      	GLC-Area-%
+11878	TAB_007814	Sterol	Sum of all percentage values: 99.2 %
+OV-17	99.20     	GLC-Area-%
+21613	TAB_006787	Sterol	auf OV-17 Saeule gemessen	100.00    	GLC-Area-%
+23236	TAB_008486	Sterol	Sum of all percentage values: 97.5 %
+Fucosterin	97.50     	GLC-Area-%
+23401	TAB_008487	Sterol	Sum of all percentage values: 97.5 %
+Fucosterin	97.50     	GLC-Area-%
+21899	TAB_008488	Sterol	Sum of all percentage values: 97.5 %
+Fucosterin	97.50     	GLC-Area-%
+16823	TAB_006790	Sterol	Sum of all percentage values: 100 %	100.00    	GLC-Area-%
+16099	TAB_006792	Sterol	Sum of all percentage values: 76.4 %
+Sterine : 3.2 % der Gesamtlipide	76.40     	GLC-Area-%
+20694	TAB_006793	Sterol	freie Sterin-Fraktion
+Sum of all percentage values: 128 % / Sitosterin 55-73 %, 5-Avensterin 13-33 %, Campesterin 9-11 %, Stigmasterin 3-11 %
+weitere Angaben siehe unter Literaturstelle
+(P.f. Britton var. Crispa Decaisne
+verschiedene Anbaugebiete in Korea
+Unverseifbares getrennt in : 4,4-Dimethylsterin und 4-Monomethylsterin = Spuren
+4-Demethylsterin > 60%	128.00    	GLC-Area-%
+20688	TAB_006801	Triacylglycerol	15 Triglyceride-Arten Haupttriglyceidee :
+Sum of the specified percentage values: 84.9 %
+OSS 3.8 %
+OOln 3.2 %
+PSLn 2,0
+LLLn 1.5 %
+16:3-18:1-18:3 1.0	-	-
+18980	TAB_008491	Sterol	Fucosterin = 0.4 %	112.50    	GLC-Area-%
+10571	TAB_007836	Sterol	Sum of all percentage values: 99 %
+Sterine in der getrockneten Pflanze: 0.17 %	99.00     	GLC-Area-%
+10201	TAB_006805	Sterol	Sum of all percentage values: 99.8 %	99.80     	GLC-Area-%
+10202	TAB_006806	Sterol	Sum of all percentage values: 99.8 %	99.80     	GLC-Area-%
+19364	TAB_006809	Sterol	Sum of all percentage values: 99.8 %
+-Delta-7-Avenastenol = 0,1 %	99.80     	GLC-Area-%
+12287	TAB_006811	Sterol	Sum of all percentage values: 100 %
+SE - 30
+Zu der vorliegenden Literaturstelle sind auch Daten zu Sterinen OV - 17 vorhanden.	100.00    	GLC-Area-%
+10471	TAB_007849	Sterol	3 Samples kernel oil, Madagaskar, auf OV-17-Saeule gemessen
+Cholesterin 0.2-0.6 (0.3)
+Campesterin 16.0-18.1(17.4)
+Stigmasterin 11.2-13.9(12.9)
+Sitosteriin 66.6-71.3(68.3)
+Fucosterin 0.1-0.2(0.1)
+Delta5-Avenasterin 0.6-1.2(0.9)	105.10    	GLC-Area-%
+20048	TAB_007853	Sterol	Sum of all percentage values: 63.7 %
+Hauptsterin im Unverseifbaren.	63.70     	GLC-Area-%
+21505	TAB_006825	Sterol	Sum of all percentage values: 107,69 %
+OV-17
+Cholesterin = 1,1-2,3 % (1,6 %)
+Campesterin = 4,9-6,3 % (5,6 %)
+Stigmasterin = 0,5-1,7 % (0,9 %)
+-beta--Sitosterin = 81,5-87,1 % (84,9 %)
+-Delta-5-Avenasterin = 1,8-6,8 % (4,4 %)
+-Delta-7-Stigmastenol = 0,9-1,8 % (1,2 %)
+-D	107.70    	GLC-Area-%
+19273	TAB_006828	Triacylglycerol	Sum of the specified percentage values: 0.2 %
+LLnO + LLPo = 1,4 %, LPPo + PoPoPo = 0,3 %
+LLO + LnOO = 6,7 %, LLP + LOPo + LnOP = 5,3 %
+LnPP + PPoO = 0,2 %, LOO + LLSt = 15,8 %
+LOP + OOPo + LPoSt = 16,2 %, LPP + OPoPo + PoPoSt = 3,0 %
+OOO + LOSt = 18,6 %, OOP + LPSt + OPSt = 24,5 %
+OPP + PPoSt = 6,2 %, OOSt = 0,2 %
+OPSt = 1,1 %, PPSt = 0,4 %	-	-
+19542	TAB_006829	Sterol	Sum of all percentage values: 99.51 %
+-Delta-7-Sitosterin = 0,01 %	99.51     	GLC-Area-%
+19543	TAB_006830	Sterol	Sum of all percentage values: 99.97 %
+-Delta-7-Sitosterin = 0,0 %	99.97     	GLC-Area-%
+19544	TAB_006831	Sterol	-Delta-7-Sitosterin = 0,0 %	100.00    	GLC-Area-%
+15509	TAB_008517	Tocopherol	Sum of the specified content values: 100 mg/kg
+Gesamttocopherolgehalt: 285,2 mg/kg	-	-
+15510	TAB_008518	Tocopherol	Sum of the specified content values: 100 mg/kg
+Gesamttocopherolgehalt: 631,2 mg/kg	-	-
+15511	TAB_008519	Tocopherol	Sum of the specified content values: 100.1 mg/kg
+Gesamttocopherolgehalt: 684,4 mg/kg	-	-
+23357	TAB_006847	Sterol	Sum of all percentage values: 99 %
+Auf SE-52-Saeule gemessen	99.00     	GLC-Area-%
+23358	TAB_006848	Sterol	Sum of all percentage values: 100 %
+Auf SE-52-Saeule gemessen	100.00    	GLC-Area-%
+23359	TAB_006849	Sterol	Sum of all percentage values: 99 %
+Auf SE-52-Saeule gemessen	99.00     	GLC-Area-%
+19999	TAB_007914	Sterol	Sum of all percentage values: 100 %
+OV-17
+Sterine: 15% des Unverseifbaren	100.00    	GLC-Area-%
+19067	TAB_008544	Sterol	Sum of all percentage values: 90.8 %
+Stigmast-5.24(alpha)-dien-3-delta--ol = 4.8 %
+Stigmast-7.24(alpha)-dien-3-delta--ol = 4.1 %	90.80     	GLC-Area-%
+21616	TAB_007956	Sterol	Sum of all percentage values: 99.7 %
+auf OV-17-Saeule gemessen
+Korea	99.70     	GLC-Area-%
+12262	TAB_007957	Sterol	Sum of all percentage values 101 %
+Kora (Unverseifbares)
+Campesterin 3.2-3.8
+Stigmasterin 5.4-5.7
+Sitosterin 85.6-86.3
+Delta7-Stigmastenol 4.9-5.2	101.00    	GLC-Area-%
+21615	TAB_006962	Sterol	Sum of all percentage values: 100 %
+OV-17	100.00    	GLC-Area-%
+11776	TAB_006978	Tocopherol	Sum of the specified content values: 101mg/kg	-	-
+11905	TAB_006980	Tocopherol	Sum of the specified percentage values: 101 mg/kg	-	-
+12065	TAB_006982	Tocopherol	Sum of the specified content values: 101 mg/kg	-	-
+11847	TAB_006983	Tocopherol	Sum of the specified content values: 101 mg/kg	-	-
+11777	TAB_006984	Tocopherol	Sum of the specified content values: 101 mg/kg	-	-
+16824	TAB_006985	Sterol	Sum of all percentage values: 100 %
+roh;China
+auf O-17-Saeule gemessen	100.00    	GLC-Area-%
+16824	TAB_006985	Tocopherol	Sum of the specified content values: 101 mg/kg	-	-
+12260	TAB_006986	Sterol	Sum of all percentage values: 100 %
+roh
+China
+auf O-17-Saeule gemessen	100.00    	GLC-Area-%
+12260	TAB_006986	Triacylglycerol	Sum of the specified percentage values: 79.7 %
+PLLn 3.3
+SOL 2.7
+POLn 1,9
+POO 1.7
+OLnLn 1.5	79.70     	%
+12260	TAB_006986	Tocopherol	Sum of the specified percentage values 101 %	-	-
+19365	TAB_006995	Sterol	Sum of all percentage values: 99.9 %	99.90     	GLC-Area-%
+21026	TAB_009515	Sterol	Sum of all percentage values: 100 %
+Gemessen auf OV-17-Saeule.
+Mittelwert aus 4 Sorten.	100.00    	GLC-Area-%
+12268	TAB_009519	Triacylglycerol	Sum of the specified percentage values: 100 %	100.00    	%
+12268	TAB_009519	Tocopherol	Sum of the specified content values: 100%
+325 mg/kg Tocopherole im Oel.	-	-
+10229	TAB_008638	Tocopherol	Sum of the specified content values: 1750.4 mg/kg	-	-
+10230	TAB_008639	Tocopherol	Sum of the specified content values: 1087.2 mg/kg	-	-
+10231	TAB_008640	Tocopherol	Sum of the specified content values: 1087.2 mg/kg	-	-
+15703	TAB_009533	Triacylglycerol	Sum of the specified percentage values: 83 %
+LnLnS = 3 %
+LnLS = 8 %
+LnOS = 4 %
+OSS = 1 %	-	-
+16125	TAB_009534	Sterol	Sum of all percentage values: 93.8 %
+Isofucosterol = 6.2 %	93.80     	GLC-Area-%
+16125	TAB_009534	Triacylglycerol	Sum of the specified percentage values: 100 %
+PLO angegeben als LLS + LOP	100.00    	%
+16125	TAB_009534	Tocopherol	Sum of the specified content values: 100 %	-	-
+16126	TAB_009535	Sterol	Sum of all percentage values: 94.5 %
+Isofucosterol = 5.5 %	94.50     	GLC-Area-%
+16126	TAB_009535	Triacylglycerol	PLO angegeben als LLS + LOP.
+Die Summe aller Prozentwerte betraegt: 100 %	100.00    	%
+16126	TAB_009535	Tocopherol	Sum of the specified content values: 100 %	-	-
+16127	TAB_009536	Sterol	Sum of all percentage values: 89.5 %
+Isofucosterol: 10.5 %	89.50     	GLC-Area-%
+16127	TAB_009536	Triacylglycerol	Sum of the specified percentage values: 100 %	100.00    	%
+16127	TAB_009536	Tocopherol	Sum of the specified content values: 100%	-	-
+20645	TAB_009540	Sterol	Sum of all percentage values: 92.8 %
+24-Ethyliden-Cholest-7-en-3-beta--ol = 2.2 %
+28-Isofucosterin = 5 %
+Note: Further data in publication.	92.80     	GLC-Area-%
+20646	TAB_009541	Sterol	Sum of all percentage values: 94.5 %
+28-Isofucosterin = 4 %
+24-Ethylidencholest-7-en-3-beta--ol = 1,4 %
+4-demethylsterine
+frei (86 %)
+Note: Further data in publication.	94.50     	GLC-Area-%
+20647	TAB_009542	Sterol	Sum of all percentage values: 89.7 %
+28-Isofucosterin = 6.5 %
+24-Ethylidencholest-7-en-3-beta--ol = 3.6 %
+4-demethylsterine
+verestert (13 %)
+Note: Further data in publication.	89.70     	GLC-Area-%
+20648	TAB_009543	Sterol	Sum of all percentage values: 99.7 %
+4-demethylsterine
+glykosyliert (1 %)
+Note: Further data in publication.	99.70     	GLC-Area-%
+19314	TAB_009547	Sterol	Sum of all percentage values: 100 %	100.00    	GLC-Area-%
+11831	TAB_009548	Sterol	Sum of all percentage values: 100 %	100.00    	GLC-Area-%
+20573	TAB_009553	Tocopherol	Sum of the specified content values: 360.4 mg/100g.
+Streubreiten siehe Originalliteratur.	-	-
+15880	TAB_009588	Triacylglycerol	Sum of the specified percentage values: 97.66 %
+SLnO = 1.4 %
+SLLn = 0,4 %
+SLnL = 0,2 %
+SLnLn = 0,2 %	-	-
+10071	TAB_009615	Sterol	Sum of all percentage values: 98.3 %	98.30     	GLC-Area-%
+10076	TAB_009621	Sterol	Sum of all percentage values: 88.5 %
+Avenasterin = 11,5 %	88.50     	GLC-Area-%
+10077	TAB_009622	Sterol	Sum of all percentage values: 96.9 %
+-Delta-7-colesten-3-beta--ol = 0.0 %
+Avenasterol = 3.1 %	96.90     	GLC-Area-%
+10078	TAB_009623	Sterol	Sum of all percentage values: 95.3 %
+Avenasterol = 2.4 %	95.30     	GLC-Area-%
+10079	TAB_009624	Sterol	Sum of all percentage values: 71.5 %
+-Delta-7-colesten-3-beta-ol = 5.5 %
+Avenasterol = 4.8 %	71.50     	GLC-Area-%
+10080	TAB_009625	Sterol	Sum of all percentage values: 86.6 %
+-Delta-7-colesten-3-beta-ol = 0.7 %
+Avenasterol = 11.8 %	86.60     	GLC-Area-%
+10081	TAB_009626	Sterol	Sum of all percentage values: 98.5 %	98.50     	GLC-Area-%
+10082	TAB_009627	Sterol	Sum of all percentage values: 99.8 %	99.80     	GLC-Area-%
+10083	TAB_009628	Sterol	Sum of all percentage values: 88.5 %	88.50     	GLC-Area-%
+10084	TAB_009629	Sterol	Sum of all percentage values: 95.6 %
+Estigmaesterol = 1.7 %
+Avenasterol = 2.7 %	95.60     	GLC-Area-%
+10085	TAB_009630	Sterol	Sum of all percentage values: 89.9 %
+Estigmaesterol = 6.4 %
+Avenasterol = 3.7 %	89.90     	GLC-Area-%
+20461	TAB_009631	Sterol	Sum of all percentage values: 72.1 %	72.10     	GLC-Area-%
+20462	TAB_009632	Sterol	Sum of all percentage values: 99.1 %	99.10     	GLC-Area-%
+20463	TAB_009633	Sterol	Sum of all percentage values: 100 %	100.00    	GLC-Area-%
+19315	TAB_009634	Sterol	Sum of all percentage values: 100 %	100.00    	GLC-Area-%
+22338	TAB_009643	Sterol	Sum of all percentage values: 100 %
+Gemessen auf OV-17-Saeule.	100.00    	GLC-Area-%
+23195	TAB_008707	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23196	TAB_008708	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23197	TAB_008709	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23198	TAB_008710	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23199	TAB_008711	Tocopherol	Sum of the specified content values: 100.1 mg/kg	-	-
+23200	TAB_008712	Tocopherol	Sum of the specified content values: 100.1 mg/kg	-	-
+23201	TAB_008713	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+18982	TAB_009652	Sterol	Sum of all percentage values: 95.9 %
+Fucosterin: 0.3 %
+Gemessen auf OV-17-Saeule.	95.90     	GLC-Area-%
+18166	TAB_009653	Sterol	Sum of all percentage values: 100 %
+Gemessen auf OV-17-Saeule.
+Note: Further data in publication.	100.00    	GLC-Area-%
+23202	TAB_008714	Tocopherol	Sum of the specified content values: 100.1 mg/kg	-	-
+23203	TAB_008715	Tocopherol	Sum of the specified content values: 99.9 mg/kg	-	-
+23204	TAB_008716	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+18170	TAB_009657	Sterol	Sum of all percentage values: 100 %
+esterified sterols
+Note: Further data in publication.	100.00    	GLC-Area-%
+23205	TAB_008717	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23206	TAB_008718	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23207	TAB_008719	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+16332	TAB_009663	Sterol	Sum of all percentage values: 99.3 %
+-Delta-7-Stigmasterin = 0.7 %	99.30     	GLC-Area-%
+23208	TAB_008720	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+16581	TAB_009664	Sterol	Sum of all content values: 2957 mg/kg	2957.00   	mg/kg
+23209	TAB_008721	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+24183	TAB_009665	Triacylglycerol	Sum of the specified percentage values: 94.4 %
+SOA = 1.2 %	-	-
+23210	TAB_008722	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23211	TAB_008723	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+21639	TAB_009668	Sterol	Sum of all percentage values: 47.2 %
+Ergosta-7,22-dienol = 1.6 %
+Spinasterin = 51.2 %	47.20     	GLC-Area-%
+21640	TAB_009669	Sterol	Sum of all percentage values: 51.2 %
+Ergosta-7,22-dienol = 2.0 %
+Spinasterin = 46.8%	51.20     	GLC-Area-%
+21641	TAB_009670	Sterol	Sum of all percentage values: 57.9 %
+Ergosta-7,22-dienol = 2.6 %
+Spinasterin = 39.5 %	57.90     	GLC-Area-%
+23212	TAB_008724	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23213	TAB_008725	Tocopherol	Sum of the specified content values: 99.9 mg/kg	-	-
+23214	TAB_008726	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23215	TAB_008727	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23216	TAB_008728	Tocopherol	Sum of the specified content values: 99.9 mg/kg	-	-
+23217	TAB_008729	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23218	TAB_008730	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23219	TAB_008731	Tocopherol	Sum of the specified content values: 99.9 mg/kg	-	-
+23220	TAB_008732	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23221	TAB_008733	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+23222	TAB_008734	Tocopherol	Sum of the specified content values: 100 mg/kg	-	-
+19617	TAB_009687	Sterol	Sum of all percentage values: 99.6 %	99.60     	GLC-Area-%
+12012	TAB_009688	Tocopherol	Sum of the specified content values: 17.4mg/kg
+mg/100 g Saat	-	-
+18983	TAB_009724	Sterol	Sum of all percentage values: 97.3 %
+Fucosterin 0.1 %	97.30     	GLC-Area-%
+18983	TAB_009724	Tocopherol	Sum of the specified content values: 96.6mg/kg	-	-
+20652	TAB_009725	Triacylglycerol	Sum of the specified percentage values: 100 %	-	-
+21250	TAB_009726	Triacylglycerol	Sum of the specified percentage values: 100 %	-	-
+10281	TAB_009727	Triacylglycerol	Sum of the specified percentage values: 98.5 %	-	-
+10282	TAB_009728	Sterol	Sum of all percentage values: 17.9 %
+Delta-7-25-Stigmastadienol 1.4 %	17.90     	GLC-Area-%
+10282	TAB_009728	Triacylglycerol	Sum of the specified percentage values: 98.1 %	-	-
+16329	TAB_009729	Sterol	Sum of all percentage values 100 %	100.00    	GLC-Area-%
+21376	TAB_009731	Sterol	Sum of all percentage values: 99.03 %	99.03     	GLC-Area-%
+21376	TAB_009731	Tocopherol	Sum of the specified content values: 45.8mg/kg	-	-
+21377	TAB_009732	Sterol	Sum of all percentage values: 97.52 %	97.52     	GLC-Area-%
+21377	TAB_009732	Tocopherol	Sum of the specified content values: 45.8mg/kg	-	-
+14534	TAB_009733	Triacylglycerol	Sum of the specified percentage values: 100 %	-	-
+15704	TAB_009746	Triacylglycerol	Sum of the specified percentage values: 100 %	-	-
+11833	TAB_009804	Sterol	Sum of all percentage values: 100 %	100.00    	GLC-Area-%
+19368	TAB_009828	Sterol	Sum of all percentage values: 99.9 %
+Delta-7-Avenastenol 0.0 %
+Auf OV-17-Saeule gemessen
+Nigeria (raff.)	99.90     	GLC-Area-%
+22289	TAB_009829	Sterol	Sum of all percentage values: 100 %
+Nigeria	100.00    	GLC-Area-%
+22290	TAB_009830	Sterol	USA	100.00    	GLC-Area-%
+21794	TAB_009831	Triacylglycerol	Sum of the specified percentage values: 93.19 %
+OOA 4.24 %
+UV Detektor 210nm
+OLB 1.12 %
+OOB 1.42 %	-	-
+20750	TAB_009832	Triacylglycerol	Sum of the specified percentage values: 89.5 %
+LLGa 0.4 %
+Laser / Light Scatt. Det.	-	-
+22339	TAB_009835	Triacylglycerol	Sum of the specified percentage values: 96.4 %	-	-
+22340	TAB_009836	Triacylglycerol	Sum of the specified percentage values: 96.4 %	-	-
+20651	TAB_008801	Triacylglycerol	ElElEl = 15.0 %
+ElElL = 42.0 %
+EiLL = 9.0 %
+ElElO = 6.0 %
+EiLO = 6.0 %
+ElLp = 3.0 %
+LLO = 3.0 %
+LLP = 3.5 %
+LOO = 0.0 %
+El : 18:3 conjugues	-	-
+23363	TAB_008812	Sterol	Sum of all percentage values: 98 %
+auf SE-52-Saeule gemessen	98.00     	GLC-Area-%
+23364	TAB_008813	Sterol	Sum of all percentage values: 99 %
+auf SE-52-Saeule gemessen	99.00     	GLC-Area-%
+16334	TAB_009847	Sterol	Sum of all percentage values: 100 %
+Gemessen auf OV-17-Saeule.	100.00    	GLC-Area-%
+16331	TAB_009851	Sterol	Sum of all percentage values: 100 %
+Auf OV-17-Saeule gemessen	100.00    	GLC-Area-%
+21309	TAB_009852	Sterol	Sum of all percentage values 101,3 %	101.30    	GLC-Area-%
+21309	TAB_009852	Tocopherol	Sum of the specified content values: 407.8
+Rosell et al. (1983) (ppm)	-	-
+15702	TAB_008826	Triacylglycerol	Sum of the specified percentage values: 30 %
+LeLeLe = 5.0 %, LeLeL = 17.0 %, LeLeO = 6.0 %
+LeLeS = 4.0 %, LeLL = 21.0 %, LeLO = 10.0 %
+LeLS = 4.0 %, LeOO = 1.0 %, LeOS = 1.0 % (mol %)	-	-
+21503	TAB_009870	Triacylglycerol	Sum of the specified percentage values: 99.3 %
+POP angegeben als POP + PLP.
+POS angegeben als POS + PAS + PLS.
+PScP = 87.0 %
+PScS = 13.0 %
+Sc = sterculic acid	-	-
+10572	TAB_008845	Sterol	Sum of all percentage values: 100 %
+Sterine in der getrockneten Pflanze : 0.22 %
+auf JXR-Saeule gemessen	100.00    	GLC-Area-%
+19539	TAB_009877	Sterol	Sum of all percentage values: 93.6 %
+Estigmasterol = 4.3 %
+-Delta-7-Estigmasterol = 0.5 %	93.60     	GLC-Area-%
+10541	TAB_009890	Sterol	Sum of all percentage values: 63.2 %
+Spinsterol = 33,0 %
+Fucosterol = 1,3 %	63.20     	GLC-Area-%
+10542	TAB_009891	Sterol	Sum of all percentage values: 63.1 %
+Spinsterol = 38,2
+Fucosterol = 1,6	63.10     	GLC-Area-%
+11854	TAB_009928	Sterol	-delta--amyrin 11,74
+Delta-5,24(25)-stigmasterol 4,76
+24-methylenecycloartanol 4,76
+citrostadienol 3,81	-	mg/100 g oil
+18973	TAB_009989	Sterol	Sum of all percentage values: 99.9 %
+Gemessen auf OV-17-Saeule.	99.90     	GLC-Area-%
+16335	TAB_009990	Sterol	Sum of all percentage values: 100 %
+Gemessen auf OV-17-Saeule.	100.00    	GLC-Area-%
+20232	TAB_009998	Tocopherol	Sum of the specified content values: 100%	-	-
+23604	TAB_009999	Tocopherol	Sum of the specified content values: 100%
+Gesamttocopherolgehalt: 785 ppm	-	-
