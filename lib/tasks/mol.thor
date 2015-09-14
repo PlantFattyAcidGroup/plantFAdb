@@ -132,25 +132,59 @@ class Mol < Thor
     end
   end
   
+  desc 'add_new_cas', 'add new cas rn by mol id'
+  def add_new_cas filename
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    file = File.open(filename,'r')
+    change = 0
+    same = 0
+    file.each_with_index do |line,idx|
+      next if idx==0
+      cas,mol = line.chomp.split("\t")
+      fa = FattyAcid.find_by(sofa_mol_id: mol)
+      cas=cas.delete 8203.chr      
+      if cas != fa.cas_number
+        fa.update_attribute(:cas_number, cas)
+        change +=1
+      else
+        same +=1
+      end
+    end
+    puts " - Updated #{change}"
+    puts " - No change #{same}"
+  end
+  
   desc 'add_cas_data', 'add data by cas id'
   def add_cas_data file
     require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
     file = File.open(file,'r')
-    file.each do |line|
+    entries = 0
+    found = 0
+    not_found = []
+    file.each_with_index do |line,idx|
+      next if idx==0
+      entries+=1
       cas,formula,name,mass,other = line.chomp.split("\t");
       fa = FattyAcid.find_by(cas_number: cas)
       if fa
+        found+=1
         result = fa.update_attributes(
           formula: formula,
-          name: name.gsub("\u03B1","-alpha-").gsub("\u0394","-delta-").gsub("\u03B3","-gamma-").gsub("\u03BD","-nu-"),
+          name: name.gsub("\u03B1","-alpha-").gsub("\u0394","-delta-").gsub("\u03B3","-gamma-").gsub("\u03BD","-nu-").try(:gsub,"\u03B2","-beta-").try(:gsub,"\u03C9","-omega-"),
           mass: mass,
-          other_names: other.try(:gsub, "\u03B1","-alpha-").try(:gsub,"\u0394","-delta-").try(:gsub,"\u03B3","-gamma-").try(:gsub,"\u03BD","-nu-")
+          other_names: other.try(:gsub, "\u03B1","-alpha-").try(:gsub,"\u03B2","-beta-").try(:gsub,"\u0394","-delta-").try(:gsub,"\u03B3","-gamma-").try(:gsub,"\u03BD","-nu-").try(:gsub,"\u03C9","-omega-")
         )
-        puts "#{cas}::#{result}"
+        #puts "#{cas}::#{result}"
       else
-        puts "NOT FOUND"
-        puts "#{cas}:: #{formula}, #{name}, #{mass}, #{other}\n\n"
+        not_found << "\t#{cas}\t #{formula}\t #{name}\t #{mass}\t #{other}"
       end
+    end
+    puts "- #{entries} entries"
+    puts "- #{found} found in database"
+    if(not_found.length > 0)
+      puts "-- NOT FOUND"
+      puts "\tCAS\tFormula\tName\tMass\tOther Names"
+      puts not_found.join("\n")
     end
   end
     

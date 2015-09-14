@@ -39,7 +39,7 @@
 
 <p>
   <strong>Plant:</strong>
-  <%= @publication.plant.display_name %>
+  <%= link_to @publication.plant.try(:display_name), @publication.plant %>
 </p>
 
 <hr/>

@@ -1,13 +1,13 @@
-#root = TreeNode.create name: 'root'
+root = TreeNode.create name: 'root'
 
 #root.children.create name: '', common_name: 'Liverworts', note: ''
 #root.children.create name: '', common_name: 'Mosses', note: ''
 #root.children.create name: '', common_name: 'Hornworts', note: ''
 #root.children.create name: '', common_name: 'Lycophytes', note: ''
 
-ferns = TreeNode.create name: 'Monilophytes', common_name: 'Ferns', note: ''
+ferns = root.children.create name: 'Monilophytes', common_name: 'Ferns', note: ''
 
-seed_plants = TreeNode.create name: 'Spermatophyte', common_name: 'Seed Plants', note: '' 
+seed_plants = root.children.create name: 'Spermatophyte', common_name: 'Seed Plants', note: '' 
 
 gmyno = seed_plants.children.create name: 'Gymnosperms', common_name: 'Gymnosperm', note: ''
   gmyno.children.create name: 'Cycadales', common_name: 'Palm', note: ''
@@ -20,9 +20,9 @@ gmyno = seed_plants.children.create name: 'Gymnosperms', common_name: 'Gymnosper
 angio = seed_plants.children.create name: 'Angiosperms', common_name: 'Flowering Plants', note: ''
 
   anita = angio.children.create name: 'Anita', common_name: 'ANA-Grade', note: ''
-    anita.children.create name: "Amborellales", common_name: 'Amborellales', note: 'woody, vessels lacking; dioecious; flw T5–8, A∞, G5–8; 1 ovule/carpel; embryo sac 9-nucleate; 1 species (New Caledonia)'
-    anita.children.create name: "Nymphaeales", common_name: 'Water lilies', note: 'aquatic, herbaceous; cambium absent; aerenchyma; flw T4–12, A3–∞; embryo sac 4-nucleate seeds operculate, perisperm; mucilage; alkaloids (no benzylisoquinolines)'
-    anita.children.create name: 'Austrobaileyales', common_name: 'Austrobaileyales', note: 'woody, vessels solitary; flw T>10, A∞, G ca.9; embryo sac 4-nucleate tiglic acid, aromatic terpenoids'
+    anita.children.create name: "Amborellales", common_name: 'Amborellales', note: ''
+    anita.children.create name: "Nymphaeales", common_name: 'Water lilies', note: ''
+    anita.children.create name: 'Austrobaileyales', common_name: 'Austrobaileyales', note: ''
   
   angio.children.create name: 'Chloranthales', common_name: 'Chloranthales', note: ''
 

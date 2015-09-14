@@ -5,7 +5,7 @@
 <% content_for :jumbo do -%>
 <div class="row">
 	<div class="col-md-8">
-		<h1>Plant Fatty Acid Database</h1>
+		<h1>Phylogenetic Fatty Acids</h1>
 		<p style='text-align: justify;'>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
 		</p>
@@ -15,7 +15,15 @@
 	</div>
 </div>
 <% end -%>
-
+<div>
+  <%= form_tag nil, method: :get, class: 'form-inline search' do %>
+    <div class='form-group pull-right'>
+	    <label for="query">Molecule:</label>
+			<%= select_tag :value, options_from_collection_for_select(@fatty_acids, :delta_notation, :name_with_count, params[:value]),include_blank: true, class: 'form-control' %>
+			<%= submit_tag "Update", class: "btn btn-primary "%>
+		</div>
+  <% end %>
+</div>
 <div id='tree'></div>
 <div id='icicle' class='graph'></div>
 <div class="mouse tooltip" >Mouse-tracking HTML Tip</div>
@@ -89,12 +97,12 @@ var	root = <%= @tree.to_json.html_safe %>
     .attr("y", function(d) { return y(d.y); })
     .attr("width", function(d) { return x(d.dx); })
     .attr("height", function(d) { return y(d.dy); })
-    .attr("fill", function(d) { return color((d.children ? d : d.parent).common_name); })
+    .attr("fill", function(d) { return color((d.children ? d : (d.parent ? d.parent : d)).common_name); })
     .on("click", clicked)
 		.on('mouseover', function(d){
 			tooltip.style("opacity", "1")
-			.html(d.name+" ("+d.common_name+")")
-			.style('background-color',color((d.children ? d : d.parent).common_name))
+			.html(d.name+" ("+d.common_name+")"+(d.children ? '' : "<br/>Value: "+d.value))
+			.style('background-color',color((d.children ? d : (d.parent ? d.parent : d)).common_name))
 		})
 		.on('mousemove', function(d){
 			tooltip

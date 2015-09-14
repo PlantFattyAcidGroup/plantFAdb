@@ -31,7 +31,7 @@
         <tr>
           <td><%= result.measure.try :type %></td>
           <td><%= result.measure.try :delta_notation %></td>
-          <td><%= result.publication.try :display_name %></td>
+          <td><%= link_to (result.publication.try :display_name), result.publication %></td>
           <td><%= result.value %></td>
           <td><%= result.unit %></td>         
             <!-- <td>

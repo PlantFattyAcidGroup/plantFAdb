@@ -125,6 +125,9 @@ Upload cas_numbers_to_sofa_Aug7.txt
 - Manually added PubChem CID -  5282782	M_435
 - Now 218 FA have a CAS RN
 
+parse extra cas data
+`thor mol:parse_scifinder lib/data/PhyloFAdb\ fatty_acid\ with\ CAS\ number-Substance_08_21_2015.txt > lib/data/cas_number_substance_Aug21_test.txt`
+
 ---
 
 Add name, other_names and formula to FA table
@@ -150,7 +153,7 @@ Upload cas_number_substance_Aug21.txt
 
 ---
 
-Add new TNRS plant names
+Add new TNRS plant names. Reload this full file to get new plant names including family,genus,species
 `thor plant:load_tnrs_full lib/data/plant_names/TNRS\ plant\ names\ Aug13.txt`
 
 Total Plants: 8299
@@ -163,24 +166,58 @@ Total Plants: 8299
 - Rejected name: 7
 - Orth. var.: 1
 - Accepted families: 7164
-- Name matched families: 8299
+- Name matched families: 8199
 
 ---
 
-Add order from mobot apweb
-`f = File.open("lib/data/taxonomy/family_to_order_clean.txt")`
-`families = {}`
-`f.each do |line|;fam,order = line.split("\t");families[fam]=order.chomp;end`
-`Plant.find_each do |plant|; plant.order_name = families[plant.family]; plant.save; end;nil`
+
+> Sep 2015
+
+Load extra plant names. 100 plants had no match in TNRS, needed manual lookup.
+`thor plant:load_tnrs_resubmit lib/data/additional_plant_names/tnrs_resubmit.txt`
+- Updated 99 plants
 
 ---
 
-Add custom taxonomy tree
+Upload updated cas rn data
+
+`thor mol:add_new_cas lib/data/additional_cas_rn/new_cas_rn.txt`
+ - Updated 88
+ - No change 4
+
+`thor mol:parse_scifinder lib> lib/data/cas_number_substance_Aug21_test.txt`
+
+`thor mol:add_cas_data lib/data/additional_cas_rn/new_cas_substance.txt`
+- 89 entries
+- 81 found in database
+-- NOT FOUND
+	CAS	Formula	Name	Mass	Other Names
+	80738-22-3	 C20 H30 O2	 5,11,14-Eicosatrien-8-ynoic acid, (Z,Z,Z)- (9CI)	 302.45	 8,9-Dehydroarachidonic acid
+	638-53-9	 C13 H26 O2	 Tridecanoic acid	 214.34	 NSC 25955; NSC 69131; Tridecylic acid; n-Tridecanoic acid; n-Tridecoic acid
+	13126-31-3	 C18 H34 O2	 7-Octadecenoic acid, (7Z)-	 282.46	 7-Octadecenoic acid, (Z)- (8CI); 7-Octadecenoic acid, cis- (7CI); (Z)-7-Octadecenoic acid; cis-7-Octadecenoic acid; Δ7-cis-Octadecenoic acid
+	120193-28-4	 C18 H26 O2	 5-Octadecene-7,9-diynoic acid, (E)- (9CI)	 274.40	 
+	33128-25-5	 C18 H28 O2	 7,9-Octadecadiynoic acid	 276.41	 
+	136145-04-5	 C18 H30 O2	 11-Octadecen-9-ynoic acid, (Z)- (9CI)	 278.43	 cis-11-Octadecen-9-ynoic acid
+	1646179-08-9	 C20 H28 O2	 13,17-Octadecadiene-9,11-diynoic acid, ethyl ester, (13Z)-	 300.44	 
+	4706-60-9	 C16 H26 O2	 6,9,12-Hexadecatrienoic acid	 250.38	 
+
+
+---
+
+Build custom taxonomy tree from mobot apweb and link plant family to order
+
+Add order name
+`thor plant:load_mobot_order lib/data/taxonomy/family_to_order_clean.txt`
+
+Add tree
 Data from poster: http://www2.biologie.fu-berlin.de/sysbot/poster/poster1.pdf
 and MOBOT AP tree: http://www.mobot.org/MOBOT/research/APweb/welcome.html
-plus web searches
-
+and web searches
 `rake db:seed:single SEED=db/seed_tree.rb`
+
+---
+
+
 
 ### License
 

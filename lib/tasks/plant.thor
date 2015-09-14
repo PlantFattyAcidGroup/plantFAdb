@@ -72,6 +72,60 @@ class Plant < Thor
     STDERR.puts "- Note only: #{note_only}"
   end
 
+  desc 'load_tnrs_resubmit', "Load new tnrs names from manual submission"
+  def load_tnrs_resubmit filename
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    file = File.open(filename,'r')
+    PaperTrail.enabled=false
+    count = 0
+    file.each_with_index do |line,idx|
+      next if idx==0
+      data = line.split("\t")
+      note = data[0]
+      plant_id = data[2]
+      url = data[4]
+      family = data[5]
+      genus = data[6]
+      species = data[7]
+      #a_species = data[9]
+      a_family=data[10].chomp
+      if(a_family != family)
+        note = "#{note.gsub(/\"/,'')} #{a_family}"
+      end
+      plant = ::Plant.find(plant_id)
+      plant.update_attributes(
+        name_status: 'manual',
+        # accepted_rank: 'none',
+        # matched_rank: 'none',
+        tropicos_url: url,
+        family: family,
+        genus: genus,
+        species: species,
+        note: note
+      )
+      count+=1
+    end
+    puts "- Updated #{count} plants"
+  end
+  
+  desc 'load_mobot_order', "Load order name from mobot file"
+  def load_mobot_order filename
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    file = File.open(filename,'r')
+    PaperTrail.enabled=false
+    families = {}
+    file.each do |line|
+      fam,order = line.split("\t")
+      families[fam]=order.chomp
+    end
+    pbar = ProgressBar.new(::Plant.count)
+    ::Plant.find_each do |plant|
+      plant.order_name = families[plant.family]
+      plant.save
+      pbar.increment!
+    end
+  end
+  
   desc 'load_tnrs_full', "Load detailed tnrs data"
   def load_tnrs_full filename
     require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
@@ -119,17 +173,17 @@ class Plant < Thor
         
         # update plant
         plant = db_plants[plant_id]        
-        # plant.update_attributes(
-        #   name_status: name_status||'none',
-        #   tnrs_family: tnrs_family,
-        #   tnrs_name: tnrs_name,
-        #   accepted_rank: accepted_rank||'none',
-        #   matched_rank: matched_rank||'none',
-        #   tropicos_url: url,
-        #   family: family,
-        #   genus: genus,
-        #   species: species
-        # )
+        plant.update_attributes(
+          name_status: name_status||'none',
+          tnrs_family: tnrs_family,
+          tnrs_name: tnrs_name,
+          accepted_rank: accepted_rank||'none',
+          matched_rank: matched_rank||'none',
+          tropicos_url: url,
+          family: family,
+          genus: genus,
+          species: species
+        )
       end
     end
     puts "Total Plants: #{::Plant.count}"
