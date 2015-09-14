@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-    @fatty_acids = FattyAcid.with_results.includes(:systematic_names).references(:systematic_names).order("measures.name desc, names.name desc")
+    @fatty_acids = FattyAcid.with_results.order("measures.name asc")
     @tree = TreeNode.arrange_serializable do |parent, children|
       {
          name: parent.name,
