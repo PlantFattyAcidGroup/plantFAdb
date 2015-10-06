@@ -26,16 +26,17 @@ class PubsController < ApplicationController
       # CSV download
       format.csv{
         render_csv do |out|
-          out << CSV.generate_line(["Plant","Year","Authors","Journal","Volume","Page","Result Count"])
+          out << CSV.generate_line(["ID","Year","Authors","Journal","Volume","Page","Result Count","Plant Count"])
           @pubs.find_each(batch_size: 500) do |item|
             out << CSV.generate_line([
-              item.plant.display_name,
+              item.id,
               item.year,
               item.authors,
               item.journal,
               item.volume,
               item.page,
-              item.results.count
+              item.results.count,
+              item.plants.count
             ])
           end
         end
