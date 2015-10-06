@@ -61,8 +61,8 @@
 					<td><%= plant.family %></td>
 					<td><%= plant.genus %></td>
 					<td><%= plant.species %></td>
-          <td><%= link_to plant.pub_count, publications_path(plant_id: plant.id) %></td>
-          <td><%= link_to plant.result_count, results_path(plant_id: plant.id) %></td>
+          <td><%= link_to plant.pub_count, pubs_path(plant_id: plant.id) if plant.pub_count %></td>
+          <td><%= link_to plant.result_count, results_path(plant_id: plant.id) if plant.result_count %></td>
           <td>
           
           <%#= link_to 'Show', plant %>

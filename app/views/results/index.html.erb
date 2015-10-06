@@ -19,7 +19,7 @@
       <tr>
         <th><%= sortable "measures.type", "Measure" %></th>
         <th><%= sortable "measures.delta_notation", "Notation" %></th>
-        <th><%= sortable "publications.authors", "Publication" %></th>
+        <th><%= sortable "pubss.authors", "Publication" %></th>
         <th><%= sortable "value" %></th>
         <th><%= sortable "unit" %></th>
         <!-- <th>Options</th> -->
@@ -31,7 +31,7 @@
         <tr>
           <td><%= result.measure.try :type %></td>
           <td><%= result.measure.try :delta_notation %></td>
-          <td><%= link_to (result.publication.try :display_name), result.publication %></td>
+          <td><%= link_to result.pub.display_name, result.pub if result.pub %></td>
           <td><%= result.value %></td>
           <td><%= result.unit %></td>         
             <!-- <td>

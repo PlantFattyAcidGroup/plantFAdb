@@ -7,9 +7,7 @@
   <thead>
     <!-- <th>Delta Notation / Name</th> -->
     <th><%= sortable 'plants.family', "Plant" %></th>
-    <th><%= sortable 'publications.authors', "Publication" %></th>
-    <th><%= sortable 'remarks' %></th>
-    <th><%= sortable 'result_count', "Results" %></th>
+    <th><%= sortable 'pubs.authors', "Publication" %></th>
     <th style='width:10%'><%= sortable 'value' %></th>
     <th style='width:10%'><%= sortable 'unit' %></th>
   </thead>
@@ -17,10 +15,8 @@
     <% @results.each do |result| %>
     <tr>
       <!-- <td><%= result.measure.delta_notation %></td> -->
-      <td><%= result.publication.plant.display_name %></td>
-      <td><%= link_to result.publication.display_name, result.publication %></td>
-      <td><%= result.publication.remarks %></td>
-      <td><%= result.publication.results.count %></td>
+      <td><%= result.plant.try :display_name %></td>
+      <td><%= link_to result.pub.display_name, result.pub if result.pub%></td>
       <td><%= result.value %></td>
       <td><%= result.unit %></td>
     </tr>

@@ -3,8 +3,9 @@ module ApplicationHelper
   # Each key has an array of link, [matching controller symbols]
   def top_navbar_items
     {
+      tree: [root_path, [:home]],
       plants: [plants_path,[:plants]],
-      literature: [publications_path,[:publications]],
+      literature: [pubs_path,[:pubs]],
       fatty_acids: [fatty_acids_path, [:fatty_acids]],
     }
   end

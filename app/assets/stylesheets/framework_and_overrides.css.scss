@@ -10,12 +10,43 @@ img {
   margin: 0 auto;
 }
 
+nav.navbar:before{
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.15;
+  background-image: url(asset-path('mol_tile.png'));
+  background-position: 0px -40px;
+}
 // apply styles to HTML elements
 // to make views framework-neutral
 main {
   @extend .container;
   padding-bottom: 80px;
   width: 100%;
+  background-image: url(asset-path('mol_tile.png'));
+}
+  
+main .container {
+  background-image: none;
+//  background:$body-bg;
+}
+.navbar{
+  margin-bottom: 0px;
+}
+.navbar-brand{
+  padding:0px;
+}
+.container .page-header{
+  background: none;
+}
+
+.row {
+  background: none;
 }
 section {
   @extend .row;

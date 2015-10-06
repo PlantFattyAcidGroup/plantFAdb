@@ -170,9 +170,9 @@ class Mol < Thor
         found+=1
         result = fa.update_attributes(
           formula: formula,
-          name: name.gsub("\u03B1","-alpha-").gsub("\u0394","-delta-").gsub("\u03B3","-gamma-").gsub("\u03BD","-nu-").try(:gsub,"\u03B2","-beta-").try(:gsub,"\u03C9","-omega-"),
+          name: name.gsub("\u03B1","-alpha-").gsub("\u0394","-delta-").gsub("\u03B3","-gamma-").gsub("\u03BD","-nu-").try(:gsub,"\u03B2","-beta-").try(:gsub,"\u03C9","-omega-").try(:gsub,"\u03B7","-eta-"),
           mass: mass,
-          other_names: other.try(:gsub, "\u03B1","-alpha-").try(:gsub,"\u03B2","-beta-").try(:gsub,"\u0394","-delta-").try(:gsub,"\u03B3","-gamma-").try(:gsub,"\u03BD","-nu-").try(:gsub,"\u03C9","-omega-")
+          other_names: other.try(:gsub, "\u03B1","-alpha-").try(:gsub,"\u03B2","-beta-").try(:gsub,"\u0394","-delta-").try(:gsub,"\u03B3","-gamma-").try(:gsub,"\u03BD","-nu-").try(:gsub,"\u03C9","-omega-").try(:gsub,"\u03B7","-eta-")
         )
         #puts "#{cas}::#{result}"
       else
@@ -245,5 +245,11 @@ class Mol < Thor
     not_found.each do |nf|
       puts "#{nf[1]} :: delta - #{nf[0].delta_notation}, pubchem - #{nf[0].pubchem_id} "
     end
+  end
+  
+  desc 'load_opsin', "Load data from opsin based on formula"
+  def load_opsin
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    
   end
 end

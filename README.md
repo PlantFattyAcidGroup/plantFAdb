@@ -185,7 +185,7 @@ Upload updated cas rn data
  - Updated 88
  - No change 4
 
-`thor mol:parse_scifinder lib> lib/data/cas_number_substance_Aug21_test.txt`
+`thor mol:parse_scifinder lib/data/additional_cas_rn/Summary of newly found CAS numbers for PhyloFAdb_09_03_2015 > lib/data/additional_cas_rn/new_cas_substance.txt`
 
 `thor mol:add_cas_data lib/data/additional_cas_rn/new_cas_substance.txt`
 - 89 entries
@@ -218,7 +218,57 @@ and web searches
 
 ---
 
+> Oct 1 2015
 
+Condense publications to (almost) unique list. Link new pubs to plants, results and sofa_tab_id
+Also removes '0 data' pubs and plants
+`thor pub:condense`
+- Created 3155 unique pubs
+- 3069 pubs after cleanup
+- 7667 plants after cleanup
+
+Added updated pub view with new condensed pubs
+
+More CAS updates
+
+thor mol:parse_scifinder lib/data/sep_cas_rn/SciFinder_download-Sept_15.txt > lib/data/sep_cas_rn/new_cas_subs.txt
+thor mol:add_cas_data lib/data/sep_cas_rn/new_cas_subs.txt
+
+Fatty Acid data
+Before:
+
+total: 587
+with data: 381
+with data, cas: 305
+with data, cas, mass and formula: 286
+  
+After:
+
+total: 587
+with data: 381
+with data, cas: 305
+with data, cas, mass and formula: 289
+
+NOT FOUND:
+	CAS	Formula	Name	Mass	Other Names
+	133530-23-1	 C24 H46 O2	 19-Tetracosenoic acid, (19Z)-	 366.62	 19-Tetracosenoic acid, (Z)-; (Z)-19-Tetracosenoic acid
+	132998-37-9	 C22 H42 O2	 17-Docosenoic acid, (17Z)-	 338.57	 17-Docosenoic acid, (Z)-; (Z)-17-Docosenoic acid; C22:1ω5
+	115185-06-3	 C18 H32 O3	 10,12-Octadecadienoic acid, 9-hydroxy-, (10E,12E)-	 296.44	 10,12-Octadecadienoic acid, 9-hydroxy-, (E,E)-; (±)-Dimorphecolic acid; (±)-β-Dimorphecolic acid; 9-(E,E)-HODE; 9-Hydroxy-10(E),12(E)-octadecadienoic acid
+	18104-44-4	 C18 H32 O3	 10,12-Octadecadienoic acid, 9-hydroxy-, (9S,10E,12E)-	 296.44	 10,12-Octadecadienoic acid, 9-hydroxy-, [S-(E,E)]- (8CI); (+)-β-Dimorphecolic acid; (S)-9-Hydroxy-10-trans,12-trans-octadecadienoic acid; (S)-9-Hydroxy-10E,12E-octadecadienoic acid; (S)-9-Hydroxy-trans,trans-10,12-octadecadienoic acid; (S)-9-Hydroxy-trans,trans-octadecadienoic acid; (S)-9-Hydroxy-trans-10-trans-12-octadecadienoic acid; Dimorphecolic acid; [S-(E,E)]-9-Hydroxyoctadeca-10,12-dienoic acid; β-Dimorphecolic acid
+	17941-34-3	 C16 H32 O5	 Hexadecanoic acid, 9,10,16-trihydroxy-, (9R,10R)-rel-	 304.42	 Hexadecanoic acid, 9,10,16-trihydroxy-, (R*,R*)-; Hexadecanoic acid, 9,10,16-trihydroxy-, threo- (8CI); (±)-threo-9,10,16-Trihydroxypalmitic acid; (±)-threo-Aleuritic acid; Aleuritic acid; DL-threo-Aleuritic acid; threo-Aleuritic acid; β-Aleuritic acid
+	13126-31-3	 C18 H34 O2	 7-Octadecenoic acid, (7Z)-	 282.46	 7-Octadecenoic acid, (Z)- (8CI); 7-Octadecenoic acid, cis- (7CI); (7Z)-7-Octadecenoic acid; (Z)-7-Octadecenoic acid; cis-7-Octadecenoic acid; Δ7-cis-Octadecenoic acid
+	7050-07-9	 C20 H38 O2	 5-Eicosenoic acid, (5Z)-	 310.51	 5-Eicosenoic acid, (Z)- (8CI); (Z)-5-Eicosenoic acid; 5-cis-Eicosenoic acid; cis-5-Eicosenoic acid; cis-Δ5-Eicosenoic acid
+	29428-96-4	 C16 H26 O2	 6,9,12-Hexadecatrienoic acid, (6Z,9Z,12Z)-	 250.38	 6,9,12-Hexadecatrienoic acid, (Z,Z,Z)- (8CI); (6Z,9Z,12Z)-6,9,12-Hexadecatrienoic acid; (Z,Z,Z)-6,9,12-Hexadecatrienoic acid
+	2540-56-9	 C18 H32 O2	 9,11-Octadecadienoic acid, (9Z,11E)-	 280.45	 9,11-Octadecadienoic acid, (E,Z)- (8CI); (9Z,11E)-9,11-Octadecadienoic acid; (9Z,11E)-Octadecadienoic acid; 9-cis,11-trans-Linoleic acid; 9-cis,11-trans-Octadecadienoic acid; 9Z,11E-Octadecadienoic acid; Bovinic acid; Rumenic acid; cis-9,trans-11 Conjugated linoleic acid; cis-9,trans-11-Octadecadienoic acid; trans-11-cis-9-Octadecadienoic acid
+	62133-71-5	 C20 H38 O2	 9-Eicosenoic acid, (9E)-	 310.51	 9-Eicosenoic acid, (E)-
+	7019-85-4	 C20 H34 O2	 5,11,14-Eicosatrienoic acid, (5Z,11Z,14Z)-	 306.48	 5,11,14-Eicosatrienoic acid, (Z,Z,Z)-; (Z,Z,Z)-5,11,14-Eicosatrienoic acid; 5Z,11Z,14Z-Eicosatrienoic acid; C20:3n-6,9,15; Podocarpic acid (fatty acid); Sciadonic acid; all-cis-5,11,14-Eicosatrienoic acid; cis,cis,cis-5,11,14-Eicosatrienoic acid; cis-5,cis-11,cis-14-Eicosatrienoic acid
+	693-19-6	 C9 H18 O2	 Octanoic acid, 7-methyl-	 158.24	 7-Methyloctanoic acid; Isononanoic acid; Isopelargonic acid
+	638-53-9	 C13 H26 O2	 Tridecanoic acid	 214.34	 NSC 25955; NSC 69131; Tridecylic acid; n-Tridecanoic acid; n-Tridecoic acid
+	7771-44-0	 C20 H32 O2	 5,8,11,14-Eicosatetraenoic acid	 304.47
+	
+	
+
+---
 
 ### License
 

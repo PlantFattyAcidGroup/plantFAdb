@@ -1,0 +1,78 @@
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Publication: <%= @pub.id %></h1>
+<% end %>
+
+<% content_for :item_bar do %>
+	<%= link_to 'Back', pubs_path, class: 'btn btn-primary' %>
+  <%= link_to 'Edit', edit_pub_path(@pub), class: 'btn btn-primary' %>
+<% end %>
+
+<p>
+  <strong>Year:</strong>
+  <%= @pub.year %>
+</p>
+
+<p>
+  <strong>Authors:</strong>
+  <%= @pub.authors %>
+</p>
+
+<p>
+  <strong>Journal:</strong>
+  <%= @pub.journal %>
+</p>
+
+<p>
+  <strong>Volume:</strong>
+  <%= @pub.volume %>
+</p>
+
+<p>
+  <strong>Page:</strong>
+  <%= @pub.page %>
+</p>
+
+<hr/>
+
+<h2 class='smalltitle'>Plant(s)</h2>
+<table class="table">
+  <thead>
+		<th>Order</th>
+    <th>Family</th>
+    <th>Genus</th>
+    <th>Species</th>
+		<th>Options</th>
+  </thead>
+  <tbody>
+    <% @pub.plants.order("order_name, family, genus").each do |plant| %>
+    <tr>
+      <td><%= plant.order_name %></td>
+      <td><%= plant.family %></td>
+      <td><%= plant.genus %></td>
+      <td><%= plant.species %></td>
+			<td><%= link_to "View", plant %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2 class='smalltitle'>Results</h2>
+<table class="table">
+  <thead>
+    <th>Type</th>
+    <th>Delta Notation / Name</th>
+    <th>Value</th>
+    <th>Unit</th>
+  </thead>
+  <tbody>
+    <% @pub.results.order("measure_id").each do |result| %>
+    <tr>
+      <td><%= result.measure.type %></td>
+      <td><%= result.measure.delta_notation %></td>
+      <td><%= result.value %></td>
+      <td><%= result.unit %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+

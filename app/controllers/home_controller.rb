@@ -6,10 +6,10 @@ class HomeController < ApplicationController
          name: parent.name,
          common_name: parent.common_name,
          #value: Plant.where(order_name: parent.name).count,
-         value: params[:value].blank? ? 1 : Result.joins(:measure, publication: [:plant])
-           .where("measures.delta_notation = ?", params[:value])
-           .where("plants.order_name = '#{parent.name}'")
-           .average(:value).try(:round,3),
+         value: params[:value].blank? ? 1 : Result.joins(:measure, :plant)
+          .where("measures.delta_notation = ?", params[:value])
+          .where("plants.order_name = '#{parent.name}'")
+          .average(:value).try(:round,3),
          children: children
       }
     end

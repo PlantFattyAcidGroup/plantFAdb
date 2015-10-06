@@ -1,5 +1,5 @@
 <% content_for :top_bar do %>
-	<h1 class="pagetitle"><%= @fatty_acid.name || @fatty_acid.delta_notation %></h1>
+	<h1 class="pagetitle"><%= @fatty_acid.name || @fatty_acid.delta_notation %> <small>(<%= @fatty_acid.formula %>)</small></h1>
 <% end %>
 
 <% content_for :item_bar do %>
@@ -7,75 +7,92 @@
   <%= link_to 'Edit', edit_fatty_acid_path(@fatty_acid), class: 'btn btn-primary' %>
 <% end %>
 
-<div style='float:left;width:200px'>
-	
-  <p>
-    <strong>Name:</strong>
-    <%= @fatty_acid.name %>
-  </p>
-	
-  <p>
-    <strong>Other Names:</strong>
-    <%= @fatty_acid.other_names %>
-  </p>
-	
-  <p>
-    <strong>Formula:</strong>
-    <%= @fatty_acid.formula %>
-  </p>
-	
-  <p>
-    <strong>Delta notation:</strong>
-    <%= @fatty_acid.delta_notation %>
-  </p>
-
-  <p>
-    <strong>Cas number:</strong>
-    <%= @fatty_acid.cas_number %>
-  </p>
-
-  <p>
-    <strong>Sofa mol ID:</strong>
-    <%= @fatty_acid.sofa_mol_id %>
-  </p>
-
-  <p>
-    <strong>Lipidmap ID:</strong>
-    <%= @fatty_acid.lipidmap_id %>
-  </p>
-
-  <p>
-    <strong>PubChem ID:</strong>
-    <%= @fatty_acid.pubchem_id %>
-  </p>
-
-  <p>
-    <strong>CHEBI ID:</strong>
-    <%= @fatty_acid.chebi_id %>
-  </p>
+<div class='row'>
+	<div class='col-md-4'>
+	  <p>
+	    <strong>Delta notation:</strong>
+	    <%= @fatty_acid.delta_notation %>
+	  </p>
+		
+	  <p>
+	    <strong>Other Names:</strong>
+	    <%= @fatty_acid.other_names %>
+	  </p>
+	</div>
+	<div id='structure' class='col-md-8'>
+	  <canvas class="ChemDoodleWebComponent" id="viewACS" height="200" alt="ChemDoodle Web Component">This browser does not support HTML5/Canvas.</canvas>
+	</div>
+</div>
+<div class='row'>
+	<div class='col-md-4'>
+				
+		<p>
+			<strong>External Database IDs:</strong><br/>
+	    <span style='display:inline-block;width:7em'>CAS registry:</span>
+	      <%= link_to @fatty_acid.cas_number,
+	      "http://www.chem.sis.nlm.nih.gov/chemidplus/rn/#{@fatty_acid.cas_number}",
+	      :target => '_blank' if @fatty_acid.cas_number%><br/>
+	    <span style='display:inline-block;width:7em'>Sofa Mol:</span>
+	      <%= link_to @fatty_acid.sofa_mol_id,
+	      "http://sofa.mri.bund.de/Show_ResultTable.php?Mol_ID=#{@fatty_acid.sofa_mol_id}&Nota=MOL_ID",
+	      :target => '_blank' %><br/>
+	    <span style='display:inline-block;width:7em'>Lipid Maps:</span>
+	      <%= link_to @fatty_acid.lipidmap_id, "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=#{@fatty_acid.lipidmap_id}",
+	      :target => '_blank' if @fatty_acid.lipidmap_id %><br/>
+	    <span style='display:inline-block;width:7em'>PubChem:</span>
+	      <%= link_to @fatty_acid.pubchem_id,
+	      "https://pubchem.ncbi.nlm.nih.gov/compound/#{@fatty_acid.pubchem_id}",
+	      :target => '_blank' if @fatty_acid.pubchem_id%><br/>
+	    <span style='display:inline-block;width:7em'>ChEBI:</span>
+	      <%= link_to @fatty_acid.chebi_id,
+	      "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:#{@fatty_acid.chebi_id}",
+	      :target => '_blank' if @fatty_acid.chebi_id%><br/>
+		</p>
+	</div>
+	<div class='col-md-8'>
+	  <p>
+	    <strong>inchi:</strong>
+	    <%= @fatty_acid.inchi %>
+	  </p>
+	  <p>
+	    <strong>stdinchi:</strong>
+	    <%= @fatty_acid.stdinchi %>
+	  </p>
+	  <p>
+	    <strong>stdinchikey:</strong>
+	    <%= @fatty_acid.stdinchikey %>
+	  </p>
+	  <p>
+	    <strong>smiles:</strong>
+	    <%= @fatty_acid.smiles %>
+	  </p>
+	</div>
 </div>
 
-<div style='float:right;width:600px'>
-  <canvas class="ChemDoodleWebComponent" id="viewACS" width="600" height="200" alt="ChemDoodle Web Component" style="width: 100px; height: 100px; background-color: rgb(255, 255, 255);">This browser does not support HTML5/Canvas.</canvas>
-  <script>
-  $().ready(function(){
-    ChemDoodle.default_bondLength_2D = 35;
-    ChemDoodle.default_bonds_width_2D = 1.5;
-    ChemDoodle.default_bonds_saturationWidth_2D = .3;
-    ChemDoodle.default_atoms_font_size_2D = 14;
-    ChemDoodle.default_atoms_font_families_2D = ['Arial', 'sans-serif'];
-    ChemDoodle.default_atoms_displayTerminalCarbonLabels_2D = true;
-    ChemDoodle.default_atoms_useJMOLColors = true; 
-    var viewACS = new ChemDoodle.ViewerCanvas('viewACS', 600, 200);
-    var MolFile = <%= @fatty_acid.structure.inspect.gsub("\\r",'').html_safe %>;
-    var caffeine = ChemDoodle.readMOL(MolFile);
-    //caffeine.scaleToAverageBondLength(30);
-    viewACS.loadMolecule(caffeine);
-    console.log(viewACS)
-  });
-  </script>
-</div>
-<hr style='clear:both'/>
+<hr/>
 <%= render partial: "measures/results", locals: {results: @fatty_acid.results} %>
 
-
+<script>
+	  $().ready(function(){
+			drawChemDoodle('viewACS')
+	  });
+		$(window).resize(function () {
+			drawChemDoodle('viewACS')
+		});
+		drawChemDoodle = function(dom_id){
+			width = $("#structure").width();
+			$(dom_id).width(width);
+	    ChemDoodle.default_bondLength_2D = 35;
+	    ChemDoodle.default_bonds_width_2D = 1.5;
+	    ChemDoodle.default_bonds_saturationWidth_2D = .3;
+	    ChemDoodle.default_atoms_font_size_2D = 14;
+	    ChemDoodle.default_atoms_font_families_2D = ['Arial', 'sans-serif'];
+	    ChemDoodle.default_atoms_displayTerminalCarbonLabels_2D = true;
+	    ChemDoodle.default_atoms_useJMOLColors = true; 
+	    var viewACS = new ChemDoodle.ViewerCanvas(dom_id, width, 200);
+	    var MolFile = <%= @fatty_acid.structure.inspect.gsub("\\r",'').html_safe %>;
+	    var caffeine = ChemDoodle.readMOL(MolFile);
+	    //caffeine.scaleToAverageBondLength(30);
+	    viewACS.loadMolecule(caffeine);
+		}
+ </script>

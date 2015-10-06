@@ -13,7 +13,7 @@ class FattyAcidsController < ApplicationController
         select count(p.id) published_count, m.id measure_id
         from measures m
         left outer join results r on m.id = r.measure_id
-        left outer join publications p  on r.publication_id = p.id 
+        left outer join pubs p  on r.pub_id = p.id 
         where (p.authors is null or upper(p.authors) not like 'UNPUBLISHED%')
         and (p.remarks is null or upper(p.remarks) not like 'PRIVATE%')
         group by m.id
@@ -86,10 +86,10 @@ class FattyAcidsController < ApplicationController
 
   # GET /fatty_acids/1
   def show
-    @results = @fatty_acid.results.includes(publication: :plant)
+    @results = @fatty_acid.results.includes(:pub, :plant)
     .order(sort_column + ' ' + sort_direction)
     .page(params[:page])
-    .joins("left outer join (select count(pub_results.id) result_count, this_result.id result_id from publications p left outer join results this_result on p.id = this_result.publication_id left outer join results pub_results on pub_results.publication_id = p.id group by this_result.id) res on res.result_id = results.id ")  
+    #.joins("left outer join (select count(pub_results.id) result_count, this_result.id result_id from publications p left outer join results this_result on p.id = this_result.publication_id left outer join results pub_results on pub_results.publication_id = p.id group by this_result.id) res on res.result_id = results.id ")  
   end
 
   # GET /fatty_acids/new

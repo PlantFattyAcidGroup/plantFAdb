@@ -1,5 +1,5 @@
 <% content_for :top_bar do %>
-	<h1 class="pagetitle">Plant: <%= @plant.id %></h1>
+	<h1 class="pagetitle"><%= @plant.genus %> <%= @plant.species %></h1>
 <% end %>
 
 <% content_for :item_bar do %>
@@ -7,24 +7,108 @@
   <%= link_to 'Edit', edit_plant_path(@plant), class: 'btn btn-primary' %>
 <% end %>
 
-<p>
-  <strong>Order:</strong>
-  <%= @plant.order_name %>
-</p>
+<div class='container'>
+	<div class='col-md-2'>
+		<%= link_to "#{@plant.pubs.count} Publications", pubs_path(plant_id: @plant.id), class: 'btn btn-default' %>
+	</div>
+	<div class='col-md-2'>
+		<%= link_to "#{@plant.results.count} Data Points", results_path(plant_id: @plant.id), class: 'btn btn-default' %>
+	</div>
+</div>
 
-<p>
-  <strong>Family:</strong>
-  <%= @plant.family %>
-</p>
+<br/>
 
-<p>
-  <strong>Genus:</strong>
-  <%= @plant.genus %>
-</p>
-<p>
-  <strong>Species:</strong>
-  <%= @plant.species %>
-</p>
+<div class='container'>
+	<div class='col-md-3'>
+		<div class='well'>
+			<p>
+			  <strong>Order:</strong>
+			  <%= @plant.order_name %>
+			</p>
+
+			<p>
+			  <strong>Family:</strong>
+			  <%= @plant.family %>
+			</p>
+
+			<p>
+			  <strong>Genus:</strong>
+			  <%= @plant.genus %>
+			</p>
+			<p>
+			  <strong>Species:</strong>
+			  <%= @plant.species %>
+			</p>
+		</div>
+	</div>
+	<div class='col-md-3'>
+		<div class='well'>
+		  <p>
+		    <strong>Name status:</strong>
+		    <%= @plant.name_status %>
+		  </p>
+		  <p>
+		    <strong>Matched rank:</strong>
+		    <%= @plant.matched_rank %>
+		  </p>
+		</div>
+	</div>
+	<% unless @plant.tropicos_url.blank? && @plant.note.blank? %>
+	<div class='col-md-4'>
+		<div class='well'>		
+
+			<% unless @plant.tropicos_url.blank? %>
+			  <p>
+			    <strong>Url</strong><br>
+					<% @plant.tropicos_url.split(";").each do |url| %>
+			    	<%= link_to url %><br/>
+					<% end %>
+			  </p>
+			<% end %>
+			<% unless @plant.note.blank? %>
+			  <p>
+			    <strong>Note</strong><br>
+			    <%= @plant.note %>
+			  </p>
+			<% end %>
+		</div>
+	</div>
+	<% end %>
+</div>
+
+<div class='container'>
+	<div class='col-md-3'>
+			<h4>SOFA Data</h4>
+		  <p>
+		    <b>sofa family</b>
+		    <%= @plant.sofa_family %>
+		  </p>
+	
+		  <p>
+		    <b>sofa name</b>
+		    <%= @plant.sofa_name %>
+		  </p>
+	</div>
+	<div class='col-md-3'>
+			<h4>TNRS Accepted data</h4>
+		  <p>
+		    <b>tnrs family</b>
+				<%= @plant.tnrs_family %>
+		  </p>
+		  <p>
+		    <b>tnrs name</b>
+				<%= @plant.tnrs_name %>
+		  </p>
+		  <p>
+		    <b>accepted rank</b>
+				<%= @plant.accepted_rank %>
+		  </p>
+	</div>
+</div>
+
+
+
+
 
 
 

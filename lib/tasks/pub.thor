@@ -75,6 +75,45 @@ class Pub < Thor
     puts "\n#{amb[0,50].map{|a| "#{a[0].inspect}\n#{a[1].map{|d| "\t#{d.inspect}"}.join("\n")}"}.join("\n\n")}"
   end
   
+  desc 'condense', "Condense duplicate publications into 'pubs' table keeping plant links"
+  def condense
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    pbar = ProgressBar.new(::Publication.count)
+    ::Publication.find_each do |pub|
+      new_pub = ::Pub.find_or_create_by(
+        year: pub.year.try(:squish),
+        authors: pub.authors.try(:squish),
+        journal: pub.journal.try(:squish),
+        volume: pub.volume.try(:squish),
+        page: pub.page.try(:squish),
+      )
+      new_pub.plants << pub.plant
+      pub.results.update_all(pub_id: new_pub.id, plant_id: pub.plant_id)
+      new_pub.sofa_tabs.create(sofa_tab_id: pub.sofa_tab_id)
+      pbar.increment!
+    end
+    
+    puts "- Created #{::Pub.count} unique pubs"
+    
+    puts "\n - Removing empty pubs/plants"
+    pbar = ProgressBar.new(::Pub.count)
+    ::Pub.find_each do |pub|
+      pbar.increment!
+      if pub.results.count == 0
+        pub.destroy
+      end
+    end
+    puts "- #{::Pub.count} pubs after cleanup"
+    pbar = ProgressBar.new(::Plant.count)
+    ::Plant.find_each do |plant|
+      pbar.increment!
+      if plant.results.count == 0
+        plant.destroy
+      end
+    end
+    puts "- #{::Plant.count} plants after cleanup"
+  end
+  
   desc "stub", "Build base literature table to be filled in by TAB data"
   def stub filename
     require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")

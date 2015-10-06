@@ -4,8 +4,8 @@ class ResultsController < ApplicationController
   # GET /results
   def index
     @results = Result.order(sort_column + ' ' + sort_direction)
-    .includes(:measure, publication: [:plant])
-    .references(:measure, publication: [:plant])
+    .includes(:measure, pub: [:plants])
+    .references(:measure, pub: [:plants])
     if params[:query]
       q = params[:query].upcase
       @results = @results.where('
@@ -25,8 +25,8 @@ class ResultsController < ApplicationController
     if params[:plant_id]
       @results = @results.where('plant_id = ?',params[:plant_id])
     end
-    if params[:publication_id]
-      @results = @results.where(publication_id: params[:publication_id])
+    if params[:pub_id]
+      @results = @results.where(pub_id: params[:pub_id])
     end
     respond_to do |format|
       # Base html query
@@ -39,7 +39,7 @@ class ResultsController < ApplicationController
             out << CSV.generate_line([
               item.measure.type,
               item.measure.delta_notation,
-              item.publication.display_name,
+              item.pub.display_name,
               item.value,
               item.unit
             ])
@@ -96,6 +96,6 @@ class ResultsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:result).permit(:value, :unit, :measure_id, :publication_id)
+      params.require(:result).permit(:value, :unit, :measure_id, :pub_id)
     end
 end
