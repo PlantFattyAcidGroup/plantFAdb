@@ -60,6 +60,10 @@ module ApplicationHelper
     
     (html+"</ul></li>").html_safe
   end
+  # pull left and give left padding
+  def left_dropdown_select label, param, array
+    "<div class='pull-left' style='margin-right:1em'> #{dropdown_select label, param, array} </div>".html_safe
+  end
   # pull right and give right padding
   def right_dropdown_select label, param, array
     "<div class='pull-right' style='margin-left:1em'> #{dropdown_select label, param, array} </div>".html_safe
