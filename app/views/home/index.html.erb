@@ -5,216 +5,385 @@
 <% content_for :jumbo do -%>
 <div class="row">
 	<div class="col-md-8">
-		<h1>Phylogenetic Fatty Acid Database</h1>
+		<h1>Quizzing the Chemical Factories of Oilseeds</h1>
 		<p style='text-align: justify;'>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+			A database of hundreds of fatty acid structures synthesized by thousands of plant species and the phylogenetic relationships between them
 		</p>
+		<ul>
+			<li>What fatty acids do plants make?</li>
+			<li>What are the phyologenetic relationships between different plant species that produce different structures?</li>
+		</ul>
+		<sub>PhyloFAdb has been developed based on the Seed Oil Fatty Acid (SOFA) database at the Max Rubner-Institut (http://sofa.mri.bund.de). Matthäus, Bertrand. "The new database seed oil fatty acids (SOFA)." Lipid Technology 24.10 (2012): 230-234.    Aitzetmüller, Kurt, Bertrand Matthäus, and Holger Friedrich. "A new database for seed oil fatty acids—the database SOFA." European Journal of Lipid Science and Technology 105.2 (2003): 92-103.
+</sub>
 	</div>
 	<div class="col-md-4">
 		<%= image_tag "castor.jpg", class: 'img-thumbnail' %>
 	</div>
 </div>
 <% end -%>
+<% if @selected %>
+	Showing maximum <%= @selected.name %> value for each order ... <br/>
+<% else %>
+  Showing count of results in each order ... <br/>
+<% end %>
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 <div>
   <%= form_tag nil, method: :get, class: 'form-inline search' do %>
     <div class='form-group pull-right'>
 	    <label for="query">Molecule:</label>
-			<%= select_tag :value, options_from_collection_for_select(@fatty_acids, :delta_notation, :name_with_count, params[:value]),include_blank: true, class: 'form-control' %>
+			<%= select_tag :measure, options_from_collection_for_select(@fatty_acids, :id, :name_with_count, params[:measure]),include_blank: true, class: 'form-control' %>
 			<%= submit_tag "Update", class: "btn btn-primary "%>
 		</div>
   <% end %>
 </div>
-<div id='tree'></div>
-<div id='icicle' class='graph'></div>
-<div id='tree' class='graph'></div>
-<div class="mouse tooltip" >Mouse-tracking HTML Tip</div>
+
+<div id='tree' class='graph' style="width:90%;margin-left:5%"></div>
 <style>
-
-.text {
-	text-shadow:2px 2px 1px #444;
+text.inner-label {
+	font-family: Verdana;
+	font-weight: bold;
+	fill: #222;
+	
 }
-
-.tooltip {
-	border-radius: 5px;
-	padding: 1em;
-  pointer-events:none;
-  opacity:0;
-  transition: opacity 0.3s;
-	text-shadow:2px 2px 1px #444;
-	box-shadow:3px 3px 5px #444;
-	border:2px solid #FFF;
-	background-color: #89A;
-	color: #FFF;
-	position: absolute;
-/*  text-align:center;*/
-}
-/*path {
-  stroke: #fff;
-  fill-rule: evenodd;
-}*/
-rect {
-  stroke: #fff;
-}
-
-.node circle {
-  fill: #fff;
-  stroke: steelblue;
-  stroke-width: 1.5px;
-}
-
-.node {
-  font: 10px sans-serif;
-}
-
-.link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 1.5px;
+text.outer-label {
+	font-family: Verdana;
+	font-weight: bold;
+	fill: #222;
+	
 }
 </style>
 
-<script>
 
-//var width = 960,
-var width = $("#icicle").width()
-    height = 1000;
-
-var x = d3.scale.linear()
-    .range([0, width]);
-
-var y = d3.scale.linear()
-    .range([0, height]);
-
-var color = d3.scale.category20b();
-
-var	root = <%= @tree.to_json.html_safe %>
-var partition = d3.layout.partition()
-    .sort(null)
-    //.value(function(d) { return 1; });
-		.value(function(d) { return d.value });
-		
-
-
-//var partition = d3.layout.partition()
-    //.children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
-    //.value(function(d) { return d.value });
-		var diameter = 900;		
-		var tree = d3.layout.cluster()
-			.size([height, width/2])
-			//.separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
-		var diagonal = d3.svg.diagonal()
-	    .projection(function(d) { return [d.y, d.x]; });
-	    //.projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
-
-	// var svg = d3.select("#tree").append("svg")
-	//     .attr("width", width)
-	//     .attr("height", height)
-	// 		.append("g")
-	//     .attr("transform", "translate(5,0)");
-	    //attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
-			
-			var nodes = tree.nodes(root[0]);
-      var links = tree.links(nodes);	
-	
-			var min = d3.min(nodes.map(function(d){return parseFloat(d.value)}))
-			var max = d3.max(nodes.map(function(d){return parseFloat(d.value)}))
-			console.log(min, max);
-
-	var nodeScale = d3.scale.linear().domain([min,max]).range([2,8])
-	var colorScale = d3.scale.linear()
-	    .domain([min, (max-min)/2, max])
-	    .range(["red", "white", "green"]);
-			
-	//   var link = svg.selectAll(".link")
-	//       .data(links)
-	//     .enter().append("path")
-	//       .attr("class", "link")
-	//       .attr("d", diagonal);
-	//
-	// var node = svg.selectAll(".node")
-	//       .data(nodes)
-	//     .enter().append("g")
-	//       .attr("class", "node")
-	//       //.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.x + ")"; })
-	//       .attr("transform", function(d) { return "translate(" + d.y + ","+d.x+")"; })
-	//
-	//   node.append("circle")
-	//       .attr("r", function(d){return nodeScale(d.value)})
-	// 		.style("stroke",function(d){return colorScale(d.value)})
-	//   node.append("text")
-	//       .attr("dx", function(d) { return d.children ? -8 : 8; })
-	//       .attr("dy", 3)
-	//       .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
-	// 		.text(function(d) { return d.name; });
-				
-var svg = d3.select("#icicle").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-
-var tooltip = d3.select(".tooltip")
-
-  var g = svg.selectAll("g")
-		.data(partition(root[0]))
-    .enter().append("g")
-	var rect = g.append("a")
-    .each( function(d){ if(!d.children){d3.select(this).attr("target",'_blank').attr("xlink:href", "<%= plants_url %>?query="+d.name) } })
-		.append("rect")
-    .attr("x", function(d) { return x(d.x); })
-    .attr("y", function(d) { return y(d.y); })
-    .attr("width", function(d) { return x(d.dx); })
-    .attr("height", function(d) { return y(d.dy); })
-    .attr("fill", function(d) { return color((d.children ? d : (d.parent ? d.parent : d)).common_name); })
-    .on("click", clicked)
-		.on('mouseover', function(d){
-			tooltip.style("opacity", "1")
-			.html(d.name+" ("+d.common_name+")"+(d.children ? '' : "<br/>Value: "+d.value))
-			.style('background-color',color((d.children ? d : (d.parent ? d.parent : d)).common_name))
-		})
-		.on('mousemove', function(d){
-			tooltip
-			.style("left", Math.max(0, d3.event.pageX - 15) + "px")
-      .style("top", (d3.event.pageY - 60) + "px");
-		})
-		.on('mouseout', function(d){
-			return tooltip.style("opacity", "0");
-		})
-			
-	var text = g.append("text")
-		.classed('text',true)
-		.text(function(d) { return d.common_name})
-		.attr('font-size',12)
-		.attr('fill',"#FFF")
-		.attr("opacity", function(d){return x(d.dx) > this.getComputedTextLength() ? '1' : '0'})
-		.attr("y", function(d) { return y(d.y) + (y(d.dy)/2) ; })
-		.attr("x", function(d){return x(d.x) + (x(d.dx)/2) - (this.getComputedTextLength()/2)})
-		.attr("pointer-events", "none")
-	
-function clicked(d) {
-
-	if(d.children){
-	  x.domain([d.x, d.x + d.dx]);
-	  y.domain([d.y, 1]).range([d.y ? 20 : 0, height]);
-
-	  rect.transition()
-	      .duration(750)
-	      .attr("x", function(d) { return x(d.x); })
-	      .attr("y", function(d) { return y(d.y); })
-	      .attr("width", function(d) { return x(d.x + d.dx) - x(d.x); })
-	      .attr("height", function(d) { return y(d.y + d.dy) - y(d.y); });
-	
-		text.transition()
-			.duration(750)
-			.attr("y", function(d) { return y(d.y) + (y(d.y + d.dy) - y(d.y))/2 ; })
-			.attr("x", function(d){return x(d.x) + (x(d.x + d.dx) - x(d.x))/2 - (this.getComputedTextLength()/2)})
-			.attr("opacity",function(d){return (x(d.x + d.dx) - x(d.x)) > this.getComputedTextLength() ? '1' : '0'})
-	}else{
-		// Leaf nodes open new page
-		//window.location
+	<script>
+	phyloColors ={
+		root: "#444",
+    spermatophyte: "#DDD",
+    gymnosperms: "#B0744C",
+    anita: "#D3EEF5",
+    angiosperms: "#D3EEF5",
+    magnoliids: "#86C0CE",
+    monocots: "#B0D4B7",
+    commelinids: "#63B384",
+    eudicots: "#FFF27B",
+    core_eudicots: "#C6D979",
+    rosids: "#F4D2DD",
+    fabids: "#ECB5CA",
+    malvids: "#E58BAF",
+    asterid: "#F6D7BA",
+    lamiids: "#EEB688",
+    campanulids: "#E6955E",
 	}
-}
+		function computeTextRotation(d) {			
+			return (x(d.x + d.dx / 2) - Math.PI / 2) / Math.PI * 180;
+			//return (x(d.x +d.dx*.5) * (180/Math.PI)-90)
+		}
+		function textOpacity(d){
+			var path = document.getElementById("path-"+d.id);
+			if( (this.getComputedTextLength()) > path.getTotalLength()/2 || d.name == 'root'){
+				return 0;
+			}else{
+				return 1;
+			}
+		}	
 
-</script>
+		var width = $("#tree").width(),
+			height = width;
+
+		var svg = d3.select("#tree").append("svg")
+		    .attr("width", width)
+		    .attr("height", height)
+		  .append("g")
+		    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+				
+		// Partition with value 1 == no 'child' size change
+		var partition = d3.layout.partition()
+		    .sort(null)
+		    .value(function(d) { return 1; });
+
+		// Keep track of the node that is currently being displayed as the root.
+		var node;
+
+		var	root = <%= @tree.to_json.html_safe %>
+		root=root[0];
+		node = root;
+			
+		// groups
+	  var g = svg.datum(root).selectAll("g")
+	  .data(partition.nodes)
+	  .enter().append("g")
+		
+		// parent / child
+		var parent_g = g.filter(function(d){ return d.children!=null})
+		var leaf_g = g.filter(function(d){ return d.children==null})
+		
+		var maxVal = d3.max(leaf_g.data(),function(d){return d.v1;})
+		
+		// setup domains
+		var outerRing = width*.1 // 10%
+		innerRingPadding = 2
+		outerHistBuffer = width*.1
+		histPadding = innerRingPadding
+		radius = (width / 2)-(outerHistBuffer+outerRing+innerRingPadding+histPadding);
+		
+		//outer font size
+		var maxName = d3.max(leaf_g.data(), function(d){return d.common_name.length});
+		var labelTextSize = Math.floor((outerRing-innerRingPadding) / (maxName+2))*1.8;
+		
+		var hx = d3.scale.linear()
+				.range([0,outerHistBuffer])
+				.domain([0,maxVal])
+		
+		var x = d3.scale.linear()
+		    .range([0, 2 * Math.PI]);
+
+		var y = d3.scale.linear()
+		    .range([20, radius]);
 
 
+		// bars for datapoints
+		var histArc = d3.svg.arc()
+		    .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx*.25))); })
+		    .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx*.75))); })
+		    .innerRadius(function(d) { 
+					return Math.max(0, y(1-d.dy)+outerRing+histPadding);
+				})
+		    .outerRadius(function(d) {
+					return Math.max(0, y(1-d.dy)+outerRing+histPadding+hx(d.v1));
+				});
+		
+		// Leaf nodes are 'pushed' to the outter most layer
+		var arc = d3.svg.arc()
+		    .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
+		    .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
+		    .innerRadius(function(d) { 
+					if(d.children){
+						return Math.max(0, y(d.y));
+					}else{
+						return Math.max(0, y(1-d.dy)+innerRingPadding);
+					}
+				})
+		    .outerRadius(function(d) {
+					if(d.children){
+						return Math.max(0, y(d.y + d.dy)); 
+					}else{
+						return Math.max(0, y(1-d.dy)+outerRing);
+					}
+				});
+				
+		var labelArc = d3.svg.arc()
+				// This arc 'flips' to show text in the proper orientation
+				.startAngle(function(d) {
+					var end = x(d.x+d.dx);
+					var start = x(d.x);
+					var half = (end-start)/2;
+					var point = (end-half)*180/Math.PI;
+					if(start <0){return 0;}
+					return Math.max(0, Math.min(2 * Math.PI, ( (point<270 && point>90) ? x(d.x+d.dx) : x(d.x)) )); })
+				.endAngle(function(d) {
+					var end = x(d.x+d.dx);
+					var start = x(d.x);
+					var half = (end-start)/2;
+					var point = (end-half)*180/Math.PI;
+					if(start<=0 && end >= (Math.PI*2) ){return (Math.PI*4)}
+					return Math.max(0, Math.min(2 * Math.PI, ( (point<270&&point>90) ? x(d.x) : x(d.x+d.dx)) )); })
+		    .innerRadius(function(d) {
+					var end = x(d.x+d.dx);
+					var start = x(d.x);
+					var half = (end-start)/2;
+					var point = (end-half)*180/Math.PI;
+					if(start<=0 && end >= (Math.PI*2) ){point=0}
+					return Math.max(0, (point<270&&point>90) ? y(d.y + d.dy)-Math.min(y(d.dy*.25),3.5) : y(d.y)+Math.min(y(d.dy*.25),3.5)); 
+				})
+		    .outerRadius(function(d) {
+					var end = x(d.x+d.dx);
+					var start = x(d.x);
+					var half = (end-start)/2;
+					var point = (end-half)*180/Math.PI;
+					if(start<=0 && end >= (Math.PI*2) ){point=0}
+					return Math.max(0, (point<270&&point>90) ? y(d.y + d.dy)-Math.min(y(d.dy*.25),3.5) : y(d.y)+Math.min(y(d.dy*.25),3.5)); 
+				});
+				
+// arcs
+			var path = g.append("path")
+		    .attr("d", arc)
+				.style("fill", function(d){
+					return d.name=='root' ? 'rgba(70,70,70,.7)' : 
+					phyloColors[(d.children ? d : d.parent).name.toLowerCase().replace(" ", "_")];
+				})
+				.style("stroke",function(d){
+					return d.children ? '#FFF' : ''
+				})
+				.on("click", click)
+		    .each(stash);
+				
+// parent label paths
+			var labelpath = parent_g.append("path")
+				.attr("d",labelArc)
+				.attr("id",function(d,i){return "path-"+d.id})
+				.attr("fill",'none')
+				.attr("stroke",'none')
+						
 
+				
+// parent labels
+			var p_text = parent_g.append("text")
+				.attr("class","inner-label")
+				.attr("pointer-events", "none")
+				.attr('text-anchor', 'middle')
+				.style("font-size",function(d){
+					return Math.min([y(d.dy)*.5],14)+"px"
+				})
+				.append("textPath")
+				.attr('startOffset', '25%')
+				.attr("xlink:href", function(d){return "#path-"+d.id})
+				.text(function(d) {return d.common_name;})
+				.attr('opacity',textOpacity)
+
+// leaf labels
+			var c_text_g = leaf_g.append("g")
+		 		// translate to the desired point and set the rotation
+				.attr("transform", function(d){ return "rotate(" + computeTextRotation(d) + ") translate("+y(1-d.dy)+")";})
+				
+			var c_text = c_text_g.append("text")
+				.attr('text-anchor', 'middle')
+				.attr("class","outer-label")
+				.attr("pointer-events","none")
+				.style("font-size",function(d){
+					return labelTextSize+"px"
+				})
+				.text(function(d){return d.name})
+				.attr("transform", function(d){
+					return "translate("+((this.getComputedTextLength()/2.0)+innerRingPadding+(labelTextSize/2.0))+") rotate("+(x(d.x)>Math.PI ? 180 : 0)+")"})
+		 		.attr("dy", ".3em") // vertical-align
+			
+// Bar histogram
+			var bar_path = leaf_g.append("path")
+				.attr("d", histArc)
+				.attr("fill",'#333')
+					
+					
+					
+			// Tween data
+			// d3.selectAll("input").on("change", function change() {
+			// 		    var value = this.value === "count"
+			// 		        ? function() { return 1; }
+			// 		        : function(d) { return d.size; };
+			//
+			// 		    path
+			// 			.data(partition.value(value).nodes)
+			// 		      .transition()
+			// 		        .duration(700)
+			// 		        .attrTween("d", arcTweenData);
+			// 		  });
+
+		  function click(d) {
+		    node = d;
+		    // fade out all text elements
+				// 		    p_text.attr("opacity", 0);
+				var dur = 1000;
+				
+	    	path.transition()
+	      	.duration(dur)
+	      	.attrTween("d", arcTweenZoom(d))
+					.attr("opacity", function(d){
+						return d.y < node.y ? 0.5 : 1 
+					})
+				
+				// inner labels
+		    labelpath.transition()
+		      .duration(dur)
+		      .attrTween("d", labelArcTweenZoom)
+					
+					p_text.transition().duration(dur).each('end',function(){
+						var d = d3.select(this);
+						d.attr('opacity', textOpacity);
+					})
+				
+				//outer labels
+				c_text_g.attr("opacity", function(d){return (d.x >= node.x && (d.x + d.dx).toFixed(3) <= (node.x + node.dx).toFixed(3))  ? 1 : 0 }); //hide out of range
+				c_text_g.transition().duration(dur)
+				.attrTween("transform", outer_g_tween_zoom())
+				.select("text")
+				.attrTween("transform", outer_c_tween_zoom())
+				
+				//bars
+				bar_path.transition().duration(dur)
+				.attrTween("d", histArcTweenZoom)
+		  }
+
+		// Setup for switching data: stash the old values for transition.
+		function stash(d) {
+		  d.x0 = d.x;
+		  d.dx0 = d.dx;
+		}
+		
+		function outer_g_tween_zoom(){
+			return function(d, i) {
+				return function(t){
+					return "rotate(" + ((x(d.x + d.dx / 2) - Math.PI / 2) / Math.PI * 180) + ") translate("+y(1-d.dy)+")"
+				}
+			}
+		}
+		function outer_c_tween_zoom(){
+			return function(d, i) {
+				var me = this;
+				return function(t){
+					return "translate("+((me.getComputedTextLength()/2.0)+innerRingPadding+(labelTextSize/2.0))+") rotate("+(x(d.x)>Math.PI ? 180 : 0)+")"
+				}
+			}
+		}
+
+		// When switching data: interpolate the arcs in data space.
+		function arcTweenData(a, i) {
+		  var oi = d3.interpolate({x: a.x0, dx: a.dx0}, a);
+		  function tween(t) {
+		    var b = oi(t);
+		    a.x0 = b.x;
+		    a.dx0 = b.dx;
+		    return arc(b);
+		  }
+		  if (i == 0) {
+		   // If we are on the first arc, adjust the x domain to match the root node
+		   // at the current zoom level. (We only need to do this once.)
+		    var xd = d3.interpolate(x.domain(), [node.x, node.x + node.dx]);
+		    return function(t) {
+		      x.domain(xd(t));
+		      return tween(t);
+		    };
+		  } else {
+		    return tween;
+		  }
+		}
+
+		// When zooming: interpolate the scales.
+		function arcTweenZoom(d) {
+		  var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]); // Clicked node's domain
+			//yd = d3.interpolate(y.domain(), [d.y, 1]); // clicked node's begin radius to 100%
+					//yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]); // root node - no padding otherwise add 20px
+		  return function(d, i) {
+				// first / root node actually changes the domain
+		    if(i){
+					return function(t) {
+						return arc(d);
+					}
+				// all others
+		    }else{
+					return function(t) {
+						x.domain(xd(t));
+						//y.domain(yd(t))//.range(yr(t));
+						return arc(d);
+					};
+		    }
+		  };
+		}
+		function labelArcTweenZoom(d) {
+			return function(t) {
+				return labelArc(d);
+			};
+		}
+		function histArcTweenZoom(d){
+			return function(t){
+				return histArc(d);
+			}
+		}
+		</script>

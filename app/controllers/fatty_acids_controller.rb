@@ -3,35 +3,19 @@ class FattyAcidsController < ApplicationController
 
   # GET /fatty_acids
   def index
-    cols = FattyAcid.columns.reject{|c| c.name=='structure'}.map{|c| "measures.#{c.name}"}.join(',')
-    
     @fatty_acids = FattyAcid.order(sort_column + ' ' + sort_direction + ', measures.id asc')
     .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id group by m.id) res on res.measure_id = measures.id ")
-    .joins("left outer join names systematic_names_measures on systematic_names_measures.measure_id = measures.id AND systematic_names_measures.type = 'SystematicName'")
-    .joins("left outer join names on names.measure_id = measures.id AND names.type = 'TrivialName'")
-    .joins("left outer join (
-        select count(p.id) published_count, m.id measure_id
-        from measures m
-        left outer join results r on m.id = r.measure_id
-        left outer join pubs p  on r.pub_id = p.id 
-        where (p.authors is null or upper(p.authors) not like 'UNPUBLISHED%')
-        and (p.remarks is null or upper(p.remarks) not like 'PRIVATE%')
-        group by m.id
-      ) pub on pub.measure_id = measures.id")
-    .select("#{cols}, res.result_count, pub.published_count")
-    .group("#{cols}, res.result_count, pub.published_count")
-    #.where("cas_number is null")
+    .select("measures.*, res.result_count")
     if(params[:query])
       q = params[:query].upcase
       @fatty_acids = @fatty_acids.where('
-        upper(names.name) like ?
-        OR upper(SYSTEMATIC_NAMES_MEASURES.name) like ?
+        upper(name) like ?
         OR result_count like ?
         OR upper(delta_notation) LIKE ?
         OR upper(cas_number) LIKE ?
         OR upper(sofa_mol_id) LIKE ?
         OR upper(lipidmap_id) LIKE ?',
-        "%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
+        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
       )
     end
     case params[:has_data]
@@ -39,12 +23,6 @@ class FattyAcidsController < ApplicationController
       @fatty_acids = @fatty_acids.where("res.result_count is not null")
     when 'false'
       @fatty_acids = @fatty_acids.where("res.result_count is null")
-    end
-    case params[:published]
-    when 'true'
-      @fatty_acids = @fatty_acids.where("pub.published_count is not null")
-    when 'false'
-      @fatty_acids = @fatty_acids.where("pub.published_count is null")
     end
     case params[:has_cas]
     when 'true'
@@ -55,9 +33,7 @@ class FattyAcidsController < ApplicationController
     respond_to do |format|
       # Base html query
       format.html{
-        @fatty_acids = Kaminari.paginate_array(@fatty_acids.to_a).page(params[:page])
-        #@fatty_acids = @fatty_acids.page(params[:page])
-        
+        @fatty_acids = @fatty_acids.page(params[:page])
       }
       # CSV download
       format.csv{

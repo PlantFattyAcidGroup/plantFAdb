@@ -18,14 +18,7 @@
 	    <strong>Other Names:</strong>
 	    <%= @fatty_acid.other_names %>
 	  </p>
-	</div>
-	<div id='structure' class='col-md-8'>
-	  <canvas class="ChemDoodleWebComponent" id="viewACS" height="200" alt="ChemDoodle Web Component">This browser does not support HTML5/Canvas.</canvas>
-	</div>
-</div>
-<div class='row'>
-	<div class='col-md-4'>
-				
+		
 		<p>
 			<strong>External Database IDs:</strong><br/>
 	    <span style='display:inline-block;width:7em'>CAS registry:</span>
@@ -49,7 +42,13 @@
 	      :target => '_blank' if @fatty_acid.chebi_id%><br/>
 		</p>
 	</div>
-	<div class='col-md-8'>
+	<div id='structure' class='col-md-7' style='height:250px'>
+	  <canvas class="ChemDoodleWebComponent" id="structureCanvas" alt="ChemDoodle Web Component">This browser does not support HTML5/Canvas.</canvas>
+	</div>
+</div>
+<br/>
+<div class='row'>
+	<div class='col-md-12'>
 	  <p>
 	    <strong>inchi:</strong>
 	    <%= @fatty_acid.inchi %>
@@ -73,26 +72,34 @@
 <%= render partial: "measures/results", locals: {results: @fatty_acid.results} %>
 
 <script>
+		var mol_cml = <%= @fatty_acid.cml.inspect.html_safe %>
+		
+		var structureCanvas;
+		
 	  $().ready(function(){
-			drawChemDoodle('viewACS')
+			ChemDoodle.default_atoms_useJMOLColors = true;
+			ChemDoodle.default_backgroundColor = "rgb(206,193,113)";
+			//ChemDoodle.default_atoms_useVDWDiameters_3D = true;
+			//ChemDoodle.default_atoms_displayLabels_3D = true;
+			ChemDoodle.default_bonds_showBondOrders_3D = true;
+			structureCanvas = new ChemDoodle.TransformCanvas3D('structureCanvas', 200, 200);
+			var mols = ChemDoodle.readCML(mol_cml);
+			structureCanvas.loadMolecule(mols[0]);
+			resizeChemDoodle();			
 	  });
+		
 		$(window).resize(function () {
-			drawChemDoodle('viewACS')
+			resizeChemDoodle()
 		});
-		drawChemDoodle = function(dom_id){
-			width = $("#structure").width();
-			$(dom_id).width(width);
-	    ChemDoodle.default_bondLength_2D = 35;
-	    ChemDoodle.default_bonds_width_2D = 1.5;
-	    ChemDoodle.default_bonds_saturationWidth_2D = .3;
-	    ChemDoodle.default_atoms_font_size_2D = 14;
-	    ChemDoodle.default_atoms_font_families_2D = ['Arial', 'sans-serif'];
-	    ChemDoodle.default_atoms_displayTerminalCarbonLabels_2D = true;
-	    ChemDoodle.default_atoms_useJMOLColors = true; 
-	    var viewACS = new ChemDoodle.ViewerCanvas(dom_id, width, 200);
-	    var MolFile = <%= @fatty_acid.structure.inspect.gsub("\\r",'').html_safe %>;
-	    var caffeine = ChemDoodle.readMOL(MolFile);
-	    //caffeine.scaleToAverageBondLength(30);
-	    viewACS.loadMolecule(caffeine);
+		resizeChemDoodle = function(){	
+			var width = $("#structure").width();
+			var height = $("#structure").height();
+			structureCanvas.resize(width,height);
 		}
  </script>
+<style>
+#structure{
+	border-bottom: 2px solid #5d5B32;
+	padding: 0px;
+}
+</style>

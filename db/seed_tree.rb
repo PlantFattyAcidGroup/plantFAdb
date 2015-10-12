@@ -87,7 +87,7 @@ angio = seed_plants.children.create name: 'Angiosperms', common_name: 'Flowering
         core.children.create name: 'Berberidopsidales', common_name: 'Berberidopsidales', note: ''
         core.children.create name: 'Caryophyllales', common_name: 'Caryophyllales', note: ''
             
-        asterid = core.children.create name: 'Asterid', common_name: 'Asterid', note: ''
+        asterid = core.children.create name: 'Asterids', common_name: 'Asterid', note: ''
           asterid.children.create name: 'Cornales', common_name: 'Cornales', note: ''
           asterid.children.create name: 'Ericales', common_name: 'Ericales', note: ''
           

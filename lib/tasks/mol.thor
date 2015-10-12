@@ -247,9 +247,47 @@ class Mol < Thor
     end
   end
   
-  desc 'load_opsin', "Load data from opsin based on formula"
+  desc 'load_opsin', "Load data from opsin"
   def load_opsin
     require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
-    
+    puts "There are #{FattyAcid.count} fatty acids"
+    fa = FattyAcid.with_results
+    puts "#{fa.length} have results"
+    mols = fa.reject{|f| f.lipidmap_id=='ambiguous'}
+    puts "#{mols.length} of these are not ambiguous"
+    puts "Of these:"
+    with_cas = mols.reject{|m| m.cas_number.blank?}
+    puts "- #{with_cas.length} have a cas RN"
+    with_name = mols.reject{|m| m.name.blank? || m.formula.blank?}
+    puts "- #{with_name.length} have a name and formula"
+    puts "Of the named molecules:"
+    no_opsin = with_name.select{|n| n.inchi.blank?}
+    puts "#{no_opsin.length} have no inchi"
+    return 0 if no_opsin.empty?
+    found = 0
+    pbar = ProgressBar.new(no_opsin.length)
+    no_data = []
+    no_opsin.each do |mol|
+      data = HTTParty.get("http://opsin.ch.cam.ac.uk/opsin/#{ERB::Util.url_encode mol.name}" )
+      pbar.increment!
+      unless data.code==200
+        no_data << mol
+        next
+      end
+      found +=1
+      cml = HTTParty.get("http://opsin.ch.cam.ac.uk/opsin/#{ERB::Util.url_encode mol.name}.cml" ).body
+      mol.update_attributes(
+        cml: cml,
+        inchi: data["inchi"],
+        stdinchi: data["stdinchi"],
+        stdinchikey: data["stdinchikey"],
+        smiles: data["smiles"]
+      )
+    end
+    puts "Found #{found} with opsin data"
+    puts "No Data found for: "
+    no_data.each do |item|
+      puts "- #{item.id}: #{item.name}"
+    end
   end
 end

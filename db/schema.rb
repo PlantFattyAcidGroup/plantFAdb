@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20151001154503) do
     t.string   "name"
     t.string   "other_names",    limit: 3999
     t.string   "formula"
-    t.string   "cml"
+    t.text     "cml"
     t.string   "inchi"
     t.string   "stdinchi"
     t.string   "stdinchikey"
@@ -38,9 +38,9 @@ ActiveRecord::Schema.define(version: 20151001154503) do
   create_table "names", force: :cascade do |t|
     t.string   "type"
     t.string   "name"
-    t.integer  "measure_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "measure_id", precision: 38
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   add_index "names", ["measure_id"], name: "index_names_on_measure_id"
@@ -48,8 +48,8 @@ ActiveRecord::Schema.define(version: 20151001154503) do
   create_table "plants", force: :cascade do |t|
     t.string   "sofa_name"
     t.string   "sofa_family"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.string   "tnrs_name"
     t.string   "tnrs_family"
     t.string   "note",          limit: 3999
@@ -59,15 +59,15 @@ ActiveRecord::Schema.define(version: 20151001154503) do
     t.string   "genus"
     t.string   "species"
     t.string   "tropicos_url"
-    t.integer  "ott_id"
+    t.integer  "ott_id",                     precision: 38
     t.string   "accepted_rank"
     t.string   "matched_rank"
     t.string   "order_name"
   end
 
   create_table "plants_pubs", force: :cascade do |t|
-    t.integer "pub_id"
-    t.integer "plant_id"
+    t.integer "pub_id",   precision: 38
+    t.integer "plant_id", precision: 38
   end
 
   create_table "publications", force: :cascade do |t|
@@ -77,9 +77,9 @@ ActiveRecord::Schema.define(version: 20151001154503) do
     t.string   "volume"
     t.string   "page"
     t.string   "remarks"
-    t.integer  "plant_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "plant_id",    precision: 38
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.string   "sofa_tab_id"
   end
 
@@ -99,19 +99,19 @@ ActiveRecord::Schema.define(version: 20151001154503) do
   create_table "results", force: :cascade do |t|
     t.string   "value"
     t.string   "unit"
-    t.integer  "measure_id"
-    t.integer  "publication_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.integer  "pub_id"
-    t.integer  "plant_id"
+    t.integer  "measure_id",     precision: 38
+    t.integer  "publication_id", precision: 38
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "pub_id",         precision: 38
+    t.integer  "plant_id",       precision: 38
   end
 
   add_index "results", ["measure_id"], name: "index_results_on_measure_id"
-  add_index "results", ["publication_id"], name: "index_results_on_publication_id"
+  add_index "results", ["publication_id"], name: "i_results_publication_id"
 
   create_table "sofa_tabs", force: :cascade do |t|
-    t.integer "pub_id"
+    t.integer "pub_id",      precision: 38
     t.string  "sofa_tab_id"
   end
 
@@ -126,33 +126,37 @@ ActiveRecord::Schema.define(version: 20151001154503) do
   add_index "tree_nodes", ["ancestry"], name: "index_tree_nodes_on_ancestry"
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                                 default: "", null: false
+    t.string   "encrypted_password",                    default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",          precision: 38, default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["reset_password_token"], name: "i_users_reset_password_token", unique: true
 
   create_table "versions", force: :cascade do |t|
-    t.string   "item_type",      null: false
-    t.integer  "item_id",        null: false
-    t.string   "event",          null: false
+    t.string   "item_type",                     null: false
+    t.integer  "item_id",        precision: 38, null: false
+    t.string   "event",                         null: false
     t.string   "whodunnit"
     t.text     "object"
     t.text     "object_changes"
     t.datetime "created_at"
   end
 
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  add_index "versions", ["item_type", "item_id"], name: "i_versions_item_type_item_id"
 
+  add_foreign_key "names", "measures"
+  add_foreign_key "publications", "plants"
+  add_foreign_key "results", "measures"
+  add_foreign_key "results", "publications"
 end

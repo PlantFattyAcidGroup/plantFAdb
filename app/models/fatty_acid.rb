@@ -9,6 +9,6 @@ class FattyAcid < Measure
   }
   
   def name_with_count
-    "#{name||systematic_names.first.try(:name)} (#{results.count})"
+    "#{name||'?-'+delta_notation} (#{results.count})"
   end
 end

@@ -229,6 +229,40 @@ Also removes '0 data' pubs and plants
 
 Added updated pub view with new condensed pubs
 
+
+---
+
+> Oct 7
+
+Added OPSIN data to mol with name
+`thor mol:load_opsin`
+
+There are 587 fatty acids
+381 have results
+315 of these are not ambiguous
+Of these:
+- 305 have a cas RN
+- 287 have a name and formula
+Of the named molecules:
+287 have no inchi
+Found 275 with opsin data
+No Data found for: 
+- 10074: 9-Octadecenoic acid (9Z)-
+- 10081: 5,6-Octadecadienoic acid, (5R)- (9CI)
+- 10090: 9,12-Octadecadienoic acid (9Z,12Z)-
+- 10099: 5,6,16-Octadecatrienoic acid, (5S,16E)- (9CI)
+- 10137: 7,8-Eicosadienoic acid, (R)- (9CI)
+- 10234: 1-Cyclopropene-1-octanoic acid, -alpha--hydroxy-2-octyl-, D- (8CI)
+- 10296: Octadecanoic acid, 9,10-dihydroxy-, [R-(R*,S*)]- (9CI)
+- 10445: 3,12-Octadecadienoic acid, 9,10-epoxy-, (E,Z)-cis- (8CI)
+- 10517: Oxiranedecanoic acid, 3-(2-octenyl)-, [2S-[2-alpha-,3-alpha-(Z)]]- (9CI)
+- 10541: 11,14-Hexadecadienoic acid, 16-(3-ethyloxiranyl)-, [2S-[2-alpha-(11Z,14Z),3-alpha-]]- (9CI)
+- 10543: 7-Nonenoic acid, 9-(3-pentyloxiranyl)-, [2S-[2-alpha-(Z),3-alpha-]]- (9CI)
+- 10548: 7,10-Dodecadienoic acid, 12-(3-ethyloxiranyl)-, [2R-[2-alpha-(7Z,10Z),3-alpha-]]- (9CI)
+
+
+---
+
 More CAS updates
 
 thor mol:parse_scifinder lib/data/sep_cas_rn/SciFinder_download-Sept_15.txt > lib/data/sep_cas_rn/new_cas_subs.txt
@@ -265,7 +299,6 @@ NOT FOUND:
 	693-19-6	 C9 H18 O2	 Octanoic acid, 7-methyl-	 158.24	 7-Methyloctanoic acid; Isononanoic acid; Isopelargonic acid
 	638-53-9	 C13 H26 O2	 Tridecanoic acid	 214.34	 NSC 25955; NSC 69131; Tridecylic acid; n-Tridecanoic acid; n-Tridecoic acid
 	7771-44-0	 C20 H32 O2	 5,8,11,14-Eicosatetraenoic acid	 304.47
-	
 	
 
 ---
