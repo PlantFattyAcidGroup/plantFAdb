@@ -30,7 +30,7 @@ class UsersController < ApplicationController
     @user = User.new(resource_params)
 
     if @user.save
-      redirect_to @user, notice: 'User was successfully created.'
+      redirect_to @user, notice: 'New user created.'
     else
       render :new
     end
@@ -39,7 +39,10 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if @user.update(resource_params)
-      redirect_to @user, notice: 'User was successfully updated.'
+      if @user == current_user
+        sign_in @user, :bypass => true
+      end
+      redirect_to @user, notice: 'Account has been updated.'
     else
       render :edit
     end
@@ -59,6 +62,10 @@ class UsersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:user).permit(:email, :password, :password_confirmation)
+      if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
+        params[:user].delete("password")
+        params[:user].delete("password_confirmation")
+      end
+      params.require(:user).permit(:email, :password, :password_confirmation, :role)
     end
 end

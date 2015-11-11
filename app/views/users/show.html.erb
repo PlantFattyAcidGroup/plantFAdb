@@ -1,21 +1,12 @@
 <% content_for :top_bar do %>
-	<h1 class="pagetitle">User: <%= @user.id %></h1>
+	<h1 class="pagetitle"><%= @user.email %></h1>
 <% end %>
 
-<p>
-  <strong>Email:</strong>
-  <%= @user.email %>
-</p>
 
 <p>
-  <strong>Password:</strong>
-  <%= @user.password %>
+  <strong>Created:</strong>
+  <%= @user.created_at %>
+	
 </p>
 
-<p>
-  <strong>Password confirmation:</strong>
-  <%= @user.password_confirmation %>
-</p>
-
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<%= link_to 'Change Password / Email', edit_user_path(@user), class: 'btn btn-primary' %>

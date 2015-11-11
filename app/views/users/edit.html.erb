@@ -1,9 +1,9 @@
 <% content_for :top_bar do %>
-  <h1 class="pagetitle">Editing User</h1>
+  <h1 class="pagetitle">Update User</h1>
 <% end %>
 
 <% content_for :item_bar do %>
-  <%= link_to 'Back', users_path, class: 'btn btn-primary' %>
+  <%= link_to 'Cancel', @user, class: 'btn btn-primary' %>
 <% end %>
 
 <%= render 'form' %>
