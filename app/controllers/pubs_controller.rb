@@ -1,10 +1,12 @@
 class PubsController < ApplicationController
-  before_action :set_publication, only: [:show, :edit, :update, :destroy]
-
+  load_and_authorize_resource  
   # GET /publications
   def index
-    @pubs = Pub.order(sort_column + ' ' + sort_direction + ", id asc")
-    .joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join pubs p on r.pub_id = p.id group by p.id) pub on pub.pub_id = pubs.id ")
+    if params[:plant_id]
+      @pubs = @pubs.includes(:plants).references(:plants).where('plants.id = ?',params[:plant_id])
+    end
+    @pubs = @pubs.order(sort_column + ' ' + sort_direction).order("pubs.id ASC") if params[:sort]
+    @pubs = @pubs.joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join pubs p on r.pub_id = p.id group by p.id) pub on pub.pub_id = pubs.id ")
     if(params[:query])
       q = params[:query].upcase
       @pubs = @pubs.where('
@@ -17,9 +19,7 @@ class PubsController < ApplicationController
         "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
       )
     end
-    if params[:plant_id]
-      @pubs = @pubs.where('plant_id = ?',params[:plant_id])
-    end
+
     respond_to do |format|
       # Base html query
       format.html{ @pubs = @pubs.page params[:page]}
@@ -50,7 +50,6 @@ class PubsController < ApplicationController
 
   # GET /publications/new
   def new
-    @pub = Pub.new
   end
 
   # GET /publications/1/edit
@@ -59,8 +58,6 @@ class PubsController < ApplicationController
 
   # POST /publications
   def create
-    @pub = Pub.new(resource_params)
-
     if @pub.save
       redirect_to @pub, notice: 'Pub was successfully created.'
     else
@@ -84,11 +81,6 @@ class PubsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_publication
-      @pub = Pub.find(params[:id])
-    end
-
     # Only allow a trusted parameter "white list" through.
     def resource_params
       params.require(:pub).permit(:year, :authors, :journal, :volume, :page, :plant_id)

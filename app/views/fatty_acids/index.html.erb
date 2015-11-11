@@ -17,29 +17,27 @@
 		<%= left_dropdown_select "registry number", :has_cas, [['Has CAS registry number','true'],['No CAS registry number','false']] %>
 	</div>
 	
-  <table class='table table-striped'>
+  <table class='table table-striped table-centered'>
     <thead>
       <tr>
-        <th><%= 'Systematic Name(s)' %></th>
+				<th style="width:300px"></th>
 				<th><%= sortable 'Name' %></th>
 				<th><%= sortable 'Formula' %></th>
-        <th><%= 'Trivial Name(s)' %></th>
-        <th><%= sortable 'delta_notation', 'Delta notation' %></th>
-        <th>External IDs</th>
+        <th><%= sortable 'delta_notation', 'Notation' %></th>
+        <!-- <th>External IDs</th> -->
         <th>Data Points</th>
-        <th>Options</th>
+        <!-- <th>Options</th> -->
       </tr>
     </thead>
 
     <tbody>
       <% @fatty_acids.each do |fatty_acid| %>
         <tr>
-          <td><%= fatty_acid.systematic_names.map(&:name).join("<br/>").html_safe %></td>
-					<td><%= fatty_acid.name %></td>
-					<td><%= fatty_acid.formula %></td>
-          <td style='width:20%'><%= fatty_acid.trivial_names.map(&:name).join("<br/>").html_safe %></td>
-          <td style='width:15%'><%= fatty_acid.delta_notation %></td>
-          <td style='text-align:left;width:25%'>
+					<td><%= link_to image_tag("http://opsin.ch.cam.ac.uk/opsin/#{fatty_acid.name}.png"), fatty_acid if fatty_acid.name %></td>
+					<td><%= link_to fatty_acid.name, fatty_acid if fatty_acid.name%></td>
+					<td><%= link_to fatty_acid.formula, fatty_acid if fatty_acid.formula%></td>
+          <td style='width:15%'><%= link_to fatty_acid.delta_notation, fatty_acid %></td>
+          <!-- <td style='text-align:left;width:25%'>
               <span style='display:inline-block;width:8em'>CAS number:</span>
                 <%= link_to fatty_acid.cas_number,
                 "http://www.chem.sis.nlm.nih.gov/chemidplus/rn/#{fatty_acid.cas_number}",
@@ -59,12 +57,12 @@
                 <%= link_to fatty_acid.chebi_id,
                 "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:#{fatty_acid.chebi_id}",
                 :target => '_blank' if fatty_acid.chebi_id%><br/>
-          </td>
+          </td> -->
           <td style='width:5%'><%= fatty_acid.result_count %></td>
-          <td style='width:15%'>
-            <%= link_to 'Show', fatty_acid %> |
-            <%= link_to 'Edit', edit_fatty_acid_path(fatty_acid) %>
-          </td>
+          <!-- <td style='width:15%'>
+            <%= link_to 'Show', fatty_acid %>
+            <% if can? :edit, fatty_acid %> | <%= link_to 'Edit', edit_fatty_acid_path(fatty_acid) %> <% end %>
+          </td> -->
         </tr>
       <% end %>
     </tbody>

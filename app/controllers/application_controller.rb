@@ -5,7 +5,12 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   helper_method :sort_column, :sort_direction 
   require 'csv'
+  check_authorization :unless => :devise_controller?
   
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_url, :alert => exception.message
+  end
+    
   private
   def render_csv
     set_file_headers

@@ -108,6 +108,9 @@ section {
   
 }
 
+table.table-centered tbody > tr > td {
+  vertical-align: middle;
+}
 // Table header overrides and rounded corners
 .table-custom {
 	background:$body-bg;

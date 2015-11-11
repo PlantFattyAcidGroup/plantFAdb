@@ -23,23 +23,18 @@
         <th style="width:5%"><%= sortable "volume" %></th>
         <th style="width:5%"><%= sortable "page" %></th>
         <th style="width:5%;white-space:nowrap"><%= sortable "result_count", "Data points" %></th>
-        <th style="width:10%">Options</th>
       </tr>
     </thead>
 
     <tbody>
       <% @pubs.each do |publication| %>
         <tr>
-          <td><%= publication.year %></td>
-          <td><%= publication.authors %></td>
-          <td><%= publication.journal %></td>
-          <td><%= publication.volume %></td>
-          <td><%= publication.page %></td>          
+          <td><%= link_to publication.year, publication if publication.year %></td>
+          <td><%= link_to publication.authors, publication if publication.authors %></td>
+          <td><%= link_to publication.journal, publication if publication.journal %></td>
+          <td><%= link_to publication.volume, publication if publication.volume %></td>
+          <td><%= link_to publication.page, publication if publication.page %></td>          
           <td><%= link_to publication.results.count, results_path(pub_id: publication.id) %></td>
-          <td style="white-space:nowrap">
-            <%= link_to 'Show', publication %> |
-            <%= link_to 'Edit', edit_pub_path(publication) %>
-          </td>
         </tr>
       <% end %>
     </tbody>

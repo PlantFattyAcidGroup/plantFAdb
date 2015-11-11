@@ -4,7 +4,7 @@
 
 <% content_for :item_bar do %>
 	<%= link_to 'Back', plants_path, class: 'btn btn-primary' %>
-  <%= link_to 'Edit', edit_plant_path(@plant), class: 'btn btn-primary' %>
+  <% if can? :edit, @plant %> <%= link_to 'Edit', edit_plant_path(@plant), class: 'btn btn-primary' %> <% end %>
 <% end %>
 
 <div class='container'>

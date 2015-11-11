@@ -1,9 +1,8 @@
 class FattyAcidsController < ApplicationController
-  before_action :set_fatty_acid, only: [:show, :edit, :update, :destroy]
-
+  load_and_authorize_resource
   # GET /fatty_acids
   def index
-    @fatty_acids = FattyAcid.order(sort_column + ' ' + sort_direction + ', measures.id asc')
+    @fatty_acids = @fatty_acids.order(sort_column + ' ' + sort_direction + ', measures.id asc')
     .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id group by m.id) res on res.measure_id = measures.id ")
     .select("measures.*, res.result_count")
     if(params[:query])
@@ -70,7 +69,6 @@ class FattyAcidsController < ApplicationController
 
   # GET /fatty_acids/new
   def new
-    @fatty_acid = FattyAcid.new
   end
 
   # GET /fatty_acids/1/edit
@@ -79,8 +77,6 @@ class FattyAcidsController < ApplicationController
 
   # POST /fatty_acids
   def create
-    @fatty_acid = FattyAcid.new(resource_params)
-
     if @fatty_acid.save
       redirect_to @fatty_acid, notice: 'Fatty acid was successfully created.'
     else
@@ -104,11 +100,6 @@ class FattyAcidsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_fatty_acid
-      @fatty_acid = FattyAcid.find(params[:id])
-    end
-
     # Only allow a trusted parameter "white list" through.
     def resource_params
       params.require(:fatty_acid).permit(:type, :delta_notation, :cas_number, :sofa_mol_id, :lipidmap_id, :pubchem_id, :chebi_id, :structure)

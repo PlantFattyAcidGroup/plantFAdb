@@ -24,50 +24,24 @@
   <table class='table table-striped'>
     <thead>
       <tr>
-				<th>URL</th>
-				<th><%= sortable('name_status','Status') %></th>
-        <th><%= sortable('tnrs_family','TNRS Accepted Family') %></th>
-        <th><%= sortable('tnrs_name','TNRS Accepted Name') %></th>
-				<th><%= sortable('accepted_rank','Accepted Rank') %></th>
-        <th><%= sortable('sofa_family','SOFA Family') %></th>
-        <th><%= sortable('sofa_name','SOFA Name') %></th>
-				<th><%= sortable('matched_rank','Matched Rank') %></th>
 				<th><%= sortable('order_name', 'Order') %></th>
-        <th><%= sortable('family','Family Matched') %></th>
-        <th><%= sortable('genus','Genus Matched') %></th>
-        <th><%= sortable('species','Species Matched') %></th>
-        <th><%= sortable('pub_count','Pubs') %></th>
+        <th><%= sortable('family','Family') %></th>
+        <th><%= sortable('genus','Genus') %></th>
+        <th><%= sortable('species','Species') %></th>
+        <th><%= sortable('pub_count','Publications') %></th>
         <th><%= sortable('result_count','Data points') %></th>
-        <th>Options</th>
       </tr>
     </thead>
 
     <tbody>
       <% @plants.each do |plant| %>
         <tr>
-          <td style='padding:.4em'>
-						<% (plant.tropicos_url||"").split(";").each do |link| %>
-							<div style='padding:.2em'><%= link_to truncate(link),link %></div>
-						<% end %>
-					</td>
-					<td><%= plant.name_status %></td>
-          <td><%= plant.tnrs_family %></td>
-          <td><%= plant.tnrs_name %></td>
-          <td><%= plant.accepted_rank %></td>
-          <td><%= plant.sofa_family %></td>
-          <td><%= plant.sofa_name %></td>
-          <td><%= plant.matched_rank %></td>
-					<td><%= plant.order_name %></td>
-					<td><%= plant.family %></td>
-					<td><%= plant.genus %></td>
-					<td><%= plant.species %></td>
+					<td><%= link_to plant.order_name, plant if plant.order_name %></td>
+					<td><%= link_to plant.family, plant if plant.family %></td>
+					<td><%= link_to plant.genus, plant if plant.genus %></td>
+					<td><%= link_to plant.species, plant if plant.species %></td>
           <td><%= link_to plant.pub_count, pubs_path(plant_id: plant.id) if plant.pub_count %></td>
           <td><%= link_to plant.result_count, results_path(plant_id: plant.id) if plant.result_count %></td>
-          <td>
-          
-          <%#= link_to 'Show', plant %>
-          <%= link_to 'Edit', edit_plant_path(plant) %>
-        </td>
         </tr>
       <% end %>
     </tbody>

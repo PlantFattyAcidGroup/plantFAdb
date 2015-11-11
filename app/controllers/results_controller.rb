@@ -1,11 +1,10 @@
 class ResultsController < ApplicationController
-  before_action :set_result, only: [:show, :edit, :update, :destroy]
-
+  load_and_authorize_resource
   # GET /results
   def index
-    @results = Result.order(sort_column + ' ' + sort_direction)
-    .includes(:measure, pub: [:plants])
-    .references(:measure, pub: [:plants])
+    @results = @results.order(sort_column + ' ' + sort_direction).order("results.id ASC")
+    .includes(:measure, :pub)
+    .references(:measure, :pub)
     if params[:query]
       q = params[:query].upcase
       @results = @results.where('
@@ -23,7 +22,7 @@ class ResultsController < ApplicationController
       )
     end
     if params[:plant_id]
-      @results = @results.where('plant_id = ?',params[:plant_id])
+      @results = @results.where(plant_id: params[:plant_id])
     end
     if params[:pub_id]
       @results = @results.where(pub_id: params[:pub_id])
@@ -55,7 +54,6 @@ class ResultsController < ApplicationController
 
   # GET /results/new
   def new
-    @result = Result.new
   end
 
   # GET /results/1/edit
@@ -64,8 +62,6 @@ class ResultsController < ApplicationController
 
   # POST /results
   def create
-    @result = Result.new(resource_params)
-
     if @result.save
       redirect_to @result, notice: 'Result was successfully created.'
     else
@@ -89,11 +85,6 @@ class ResultsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_result
-      @result = Result.find(params[:id])
-    end
-
     # Only allow a trusted parameter "white list" through.
     def resource_params
       params.require(:result).permit(:value, :unit, :measure_id, :pub_id)

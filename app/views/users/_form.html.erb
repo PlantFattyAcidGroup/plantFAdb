@@ -23,6 +23,12 @@
 	    <%= f.label :password_confirmation %><br>
 	    <%= f.password_field :password_confirmation %>
 	  </div>
+		<% if current_user.is_admin? %>
+		<div class="field">
+			Role:<br/>
+			<%= f.collection_select(:role, User::ROLES, :to_s, lambda{|i| i.to_s.humanize}) %>
+		</div>
+		<% end %>
 	</div>
 	<br style='clear:both'/>
   <div class="actions">

@@ -6,7 +6,12 @@
 <p>
   <strong>Created:</strong>
   <%= @user.created_at %>
-	
 </p>
+
+<p>
+  <strong>Role:</strong>
+  <%= @user.role %>
+</p>
+
 
 <%= link_to 'Change Password / Email', edit_user_path(@user), class: 'btn btn-primary' %>

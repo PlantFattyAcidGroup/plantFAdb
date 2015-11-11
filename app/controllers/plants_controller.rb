@@ -1,9 +1,8 @@
 class PlantsController < ApplicationController
-  before_action :set_plant, only: [:show, :edit, :update, :destroy]
-
+  load_and_authorize_resource
   # GET /plants
   def index
-    @plants = Plant.order(sort_column + ' ' + sort_direction+", id asc")
+    @plants = @plants.order(sort_column + ' ' + sort_direction+", id asc")
     .joins("left outer join (select count(p.id) pub_count, l.id plant_id from plants_pubs p left outer join plants l on p.plant_id = l.id group by l.id) pub on pub.plant_id = plants.id ")
     .joins("left outer join (select count(r.id) result_count, l.id plant_id from results r left outer join plants l on r.plant_id = l.id group by l.id) res on res.plant_id = plants.id ")
     .page(params[:page])
@@ -58,7 +57,6 @@ class PlantsController < ApplicationController
 
   # GET /plants/new
   def new
-    @plant = Plant.new
   end
 
   # GET /plants/1/edit
@@ -67,8 +65,6 @@ class PlantsController < ApplicationController
 
   # POST /plants
   def create
-    @plant = Plant.new(resource_params)
-
     if @plant.save
       redirect_to @plant, notice: 'Plant was successfully created.'
     else
@@ -92,11 +88,6 @@ class PlantsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_plant
-      @plant = Plant.find(params[:id])
-    end
-
     # Only allow a trusted parameter "white list" through.
     def resource_params
       params.require(:plant).permit(:tnrs_family, :tnrs_name, :accepted_rank, :name_status, :matched_rank, :family, :genus, :species, :tropicos_url, :note)

@@ -1,7 +1,8 @@
 class HomeController < ApplicationController
+  skip_authorization_check
   def index
     @fatty_acids = FattyAcid.with_results.order("measures.name asc")
-    @selected = FattyAcid.find_by(delta_notation: params[:measure]) if params[:measure]
+    @selected = FattyAcid.find_by(id: params[:measure]) if params[:measure]
     @min = nil
     @max = 0
     @tree = TreeNode.arrange_serializable(:order => :id) do |parent, children|

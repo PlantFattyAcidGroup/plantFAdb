@@ -4,7 +4,7 @@
 
 <% content_for :item_bar do %>
 	<%= link_to 'Back', fatty_acids_path, class: 'btn btn-primary' %>
-  <%= link_to 'Edit', edit_fatty_acid_path(@fatty_acid), class: 'btn btn-primary' %>
+  <% if can? :edit, @fatty_acid %> <%= link_to 'Edit', edit_fatty_acid_path(@fatty_acid), class: 'btn btn-primary' %> <% end %>
 <% end %>
 
 <div class='row'>
