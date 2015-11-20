@@ -27,6 +27,9 @@ class ResultsController < ApplicationController
     if params[:pub_id]
       @results = @results.where(pub_id: params[:pub_id])
     end
+    if params[:measure_id]
+      @results = @results.where(measure_id: params[:measure_id])
+    end
     respond_to do |format|
       # Base html query
       format.html{ @results = @results.page params[:page]}

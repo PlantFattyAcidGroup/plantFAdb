@@ -10,36 +10,75 @@
       </ul>
     </div>
   <% end %>
+	
+	<div class='container'>
+		<div class='row'>
+			<div class='col-md-5'>
+			  <div class="field">
+			    <%= f.label :name %><br>
+			    <%= f.text_field :name, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :other_names %><br>
+			    <%= f.text_area :other_names, class: 'form-control', rows: 4 %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :formula %><br>
+			    <%= f.text_field :formula, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :delta_notation %><br>
+			    <%= f.text_field :delta_notation, class: 'form-control' %>
+			  </div>
+			</div>
 
-  <div class="field">
-    <%= f.label :delta_notation %><br>
-    <%= f.text_field :delta_notation %>
-  </div>
-  <div class="field">
-    <%= f.label :cas_number %><br>
-    <%= f.text_field :cas_number %>
-  </div>
-  <div class="field">
-    <%= f.label :sofa_mol_id %><br>
-    <%= f.text_field :sofa_mol_id %>
-  </div>
-  <div class="field">
-    <%= f.label :lipidmap_id %><br>
-    <%= f.text_field :lipidmap_id %>
-  </div>
-  <div class="field">
-    <%= f.label :pubchem_id %><br>
-    <%= f.text_field :pubchem_id %>
-  </div>
-  <div class="field">
-    <%= f.label :chebi_id %><br>
-    <%= f.text_field :chebi_id %>
-  </div>
-  <hr/>
-  <div class='field'>
-    <%= f.label :structure %><br/>
-    <%= f.text_area :structure, size: "60x30" %>
-  </div>
+			<div class='col-md-2'>
+			  <div class="field">
+			    <%= f.label :cas_number %><br>
+			    <%= f.text_field :cas_number, class: 'form-control' %>
+			  </div>
+	
+			  <div class="field">
+			    <%= f.label :sofa_mol_id %><br>
+			    <%= f.text_field :sofa_mol_id, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :lipidmap_id %><br>
+			    <%= f.text_field :lipidmap_id, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :pubchem_id %><br>
+			    <%= f.text_field :pubchem_id, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :chebi_id %><br>
+			    <%= f.text_field :chebi_id, class: 'form-control' %>
+			  </div>
+			</div>
+			
+			<div class='col-md-5'>
+			  <div class="field">
+			    <%= f.label :inchi %><br>
+			    <%= f.text_field :inchi, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :stdinchi %><br>
+			    <%= f.text_field :stdinchi, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :stdinchikey %><br>
+			    <%= f.text_field :stdinchikey, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :smiles %><br>
+			    <%= f.text_field :smiles, class: 'form-control' %>
+			  </div>
+			</div>
+		</div>
+	</div>
+	
+	<br/>
+
   <div class="actions">
     <%= f.submit class: 'btn btn-primary' %>
   </div>

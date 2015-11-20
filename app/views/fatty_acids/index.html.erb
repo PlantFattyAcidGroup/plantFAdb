@@ -22,10 +22,13 @@
       <tr>
 				<th style="width:300px"></th>
 				<th><%= sortable 'Name' %></th>
+				<th>Other Names</th>
+				<th><%= sortable 'sofa_mol_id'%></th>
 				<th><%= sortable 'Formula' %></th>
+				<th><%= sortable 'Mass' %></th>
         <th><%= sortable 'delta_notation', 'Notation' %></th>
         <!-- <th>External IDs</th> -->
-        <th>Data Points</th>
+        <th><%= sortable 'result_count', 'Data Points'%></th>
         <!-- <th>Options</th> -->
       </tr>
     </thead>
@@ -35,7 +38,10 @@
         <tr>
 					<td><%= link_to image_tag("http://opsin.ch.cam.ac.uk/opsin/#{fatty_acid.name}.png"), fatty_acid if fatty_acid.name %></td>
 					<td><%= link_to fatty_acid.name, fatty_acid if fatty_acid.name%></td>
+					<td><%= link_to truncate(fatty_acid.other_names,{length: 150}), fatty_acid if fatty_acid.other_names%></td>
+					<td><%= link_to fatty_acid.sofa_mol_id, fatty_acid %></td>
 					<td><%= link_to fatty_acid.formula, fatty_acid if fatty_acid.formula%></td>
+					<td><%= link_to fatty_acid.mass, fatty_acid if fatty_acid.mass %></td>
           <td style='width:15%'><%= link_to fatty_acid.delta_notation, fatty_acid %></td>
           <!-- <td style='text-align:left;width:25%'>
               <span style='display:inline-block;width:8em'>CAS number:</span>
@@ -58,7 +64,7 @@
                 "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:#{fatty_acid.chebi_id}",
                 :target => '_blank' if fatty_acid.chebi_id%><br/>
           </td> -->
-          <td style='width:5%'><%= fatty_acid.result_count %></td>
+          <td style='width:5%'><%= link_to fatty_acid.result_count, results_path(measure_id: fatty_acid.id) if fatty_acid.result_count %></td>
           <!-- <td style='width:15%'>
             <%= link_to 'Show', fatty_acid %>
             <% if can? :edit, fatty_acid %> | <%= link_to 'Edit', edit_fatty_acid_path(fatty_acid) %> <% end %>
