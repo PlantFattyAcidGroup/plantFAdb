@@ -15,8 +15,15 @@ class PubsController < ApplicationController
         OR upper(journal) LIKE ?
         OR upper(volume) LIKE ?
         OR upper(page) LIKE ?
-        OR upper(remarks) LIKE ?',
-        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
+        OR upper(wos_uid) LIKE ?
+        OR upper(doi) LIKE ?
+        OR upper(wos_title) LIKE ?
+        OR upper(wos_authors) LIKE ?
+        OR upper(wos_journal) LIKE ?
+        OR upper(wos_volume) LIKE ?
+        OR upper(wos_pages) LIKE ?
+        OR upper(wos_year) LIKE ?',
+        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
       )
     end
 
@@ -26,8 +33,11 @@ class PubsController < ApplicationController
       # CSV download
       format.csv{
         render_csv do |out|
-          out << CSV.generate_line(["ID","Year","Authors","Journal","Volume","Page","Result Count","Plant Count"])
-          @pubs.find_each(batch_size: 500) do |item|
+          out << CSV.generate_line([
+            "ID","Year","Authors","Journal","Volume","Page",
+            "DOI","WOS_Title","WOS_UID","WOS_Year","WOS_Authors","WOS_Journal","WOS_Volume","WOS_Pages"
+            ])
+          @pubs.find_each do |item|
             out << CSV.generate_line([
               item.id,
               item.year,
@@ -35,8 +45,14 @@ class PubsController < ApplicationController
               item.journal,
               item.volume,
               item.page,
-              item.results.count,
-              item.plants.count
+              item.doi,
+              item.wos_title,
+              item.wos_uid,
+              item.wos_year,
+              item.wos_authors,
+              item.wos_journal,
+              item.wos_volume,
+              item.wos_pages
             ])
           end
         end
@@ -83,6 +99,7 @@ class PubsController < ApplicationController
   private
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:pub).permit(:year, :authors, :journal, :volume, :page, :plant_id)
+      params.require(:pub).permit(:doi,:wos_uid,:wos_title,:wos_year,:wos_authors,:wos_journal,:wos_volume,:wos_pages,
+      :year, :authors, :journal, :volume, :page)
     end
 end

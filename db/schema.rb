@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151111151859) do
+ActiveRecord::Schema.define(version: 20151124181531) do
 
   create_table "measures", force: :cascade do |t|
     t.string   "type"
@@ -92,8 +92,17 @@ ActiveRecord::Schema.define(version: 20151111151859) do
     t.string   "volume"
     t.string   "page"
     t.string   "remarks"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "wos_uid"
+    t.string   "wos_journal"
+    t.string   "wos_title"
+    t.string   "wos_volume"
+    t.string   "wos_authors"
+    t.string   "wos_pages"
+    t.string   "wos_year"
+    t.string   "doi"
+    t.text     "original_pubs"
   end
 
   create_table "results", force: :cascade do |t|

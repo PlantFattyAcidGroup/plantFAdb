@@ -103,6 +103,8 @@ class FattyAcidsController < ApplicationController
   private
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:fatty_acid).permit(:type, :delta_notation, :cas_number, :sofa_mol_id, :lipidmap_id, :pubchem_id, :chebi_id, :structure)
+      params.require(:fatty_acid).permit(:name,:other_names,:formula, :type, :delta_notation,
+        :cas_number, :sofa_mol_id, :lipidmap_id, :pubchem_id, :chebi_id, :structure,
+        :inchi,:stdinchi,:stdinchikey,:smiles)
     end
 end

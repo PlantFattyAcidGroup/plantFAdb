@@ -75,6 +75,119 @@ class Pub < Thor
     puts "\n#{amb[0,50].map{|a| "#{a[0].inspect}\n#{a[1].map{|d| "\t#{d.inspect}"}.join("\n")}"}.join("\n\n")}"
   end
   
+  desc 'condense_wos_id', 'condense using wos_uid column'
+  def condense_wos_id
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    PaperTrail.enabled = false
+    pbar = ProgressBar.new(::Pub.count)
+    hsh = {}
+    cnt = 0
+    puts "building hash"
+    ::Pub.find_each do |pub|
+      pbar.increment!
+      next if pub.wos_uid.blank? || pub.wos_uid.downcase=='none'
+      hsh[pub.wos_uid]||=[]
+      hsh[pub.wos_uid]<<pub
+      cnt+=1
+    end
+    puts "Found #{cnt} pubs with wos_uid"
+    puts "Found #{hsh.keys.length} unique wos_uid"
+    dest = 0
+    crt = 0
+    skip = 0
+    ::Pub.transaction do
+      pbar = ProgressBar.new(hsh.keys.length)
+      hsh.each do |key,pubs|
+        pbar.increment!
+        # do nothing if only 1 unique
+        if pubs.length == 1
+          skip+=1
+          next
+        end
+        new_pub = ::Pub.create(
+          wos_uid: pubs[0].wos_uid,
+          wos_journal: pubs[0].wos_journal,
+          wos_title: pubs[0].wos_title,
+          wos_volume: pubs[0].wos_volume,
+          wos_authors: pubs[0].wos_authors,
+          wos_pages: pubs[0].wos_pages,
+          wos_year: pubs[0].wos_year,
+          doi: pubs[0].doi,
+          original_pubs: pubs
+        )
+        crt += 1
+        new_pub.plants = pubs.map(&:plants).flatten
+        pubs.each do |p|
+          p.results.update_all(pub_id: new_pub.id)
+          p.sofa_tabs.update_all(pub_id: new_pub.id)
+          p.destroy
+          dest+=1
+        end
+      end
+    end
+    puts "Skipped #{skip} pubs with 1 wos_uid"
+    puts "Created #{crt} new unique pubs"
+    puts "Removed #{dest} non unique"
+    puts
+    puts "Total pubs now: #{::Pub.count}"
+    puts "Pubs with wos: #{with_wos = ::Pub.where("wos_uid != 'None'").count}"
+    puts "Pubs with doi: #{with_doi = ::Pub.where("doi != 'None'").count}"
+  end
+  
+  desc 'add_wos', 'add wos data to pubs'
+  method_options %w(id_column -i) => 1, %w(title -t) => 13, %w(journal -j) => 15, %w(volume -v) => 16,
+    %w(authors -a) => 20, %w(pages -p) => 18, %w(year -y) => 22, %w(doi -d) => 14, %w(wos_uid -w) => 21
+  def add_wos filename
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    file = File.open(filename,'r')
+    pbar = ProgressBar.new(`wc -l < "#{filename}"`.to_i)
+    ids = []
+    wos_ids = []
+    doi_ids = []
+    count = 0
+    PaperTrail.enabled = false
+    file.each_with_index do |line,idx|
+      pbar.increment!
+      next if idx==0
+      data = line.split("\t")
+      
+      pub_id = data[ options[:id_column].to_i-1]
+      next if pub_id.empty?
+      wos_uid = data[ options[:wos_uid].to_i-1]
+      wos_journal=data[ options[:journal].to_i-1]
+      wos_title=data[ options[:title].to_i-1]
+      wos_volume=data[ options[:volume].to_i-1]
+      wos_authors=data[ options[:authors].to_i-1]
+      wos_pages=data[ options[:pages].to_i-1]
+      wos_year=data[ options[:year].to_i-1]
+      doi=data[ options[:doi].to_i-1]
+      
+      ids << pub_id
+      wos_ids << wos_uid unless wos_uid.strip.blank? || wos_uid.downcase=='none'
+      doi_ids << doi unless doi.strip.blank? || doi.downcase=='none'
+      count +=1
+      pub = ::Pub.find_by(id: pub_id )
+      if pub
+        pub.wos_uid=wos_uid
+        pub.wos_journal=wos_journal
+        pub.wos_title=wos_title
+        pub.wos_volume=wos_volume
+        pub.wos_authors=wos_authors
+        pub.wos_pages=wos_pages
+        pub.wos_year=wos_year
+        pub.doi=doi
+        pub.save!
+      else
+        raise "NOT FOUND: #{data.inspect}"
+      end
+    end
+    puts "Found #{count} entries in file"
+    puts "- pub IDS: #{ids.length}, unique: #{ids.uniq.length}"
+    puts "- wos IDS: #{wos_ids.length} unique: #{wos_ids.uniq.length}"
+    puts "- doi IDS: #{doi_ids.length} unique: #{doi_ids.uniq.length}"
+    
+  end
+  
   desc 'condense', "Condense duplicate publications into 'pubs' table keeping plant links"
   def condense
     require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")

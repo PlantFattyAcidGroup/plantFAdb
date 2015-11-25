@@ -299,7 +299,54 @@ NOT FOUND:
 	693-19-6	 C9 H18 O2	 Octanoic acid, 7-methyl-	 158.24	 7-Methyloctanoic acid; Isononanoic acid; Isopelargonic acid
 	638-53-9	 C13 H26 O2	 Tridecanoic acid	 214.34	 NSC 25955; NSC 69131; Tridecylic acid; n-Tridecanoic acid; n-Tridecoic acid
 	7771-44-0	 C20 H32 O2	 5,8,11,14-Eicosatetraenoic acid	 304.47
-	
+
+---
+
+> Nov 25
+
+Add publication data from WOS - ISI lookup
+
+thor pub:add_wos lib/data/pub_data/PubSearchDevinHiggins_2015Nov15.tsv.txt 
+
+	Found 2875 entries in file
+	- pub IDS: 2875, unique: 2875
+	- wos IDS: 1737 unique: 1060
+	- doi IDS: 1166 unique: 686
+
+thor pub:condense_wos_id
+
+	Found 1737 pubs with wos_uid
+	Found 1060 unique wos_uid
+	Created 301 new unique pubs
+	Removed 978 non unique
+
+	Total pubs now: 2392
+	Pubs with wos: 1060
+	Pubs with doi: 686
+
+
+Add ~150 manual pubs
+
+thor pub:add_wos lib/data/pub_data/Nov18\ 150\ records\ by\ Jinjie\ John\ Oct28.txt -t 11 -j 13 -v 14 -a 17 -p 15 -y 19 -d 12 -w 18
+
+	Found 152 entries in file
+	- pub IDS: 152, unique: 152
+	- wos IDS: 136 unique: 87
+	- doi IDS: 106 unique: 70
+
+Condense again
+
+thor pub:condense_wos_id
+
+	Found 1195 pubs with wos_uid
+	Found 1060 unique wos_uid
+	Skipped 974 pubs with 1 wos_uid
+	Created 86 new unique pubs
+	Removed 221 non unique
+
+	Total pubs now: 2257
+	Pubs with wos: 1060
+	Pubs with doi: 692
 
 ---
 

@@ -17,23 +17,43 @@
   <table class='table table-striped'>
     <thead>
       <tr>
-        <th style="width:5%"><%= sortable "year" %></th>
-        <th style="width:15%"><%= sortable "authors" %></th>
-        <th style="width:15%"><%= sortable "journal" %></th>
-        <th style="width:5%"><%= sortable "volume" %></th>
-        <th style="width:5%"><%= sortable "page" %></th>
-        <th style="width:5%;white-space:nowrap"><%= sortable "result_count", "Data points" %></th>
+				<th><%= sortable "doi" %></th>
+				<th><%= sortable "wos_uid" %></th>
+				<th><%= sortable "wos_title" %></th>
+        <th><%= sortable "wos_year" %></th>
+        <th><%= sortable "wos_authors" %></th>
+        <th><%= sortable "wos_journal" %></th>
+        <th><%= sortable "wos_volume" %></th>
+        <th><%= sortable "wos_pages" %></th>
+        <th><%= sortable "year" %></th>
+        <th><%= sortable "authors" %></th>
+        <th><%= sortable "journal" %></th>
+        <th><%= sortable "volume" %></th>
+        <th><%= sortable "page" %></th>
+
+				
+        <th><%= sortable "result_count", "Data points" %></th>
       </tr>
     </thead>
 
     <tbody>
       <% @pubs.each do |publication| %>
         <tr>
+					<td><%= link_to publication.doi||'-', publication %></td>
+					<td><%= link_to publication.wos_uid, publication if publication.wos_uid %></td>
+					<td><%= link_to publication.wos_title, publication if publication.wos_title %></td>
+          <td><%= link_to publication.wos_year, publication if publication.wos_year %></td>
+          <td><%= link_to publication.wos_authors, publication if publication.wos_authors %></td>
+          <td><%= link_to publication.wos_journal, publication if publication.wos_journal %></td>
+          <td><%= link_to publication.wos_volume, publication if publication.wos_volume %></td>
+          <td><%= link_to publication.wos_pages, publication if publication.wos_pages %></td>
+					
           <td><%= link_to publication.year, publication if publication.year %></td>
           <td><%= link_to publication.authors, publication if publication.authors %></td>
           <td><%= link_to publication.journal, publication if publication.journal %></td>
           <td><%= link_to publication.volume, publication if publication.volume %></td>
-          <td><%= link_to publication.page, publication if publication.page %></td>          
+          <td><%= link_to publication.page, publication if publication.page %></td>
+					       
           <td><%= link_to publication.results.count, results_path(pub_id: publication.id) %></td>
         </tr>
       <% end %>

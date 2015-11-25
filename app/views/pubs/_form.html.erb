@@ -10,28 +10,82 @@
       </ul>
     </div>
   <% end %>
+<div class='row'>
+	<div class='col-md-6'>
+	  <div class="field">
+	    <%= f.label :doi %><br>
+	    <%= f.text_field :doi, class: 'form-control' %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :wos_uid %><br>
+	    <%= f.text_field :wos_uid, class: 'form-control' %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :wos_title %><br>
+	    <%= f.text_field :wos_title, class: 'form-control' %>
+	  </div>		
+	  <div class="field">
+	    <%= f.label :wos_year %><br>
+	    <%= f.text_field :wos_year, class: 'form-control' %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :wos_authors %><br>
+	    <%= f.text_field :wos_authors, class: 'form-control'  %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :wos_journal %><br>
+	    <%= f.text_field :wos_journal, class: 'form-control'  %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :wos_volume %><br>
+	    <%= f.text_field :wos_volume, class: 'form-control'  %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :wos_pages %><br>
+	    <%= f.text_field :wos_pages, class: 'form-control'  %>
+	  </div>
+	</div>
+	
+	<div class='well col-md-4' style='height:350px;overflow-y:auto'>
+		<legend>SOFA citation(s)</legend>
+		<% if @pub.original_pubs.empty? %>
+			<% pubs = [@pub]  %>
+		<% else %>
+			<% pubs = @pub.original_pubs %>
+		<% end %>
+		<% pubs.each do |pub| %>
+			<p>
+			  <strong>Year:</strong>
+			  <%= pub.year %>
+			</p>
 
-  <div class="field">
-    <%= f.label :year %><br>
-    <%= f.text_field :year %>
-  </div>
-  <div class="field">
-    <%= f.label :authors %><br>
-    <%= f.text_field :authors %>
-  </div>
-  <div class="field">
-    <%= f.label :journal %><br>
-    <%= f.text_field :journal %>
-  </div>
-  <div class="field">
-    <%= f.label :volume %><br>
-    <%= f.text_field :volume %>
-  </div>
-  <div class="field">
-    <%= f.label :page %><br>
-    <%= f.text_field :page %>
-  </div>
-  <div class="actions">
-    <%= f.submit class: 'btn btn-primary' %>
-  </div>
+			<p>
+			  <strong>Authors:</strong>
+			  <%= pub.authors %>
+			</p>
+
+			<p>
+			  <strong>Journal:</strong>
+			  <%= pub.journal %>
+			</p>
+
+			<p>
+			  <strong>Volume:</strong>
+			  <%= pub.volume %>
+			</p>
+
+			<p>
+			  <strong>Page:</strong>
+			  <%= pub.page %>
+			</p>
+			<hr/>
+		<% end %>
+	</div>
+	
+</div>
+<br/>
+<div class="actions">
+  <%= f.submit class: 'btn btn-primary' %>
+</div>
+	
 <% end %>

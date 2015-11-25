@@ -7,30 +7,91 @@
   <% if can? :edit, @pub %> <%= link_to 'Edit', edit_pub_path(@pub), class: 'btn btn-primary' %> <% end %>
 <% end %>
 
-<p>
-  <strong>Year:</strong>
-  <%= @pub.year %>
-</p>
+<div class='row'>
+	<div class='well col-md-4' style='height:350px;overflow-y:auto'>
+		<legend>SOFA citation(s)</legend>
+		<% if @pub.original_pubs.empty? %>
+			<% pubs = [@pub]  %>
+		<% else %>
+			<% pubs = @pub.original_pubs %>
+		<% end %>
+		<% pubs.each do |pub| %>
+			<p>
+			  <strong>Year:</strong>
+			  <%= pub.year %>
+			</p>
 
-<p>
-  <strong>Authors:</strong>
-  <%= @pub.authors %>
-</p>
+			<p>
+			  <strong>Authors:</strong>
+			  <%= pub.authors %>
+			</p>
 
-<p>
-  <strong>Journal:</strong>
-  <%= @pub.journal %>
-</p>
+			<p>
+			  <strong>Journal:</strong>
+			  <%= pub.journal %>
+			</p>
 
-<p>
-  <strong>Volume:</strong>
-  <%= @pub.volume %>
-</p>
+			<p>
+			  <strong>Volume:</strong>
+			  <%= pub.volume %>
+			</p>
 
-<p>
-  <strong>Page:</strong>
-  <%= @pub.page %>
-</p>
+			<p>
+			  <strong>Page:</strong>
+			  <%= pub.page %>
+			</p>
+			<hr/>
+		<% end %>
+	</div>
+	<div class='well col-md-4'>
+		<legend>WOS citation</legend>
+		<p>
+		  <strong>Year:</strong>
+		  <%= @pub.wos_year %>
+		</p>
+
+		<p>
+		  <strong>Authors:</strong>
+		  <%= @pub.wos_authors %>
+		</p>
+
+		<p>
+		  <strong>Journal:</strong>
+		  <%= @pub.wos_journal %>
+		</p>
+
+		<p>
+		  <strong>Volume:</strong>
+		  <%= @pub.wos_volume %>
+		</p>
+
+		<p>
+		  <strong>Page:</strong>
+		  <%= @pub.wos_pages %>
+		</p>
+		
+		<p>
+		  <strong>UID:</strong>
+		  <%= @pub.wos_uid %>
+		</p>
+
+		<p>
+		  <strong>Title:</strong>
+		  <%= @pub.wos_title %>
+		</p>
+		
+		<p>
+		  <strong>DOI:</strong>
+		  <%= @pub.doi %>
+		</p>
+	</div>
+	<div class='well col-md-4' style='height:350px;overflow-y:auto'>
+		<legend>SOFA Tables</legend>
+		<% @pub.sofa_tabs.each do |tab| %>
+			<div style='float:left;margin:0.25em'><%= link_to tab.sofa_tab_id, "http://sofa.mri.bund.de/Show_ResultDetail.php?Tab_ID="+tab.sofa_tab_id %></div>
+		<% end %>
+	</div>
+</div>
 
 <hr/>
 
