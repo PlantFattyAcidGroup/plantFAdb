@@ -60,6 +60,27 @@ class PubsController < ApplicationController
     end
   end
 
+  def check_wos_uid
+    uid = params[:uid]
+    pub = Pub.find_by(wos_uid: uid) if uid
+    if pub
+      render json: {
+        pub: {
+          wos_title: pub.wos_title,
+          wos_year: pub.wos_year,
+          wos_authors: pub.wos_authors,
+          wos_journal: pub.wos_journal,
+          wos_volume: pub.wos_volume,
+          wos_pages: pub.wos_pages
+        }
+      }
+    else
+      render json: {
+        pub: nil
+      }
+    end
+  end
+  
   # GET /publications/1
   def show
   end

@@ -13,35 +13,36 @@
 <div class='row'>
 	<div class='col-md-6'>
 	  <div class="field">
-	    <%= f.label :doi %><br>
+			
+	    <%= f.label :doi %> <%= link_to 'Lookup (crossref)', '#', class: 'btn btn-info pull-right', id: 'doi_lookup' %><br>
 	    <%= f.text_field :doi, class: 'form-control' %>
 	  </div>
 	  <div class="field">
-	    <%= f.label :wos_uid %><br>
+	    <%= f.label :wos_uid %> <%= link_to 'Lookup (local db)', '#', class: 'btn btn-info pull-right', id: 'wos_uid_lookup' %><br>
 	    <%= f.text_field :wos_uid, class: 'form-control' %>
 	  </div>
 	  <div class="field">
-	    <%= f.label :wos_title %><br>
+	    <%= f.label :wos_title, 'Title' %><br>
 	    <%= f.text_field :wos_title, class: 'form-control' %>
 	  </div>		
 	  <div class="field">
-	    <%= f.label :wos_year %><br>
+	    <%= f.label :wos_year, 'Year' %><br>
 	    <%= f.text_field :wos_year, class: 'form-control' %>
 	  </div>
 	  <div class="field">
-	    <%= f.label :wos_authors %><br>
+	    <%= f.label :wos_authors, 'Authors' %><br>
 	    <%= f.text_field :wos_authors, class: 'form-control'  %>
 	  </div>
 	  <div class="field">
-	    <%= f.label :wos_journal %><br>
+	    <%= f.label :wos_journal, 'Journal' %><br>
 	    <%= f.text_field :wos_journal, class: 'form-control'  %>
 	  </div>
 	  <div class="field">
-	    <%= f.label :wos_volume %><br>
+	    <%= f.label :wos_volume, 'Volume' %><br>
 	    <%= f.text_field :wos_volume, class: 'form-control'  %>
 	  </div>
 	  <div class="field">
-	    <%= f.label :wos_pages %><br>
+	    <%= f.label :wos_pages, 'Pages' %><br>
 	    <%= f.text_field :wos_pages, class: 'form-control'  %>
 	  </div>
 	</div>

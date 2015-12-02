@@ -14,7 +14,11 @@ Rails.application.routes.draw do
   resources :measures
   resources :publications
   resources :plants
-  resources :pubs
+  resources :pubs do
+    collection do
+      get 'check_wos_uid'
+    end
+  end
   
   devise_for :users
   resources :users
