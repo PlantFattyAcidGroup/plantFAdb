@@ -5,26 +5,19 @@ class PubsController < ApplicationController
     if params[:plant_id]
       @pubs = @pubs.includes(:plants).references(:plants).where('plants.id = ?',params[:plant_id])
     end
-    @pubs = @pubs.order(sort_column + ' ' + sort_direction).order("pubs.id ASC") if params[:sort]
+    @pubs = @pubs.order(sort_column + ' ' + sort_direction + ", pubs.id ASC")
     @pubs = @pubs.joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join pubs p on r.pub_id = p.id group by p.id) pub on pub.pub_id = pubs.id ")
     if(params[:query])
       q = params[:query].upcase
       @pubs = @pubs.where('
-        upper(year) LIKE ?
-        OR upper(authors) LIKE ?
-        OR upper(journal) LIKE ?
-        OR upper(volume) LIKE ?
-        OR upper(page) LIKE ?
-        OR upper(wos_uid) LIKE ?
-        OR upper(doi) LIKE ?
-        OR upper(wos_title) LIKE ?
+        upper(wos_year) LIKE ?
         OR upper(wos_authors) LIKE ?
         OR upper(wos_journal) LIKE ?
         OR upper(wos_volume) LIKE ?
         OR upper(wos_pages) LIKE ?
-        OR upper(wos_year) LIKE ?',
-        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
-      )
+        OR upper(wos_uid) LIKE ?
+        OR upper(doi) LIKE ?',
+        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%" )
     end
 
     respond_to do |format|
@@ -121,6 +114,10 @@ class PubsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def resource_params
       params.require(:pub).permit(:doi,:wos_uid,:wos_title,:wos_year,:wos_authors,:wos_journal,:wos_volume,:wos_pages,
-      :year, :authors, :journal, :volume, :page)
+      :year, :authors, :journal, :volume, :page, :url, :abstract)
+    end
+  
+    def sort_column
+      params[:sort] || "pubs.wos_authors, pubs.wos_year"
     end
 end

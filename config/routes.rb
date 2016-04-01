@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+  resources :pages
   resources :trivial_names
   resources :trivial_names
   resources :systematic_names
@@ -22,6 +23,7 @@ Rails.application.routes.draw do
   
   devise_for :users
   resources :users
+  resources :pages
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

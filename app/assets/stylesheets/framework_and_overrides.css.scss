@@ -10,36 +10,36 @@ img {
   margin: 0 auto;
 }
 
-nav.navbar:before{
-  content: ' ';
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.15;
-  background-image: url(asset-path('mol_tile.png'));
-  background-position: 0px -40px;
+nav.navbar {
+  border-bottom: 2px solid;
 }
-// apply styles to HTML elements
-// to make views framework-neutral
+
 main {
   @extend .container;
-  padding-bottom: 80px;
+  padding-bottom: 50px;
   width: 100%;
+  min-height: 600px;
   background-image: url(asset-path('mol_tile.png'));
 }
+
   
 main .container {
   background-image: none;
-//  background:$body-bg;
 }
+
+.footer {
+  width: 100%;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  background-color: $navbar-default-bg;
+}
+
 .navbar{
   margin-bottom: 0px;
 }
 .navbar-brand{
   padding:0px;
+  background-color: $navbar-default-bg;
 }
 .container .page-header{
   background: none;
@@ -99,49 +99,14 @@ section {
 	color:$gray-dark;
   background: $gray-lighter;
 }
-.table th a {
-  color:$gray-dark;
-}
 
-.panel-primary .table a {
-  color:$gray-dark;
-  
+.panel-primary .table th a {
+  color:$gray-dark; 
 }
 
 table.table-centered tbody > tr > td {
   vertical-align: middle;
 }
-// Table header overrides and rounded corners
-.table-custom {
-	background:$body-bg;
-	border-collapse:separate;
-	border:1px solid $brand-primary;
-}
-
-table.table-custom, .table-custom th:first-child {
-	border-top-left-radius: 10px;
-};
-
-table.table-custom, .table-custom th:last-child {
-	border-top-right-radius: 10px;
-};
-table.table-custom tr:nth-child(odd) td {
-	background:lighten($body-bg,10%);
-}
-.table.table-custom td,
-.table.table-custom th {
-  border-top:0;
-  border:1px solid $body-bg;
-	color:$gray-dark;
-}
-.table-custom th a {
-  color:$gray-dark;
-}
-.table-custom th {
-  background: $gray-lighter;
-}
-.table-custom th:first-child, .table-custom td:first-child {border-left:0px solid $navbar-inverse-bg;}
-.table-custom th:last-child, .table-custom td:last-child {border-right:0px solid $navbar-inverse-bg;}
 
 // Extra pagination updates
 .pagination {
@@ -150,30 +115,17 @@ table.table-custom tr:nth-child(odd) td {
 .search {
   margin-bottom:10px;
 }
-// Sorable table header styles
+// Sortable table header styles
 th .sortable {
   padding-right: 16px;
   background-repeat: no-repeat;
   background-position: right center;
 }
-th .unsorted {
-  background-image: url(asset-path('sort_off.png'));  
-}
-
-th .asc {
-  background-image: url(asset-path('sort_up.png'));
-}
-
-th .desc {
-  background-image: url(asset-path('sort_down.png'));
-}
 // panel primary dropdowns
-.panel-primary a {
+.panel-primary .panel-heading a {
   color: #FFF;
 }
 .panel-primary li {
   list-style-type: none;
 }
-//.panel.table-responsive  {
-//  overflow:visible;
-//}
+

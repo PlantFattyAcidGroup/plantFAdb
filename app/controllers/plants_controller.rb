@@ -31,6 +31,47 @@ class PlantsController < ApplicationController
     unless params[:matched_rank].blank?
       @plants = @plants.where(matched_rank: params[:matched_rank])
     end
+    if params[:fmt] == 'tree'
+      @format_partial = 'tree'
+    else
+      @format_partial = 'listing'
+    end
+    if @format_partial == 'tree'
+      @fatty_acids = FattyAcid.with_results.order("measures.name asc")
+      @selected = FattyAcid.find_by(id: params[:measure]) if params[:measure]
+      @min = nil
+      @max = 0
+      @tree = TreeNode.arrange_serializable(:order => :id) do |parent, children|
+        if children.empty?
+          if params[:measure].blank?
+            v1 = Result.joins(:measure, :plant)
+            .where("measures.type ='FattyAcid'")
+            .where("plants.order_name='#{parent.name}'")
+            .count
+          else
+            v1 = Result.joins(:measure, :plant)
+            .where("measures.id = ?", params[:measure])
+            .where("plants.order_name = '#{parent.name}'")
+            .maximum(:value).to_f.try(:round,3)
+          end
+          v1||=0
+          # get leaf stats
+          @min||=v1
+          @max=v1 if v1 > @max
+          @min=v1 if v1 < @min
+        else
+          v1 = 1
+        end
+        {
+          id: parent.id,
+          name: parent.name,
+          common_name: parent.common_name,
+          #value: Plant.where(order_name: parent.name).count,
+          v1: v1,
+          children: children
+        }
+      end
+    end
     respond_to do |format|
       # Base html query
       format.html{ @plants = @plants.page params[:page]}
@@ -91,5 +132,9 @@ class PlantsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def resource_params
       params.require(:plant).permit(:tnrs_family, :tnrs_name, :accepted_rank, :name_status, :matched_rank, :family, :genus, :species, :tropicos_url, :note)
+    end
+    
+    def sort_column
+      params[:sort] || "plants.genus, plants.species"
     end
 end

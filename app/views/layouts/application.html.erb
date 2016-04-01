@@ -11,6 +11,7 @@
 <body>
 	<header>
 		<%= render 'layouts/navigation' %>
+		
 	</header>
 	<main role="main">
 		<%= render 'layouts/messages' %>
@@ -36,5 +37,8 @@
 			<%= yield %>
 		</div>
 	</main>
+	
+	<%= render :partial => 'layouts/footer' %>
+
 </body>
 </html>

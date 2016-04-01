@@ -290,4 +290,134 @@ class Mol < Thor
       puts "- #{item.id}: #{item.name}"
     end
   end
+  
+  
+  desc 'compare_tables', "Compare the data in tabular file with the database. Expects 1 line header"
+  method_option :update_db, default: false, desc: "Save file changes into the database"
+  method_option :lookup, default: 'sofa_mol_id', desc: 'attribute to lookup fattyacid with (must be in file)'
+  method_option :columns, 
+    default: ['NA','delta_notation','name','other_names','formula','mass','cas_number','sofa_mol_id','lipidmap_id','pubchem_id'], 
+    desc: "column names to check in file - NA to skip
+    id, type, delta_notation, cas_number, sofa_mol_id, lipidmap_id, pubchem_id, chebi_id,
+    mass, name, other_names, formula, cml, inchi, stdinchi, stdinchikey, smiles"
+  def compare_tables filename
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    file = File.open(filename,'r')
+    puts "parsing file"
+    file_data = {}
+    file.each_with_index do |line,idx|
+      # skip any comment lines
+      if line[0] == '#'
+        puts "skipping comment - line: #{idx+1} #{line}"
+        next
+      end
+      # open the file and check format
+      if line.match(/\t/) 
+        data = line.parse_csv({ :col_sep => "\t" })
+      else
+        data = line.parse_csv
+      end
+      # skip blank
+      if data.compact.uniq.empty? || data.compact.uniq == [""]
+        puts "skipping empty line: #{idx+1} #{line}"
+        next
+      end
+      hsh = {}
+      # parse columns
+      options[:columns].each_with_index do |col,idx|
+        next if col == 'NA'
+        hsh[col.to_sym]=data[idx]
+      end
+      # print and skip header
+      if idx == 0
+        puts "-- header"
+        puts Terminal::Table.new :rows => hsh.to_a
+        next
+      end
+      # get key and push
+      key = hsh[options[:lookup].to_sym]
+      raise "Error - empty key for '#{options[:lookup]}' \n\tline: #{idx+1}, data: #{data.inspect}\n\t#{hsh.inspect}" unless key
+      raise "Error - non-unique key '#{key}'\n\t line: #{idx+1}, data: #{data.inspect}\n\t#{hsh.inspect}" if file_data[key]
+      file_data[key]=hsh
+    end
+    puts "Found #{file_data.length} Entries"
+    
+    
+    puts "Loading stored data"
+    pbar = ProgressBar.new(file_data.length)
+    db_data_same = {}
+    db_data_different = {}
+    # change tracking hash
+    changes = {}
+    options[:columns].each do |col|
+      next if col == 'NA'
+      changes[col.to_sym]=0
+    end
+    # new item tracking hash
+    inserts = {}
+    options[:columns].each do |col|
+      next if col == 'NA'
+      inserts[col.to_sym]=0
+    end
+    
+    file_data.each do |item_key, item_data|
+      pbar.increment!
+      lookup = {}
+      lookup[options[:lookup].to_sym]=item_key.to_s
+      fa = FattyAcid.find_by(lookup)
+      # convert to plain hash
+      db_item = {}
+      options[:columns].each_with_index do |col,idx|
+        next if col == 'NA'
+        db_item[col.to_sym]=fa.send(col.to_sym)
+      end
+      # get key and compare
+      key = db_item[options[:lookup].to_sym]
+      if db_item == item_data
+        db_data_same[key]=db_item
+      else
+        db_data_different[key]=[fa,item_data]
+        # get changed columns
+        options[:columns].each do |col|
+          next if col == 'NA'
+          unless db_item[col.to_sym]==item_data[col.to_sym]
+            if db_item[col.to_sym].blank?
+              inserts[col.to_sym]+=1 
+            else
+              changes[col.to_sym]+=1
+            end
+          end
+        end
+      end
+    end
+    puts "#{FattyAcid.count} Total Fatty acids in database"
+    puts "#{db_data_same.length + db_data_different.length} stored items loaded"
+    puts "---"
+    puts "#{db_data_same.length} items identical"
+    puts "#{db_data_different.length} items have changed"
+    puts " --- NEW"
+    table = Terminal::Table.new :rows => inserts.to_a
+    puts table
+    puts " --- CHANGED"
+    table = Terminal::Table.new :rows => changes.to_a
+    puts table
+    
+    if options[:update_db]
+      if yes? "--update_db supplied. Do you want to save the changes? type 'y' or 'yes' to continue:"
+        puts "--updating stored data"
+        FattyAcid.transaction do
+          pbar = ProgressBar.new(db_data_different.length)
+          db_data_different.each do |key,item|
+            pbar.increment!
+            item[0].update_attributes!(item[1])
+          end
+        end
+      else
+        puts "--nothing saved"
+      end
+    else
+      puts "\n --update_db not supplied. Nothing saved"
+    end
+    puts "\n --done"
+  end
 end

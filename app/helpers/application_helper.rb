@@ -3,10 +3,9 @@ module ApplicationHelper
   # Each key has an array of link, [matching controller symbols]
   def top_navbar_items
     {
-      tree: [root_path, [:home]],
       plants: [plants_path,[:plants]],
       literature: [pubs_path,[:pubs]],
-      fatty_acids: [fatty_acids_path, [:fatty_acids]],
+      fatty_acids: [fatty_acids_path, [:fatty_acids]]
     }
   end
   # return top nav bar html
@@ -27,6 +26,8 @@ module ApplicationHelper
       else
         icon = " <i class='glyphicon glyphicon-triangle-bottom'/>"
       end
+    else
+      icon = "#{image_tag "sort_off.png", style: 'display:inline-block', size: '10x10'}"
     end
     direction = (column == sort_column && sort_direction == "asc") ? "desc" : "asc"
     link_to (title+icon).html_safe, params.merge({sort: column, direction: direction}), style: 'white-space: nowrap'

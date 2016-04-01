@@ -21,16 +21,18 @@
 				<th>Role</th>
 				<th>Created</th>
 				<th>Last Login</th>
+				<th>Options</th>
       </tr>
     </thead>
 
     <tbody>
       <% @users.each do |user| %>
         <tr>
-        	<td><%= link_to user.email, user %></td>
-					<td><%= link_to user.role, user if user.role%></td>
-        	<td><%= link_to user.created_at.strftime("%c"), user %></td>
-        	<td><%= link_to user.current_sign_in_at.strftime("%c"), user if user.current_sign_in_at%></td>
+        	<td><%= user.email %></td>
+					<td><%= user.role%></td>
+        	<td><%= user.created_at.strftime("%c") if user.created_at %></td>
+        	<td><%= user.current_sign_in_at.strftime("%c") if user.current_sign_in_at%></td>
+					<td><%= link_to "Edit", edit_user_path(user) %></td>
       	</tr>
       <% end %>
     </tbody>

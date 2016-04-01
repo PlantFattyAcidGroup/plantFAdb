@@ -1,5 +1,5 @@
 <% content_for :top_bar do %>
-	<h1 class="pagetitle">Publication: <%= @pub.id %></h1>
+	<h1 class="pagetitle"><%= @pub.wos_title %></h1>
 <% end %>
 
 <% content_for :item_bar do %>
@@ -7,48 +7,22 @@
   <% if can? :edit, @pub %> <%= link_to 'Edit', edit_pub_path(@pub), class: 'btn btn-primary' %> <% end %>
 <% end %>
 
+<% if @pub.abstract %>
 <div class='row'>
-	<div class='well col-md-4' style='height:350px;overflow-y:auto'>
-		<legend>SOFA citation(s)</legend>
-		<% if @pub.original_pubs.empty? %>
-			<% pubs = [@pub]  %>
-		<% else %>
-			<% pubs = @pub.original_pubs %>
-		<% end %>
-		<% pubs.each do |pub| %>
-			<p>
-			  <strong>Year:</strong>
-			  <%= pub.year %>
-			</p>
-
-			<p>
-			  <strong>Authors:</strong>
-			  <%= pub.authors %>
-			</p>
-
-			<p>
-			  <strong>Journal:</strong>
-			  <%= pub.journal %>
-			</p>
-
-			<p>
-			  <strong>Volume:</strong>
-			  <%= pub.volume %>
-			</p>
-
-			<p>
-			  <strong>Page:</strong>
-			  <%= pub.page %>
-			</p>
-			<hr/>
-		<% end %>
+	<div class='well col-md-12'>
+		<legend>Abstract</legend>
+		<%= @pub.abstract %>
 	</div>
-	<div class='well col-md-4'>
-		<legend>WOS citation</legend>
-		<p>
-		  <strong>Year:</strong>
-		  <%= @pub.wos_year %>
-		</p>
+</div>
+<% end %>
+
+<div class='row'>
+	<div class='well col-md-8' style='height:400px;overflow-y:auto'>
+		<legend>Citation</legend>
+		<!--		<p>
+				  <strong>Title:</strong>
+				  <#%= @pub.wos_title %>
+				</p> -->
 
 		<p>
 		  <strong>Authors:</strong>
@@ -59,7 +33,12 @@
 		  <strong>Journal:</strong>
 		  <%= @pub.wos_journal %>
 		</p>
-
+		
+		<p>
+		  <strong>Year:</strong>
+		  <%= @pub.wos_year %>
+		</p>
+		
 		<p>
 		  <strong>Volume:</strong>
 		  <%= @pub.wos_volume %>
@@ -74,64 +53,88 @@
 		  <strong>UID:</strong>
 		  <%= @pub.wos_uid %>
 		</p>
-
-		<p>
-		  <strong>Title:</strong>
-		  <%= @pub.wos_title %>
-		</p>
 		
-		<p>
-		  <strong>DOI:</strong>
-		  <%= @pub.doi %>
-		</p>
-	</div>
-	<div class='well col-md-4' style='height:350px;overflow-y:auto'>
-		<legend>SOFA Tables</legend>
-		<% @pub.sofa_tabs.each do |tab| %>
-			<div style='float:left;margin:0.25em'><%= link_to tab.sofa_tab_id, "http://sofa.mri.bund.de/Show_ResultDetail.php?Tab_ID="+tab.sofa_tab_id %></div>
+		<% if @pub.url %>
+			<p>
+			  <strong>URL:</strong>
+			  <%= link_to @pub.url, "https://doi.org/#{@pub.doi}", target: '_blank'%>
+			</p>
+		<% end %>
+		
+		<% unless @pub.doi.blank? || @pub.doi.downcase == 'none' %>
+			<p>
+			  <strong>DOI:</strong>
+			  <%= link_to @pub.doi, "https://doi.org/#{@pub.doi}", target: '_blank'%>
+			</p>
 		<% end %>
 	</div>
+	<div class='well col-md-4'>
+		<div style='height:255px;overflow-y:auto'>
+			<legend>SOFA citation(s)</legend>
+			<% if @pub.original_pubs.empty? %>
+				<% pubs = [@pub]  %>
+			<% else %>
+				<% pubs = @pub.original_pubs %>
+			<% end %>
+			<% pubs.each do |pub| %>
+				<div class='well'>
+					<p>
+					  <strong>Authors:</strong>
+					  <%= pub.authors %>
+					</p>
+			
+					<p>
+					  <strong>Journal:</strong>
+					  <%= pub.journal %>
+					</p>
+			
+					<p>
+					  <strong>Year:</strong>
+					  <%= pub.year %>
+					</p>
+
+					<p>
+					  <strong>Volume:</strong>
+					  <%= pub.volume %>
+					</p>
+
+					<p>
+					  <strong>Page:</strong>
+					  <%= pub.page %>
+					</p>
+				</div>
+			<% end %>
+		</div>
+		
+		<div style='height:105px;overflow-y:auto'>
+			<legend>SOFA Table(s)</legend>
+			<% @pub.sofa_tabs.each do |tab| %>
+				<div style='float:left;margin:0.25em'><%= link_to (tab.sofa_tab_id||'#'), "http://sofa.mri.bund.de/Show_ResultDetail.php?Tab_ID="+(tab.sofa_tab_id||'') %></div>
+			<% end %>
+		</div>
+	</div>
 </div>
+
 
 <hr/>
 
 <h2 class='smalltitle'>Plant(s)</h2>
 <table class="table">
   <thead>
-		<th>Order</th>
-    <th>Family</th>
     <th>Genus</th>
     <th>Species</th>
-		<th>Options</th>
+		<th>Order</th>
+    <th>Family</th>
+		<th>Data Points</th>
   </thead>
   <tbody>
-    <% @pub.plants.order("order_name, family, genus").each do |plant| %>
+    <% @pub.plants.order("genus, species").uniq.each do |plant| %>
     <tr>
+      <td><%= link_to plant.genus||"Unknown", plant %></td>
+      <td><%= link_to plant.species||"Unknown", plant %></td>
       <td><%= plant.order_name %></td>
       <td><%= plant.family %></td>
-      <td><%= plant.genus %></td>
-      <td><%= plant.species %></td>
-			<td><%= link_to "View", plant %></td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<h2 class='smalltitle'>Results</h2>
-<table class="table">
-  <thead>
-    <th>Type</th>
-    <th>Delta Notation / Name</th>
-    <th>Value</th>
-    <th>Unit</th>
-  </thead>
-  <tbody>
-    <% @pub.results.order("measure_id").each do |result| %>
-    <tr>
-      <td><%= result.measure.type %></td>
-      <td><%= result.measure.delta_notation %></td>
-      <td><%= result.value %></td>
-      <td><%= result.unit %></td>
+			<td><%= link_to plant.results.where(pub_id: @pub.id).count, results_path(pub_id: @pub.id, plant_id: plant.id) %></td>
     </tr>
     <% end %>
   </tbody>

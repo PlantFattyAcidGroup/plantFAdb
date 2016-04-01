@@ -9,7 +9,7 @@ Plant based database of fatty acid compounds.
 - Matthäus, B. (2012). The new database seed oil fatty acids (SOFA). Lipid Technology, 24(10), 230-234.
 
 
-### Notes
+### ChangeLog
 
 > July 2015
 
@@ -347,6 +347,67 @@ thor pub:condense_wos_id
 	Total pubs now: 2257
 	Pubs with wos: 1060
 	Pubs with doi: 692
+
+---
+
+> Mar 7
+
+Fatty Acid updates
+thor mol:compare_tables lib/data/mol_updates/FattyAcid_2_16.txt
+
+587 stored items loaded
+---
+215 items identical
+372 items have changed
+ --- NEW
++----------------+-----+
+| delta_notation | 0   |
+| name           | 287 |
+| other_names    | 118 |
+| formula        | 171 |
+| mass           | 168 |
+| cas_number     | 8   |
+| sofa_mol_id    | 0   |
+| lipidmap_id    | 0   |
+| pubchem_id     | 0   |
++----------------+-----+
+ --- CHANGED
++----------------+----+
+| delta_notation | 72 |
+| name           | 38 |
+| other_names    | 32 |
+| formula        | 2  |
+| mass           | 6  |
+| cas_number     | 17 |
+| sofa_mol_id    | 0  |
+| lipidmap_id    | 0  |
+| pubchem_id     | 0  |
++----------------+----+
+---
+
+---
+
+> Mar 25
+
+Publication updates and sitewide review 
+
+thor pub:load_endnote_xml lib/data/pub_data/EndnoteExport\ TabDeliminatedMar22\ 1315refs\ XML.xml 
+1315 pubs created
+
+thor pub:condense_wos
+Found 1882 pubs with wos_uid
+Found 1248 unique wos_uid
+Total pubs now: 2938
+Pubs with wos: 1248
+Pubs with doi: 1209
+
+thor pub:condense_doi
+Found 1209 pubs with doi
+Found 783 unique doi
+Total pubs now: 2512
+Pubs with wos: 1245
+Pubs with doi: 783
+
 
 ---
 

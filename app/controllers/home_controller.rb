@@ -1,40 +1,41 @@
 class HomeController < ApplicationController
   skip_authorization_check
   def index
-    @fatty_acids = FattyAcid.with_results.order("measures.name asc")
-    @selected = FattyAcid.find_by(id: params[:measure]) if params[:measure]
-    @min = nil
-    @max = 0
-    @tree = TreeNode.arrange_serializable(:order => :id) do |parent, children|
-      if children.empty?
-        if params[:measure].blank?
-          v1 = Result.joins(:measure, :plant)
-          .where("measures.type ='FattyAcid'")
-          .where("plants.order_name='#{parent.name}'")
-          .count
-        else
-          v1 = Result.joins(:measure, :plant)
-          .where("measures.id = ?", params[:measure])
-          .where("plants.order_name = '#{parent.name}'")
-          .maximum(:value).to_f.try(:round,3)
-        end
-        v1||=0
-        # get leaf stats
-        @min||=v1
-        @max=v1 if v1 > @max
-        @min=v1 if v1 < @min
-      else
-        v1 = 1
-      end
-      {
-        id: parent.id,
-        name: parent.name,
-        common_name: parent.common_name,
-        #value: Plant.where(order_name: parent.name).count,
-        v1: v1,
-        children: children
-      }
-    end
+    @page = Page.find_by(title: 'home')
+    # @fatty_acids = FattyAcid.with_results.order("measures.name asc")
+    # @selected = FattyAcid.find_by(id: params[:measure]) if params[:measure]
+    # @min = nil
+    # @max = 0
+    # @tree = TreeNode.arrange_serializable(:order => :id) do |parent, children|
+    #   if children.empty?
+    #     if params[:measure].blank?
+    #       v1 = Result.joins(:measure, :plant)
+    #       .where("measures.type ='FattyAcid'")
+    #       .where("plants.order_name='#{parent.name}'")
+    #       .count
+    #     else
+    #       v1 = Result.joins(:measure, :plant)
+    #       .where("measures.id = ?", params[:measure])
+    #       .where("plants.order_name = '#{parent.name}'")
+    #       .maximum(:value).to_f.try(:round,3)
+    #     end
+    #     v1||=0
+    #     # get leaf stats
+    #     @min||=v1
+    #     @max=v1 if v1 > @max
+    #     @min=v1 if v1 < @min
+    #   else
+    #     v1 = 1
+    #   end
+    #   {
+    #     id: parent.id,
+    #     name: parent.name,
+    #     common_name: parent.common_name,
+    #     #value: Plant.where(order_name: parent.name).count,
+    #     v1: v1,
+    #     children: children
+    #   }
+    # end
   end
    
   def tree

@@ -39,13 +39,9 @@ class ApplicationController < ActionController::Base
   def sort_direction  
     %w[asc desc].include?(params[:direction]) ?  params[:direction] : "asc"  
   end
+  
   def sort_column
-    if params[:action] == 'index'
-      params[:sort] || "#{table_name}.id"
-    else
-      # NOTE: this assumes non-index tables always include a 'results' column
-      params[:sort] || "results.id"
-    end
+    "#{table_name}.id"
   end
   
   def resource_name

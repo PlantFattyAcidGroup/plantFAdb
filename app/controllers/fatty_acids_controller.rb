@@ -4,7 +4,7 @@ class FattyAcidsController < ApplicationController
   def index
     @fatty_acids = @fatty_acids.order(sort_column + ' ' + sort_direction + ', measures.id asc')
     .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id group by m.id) res on res.measure_id = measures.id ")
-    .select("measures.*, res.result_count")
+    .select("measures.*, res.result_count, REPLACE(REPLACE(REPLACE(REPLACE(formula,'C',''), 'O', ''), 'H', ''), ' ', '') formc")
     if(params[:query])
       q = params[:query].upcase
       @fatty_acids = @fatty_acids.where('
@@ -14,8 +14,10 @@ class FattyAcidsController < ApplicationController
         OR upper(delta_notation) LIKE ?
         OR upper(cas_number) LIKE ?
         OR upper(sofa_mol_id) LIKE ?
-        OR upper(lipidmap_id) LIKE ?',
-        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
+        OR upper(lipidmap_id) LIKE ?
+        OR upper(formula) LIKE ?
+        OR mass = ?',
+        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", q
       )
     end
     case params[:has_data]
@@ -106,5 +108,14 @@ class FattyAcidsController < ApplicationController
       params.require(:fatty_acid).permit(:name,:other_names,:formula, :type, :delta_notation,
         :cas_number, :sofa_mol_id, :lipidmap_id, :pubchem_id, :chebi_id, :structure,
         :inchi,:stdinchi,:stdinchikey,:smiles)
+    end
+    
+    def sort_column
+      if params[:action] == 'index'
+        params[:sort]||"cast(mass as number)"
+      else
+        params[:sort] || "results.value"
+      end
+      
     end
 end

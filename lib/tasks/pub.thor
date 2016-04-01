@@ -1,5 +1,51 @@
 class Pub < Thor
   ENV['RAILS_ENV'] ||= 'development'
+  
+  
+  desc 'load_endnote_xml', "load new pubs from endnote xml"
+  def load_endnote_xml filename
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    doc = File.open(filename) { |f| Nokogiri::XML(f) }
+    records = doc.search("record")
+    pbar = ProgressBar.new records.length
+    found = 0
+    ::Pub.transaction do 
+      records.each_with_index do |r,idx|
+        authors = r.search("author").map{|a| a.text.strip}
+        title = r.search("title").first.text.strip rescue nil
+        journal = r.search("secondary-title").first.text.strip rescue nil
+        pages = r.search("pages").first.text.strip rescue nil
+        volume = r.search("volume").first.text.strip rescue nil
+        number = r.search("number").first.text.strip rescue nil
+        year = r.search("year").first.text.strip rescue nil
+        isbn = r.search("isbn").first.text.strip rescue nil
+        accession = r.search("accession-num").first.text.strip rescue nil
+        doi = r.search("electronic-resource-num").first.text.strip rescue nil
+      
+        url = r.search("url").select{|u| u.text.strip =~ /http/}.first.text.strip rescue nil
+        abstract = r.search("abstract").first.text.strip rescue nil
+                
+        pub = ::Pub.new
+        pub.wos_journal = journal
+        pub.wos_title = title
+        pub.wos_volume = volume
+        pub.wos_authors = authors.join('; ')
+        pub.wos_pages = pages
+        pub.wos_year = year
+
+        pub.wos_uid = accession
+        pub.doi = doi
+
+        pub.url = url
+        pub.abstract = abstract
+        pub.save!
+      
+        pbar.increment!
+      end
+      puts found
+    end
+  end
+    
   desc 'load_year_tab', "load year and tab id into pubs"
   def load_year_tab filename
     require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
@@ -104,7 +150,13 @@ class Pub < Thor
           skip+=1
           next
         end
-        new_pub = ::Pub.create(
+        # sort the array - latest == best
+        pubs = pubs.sort_by {|p| p.id}.reverse
+        originals = (pubs.map(&:original_pubs).flatten + [pubs]).flatten.compact.reject{|p|
+          p.year.nil? && p.authors.nil? && p.journal.nil? && p.volume.nil? && p.page.nil?
+        }
+        originals = nil if originals.empty?
+        new_pub = ::Pub.new(
           wos_uid: pubs[0].wos_uid,
           wos_journal: pubs[0].wos_journal,
           wos_title: pubs[0].wos_title,
@@ -112,10 +164,13 @@ class Pub < Thor
           wos_authors: pubs[0].wos_authors,
           wos_pages: pubs[0].wos_pages,
           wos_year: pubs[0].wos_year,
-          doi: pubs[0].doi,
-          original_pubs: pubs
+          doi: pubs.reject{|p| p.doi.nil?}.first.try(:doi),
+          abstract: pubs.reject{|p| p.abstract.nil?}.first.try(:abstract),
+          url: pubs.reject{|p| p.url.nil?}.first.try(:url),
+          original_pubs: originals
         )
         crt += 1
+        new_pub.save!
         new_pub.plants = pubs.map(&:plants).flatten
         pubs.each do |p|
           p.results.update_all(pub_id: new_pub.id)
@@ -126,6 +181,74 @@ class Pub < Thor
       end
     end
     puts "Skipped #{skip} pubs with 1 wos_uid"
+    puts "Created #{crt} new unique pubs"
+    puts "Removed #{dest} non unique"
+    puts
+    puts "Total pubs now: #{::Pub.count}"
+    puts "Pubs with wos: #{with_wos = ::Pub.where("wos_uid != 'None'").count}"
+    puts "Pubs with doi: #{with_doi = ::Pub.where("doi != 'None'").count}"
+  end
+  
+  desc 'condense_doi', 'condense using doi column'
+  def condense_doi
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    PaperTrail.enabled = false
+    pbar = ProgressBar.new(::Pub.count)
+    hsh = {}
+    cnt = 0
+    puts "building hash"
+    ::Pub.find_each do |pub|
+      pbar.increment!
+      next if pub.doi.blank? || pub.doi.downcase=='none'
+      hsh[pub.doi]||=[]
+      hsh[pub.doi]<<pub
+      cnt+=1
+    end
+    puts "Found #{cnt} pubs with doi"
+    puts "Found #{hsh.keys.length} unique doi"
+    dest = 0
+    crt = 0
+    skip = 0
+    ::Pub.transaction do
+      pbar = ProgressBar.new(hsh.keys.length)
+      hsh.each do |key,pubs|
+        pbar.increment!
+        # do nothing if only 1 unique
+        if pubs.length == 1
+          skip+=1
+          next
+        end
+        # sort the array - latest == best
+        pubs = pubs.sort_by {|p| p.id}.reverse
+        originals = (pubs.map(&:original_pubs).flatten + [pubs]).flatten.compact.reject{|p|
+          p.year.nil? && p.authors.nil? && p.journal.nil? && p.volume.nil? && p.page.nil?
+        }
+        originals = nil if originals.empty?
+        new_pub = ::Pub.new(
+          wos_uid: pubs.reject{|p| p.wos_uid.nil?}.first.try(:wos_uid),
+          wos_journal: pubs[0].wos_journal,
+          wos_title: pubs[0].wos_title,
+          wos_volume: pubs[0].wos_volume,
+          wos_authors: pubs[0].wos_authors,
+          wos_pages: pubs[0].wos_pages,
+          wos_year: pubs[0].wos_year,
+          doi: pubs.reject{|p| p.doi.nil?}.first.try(:doi),
+          abstract: pubs.reject{|p| p.abstract.nil?}.first.try(:abstract),
+          url: pubs.reject{|p| p.url.nil?}.first.try(:url),
+          original_pubs: originals
+        )
+        crt += 1
+        new_pub.save!
+        new_pub.plants = pubs.map(&:plants).flatten
+        pubs.each do |p|
+          p.results.update_all(pub_id: new_pub.id)
+          p.sofa_tabs.update_all(pub_id: new_pub.id)
+          p.destroy
+          dest+=1
+        end
+      end
+    end
+    puts "Skipped #{skip} pubs with 1 doi"
     puts "Created #{crt} new unique pubs"
     puts "Removed #{dest} non unique"
     puts

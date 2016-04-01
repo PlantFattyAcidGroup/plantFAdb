@@ -1,0 +1,52 @@
+<footer class="footer">
+	<div class="container">
+		<row>
+			<div class='col-md-9 col-sm-12 col-xs-12 pull-right' >
+				<span class='small'>
+					<%= link_to "About PhyloFAdb", Page.path('about') %> |
+					<%= link_to "Help", Page.path('help') %> |
+					<%= link_to "Contact", Page.path('contact') %> <br/>
+					<br/>
+					© 2016 Michigan State University Board of Trustees (<%= link_to "https://msu.edu", "https://msu.edu" %>)
+					<hr class='hidden-sm hidden-xs'/>
+				</span>
+			</div>
+			<div class='col-md-3 col-sm-12 col-xs-12 pull-left'>
+				<%= link_to image_tag('msu-wordmark-black.png', style:"max-height:60px;padding-top:10px;margin-top:10px" ), "http://msu.edu" %>
+				<hr class='hidden-md hidden-lg'/>
+			</div>
+		</row>
+		<span class='clearfix'></span>
+		<row>
+			<div class='col-md-9 col-sm-12 col-xs-12 pull-right' >
+				<span class='small'>
+					This database has been developed with support from the Great Lakes Bioenergy Research Center
+					(<%= link_to "http://glbrc.org", "http://glbrc.org" %>) 
+					<hr class='hidden-sm hidden-xs'/>
+				</span>
+			</div>	
+			<div class='col-md-3 col-sm-12 col-xs-12 pull-left'>
+				<%= link_to image_tag('glbrc_Logo.png', style:"max-height:50px" ), "http://glbrc.org" %><br/>
+				<hr class='hidden-md hidden-lg'/>
+			</div>
+		</row>
+		<span class='clearfix'></span>
+		<row>
+			<div class='col-md-9 col-sm-12 col-xs-12 pull-right' >
+				<span class='small'>
+					This database is based on the Seed Oil Fatty Acid (SOFA) database at the Max Rubner-Institute
+					(<%= link_to "http://sofa.mri.bund.de", "http://sofa.mri.bund.de" %>)<br/>
+					<li>
+						Matthäus, B. (2012), The new database <i>Seed Oil Fatty Acids</i> (SOFA). Lipid Technology, 24: 230–234.
+					</li>
+					<li>
+						Aitzetmüller, K., Matthäus, B. and Friedrich, H. (2003), A new database for seed oil fatty acids — the database SOFA. Eur. J. Lipid Sci. Technol., 105: 92–103.
+					</li>
+				</span>
+			</div>
+			<div class='col-md-3 col-sm-12 col-xs-12 pull-left' style='max-height:100px'>
+				<%= link_to image_tag('MRI_Logo.gif', style:'max-height:60px;'), "https://www.mri.bund.de" %><br/>
+			</div>
+		</row>
+	</div>
+</footer>

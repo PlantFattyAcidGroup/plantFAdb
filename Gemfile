@@ -39,7 +39,10 @@ gem 'parallel'
 gem 'bootstrap-sass', '~> 3.3.5'
 gem 'ancestry', git: 'git://github.com/stefankroes/ancestry.git'
 gem 'cancancan'
-
+gem 'terminal-table'
+gem 'summernote-rails'
+gem 'codemirror-rails'
+gem 'friendly_id'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

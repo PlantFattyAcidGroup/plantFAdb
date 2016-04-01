@@ -12,7 +12,7 @@
 <table class="table">
   <thead>
     <!-- <th>Delta Notation / Name</th> -->
-    <th><%= sortable 'plants.family', "Plant" %></th>
+    <th><%= sortable 'plants.genus', "Plant" %></th>
     <th><%= sortable 'pubs.authors', "Publication" %></th>
     <th style='width:10%'><%= sortable 'value' %></th>
     <th style='width:10%'><%= sortable 'unit' %></th>
@@ -21,7 +21,7 @@
     <% @results.each do |result| %>
     <tr>
       <!-- <td><%= result.measure.delta_notation %></td> -->
-      <td><%= result.plant.try :display_name %></td>
+      <td><%= link_to result.plant.try( :display_name)||"Unknwon", result.plant %></td>
       <td><%= link_to result.pub.display_name, result.pub if result.pub%></td>
       <td><%= result.value %></td>
       <td><%= result.unit %></td>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151124181531) do
+ActiveRecord::Schema.define(version: 20160329174416) do
 
   create_table "measures", force: :cascade do |t|
     t.string   "type"
@@ -44,6 +44,12 @@ ActiveRecord::Schema.define(version: 20151124181531) do
   end
 
   add_index "names", ["measure_id"], name: "index_names_on_measure_id"
+
+  create_table "pages", force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.text   "content"
+  end
 
   create_table "plants", force: :cascade do |t|
     t.string   "sofa_name"
@@ -92,17 +98,19 @@ ActiveRecord::Schema.define(version: 20151124181531) do
     t.string   "volume"
     t.string   "page"
     t.string   "remarks"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.string   "wos_uid"
     t.string   "wos_journal"
-    t.string   "wos_title"
+    t.string   "wos_title",     limit: 500
     t.string   "wos_volume"
     t.string   "wos_authors"
     t.string   "wos_pages"
     t.string   "wos_year"
     t.string   "doi"
     t.text     "original_pubs"
+    t.string   "abstract",      limit: 4000
+    t.string   "url",           limit: 1000
   end
 
   create_table "results", force: :cascade do |t|
@@ -117,6 +125,7 @@ ActiveRecord::Schema.define(version: 20151124181531) do
   end
 
   add_index "results", ["measure_id"], name: "index_results_on_measure_id"
+  add_index "results", ["pub_id"], name: "idx$$_00010001"
   add_index "results", ["publication_id"], name: "i_results_publication_id"
 
   create_table "sofa_tabs", force: :cascade do |t|

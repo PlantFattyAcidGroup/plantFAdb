@@ -13,4 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap-sprockets
+//= require codemirror
+//= require codemirror/modes/xml
+//= require codemirror/modes/javascript
+//= require codemirror/modes/css
+//= require codemirror/modes/htmlmixed
+//= require summernote
 //= require_tree .

@@ -13,3 +13,6 @@
  *= require framework_and_overrides
  *= require_self
  */
+@import "codemirror";
+@import "codemirror/themes/monokai";
+@import "summernote";

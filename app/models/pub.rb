@@ -6,6 +6,6 @@ class Pub < ActiveRecord::Base
   has_paper_trail
   
   def display_name
-    "#{authors} #{year ? "(#{year})" : ''}. #{journal} #{volume} #{page}"
+    "#{wos_authors} #{wos_year ? "(#{wos_year})" : ''}. #{wos_journal} #{wos_volume} #{wos_pages}"
   end
 end

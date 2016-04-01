@@ -1,5 +1,8 @@
 <% content_for :top_bar do %>
-	<h1 class="pagetitle"><%= @plant.genus %> <%= @plant.species %></h1>
+	<h1 class="pagetitle">
+		<%= @plant.genus %> <%= @plant.species %>
+		<small style='white-space:nowrap'>(<%= @plant.tnrs_name %>)</small>
+	</h1>
 <% end %>
 
 <% content_for :item_bar do %>
@@ -8,29 +11,17 @@
 <% end %>
 
 <div class='container'>
-	<div class='col-md-2'>
-		<%= link_to "#{@plant.pubs.count} Publications", pubs_path(plant_id: @plant.id), class: 'btn btn-default' %>
-	</div>
-	<div class='col-md-2'>
-		<%= link_to "#{@plant.results.count} Data Points", results_path(plant_id: @plant.id), class: 'btn btn-default' %>
-	</div>
-</div>
-
-<br/>
-
-<div class='container'>
-	<div class='col-md-3'>
+	<div class='col-md-4'>
 		<div class='well'>
+			<legend>Classification</legend>
 			<p>
 			  <strong>Order:</strong>
 			  <%= @plant.order_name %>
 			</p>
-
 			<p>
 			  <strong>Family:</strong>
 			  <%= @plant.family %>
 			</p>
-
 			<p>
 			  <strong>Genus:</strong>
 			  <%= @plant.genus %>
@@ -39,70 +30,89 @@
 			  <strong>Species:</strong>
 			  <%= @plant.species %>
 			</p>
-		</div>
-	</div>
-	<div class='col-md-3'>
-		<div class='well'>
-		  <p>
-		    <strong>Name status:</strong>
-		    <%= @plant.name_status %>
-		  </p>
-		  <p>
-		    <strong>Matched rank:</strong>
-		    <%= @plant.matched_rank %>
-		  </p>
-		</div>
-	</div>
-	<% unless @plant.tropicos_url.blank? && @plant.note.blank? %>
-	<div class='col-md-4'>
-		<div class='well'>		
-
+			
 			<% unless @plant.tropicos_url.blank? %>
-			  <p>
-			    <strong>Url</strong><br>
-					<% @plant.tropicos_url.split(";").each do |url| %>
-			    	<%= link_to url %><br/>
-					<% end %>
-			  </p>
+		    <legend>External Link(s)</legend>
+				<% @plant.tropicos_url.split(";").each do |url| %>
+		    	<%= link_to url %><br/>
+				<% end %>
 			<% end %>
+		
 			<% unless @plant.note.blank? %>
-			  <p>
-			    <strong>Note</strong><br>
-			    <%= @plant.note %>
-			  </p>
+			   <legend>Note</legend><br>
+			   <%= @plant.note %>
 			<% end %>
+			
 		</div>
 	</div>
-	<% end %>
+	<div class='col-md-8'>
+		<div class='well'>
+			<legend>Data</legend>
+			<div class='row'>
+				<div class='col-md-3'>
+					<%= link_to "#{@plant.pubs.count} Publications", pubs_path(plant_id: @plant.id), class: 'btn btn-default' %>
+				</div>
+				<div class='col-md-3'>
+					<%= link_to "#{@plant.results.count} Data Points", results_path(plant_id: @plant.id), class: 'btn btn-default' %>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<div class='container'>
-	<div class='col-md-3'>
-			<h4>SOFA Data</h4>
-		  <p>
-		    <b>sofa family</b>
-		    <%= @plant.sofa_family %>
-		  </p>
+<hr/>
+
+<div class='container col-md-6'>
+	<div class='well'>
+		<legend>Name Resolution</legend>
+		<div class='row'>
+			<div class='col-md-4  col-sm-12 col-xs-12'>
+					<legend><h5>TNRS Accepted data</h5></legend>
+				  <p>
+				    <b>Family:</b>
+						<%= @plant.tnrs_family %>
+				  </p>
+				  <p>
+				    <b>Name:</b>
+						<%= @plant.tnrs_name %>
+				  </p>
+				  <p>
+				    <b>Accepted Rank:</b>
+						<%= @plant.accepted_rank %>
+				  </p>
+				  <p>
+				    <strong>Matched rank:</strong>
+				    <%= @plant.matched_rank %>
+				  </p>
+				  <p>
+				    <strong>Name status:</strong>
+				    <%= @plant.name_status %>
+				  </p>
+			</div>
+
+			<div class='col-md-4 col-sm-12 col-xs-12'>
+					<legend><h5>Original SOFA Data</h5></legend>
+				  <p>
+				    <b>Family:</b>
+				    <%= @plant.sofa_family %>
+				  </p>
 	
-		  <p>
-		    <b>sofa name</b>
-		    <%= @plant.sofa_name %>
-		  </p>
-	</div>
-	<div class='col-md-3'>
-			<h4>TNRS Accepted data</h4>
-		  <p>
-		    <b>tnrs family</b>
-				<%= @plant.tnrs_family %>
-		  </p>
-		  <p>
-		    <b>tnrs name</b>
-				<%= @plant.tnrs_name %>
-		  </p>
-		  <p>
-		    <b>accepted rank</b>
-				<%= @plant.accepted_rank %>
-		  </p>
+				  <p>
+				    <b>Name:</b>
+				    <%= @plant.sofa_name %>
+				  </p>
+					<br/>
+			</div>
+			
+		</div>
+					
+		<div class='clearfix row small'>
+			<div class='col-md-12'>
+				<br/>
+				Plant names were updated using the Taxanomic Name Resolution Service (<%= link_to "http://tnrs.iplantcollaborative.org", "http://tnrs.iplantcollaborative.org" %>)<br/><br/>
+				Note: There may be other accepted names for a species not displayed here
+			</div>
+		</div>
 	</div>
 </div>
 

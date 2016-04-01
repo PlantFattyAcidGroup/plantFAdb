@@ -21,6 +21,8 @@
 	</div>
 	<div class='col-md-6'>
 		<%= image_tag("http://opsin.ch.cam.ac.uk/opsin/#{@fatty_acid.name}.png", style: 'margin-left:1em;max-height:150px') if @fatty_acid.name %>
+		<br/>
+		<span class='small' style='font-size:75%'>Structure drawn at OPSIN (opsin.ch.cam.uk)</span>
 	</div>
 	
 </div>
@@ -75,32 +77,3 @@
 
 <hr/>
 <%= render partial: "measures/results", locals: {results: @fatty_acid.results} %>
-
-<script>
-		// var mol_cml = <%#= @fatty_acid.cml.inspect.html_safe %>
-		//
-		// var structureCanvas;
-		//
-		// 	  $().ready(function(){
-		// 	ChemDoodle.default_atoms_useJMOLColors = true;
-		// 	ChemDoodle.default_backgroundColor = "rgb(206,193,113)";
-		// 	//ChemDoodle.default_atoms_useVDWDiameters_3D = true;
-		// 	//ChemDoodle.default_atoms_displayLabels_3D = true;
-		// 	ChemDoodle.default_bonds_showBondOrders_3D = true;
-		// 	structureCanvas = new ChemDoodle.TransformCanvas3D('structureCanvas', 200, 200);
-		// 	var mols = ChemDoodle.readCML(mol_cml);
-		// 	structureCanvas.loadMolecule(mols[0]);
-		// 	resizeChemDoodle();
-		// 	  });
-		//
-		// $(window).resize(function () {
-		// 	resizeChemDoodle()
-		// });
-		// resizeChemDoodle = function(){
-		// 	var width = $("#structure").width();
-		// 	var height = $("#structure").height();
-		// 	structureCanvas.resize(width,height);
-		// }
- </script>
-<style>
-</style>

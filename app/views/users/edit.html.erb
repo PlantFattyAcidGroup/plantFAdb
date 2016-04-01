@@ -3,7 +3,11 @@
 <% end %>
 
 <% content_for :item_bar do %>
-  <%= link_to 'Cancel', @user, class: 'btn btn-primary' %>
+	<% if can? :delete, @user %>
+  	<%= link_to 'Remove User', @user, class: 'btn btn-danger', data: {
+			:confirm => "Permanently Remove user '#{@user.email}' ?"
+			}, :method => :delete %>
+	<% end %>
 <% end %>
 
 <%= render 'form' %>

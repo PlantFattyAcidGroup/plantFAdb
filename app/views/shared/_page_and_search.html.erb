@@ -1,16 +1,16 @@
 <div class='row'>
-	<div class='col-xs-8 col-md-8'>
-		<ul class="pagination">
-			<%= paginate items %>
-		</ul>
-	</div>
-	<div class='col-xs-4 col-md-4 search'>
-    <%= form_tag nil, method: :get, class: 'form-inline search' do %>
-      <div class='form-group pull-right'>
+	<div class='col-md-4 search pull-right'>
+    <%= form_tag nil, method: :get do %>
+      <div class='form-inline pull-right'>
 		    <label for="query">Search:</label>
 				<%= text_field_tag :query, params[:query], class: 'form-control' %>
 				<%= submit_tag "Go", class: "btn btn-info "%>
 			</div>
     <% end %>
+	</div>
+	<div class='col-md-8 pull-left'>
+		<ul class="pagination">
+			<%= paginate items %>
+		</ul>
 	</div>
 </div>

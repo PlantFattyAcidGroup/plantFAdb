@@ -7,43 +7,10 @@
     <%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
 <% end %>
 
-<%= render 'shared/page_and_search', items: @plants  %>
+<ul class="nav nav-pills">
+	<li style="padding:10px">Display as: </li>
+  <%= content_tag(:li, (link_to "Tree", plants_path(fmt: 'tree')), class: "#{'active' if @format_partial == 'tree'}")  %>
+  <%= content_tag(:li, (link_to "Listing", plants_path(fmt: 'listing')), class: "#{'active' if @format_partial == 'listing'}")  %>
+</ul>
 
-<div class='panel panel-primary table-responsive'>
-	
-	<div class="panel-heading clearfix">
-		<div class='pull-right'><%= page_entries_info @plants %></div>
-		<%= left_dropdown_select "status", :name_status, Plant.select("name_status").group(:name_status)
-			.count.to_a.sort{|a,b| b[1]<=>a[1]}.collect{|key,cnt| ["#{key} : #{cnt}", key]} %>
-		<%= left_dropdown_select "accepted rank", :accepted_rank, Plant.select("accepted_rank").group(:accepted_rank)
-			.count.to_a.sort{|a,b| b[1]<=>a[1]}.collect{|key,cnt| ["#{key} : #{cnt}", key]} %>
-		<%= left_dropdown_select "matched rank", :matched_rank, Plant.select("accepted_rank").group(:matched_rank)
-			.count.to_a.sort{|a,b| b[1]<=>a[1]}.collect{|key,cnt| ["#{key} : #{cnt}", key]} %>
-	</div>
-	
-  <table class='table table-striped'>
-    <thead>
-      <tr>
-				<th><%= sortable('order_name', 'Order') %></th>
-        <th><%= sortable('family','Family') %></th>
-        <th><%= sortable('genus','Genus') %></th>
-        <th><%= sortable('species','Species') %></th>
-        <th><%= sortable('pub_count','Publications') %></th>
-        <th><%= sortable('result_count','Data points') %></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @plants.each do |plant| %>
-        <tr>
-					<td><%= link_to plant.order_name, plant if plant.order_name %></td>
-					<td><%= link_to plant.family, plant if plant.family %></td>
-					<td><%= link_to plant.genus, plant if plant.genus %></td>
-					<td><%= link_to plant.species, plant if plant.species %></td>
-          <td><%= link_to plant.pub_count, pubs_path(plant_id: plant.id) if plant.pub_count %></td>
-          <td><%= link_to plant.result_count, results_path(plant_id: plant.id) if plant.result_count %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+<%= render @format_partial, plants: @plants %>

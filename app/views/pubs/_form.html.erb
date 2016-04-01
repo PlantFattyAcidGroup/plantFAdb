@@ -45,42 +45,60 @@
 	    <%= f.label :wos_pages, 'Pages' %><br>
 	    <%= f.text_field :wos_pages, class: 'form-control'  %>
 	  </div>
+	  <div class="field">
+	    <%= f.label :url, 'URL' %><br>
+	    <%= f.text_field :url, class: 'form-control'  %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :abstract, 'Abstract' %><br>
+	    <%= f.text_area :abstract, class: 'form-control', rows: 10  %>
+	  </div>
 	</div>
 	
-	<div class='well col-md-4' style='height:350px;overflow-y:auto'>
-		<legend>SOFA citation(s)</legend>
-		<% if @pub.original_pubs.empty? %>
-			<% pubs = [@pub]  %>
-		<% else %>
-			<% pubs = @pub.original_pubs %>
-		<% end %>
-		<% pubs.each do |pub| %>
-			<p>
-			  <strong>Year:</strong>
-			  <%= pub.year %>
-			</p>
+	<div class='well col-md-4'>
+		<div style='height:300px;overflow-y:auto'>
+			<legend>SOFA citation(s)</legend>
+			<% if @pub.original_pubs.empty? %>
+				<% pubs = [@pub]  %>
+			<% else %>
+				<% pubs = @pub.original_pubs %>
+			<% end %>
+			<% pubs.each do |pub| %>
+				<div class='well'>
+					<p>
+					  <strong>Authors:</strong>
+					  <%= pub.authors %>
+					</p>
+			
+					<p>
+					  <strong>Journal:</strong>
+					  <%= pub.journal %>
+					</p>
+			
+					<p>
+					  <strong>Year:</strong>
+					  <%= pub.year %>
+					</p>
 
-			<p>
-			  <strong>Authors:</strong>
-			  <%= pub.authors %>
-			</p>
+					<p>
+					  <strong>Volume:</strong>
+					  <%= pub.volume %>
+					</p>
 
-			<p>
-			  <strong>Journal:</strong>
-			  <%= pub.journal %>
-			</p>
-
-			<p>
-			  <strong>Volume:</strong>
-			  <%= pub.volume %>
-			</p>
-
-			<p>
-			  <strong>Page:</strong>
-			  <%= pub.page %>
-			</p>
-			<hr/>
-		<% end %>
+					<p>
+					  <strong>Page:</strong>
+					  <%= pub.page %>
+					</p>
+				</div>
+			<% end %>
+		</div>
+		
+		<div>
+			<legend>SOFA Table(s)</legend>
+			<% @pub.sofa_tabs.each do |tab| %>
+				<div style='float:left;margin:0.25em'><%= link_to (tab.sofa_tab_id||'#'), "http://sofa.mri.bund.de/Show_ResultDetail.php?Tab_ID="+(tab.sofa_tab_id||'') %></div>
+			<% end %>
+		</div>
 	</div>
 	
 </div>

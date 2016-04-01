@@ -6,6 +6,12 @@ class Ability
     user ||= User.new # guest user (not logged in)
     if user.is_admin?
       can :manage, :all
+    elsif user.is_editor?
+      can :manage, Plant
+      can :manage, Pub
+      can :manage, FattyAcid
+      can :manage, Result
+      can [:read, :update], User, id: user.id
     else
       can :read, Plant
       can :read, Pub

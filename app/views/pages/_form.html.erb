@@ -1,0 +1,55 @@
+<%= form_for(@page) do |f| %>
+  <% if @page.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@page.errors.count, "error") %> prohibited this page from being saved:</h2>
+
+      <ul>
+      <% @page.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+	
+	<div class='row'>
+		<div class="pull-right">
+		  <%= f.submit class: 'btn btn-primary' %>
+		</div>
+	</div>
+	<div class='row'>
+		<div class='col-md-12'>
+		  <div class="field">
+		    <%= f.label :description %>
+		    <%= f.text_field :description, class: 'form-control' %>
+		  </div>
+		  <div class="field">
+		    <%= f.label :content %><br>
+		    <%= f.text_area :content, class: 'form-control' %>
+		  </div>
+		</div>
+	</div>
+
+
+<% end %>
+
+<script type="text/javascript">
+	$( document ).ready(function(){
+		//console.log(Summernote)
+		$("#page_content").summernote({
+			height: 600,
+			tableClassName: 'table table-striped table-hover',
+		  codemirror: {
+		    theme: 'monokai',
+        mode: 'htmlmixed'
+		  },
+			toolbar: [
+				['style',['style','paragraph']],
+				['insert',['picture','link','hr']],
+				['font',['bold','italic','underline']],
+				['align',['superscript','subscript']],
+				['paragraph',['ol','ul','height','table']],
+				['control',['codeview','undo','redo','fullscreen','help']]
+			]
+		})
+	});		
+</script>

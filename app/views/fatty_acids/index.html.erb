@@ -1,11 +1,13 @@
 <% content_for :top_bar do %>
-	<h1 class="pagetitle">Fatty Acids</h1>	
+	<h1 class="pagetitle">Fatty Acids</h1>
 <% end %>
 
 <% content_for :item_bar do %>
 	<%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
   <%#= link_to 'New Fatty acid', new_fatty_acid_path, class: 'btn btn-primary pull-left'%>
 <% end %>
+
+<span class='small'>Structures drawn at OPSIN (opsin.ch.cam.uk)</span>
 
 <%= render 'shared/page_and_search', items: @fatty_acids  %>
 
@@ -20,16 +22,14 @@
   <table class='table table-striped table-centered'>
     <thead>
       <tr>
-				<th style="width:300px"></th>
-				<th><%= sortable 'Name' %></th>
+				<th style="width:300px">Structure</th>
+				<th><%= sortable 'IUPAC Name' %></th>
 				<th>Other Names</th>
-				<th><%= sortable 'sofa_mol_id'%></th>
 				<th><%= sortable 'Formula' %></th>
 				<th><%= sortable 'Mass' %></th>
-        <th><%= sortable 'delta_notation', 'Notation' %></th>
-        <!-- <th>External IDs</th> -->
-        <th><%= sortable 'result_count', 'Data Points'%></th>
-        <!-- <th>Options</th> -->
+				<th><%= sortable 'delta_notation', 'SOFA<br/>Delta Notation' %></th>
+				<th><%= sortable 'sofa_mol_id', 'SOFA<br/>ID'%></th>
+        <th><%= sortable 'result_count', 'Data<br/>Points'%></th>
       </tr>
     </thead>
 
@@ -38,37 +38,12 @@
         <tr>
 					<td><%= link_to image_tag("http://opsin.ch.cam.ac.uk/opsin/#{fatty_acid.name}.png"), fatty_acid if fatty_acid.name %></td>
 					<td><%= link_to fatty_acid.name, fatty_acid if fatty_acid.name%></td>
-					<td><%= link_to truncate(fatty_acid.other_names,{length: 150}), fatty_acid if fatty_acid.other_names%></td>
-					<td><%= link_to fatty_acid.sofa_mol_id, fatty_acid %></td>
-					<td><%= link_to fatty_acid.formula, fatty_acid if fatty_acid.formula%></td>
-					<td><%= link_to fatty_acid.mass, fatty_acid if fatty_acid.mass %></td>
-          <td style='width:15%'><%= link_to fatty_acid.delta_notation, fatty_acid %></td>
-          <!-- <td style='text-align:left;width:25%'>
-              <span style='display:inline-block;width:8em'>CAS number:</span>
-                <%= link_to fatty_acid.cas_number,
-                "http://www.chem.sis.nlm.nih.gov/chemidplus/rn/#{fatty_acid.cas_number}",
-                :target => '_blank' if fatty_acid.cas_number%><br/>
-              <span style='display:inline-block;width:8em'>Sofa Mol:</span>
-                <%= link_to fatty_acid.sofa_mol_id,
-                "http://sofa.mri.bund.de/Show_ResultTable.php?Mol_ID=#{fatty_acid.sofa_mol_id}&Nota=MOL_ID",
-                :target => '_blank' %><br/>
-              <span style='display:inline-block;width:8em'>Lipid Map:</span>
-                <%= link_to fatty_acid.lipidmap_id, "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=#{fatty_acid.lipidmap_id}",
-                :target => '_blank' if fatty_acid.lipidmap_id %><br/>
-              <span style='display:inline-block;width:8em'>PubChem:</span>
-                <%= link_to fatty_acid.pubchem_id,
-                "https://pubchem.ncbi.nlm.nih.gov/compound/#{fatty_acid.pubchem_id}",
-                :target => '_blank' if fatty_acid.pubchem_id%><br/>
-              <span style='display:inline-block;width:8em'>ChEBI:</span>
-                <%= link_to fatty_acid.chebi_id,
-                "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:#{fatty_acid.chebi_id}",
-                :target => '_blank' if fatty_acid.chebi_id%><br/>
-          </td> -->
-          <td style='width:5%'><%= link_to fatty_acid.result_count, results_path(measure_id: fatty_acid.id) if fatty_acid.result_count %></td>
-          <!-- <td style='width:15%'>
-            <%= link_to 'Show', fatty_acid %>
-            <% if can? :edit, fatty_acid %> | <%= link_to 'Edit', edit_fatty_acid_path(fatty_acid) %> <% end %>
-          </td> -->
+					<td><%= truncate(fatty_acid.other_names,{length: 150}) %></td>
+					<td><%= fatty_acid.formula %> <%= fatty_acid.formc %></td>
+					<td><%= fatty_acid.mass %></td>
+          <td><%= fatty_acid.delta_notation %></td>
+					<td><%= fatty_acid.sofa_mol_id %></td>
+          <td><%= link_to fatty_acid.result_count, results_path(measure_id: fatty_acid.id) if fatty_acid.result_count %></td>
         </tr>
       <% end %>
     </tbody>

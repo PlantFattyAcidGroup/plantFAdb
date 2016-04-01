@@ -7,4 +7,8 @@ class User < ActiveRecord::Base
   def is_admin?
     role == 'admin'
   end
+  
+  def is_editor?
+    role == 'editor'
+  end
 end
