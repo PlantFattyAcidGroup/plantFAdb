@@ -17,7 +17,7 @@ class FattyAcidsController < ApplicationController
         OR upper(lipidmap_id) LIKE ?
         OR upper(formula) LIKE ?
         OR mass = ?',
-        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", q
+        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", q.to_f
       )
     end
     case params[:has_data]
