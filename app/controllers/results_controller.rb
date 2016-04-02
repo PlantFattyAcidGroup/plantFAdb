@@ -40,6 +40,7 @@ class ResultsController < ApplicationController
           @results.find_each(batch_size: 500) do |item|
             out << CSV.generate_line([
               item.measure.type,
+              item.measure.name,
               item.measure.delta_notation,
               item.pub.display_name,
               item.value,
@@ -91,5 +92,11 @@ class ResultsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def resource_params
       params.require(:result).permit(:value, :unit, :measure_id, :pub_id)
+    end
+    def sort_column
+      params[:sort]||"value"
+    end
+    def sort_direction  
+      %w[asc desc].include?(params[:direction]) ?  params[:direction] : "desc"  
     end
 end

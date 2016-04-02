@@ -78,11 +78,27 @@ class PlantsController < ApplicationController
       # CSV download
       format.csv{
         render_csv do |out|
-          out << CSV.generate_line(["Family","Name","Publication Count","Result Count"])
+          out << CSV.generate_line(["ID","Common Name","Genus", "Species", "Family", "Order", "Tropicos URL", "Note",
+            "TNRS Family", "TNRS Name", "Accepted Rank", "Matched Rank", "Name Status",
+            "SOFA Family", "SOFA Name",
+            "Publication Count","Result Count"])
           @plants.find_each(batch_size: 500) do |item|
             out << CSV.generate_line([
+              item.id,
+              item.common_name,
+              item.genus,
+              item.species,
               item.family,
-              item.name,
+              item.order_name,
+              item.tropicos_url,
+              item.note,
+              item.tnrs_family,
+              item.tnrs_name,
+              item.accepted_rank,
+              item.matched_rank,
+              item.name_status,
+              item.sofa_family,
+              item.sofa_name,
               item.pub_count,
               item.result_count
             ])
@@ -131,7 +147,7 @@ class PlantsController < ApplicationController
   private
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:plant).permit(:tnrs_family, :tnrs_name, :accepted_rank, :name_status, :matched_rank, :family, :genus, :species, :tropicos_url, :note)
+      params.require(:plant).permit(:common_name, :tnrs_family, :tnrs_name, :accepted_rank, :name_status, :matched_rank, :family, :genus, :species, :tropicos_url, :note)
     end
     
     def sort_column

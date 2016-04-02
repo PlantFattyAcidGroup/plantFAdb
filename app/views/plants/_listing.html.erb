@@ -27,8 +27,8 @@
     <tbody>
       <% plants.each do |plant| %>
         <tr>
-					<td><%= link_to plant.genus, plant if plant.genus %></td>
-					<td><%= link_to plant.species, plant if plant.species %></td>
+					<td><%= link_to plant.genus||'-', plant %></td>
+					<td><%= link_to plant.species||'-', plant %></td>
 					<td><%= plant.family %></td>
 					<td><%= plant.order_name %></td>
           <td><%= link_to plant.pub_count, pubs_path(plant_id: plant.id) if plant.pub_count %></td>

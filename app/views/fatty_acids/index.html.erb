@@ -39,7 +39,7 @@
 					<td><%= link_to image_tag("http://opsin.ch.cam.ac.uk/opsin/#{fatty_acid.name}.png"), fatty_acid if fatty_acid.name %></td>
 					<td><%= link_to fatty_acid.name, fatty_acid if fatty_acid.name%></td>
 					<td><%= truncate(fatty_acid.other_names,{length: 150}) %></td>
-					<td><%= fatty_acid.formula %> <%= fatty_acid.formc %></td>
+					<td style='white-space:nowrap'><%= fatty_acid.formula %></td>
 					<td><%= fatty_acid.mass %></td>
           <td><%= fatty_acid.delta_notation %></td>
 					<td><%= fatty_acid.sofa_mol_id %></td>

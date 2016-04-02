@@ -4,7 +4,7 @@ class FattyAcidsController < ApplicationController
   def index
     @fatty_acids = @fatty_acids.order(sort_column + ' ' + sort_direction + ', measures.id asc')
     .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id group by m.id) res on res.measure_id = measures.id ")
-    .select("measures.*, res.result_count, REPLACE(REPLACE(REPLACE(REPLACE(formula,'C',''), 'O', ''), 'H', ''), ' ', '') formc")
+    .select("measures.*, res.result_count")
     if(params[:query])
       q = params[:query].upcase
       @fatty_acids = @fatty_acids.where('
@@ -112,7 +112,7 @@ class FattyAcidsController < ApplicationController
     
     def sort_column
       if params[:action] == 'index'
-        params[:sort]||"cast(mass as number)"
+        params[:sort]||"mass"
       else
         params[:sort] || "results.value"
       end

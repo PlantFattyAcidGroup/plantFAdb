@@ -1,7 +1,11 @@
 <% content_for :top_bar do %>
 	<h1 class="pagetitle">
-		<%= @plant.genus %> <%= @plant.species %>
-		<small style='white-space:nowrap'>(<%= @plant.tnrs_name %>)</small>
+		<% if @plant.genus.blank? && @plant.species.blank? %>
+		 <%= @plant.family || @plant.order || @plant.sofa_family %>
+		<% else %>
+			<%= @plant.genus %> <%= @plant.species %>
+		<% end %>
+		<small style='white-space:nowrap'><%= @plant.common_name || @plant.sofa_name %></small>
 	</h1>
 <% end %>
 
@@ -30,6 +34,12 @@
 			  <strong>Species:</strong>
 			  <%= @plant.species %>
 			</p>
+			<% if @plant.common_name %>
+				<p>
+				  <strong>Common Name:</strong>
+				  <%= @plant.common_name %>
+				</p>
+			<% end %>
 			
 			<% unless @plant.tropicos_url.blank? %>
 		    <legend>External Link(s)</legend>

@@ -53,6 +53,10 @@
 	<!-- <div style='float:left;width:25%'> -->
 	<div class='col-md-3'>
 	  <div class="field">
+	    <%= f.label :common_name %><br>
+	    <%= f.text_field :common_name, class: 'form-control',  :autofocus => true %>
+	  </div>
+	  <div class="field">
 	    <%= f.label :name_status %><br>
 	    <%= f.text_field :name_status, class: 'form-control' %>
 	  </div>

@@ -11,20 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160329174416) do
+ActiveRecord::Schema.define(version: 20160402174623) do
 
   create_table "measures", force: :cascade do |t|
     t.string   "type"
     t.string   "delta_notation"
     t.string   "cas_number"
     t.string   "sofa_mol_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
     t.string   "lipidmap_id"
     t.string   "pubchem_id"
     t.string   "chebi_id"
     t.text     "structure"
-    t.string   "mass"
+    t.string   "old_mass"
     t.string   "name"
     t.string   "other_names",    limit: 3999
     t.string   "formula"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20160329174416) do
     t.string   "stdinchi"
     t.string   "stdinchikey"
     t.string   "smiles"
+    t.decimal  "mass",                        precision: 7, scale: 2
   end
 
   create_table "names", force: :cascade do |t|
@@ -69,6 +70,7 @@ ActiveRecord::Schema.define(version: 20160329174416) do
     t.string   "accepted_rank"
     t.string   "matched_rank"
     t.string   "order_name"
+    t.string   "common_name"
   end
 
   create_table "plants_pubs", force: :cascade do |t|
@@ -114,14 +116,15 @@ ActiveRecord::Schema.define(version: 20160329174416) do
   end
 
   create_table "results", force: :cascade do |t|
-    t.string   "value"
+    t.string   "value_old"
     t.string   "unit"
     t.integer  "measure_id",     precision: 38
     t.integer  "publication_id", precision: 38
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.integer  "pub_id",         precision: 38
     t.integer  "plant_id",       precision: 38
+    t.decimal  "value",          precision: 8,  scale: 2
   end
 
   add_index "results", ["measure_id"], name: "index_results_on_measure_id"
