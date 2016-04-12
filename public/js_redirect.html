@@ -1,0 +1,14 @@
+<html>
+<body>
+loading your page... 
+<script type="text/javascript">
+function getQuerystring(key) {
+//key = key.replace(/[\[]/,"\\\[").replace(/    [\]]/,"\\\]");
+var regex = new RegExp("[\\?&]"+key+"=([^&#]*)");
+var query = regex.exec(window.location.href);
+return unescape(query[1]);
+}
+window.location = window.location.protocol + "//" + window.location.host + getQuerystring('page');
+</script>
+</body>
+</html>

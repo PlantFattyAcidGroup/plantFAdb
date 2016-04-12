@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   resources :plants
   resources :pubs do
     collection do
-      get 'check_wos_uid'
+      post 'condense_doi'
     end
   end
   

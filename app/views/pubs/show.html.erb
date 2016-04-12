@@ -109,7 +109,7 @@
 		<div style='height:105px;overflow-y:auto'>
 			<legend>SOFA Table(s)</legend>
 			<% @pub.sofa_tabs.each do |tab| %>
-				<div style='float:left;margin:0.25em'><%= link_to (tab.sofa_tab_id||'#'), "http://sofa.mri.bund.de/Show_ResultDetail.php?Tab_ID="+(tab.sofa_tab_id||'') %></div>
+				<div style='float:left;margin:0.25em'><%= link_to (tab.sofa_tab_id||'#'), tab.sofa_url %></div>
 			<% end %>
 		</div>
 	</div>

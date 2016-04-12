@@ -16,8 +16,9 @@ class PubsController < ApplicationController
         OR upper(wos_volume) LIKE ?
         OR upper(wos_pages) LIKE ?
         OR upper(wos_uid) LIKE ?
+        OR upper(wos_title) LIKE ?
         OR upper(doi) LIKE ?',
-        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%" )
+        "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%" )
     end
 
     respond_to do |format|
@@ -27,51 +28,52 @@ class PubsController < ApplicationController
       format.csv{
         render_csv do |out|
           out << CSV.generate_line([
-            "ID","Year","Authors","Journal","Volume","Page",
-            "DOI","WOS_Title","WOS_UID","WOS_Year","WOS_Authors","WOS_Journal","WOS_Volume","WOS_Pages"
+            "ID","WOS_Authors","WOS_Year","WOS_Title","WOS_Journal","WOS_Volume","WOS_Pages",
+            "DOI","WOS_UID","Abstract","URL",
+            "SOFA Authors","SOFA Year","SOFA Journal","SOFA Volume","SOFA Page",
+            "SOFA TABS"
             ])
           @pubs.find_each do |item|
+            all_pubs = [item]+item.original_pubs
             out << CSV.generate_line([
-              item.id,
-              item.year,
-              item.authors,
-              item.journal,
-              item.volume,
-              item.page,
-              item.doi,
-              item.wos_title,
-              item.wos_uid,
-              item.wos_year,
+              (can? :edit, item) ? "=HYPERLINK(\"#{root_url}js_redirect.html?page=#{edit_pub_path(item.id)}\",\"#{item.id}\")" : item.id,
               item.wos_authors,
+              item.wos_year,
+              item.wos_title,
               item.wos_journal,
               item.wos_volume,
-              item.wos_pages
-            ])
+              item.wos_pages,
+              item.doi,
+              item.wos_uid,
+              item.abstract,
+              item.url,
+              all_pubs.map(&:authors).join("; "),
+              all_pubs.map(&:year).join("; "),
+              all_pubs.map(&:journal).join("; "),
+              all_pubs.map(&:volume).join("; "),
+              all_pubs.map(&:page).join("; ")
+            ]+item.sofa_tabs.map{|tab|"=HYPERLINK(\"#{tab.sofa_url}\",\"#{tab.sofa_tab_id||'#'}\")"})
           end
         end
       }
     end
   end
 
-  def check_wos_uid
-    uid = params[:uid]
-    pub = Pub.find_by(wos_uid: uid) if uid
-    if pub
-      render json: {
-        pub: {
-          wos_title: pub.wos_title,
-          wos_year: pub.wos_year,
-          wos_authors: pub.wos_authors,
-          wos_journal: pub.wos_journal,
-          wos_volume: pub.wos_volume,
-          wos_pages: pub.wos_pages
-        }
-      }
-    else
-      render json: {
-        pub: nil
-      }
-    end
+  def condense_doi
+    result = Pub.condense_doi
+    text = "Condense Complete:<br/><br/>
+        Beginning Pub Count: #{result[:begin_count]}<br/>
+        --<br/>
+        Pub with DOI: #{result[:found]}<br/>
+        Pub with unique DOI: #{result[:unique]}<br/>
+        --<br/>
+        Condensed: #{result[:removed]} <br/>
+        New: #{result[:created]}<br/>
+        --<br/>
+        Ending Pub Count: #{result[:end_count]}
+      "
+    Rails.logger.info { text }
+    redirect_to pubs_path, notice: text
   end
   
   # GET /publications/1

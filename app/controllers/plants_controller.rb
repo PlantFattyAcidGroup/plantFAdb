@@ -84,7 +84,7 @@ class PlantsController < ApplicationController
             "Publication Count","Result Count"])
           @plants.find_each(batch_size: 500) do |item|
             out << CSV.generate_line([
-              item.id,
+              (can? :edit, item) ? "=HYPERLINK(\"#{root_url}js_redirect.html?page=#{edit_plant_path(item.id)}\",\"#{item.id}\")" : item.id,
               item.common_name,
               item.genus,
               item.species,
