@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :pubs do
     collection do
       post 'condense_doi'
+      post 'condense_wos'
     end
   end
   

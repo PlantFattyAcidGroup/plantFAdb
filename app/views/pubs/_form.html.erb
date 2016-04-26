@@ -14,7 +14,7 @@
 	<div class='col-md-6'>
 	  <div class="field">
 			
-	    <%= f.label :doi %><br>
+	    <%= f.label :doi %> <%= link_to 'Lookup (crossref)', '#', class: 'btn btn-info pull-right', id: 'doi_lookup' %><br><br>
 	    <%= f.text_field :doi, class: 'form-control' %>
 	  </div>
 	  <div class="field">

@@ -76,6 +76,23 @@ class PubsController < ApplicationController
     redirect_to pubs_path, notice: text
   end
   
+  def condense_wos
+    result = Pub.condense_wos
+    text = "Condense Complete:<br/><br/>
+        Beginning Pub Count: #{result[:begin_count]}<br/>
+        --<br/>
+        Pub with UID: #{result[:found]}<br/>
+        Pub with unique UID: #{result[:unique]}<br/>
+        --<br/>
+        Condensed: #{result[:removed]} <br/>
+        New: #{result[:created]}<br/>
+        --<br/>
+        Ending Pub Count: #{result[:end_count]}
+      "
+    Rails.logger.info { text }
+    redirect_to pubs_path, notice: text
+  end
+  
   # GET /publications/1
   def show
   end
