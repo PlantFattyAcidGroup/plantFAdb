@@ -119,8 +119,8 @@ class PlantsController < ApplicationController
       @fatty_acid_data[result.unit][result.measure_id][:values]<<result.value.round(2)
     end
     @results.where("measures.type = 'Parameter'").each do |result|
-      @parameter_data[result.measure.delta_notation]||=[]
-      @parameter_data[result.measure.delta_notation]<<result.value.round(2)
+      @parameter_data["#{result.measure.delta_notation} - #{result.unit}"]||=[]
+      @parameter_data["#{result.measure.delta_notation} - #{result.unit}"]<<result.value.round(2)
     end
   end
 
