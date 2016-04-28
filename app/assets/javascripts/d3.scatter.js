@@ -72,24 +72,24 @@
         .style("font-size", "12px") 
         .text(ylabel);		
         
-        // draw y count axis
-        var yCountAxis = d3.svg.axis()
-        .scale(yCountDomain)
-        .orient("right")
-        .tickFormat(d3.format("d"))
-          .tickSubdivide(0);
-        
-        svg.append("g")
-        .attr("class", "y axis")
-        .attr("transform", "translate("+(width-margin.right-margin.left)+",0)")
-        .call(yCountAxis)
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("dy", "3em")
-        .attr("dx",-margin.top)
-        .style("text-anchor", "end")
-        .style("font-size", "12px") 
-        .text('Count');	
+        // // draw y count axis
+        // var yCountAxis = d3.svg.axis()
+        // .scale(yCountDomain)
+        // .orient("right")
+        // .tickFormat(d3.format("d"))
+        //   .tickSubdivide(0);
+        //
+        // svg.append("g")
+        // .attr("class", "y axis")
+        // .attr("transform", "translate("+(width-margin.right-margin.left)+",0)")
+        // .call(yCountAxis)
+        // .append("text")
+        // .attr("transform", "rotate(-90)")
+        // .attr("dy", "3em")
+        // .attr("dx",-margin.top)
+        // .style("text-anchor", "end")
+        // .style("font-size", "12px")
+        // .text('Count');
         
         // draw x axis	
         var xAxis = d3.svg.axis()
@@ -115,12 +115,13 @@
           .attr("transform", function(d) { return "translate(" +  xDomain(d.object[categoryMethod])  + ",0)"; } )
         scatterGroup.append("rect")
           .attr('x',0)
-          .attr('y',function(d){return yCountDomain(d.values.length)})
+          .attr('y',0)
+          //.attr('y',function(d){return yCountDomain(d.values.length)})
           .attr('width',xDomain.rangeBand())
           .attr('height',function(d){
             
-            return height-margin.bottom+xAxisPadding-yCountDomain(d.values.length)
-            
+            //return height-margin.bottom+xAxisPadding-yCountDomain(d.values.length)
+            return height-margin.bottom+xAxisPadding;
           })
         .on('mouseover',function(d){
           var me = d3.select(this)

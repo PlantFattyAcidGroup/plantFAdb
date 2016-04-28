@@ -114,13 +114,14 @@ class PlantsController < ApplicationController
     @parameter_data = {}
     @results = @plant.results.includes(:measure).order("measures.delta_notation")
     @results.where("measures.type = 'FattyAcid'").each do |result|
-      @fatty_acid_data[result.unit]||={}
-      @fatty_acid_data[result.unit][result.measure_id]||={object:result.measure,values:[]}
-      @fatty_acid_data[result.unit][result.measure_id][:values]<<result.value.round(2)
+      next unless result.unit == 'GLC-Area-%' || result.unit == 'weight-%'
+      @fatty_acid_data[result.measure_id]||={object:result.measure,values:[]}
+      @fatty_acid_data[result.measure_id][:values]<<result.value.round(2)
     end
+    @fatty_acid_data = @fatty_acid_data.map{|k,v| v}
     @results.where("measures.type = 'Parameter'").each do |result|
-      @parameter_data["#{result.measure.delta_notation} - #{result.unit}"]||=[]
-      @parameter_data["#{result.measure.delta_notation} - #{result.unit}"]<<result.value.round(2)
+      @parameter_data["#{result.measure.delta_notation}#{result.unit ? ' - '+result.unit : ''}"]||=[]
+      @parameter_data["#{result.measure.delta_notation}#{result.unit ? ' - '+result.unit : ''}"]<<result.value.round(2)
     end
   end
 

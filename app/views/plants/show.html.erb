@@ -111,28 +111,20 @@
 	<div class='col-md-8'>
 		<div class='well' style='overflow:scroll'>
 			<legend>Data</legend>
+			<p>The graphs below are built from data across all publications stored in the database.</p>
 			<span> 
 				<%= link_to "View #{pluralize @plant.pubs.count,"Publication"}", pubs_path(plant_id: @plant.id) %>
 			</span> |
 			<span>
 				<%= link_to "View #{pluralize @plant.results.count, "Data Point"}", results_path(plant_id: @plant.id) %>
 			</span>
-			<!-- <div class='row'>
-				<div class='col-md-3'>
-					<%= link_to "#{@plant.pubs.count} Publications", pubs_path(plant_id: @plant.id), class: 'btn btn-default' %>
-				</div>
-				<div class='col-md-3'>
-					<%= link_to "#{@plant.results.count} Data Points", results_path(plant_id: @plant.id), class: 'btn btn-default' %>
-				</div>
-			</div> -->
 			<% unless @fatty_acid_data.empty? %>
 				<legend><h5>Fatty Acid Data</h5></legend>
-				<% @fatty_acid_data.each_with_index do |(key, subdata),index| %>
-					<div id='fa_plant_data_viz_<%= index %>' style='min-width:700px;height:350px'></div>
-				<% end %>
+					<div id='fa_plant_data_viz_0' style='min-width:700px;height:350px'></div>
 			<% end %>
 			<% unless @parameter_data.empty? %>
 			<legend><h5>Parameters</h5></legend>
+			<p>Each bar represents data from a different publication or analysis within a publication</p>
 				<% @parameter_data.each_with_index do |(key, subdata),index| %>
 					<div id='p_plant_data_viz_<%= index %>' style='min-width:700px;height:350px'></div>
 				<% end %>
@@ -164,7 +156,8 @@
 }
 
 .scatter rect {
-	fill: #e4e4e7;
+/*	fill: #e4e4e7;*/
+	fill: #fbfaf4;
 	stroke: none;
 	cursor: pointer;
 }
@@ -199,7 +192,14 @@ function drawBoxPlot(data,el,unit){
 		.hoverMessage(function(d,el){
       var text = '<legend><h5>'+d.object.name+'</h5></legend>'
 			text += 'Delta Notation: '+d.object.delta_notation+'<br/>'
-      text += 'Click to view ' + d.values.length+' datapoint'+(d.values.length>1 ? 's' : '')
+			if(d.values.length ==1){
+				text += 'Value: '+d.values[0]+'<br/><br/>'
+			}else{
+				text += 'Max: '+d3.max(d.values)+'<br/>'
+				text += 'Min: '+d3.min(d.values)+'<br/><br/>'
+				text += 'Click to view ' + d.values.length+' datapoints'
+			}
+      
       el.style('display','')
       .html(text)
 		})
@@ -214,17 +214,32 @@ function drawBoxPlot(data,el,unit){
 
 //https://bl.ocks.org/mbostock/4061502
 $(document).ready(function(){
-		
-		
-	<% @fatty_acid_data.each_with_index do |(key, subdata),index| %>
-		<% data = subdata.map{|d| d[1]} %>
-		<%= "var fa_data_#{index} = #{data.to_json}".html_safe %>
-		<%= "var fa_el_#{index} = d3.select('#fa_plant_data_viz_#{index}')".html_safe %>
-		<%= "drawBoxPlot(fa_data_#{index},fa_el_#{index},'#{key}')".html_safe %>
+
+	// fatty acid graph
+	var fa_data_0 = <%= "#{@fatty_acid_data.to_json}".html_safe %>
+	var fa_el_0 = d3.select('#fa_plant_data_viz_0')
+	drawBoxPlot(fa_data_0,fa_el_0,'GC-Area% or Weight%')
+	
+	
+	// Oil Content parameter first
+	
+	<% if oil = @parameter_data["Oil content - weight-%"] %>
+		<% @parameter_data.delete("Oil content - weight-%") %>
+		var p_data_0 = <%="#{oil.map(&:to_f).unshift('Oil content - weight-%').to_json}".html_safe %>
+		var chart = c3.generate({
+			bindto: '#p_plant_data_viz_0',
+			data: {
+				columns: [p_data_0],
+				types: {
+					'Oil content - weight-%': 'bar'
+				}
+			}
+		})
 	<% end %>
 	
+	
 	<% @parameter_data.each_with_index do |(key, subdata),index| %>
-		"<%= key %>"
+		<% index +=1 if oil %>
 		<%= "var p_data_#{index} = #{subdata.map(&:to_f).unshift(key).to_json}".html_safe %>
 		var chart = c3.generate({
 			bindto: '<%= "#p_plant_data_viz_#{index}" %>',
