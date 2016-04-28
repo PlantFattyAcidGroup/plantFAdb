@@ -35,4 +35,10 @@ $( function(){
       alert( "error" );
     })
   })
+  
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip({placement: 'right auto'})
+    $('[data-toggle="popover"]').popover({placement: 'right auto'})
+  })
+  
 });

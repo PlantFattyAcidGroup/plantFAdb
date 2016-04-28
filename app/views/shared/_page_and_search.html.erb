@@ -6,6 +6,7 @@
 				<%= text_field_tag :query, params[:query], class: 'form-control' %>
 				<%= submit_tag "Go", class: "btn btn-info "%>
 			</div>
+			<%= yield if block_given? %>
     <% end %>
 	</div>
 	<div class='col-md-8 pull-left'>

@@ -1,12 +1,39 @@
 <% content_for :top_bar do %>
-	<h1 class="pagetitle">Results</h1>
+	<h1 class="pagetitle">Data Points</h1>
+	<% if @plant %>
+		<p>
+			Filtering on plant: <b><%= link_to @plant.display_name, @plant %></b>
+		</p>
+	<% end %>
+
+	<% if @pub%>
+		<p>
+			Filtering on publication: <b><%= link_to @pub.display_name, @pub %></b>
+		</p>
+	<% end %>
+	<% if @measure%>
+		<p>
+			Filtering on <%= @measure.class %>: <b><%= link_to @measure.name, @measure %></b>
+		</p>
+	<% end %>
 <% end %>
 
 <% content_for :item_bar do %>
     <%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
 <% end %>
 
-<%= render 'shared/page_and_search', items: @results  %>
+
+<%= render layout: 'shared/page_and_search', locals: {items: @results} do %>
+<br style='clear:both'/>
+	<div class='form-inline pull-right'>
+		<br/>
+		<label for="measure_type">Measure:</label>
+		<%= select_tag :measure_type, options_for_select(@measure_types, params[:measure_type]),
+			{	include_blank: true,
+				class: 'form-control',
+				onchange: 'this.form.submit()'} %>
+	</div>
+<% end %>
 
 <div class='panel panel-primary table-responsive'>
 	
@@ -33,7 +60,7 @@
 					<td><%= result.measure.try :name %></td>
           <td><%= result.measure.try :delta_notation %></td>
           <td><%= link_to result.pub.display_name, result.pub if result.pub %></td>
-          <td><%= result.value %></td>
+          <td><%= result.value.round(2) %></td>
           <td><%= result.unit %></td>         
         </tr>
       <% end %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160402174623) do
+ActiveRecord::Schema.define(version: 20160427151254) do
 
   create_table "measures", force: :cascade do |t|
     t.string   "type"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20160402174623) do
     t.string   "stdinchikey"
     t.string   "smiles"
     t.decimal  "mass",                        precision: 7, scale: 2
+    t.string   "image_link"
   end
 
   create_table "names", force: :cascade do |t|

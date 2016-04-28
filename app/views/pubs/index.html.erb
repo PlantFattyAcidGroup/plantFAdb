@@ -27,6 +27,7 @@
       <tr>
 				<th style='width:20%'><%= sortable "wos_authors", "Authors" %></th>
 				<th><%= sortable "wos_year", "Year"%></th>
+				<th style='width: 20px'></th>
 				<th style='width:30%'><%= sortable "wos_title", "Title" %></th>
 				<th><%= sortable "wos_journal", "Journal" %></th>
         <th><%= sortable "wos_volume", "Volume" %></th>
@@ -42,11 +43,16 @@
         <tr>
 					<td><%= link_to publication.wos_authors||"Unknown", publication %></td>
 					<td><%= publication.wos_year %></td>
+					<td class='pub-tooltip'>
+						<% if publication.abstract %>
+							<a tabindex="0" class="glyphicon glyphicon-text-color" role="button" data-toggle="popover" data-trigger="focus" title="Abstract" data-content="<%= publication.abstract %>"></a>
+						<% end %>
+					</td>
 					<td><%= publication.wos_title %></td>
 					<td><%= publication.wos_journal %></td>
 					<td><%= publication.wos_volume %></td>
 					<td><%= publication.wos_pages %></td>
-					<td><%= publication.doi %></td>
+					<td><%= link_to publication.doi, "https://doi.org/#{publication.doi}", target: '_blank' if publication.doi && publication.doi.downcase != 'none' %></td>
 					<td><%= publication.wos_uid %></td>
           <td><%= link_to publication.results.count, results_path(pub_id: publication.id) %></td>
         </tr>

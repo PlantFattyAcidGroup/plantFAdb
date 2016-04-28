@@ -30,13 +30,20 @@
 				<th><%= sortable 'delta_notation', 'SOFA<br/>Delta Notation' %></th>
 				<th><%= sortable 'sofa_mol_id', 'SOFA<br/>ID'%></th>
         <th><%= sortable 'result_count', 'Data<br/>Points'%></th>
+				<th></th>
       </tr>
     </thead>
 
     <tbody>
       <% @fatty_acids.each do |fatty_acid| %>
         <tr>
-					<td><%= link_to image_tag("http://opsin.ch.cam.ac.uk/opsin/#{fatty_acid.name}.png"), fatty_acid if fatty_acid.name %></td>
+					<td>
+						<% if fatty_acid.image_link %>
+							<%= link_to image_tag(fatty_acid.image_link), fatty_acid %>
+						<% else %>
+							<%= link_to image_tag("http://opsin.ch.cam.ac.uk/opsin/#{fatty_acid.name}.png"), fatty_acid if fatty_acid.name %>
+						<% end %>
+					</td>
 					<td><%= link_to fatty_acid.name, fatty_acid if fatty_acid.name%></td>
 					<td><%= truncate(fatty_acid.other_names,{length: 150}) %></td>
 					<td style='white-space:nowrap'><%= fatty_acid.formula %></td>
@@ -44,7 +51,8 @@
           <td><%= fatty_acid.delta_notation %></td>
 					<td><%= fatty_acid.sofa_mol_id %></td>
           <td><%= link_to fatty_acid.result_count, results_path(measure_id: fatty_acid.id) if fatty_acid.result_count %></td>
-        </tr>
+        	<td><%= link_to "Tree", plants_path(fmt: 'tree', measure_id: fatty_acid.id) %></td>
+				</tr>
       <% end %>
     </tbody>
   </table>

@@ -16,119 +16,229 @@
 
 <div class='container'>
 	<div class='col-md-4'>
-		<div class='well'>
+		<div class='well' style='overflow:scroll'>
 			<legend>Classification</legend>
-			<p>
-			  <strong>Order:</strong>
-			  <%= @plant.order_name %>
-			</p>
-			<p>
-			  <strong>Family:</strong>
-			  <%= @plant.family %>
-			</p>
-			<p>
-			  <strong>Genus:</strong>
-			  <%= @plant.genus %>
-			</p>
-			<p>
-			  <strong>Species:</strong>
-			  <%= @plant.species %>
-			</p>
-			<% if @plant.common_name %>
+			<div style='min-height:300px'>
 				<p>
-				  <strong>Common Name:</strong>
-				  <%= @plant.common_name %>
+				  <strong>Order:</strong>
+				  <%= @plant.order_name %>
 				</p>
-			<% end %>
-			
-			<% unless @plant.tropicos_url.blank? %>
-		    <legend>External Link(s)</legend>
-				<% @plant.tropicos_url.split(";").each do |url| %>
-		    	<%= link_to url %><br/>
+				<p>
+				  <strong>Family:</strong>
+				  <%= @plant.family %>
+				</p>
+				<p>
+				  <strong>Genus:</strong>
+				  <%= @plant.genus %>
+				</p>
+				<p>
+				  <strong>Species:</strong>
+				  <%= @plant.species %>
+				</p>
+				<% if @plant.common_name %>
+					<p>
+					  <strong>Common Name:</strong>
+					  <%= @plant.common_name %>
+					</p>
 				<% end %>
-			<% end %>
-		
-			<% unless @plant.note.blank? %>
-			   <legend>Note</legend><br>
-			   <%= @plant.note %>
-			<% end %>
 			
+				<% unless @plant.tropicos_url.blank? %>
+			    <legend>External Link(s)</legend>
+					<% @plant.tropicos_url.split(";").each do |url| %>
+			    	<%= link_to url %><br/>
+					<% end %>
+				<% end %>
+		
+				<% unless @plant.note.blank? %>
+				   <legend>Note</legend><br>
+				   <%= @plant.note %>
+				<% end %>
+			</div>
+		</div>
+		<div class='well'>
+			<legend>Name Resolution</legend>
+			<div class='row'>
+				<div class='col-md-12  col-sm-12 col-xs-12'>
+						<legend><h5>TNRS Accepted data</h5></legend>
+					  <p>
+					    <b>Family:</b>
+							<%= @plant.tnrs_family %>
+					  </p>
+					  <p>
+					    <b>Name:</b>
+							<%= @plant.tnrs_name %>
+					  </p>
+					  <p>
+					    <b>Accepted Rank:</b>
+							<%= @plant.accepted_rank %>
+					  </p>
+					  <p>
+					    <strong>Matched rank:</strong>
+					    <%= @plant.matched_rank %>
+					  </p>
+					  <p>
+					    <strong>Name status:</strong>
+					    <%= @plant.name_status %>
+					  </p>
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col-md-12 col-sm-12 col-xs-12'>
+						<legend><h5>Original SOFA Data</h5></legend>
+					  <p>
+					    <b>Family:</b>
+					    <%= @plant.sofa_family %>
+					  </p>
+
+					  <p>
+					    <b>Name:</b>
+					    <%= @plant.sofa_name %>
+					  </p>
+						<br/>
+				</div>
+		
+			</div>
+				
+			<div class='clearfix row small'>
+				<div class='col-md-12'>
+					<br/>
+					Plant names were updated using the Taxanomic Name Resolution Service (<%= link_to "http://tnrs.iplantcollaborative.org", "http://tnrs.iplantcollaborative.org" %>)<br/><br/>
+					Note: There may be other accepted names for a species not displayed here
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class='col-md-8'>
-		<div class='well'>
+		<div class='well' style='overflow:scroll'>
 			<legend>Data</legend>
-			<div class='row'>
+			<span> 
+				<%= link_to "View #{pluralize @plant.pubs.count,"Publication"}", pubs_path(plant_id: @plant.id) %>
+			</span> |
+			<span>
+				<%= link_to "View #{pluralize @plant.results.count, "Data Point"}", results_path(plant_id: @plant.id) %>
+			</span>
+			<!-- <div class='row'>
 				<div class='col-md-3'>
 					<%= link_to "#{@plant.pubs.count} Publications", pubs_path(plant_id: @plant.id), class: 'btn btn-default' %>
 				</div>
 				<div class='col-md-3'>
 					<%= link_to "#{@plant.results.count} Data Points", results_path(plant_id: @plant.id), class: 'btn btn-default' %>
 				</div>
-			</div>
+			</div> -->
+			<% unless @fatty_acid_data.empty? %>
+				<legend><h5>Fatty Acid Data</h5></legend>
+				<% @fatty_acid_data.each_with_index do |(key, subdata),index| %>
+					<div id='fa_plant_data_viz_<%= index %>' style='min-width:700px;height:350px'></div>
+				<% end %>
+			<% end %>
+			<% unless @parameter_data.empty? %>
+			<legend><h5>Parameters</h5></legend>
+				<% @parameter_data.each_with_index do |(key, subdata),index| %>
+					<div id='p_plant_data_viz_<%= index %>' style='min-width:700px;height:350px'></div>
+				<% end %>
+			<% end %>
 		</div>
 	</div>
 </div>
 
 <hr/>
 
-<div class='container col-md-6'>
-	<div class='well'>
-		<legend>Name Resolution</legend>
-		<div class='row'>
-			<div class='col-md-4  col-sm-12 col-xs-12'>
-					<legend><h5>TNRS Accepted data</h5></legend>
-				  <p>
-				    <b>Family:</b>
-						<%= @plant.tnrs_family %>
-				  </p>
-				  <p>
-				    <b>Name:</b>
-						<%= @plant.tnrs_name %>
-				  </p>
-				  <p>
-				    <b>Accepted Rank:</b>
-						<%= @plant.accepted_rank %>
-				  </p>
-				  <p>
-				    <strong>Matched rank:</strong>
-				    <%= @plant.matched_rank %>
-				  </p>
-				  <p>
-				    <strong>Name status:</strong>
-				    <%= @plant.name_status %>
-				  </p>
-			</div>
 
-			<div class='col-md-4 col-sm-12 col-xs-12'>
-					<legend><h5>Original SOFA Data</h5></legend>
-				  <p>
-				    <b>Family:</b>
-				    <%= @plant.sofa_family %>
-				  </p>
+
+<style>
+.scatter {
+  font: 10px sans-serif;
+}
+
+.scatter {
+  font: 10px sans-serif;
+}
+
+.scatter line,
+
+.scatter .point {
+  fill: steelblue;
+  stroke: none;
+	opacity: .65;
+	pointer-events: none;
+}
+
+.scatter rect {
+	fill: #e4e4e7;
+	stroke: none;
+	cursor: pointer;
+}
+.axis {
+  font: 12px sans-serif;
+}
+ 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+ 
+.x.axis path { 
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+</style>
+
+<script>
+function drawBoxPlot(data,el,unit){
+	var  width = $(el.node()).width() //- margin.left - margin.right;
+	var height = $(el.node()).height() //- margin.top - margin.bottom;
+
+	var chart = d3.scatter()
+		.height(height)
+		.width(width)
+		.ylabel(unit)
+		.categoryMethod('delta_notation')
+		.hoverMessage(function(d,el){
+      var text = '<legend><h5>'+d.object.name+'</h5></legend>'
+			text += 'Delta Notation: '+d.object.delta_notation+'<br/>'
+      text += 'Click to view ' + d.values.length+' datapoint'+(d.values.length>1 ? 's' : '')
+      el.style('display','')
+      .html(text)
+		})
+		.click(function(d){
+			window.open('<%= results_path(plant_id: @plant.id) %>'+'&measure_id='+d.object.id,'_blank')
+		})
+		
+	el.datum(data).call(chart)
 	
-				  <p>
-				    <b>Name:</b>
-				    <%= @plant.sofa_name %>
-				  </p>
-					<br/>
-			</div>
-			
-		</div>
-					
-		<div class='clearfix row small'>
-			<div class='col-md-12'>
-				<br/>
-				Plant names were updated using the Taxanomic Name Resolution Service (<%= link_to "http://tnrs.iplantcollaborative.org", "http://tnrs.iplantcollaborative.org" %>)<br/><br/>
-				Note: There may be other accepted names for a species not displayed here
-			</div>
-		</div>
-	</div>
-</div>
+}
 
 
-
-
+//https://bl.ocks.org/mbostock/4061502
+$(document).ready(function(){
+		
+		
+	<% @fatty_acid_data.each_with_index do |(key, subdata),index| %>
+		<% data = subdata.map{|d| d[1]} %>
+		<%= "var fa_data_#{index} = #{data.to_json}".html_safe %>
+		<%= "var fa_el_#{index} = d3.select('#fa_plant_data_viz_#{index}')".html_safe %>
+		<%= "drawBoxPlot(fa_data_#{index},fa_el_#{index},'#{key}')".html_safe %>
+	<% end %>
+	
+	<% @parameter_data.each_with_index do |(key, subdata),index| %>
+		"<%= key %>"
+		<%= "var p_data_#{index} = #{subdata.map(&:to_f).unshift(key).to_json}".html_safe %>
+		var chart = c3.generate({
+			bindto: '<%= "#p_plant_data_viz_#{index}" %>',
+			data: {
+				columns: [<%= "p_data_#{index}" %>],
+				types: {
+					'<%= key %>': 'bar'
+				}
+			}
+		})
+	<% end %>
+	
+});
+</script>
 
 
 

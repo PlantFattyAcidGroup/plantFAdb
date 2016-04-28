@@ -2,6 +2,8 @@ class ResultsController < ApplicationController
   load_and_authorize_resource
   # GET /results
   def index
+    @measure_types = Measure.select(:type).distinct.map(&:type)
+    logger.info { "\nmeasure type: #{@measure_types.inspect}\n\n" }
     @results = @results.order(sort_column + ' ' + sort_direction).order("results.id ASC")
     .includes(:measure, :pub)
     .references(:measure, :pub)
@@ -21,13 +23,16 @@ class ResultsController < ApplicationController
         "%#{q}%","%#{q}%","%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
       )
     end
-    if params[:plant_id]
+    if params[:measure_type]
+      @results = @results.where("measures.type =?",params[:measure_type])
+    end
+    if params[:plant_id] && @plant = Plant.find_by(id: params[:plant_id])
       @results = @results.where(plant_id: params[:plant_id])
     end
-    if params[:pub_id]
+    if params[:pub_id] && @pub = Pub.find_by(id: params[:pub_id])
       @results = @results.where(pub_id: params[:pub_id])
     end
-    if params[:measure_id]
+    if params[:measure_id] && @measure = Measure.find_by(id: params[:measure_id])
       @results = @results.where(measure_id: params[:measure_id])
     end
     respond_to do |format|

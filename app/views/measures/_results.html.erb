@@ -5,30 +5,35 @@
 			<%= paginate @results %>
 		</ul>
 	</div>
-	<div class='col-md-4'>
-		<%= page_entries_info @results %>
-	</div>
 </div>
-<table class="table">
-  <thead>
-    <!-- <th>Delta Notation / Name</th> -->
-    <th><%= sortable 'plants.genus', "Plant" %></th>
-    <th><%= sortable 'pubs.authors', "Publication" %></th>
-    <th style='width:10%'><%= sortable 'value' %></th>
-    <th style='width:10%'><%= sortable 'unit' %></th>
-  </thead>
-  <tbody>
-    <% @results.each do |result| %>
-    <tr>
-      <!-- <td><%= result.measure.delta_notation %></td> -->
-      <td><%= link_to result.plant.try( :display_name)||"Unknwon", result.plant %></td>
-      <td><%= link_to result.pub.display_name, result.pub if result.pub%></td>
-      <td><%= result.value %></td>
-      <td><%= result.unit %></td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+
+<div class='panel panel-primary table-responsive'>
+	
+	<div class="panel-heading clearfix">
+		<div class='pull-right'><%= page_entries_info @results %></div>
+	</div>
+	
+	<table class="table table-striped">
+	  <thead>
+	    <!-- <th>Delta Notation / Name</th> -->
+	    <th><%= sortable 'plants.genus', "Plant" %></th>
+	    <th><%= sortable 'pubs.authors', "Publication" %></th>
+	    <th style='width:10%'><%= sortable 'value' %></th>
+	    <th style='width:10%'><%= sortable 'unit' %></th>
+	  </thead>
+	  <tbody>
+	    <% @results.each do |result| %>
+	    <tr>
+	      <!-- <td><%= result.measure.delta_notation %></td> -->
+	      <td><%= link_to result.plant.try( :display_name)||"Unknwon", result.plant %></td>
+	      <td><%= link_to result.pub.display_name, result.pub if result.pub%></td>
+	      <td><%= result.value %></td>
+	      <td><%= result.unit %></td>
+	    </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+</div>
 
 
 

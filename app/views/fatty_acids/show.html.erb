@@ -20,9 +20,13 @@
 	  </p>
 	</div>
 	<div class='col-md-6'>
-		<%= image_tag("http://opsin.ch.cam.ac.uk/opsin/#{@fatty_acid.name}.png", style: 'margin-left:1em;max-height:150px') if @fatty_acid.name %>
-		<br/>
-		<span class='small' style='font-size:75%'>Structure drawn at OPSIN (opsin.ch.cam.uk)</span>
+		<% if @fatty_acid.image_link %>
+			<%= image_tag @fatty_acid.image_link, style: 'margin-left:1em;max-height:150px;' %>
+		<% else %>
+			<%= image_tag("http://opsin.ch.cam.ac.uk/opsin/#{@fatty_acid.name}.png", style: 'margin-left:1em;max-height:150px') if @fatty_acid.name %>
+			<br/>
+			<span class='small' style='font-size:75%'>Structure drawn at OPSIN (opsin.ch.cam.uk)</span>
+		<% end %>
 	</div>
 	
 </div>

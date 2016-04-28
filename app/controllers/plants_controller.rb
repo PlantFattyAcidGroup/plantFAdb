@@ -38,21 +38,21 @@ class PlantsController < ApplicationController
     end
     if @format_partial == 'tree'
       @fatty_acids = FattyAcid.with_results.order("measures.name asc")
-      @selected = FattyAcid.find_by(id: params[:measure]) if params[:measure]
+      @selected = FattyAcid.find_by(id: params[:measure_id]) if params[:measure_id]
       @min = nil
       @max = 0
       @tree = TreeNode.arrange_serializable(:order => :id) do |parent, children|
         if children.empty?
-          if params[:measure].blank?
+          if params[:measure_id].blank?
             v1 = Result.joins(:measure, :plant)
             .where("measures.type ='FattyAcid'")
             .where("plants.order_name='#{parent.name}'")
             .count
           else
             v1 = Result.joins(:measure, :plant)
-            .where("measures.id = ?", params[:measure])
+            .where("measures.id = ?", params[:measure_id])
             .where("plants.order_name = '#{parent.name}'")
-            .maximum(:value).to_f.try(:round,3)
+            .maximum(:value).to_f.try(:round,4)
           end
           v1||=0
           # get leaf stats
@@ -110,6 +110,18 @@ class PlantsController < ApplicationController
 
   # GET /plants/1
   def show
+    @fatty_acid_data = {}
+    @parameter_data = {}
+    @results = @plant.results.includes(:measure).order("measures.delta_notation")
+    @results.where("measures.type = 'FattyAcid'").each do |result|
+      @fatty_acid_data[result.unit]||={}
+      @fatty_acid_data[result.unit][result.measure_id]||={object:result.measure,values:[]}
+      @fatty_acid_data[result.unit][result.measure_id][:values]<<result.value.round(2)
+    end
+    @results.where("measures.type = 'Parameter'").each do |result|
+      @parameter_data[result.measure.delta_notation]||=[]
+      @parameter_data[result.measure.delta_notation]<<result.value.round(2)
+    end
   end
 
   # GET /plants/new

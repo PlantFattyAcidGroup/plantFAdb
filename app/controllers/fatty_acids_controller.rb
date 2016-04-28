@@ -43,7 +43,7 @@ class FattyAcidsController < ApplicationController
           out << CSV.generate_line(["Delta notation","Name","Other Names","Formula","Mass", "Cas number", "Sofa mol ID", "LipidMaps ID", "PubChem ID","Systematic Names(s)", "Trivial Name(s)","Result Count"])
           @fatty_acids.find_each(batch_size: 500) do |item|
             out << CSV.generate_line([
-              item.delta_notation,
+              " #{item.delta_notation}",
               item.name,
               item.other_names,
               item.formula,
@@ -105,7 +105,7 @@ class FattyAcidsController < ApplicationController
   private
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:fatty_acid).permit(:name,:other_names,:formula, :type, :delta_notation,
+      params.require(:fatty_acid).permit(:name,:other_names,:formula, :type, :delta_notation, :image_link,
         :cas_number, :sofa_mol_id, :lipidmap_id, :pubchem_id, :chebi_id, :structure,
         :inchi,:stdinchi,:stdinchikey,:smiles)
     end
@@ -118,4 +118,13 @@ class FattyAcidsController < ApplicationController
       end
       
     end
+    
+    def sort_direction
+      if params[:action] == 'index'
+        super
+      else
+        params[:direction] == 'asc' ?  params[:direction] : "desc"
+      end
+    end
+    
 end
