@@ -105,7 +105,7 @@
         .attr("y",0)
         .attr("x", "-.25em")
         .attr("dy", "1.1em")
-        .attr("transform", "rotate(-20)")
+        .attr("transform", "rotate(-35)")
         .style("text-anchor", "end");
       
         var scatterGroup = svg.selectAll(".scatter")
