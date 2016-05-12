@@ -1,17 +1,17 @@
 <% content_for :top_bar do %>
 	<h1 class="pagetitle">Fatty Acids</h1>
+	<span class='small'>Structures drawn at OPSIN (opsin.ch.cam.uk)</span>
 <% end %>
 
 <% content_for :item_bar do %>
 	<%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
-  <%#= link_to 'New Fatty acid', new_fatty_acid_path, class: 'btn btn-primary pull-left'%>
 <% end %>
 
-<span class='small'>Structures drawn at OPSIN (opsin.ch.cam.uk)</span>
+
 
 <%= render 'shared/page_and_search', items: @fatty_acids  %>
 
-<div class='panel panel-primary table-responsive'>
+<div class='panel table-responsive'>
 	
 	<div class="panel-heading clearfix">
 		<div class='pull-right'><%= page_entries_info @fatty_acids %></div>
@@ -23,14 +23,14 @@
     <thead>
       <tr>
 				<th style="width:300px">Structure</th>
-				<th><%= sortable 'IUPAC Name' %></th>
-				<th>Other Names</th>
+				<th><%= sortable 'name','IUPAC Name' %></th>
+				<th style='white-space:nowrap'>Other Names</th>
 				<th><%= sortable 'Formula' %></th>
 				<th><%= sortable 'Mass' %></th>
-				<th><%= sortable 'delta_notation', 'SOFA<br/>Delta Notation' %></th>
-				<th><%= sortable 'sofa_mol_id', 'SOFA<br/>ID'%></th>
-        <th><%= sortable 'result_count', 'Data<br/>Points'%></th>
-				<th></th>
+				<th><%= sortable 'delta_notation', 'Delta Notation' %></th>
+				<th><%= sortable 'sofa_mol_id', 'SOFA ID'%></th>
+        <th><%= sortable 'result_count', 'Data Points'%></th>
+				<th>Phylo Tree</th>
       </tr>
     </thead>
 

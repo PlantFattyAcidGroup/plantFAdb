@@ -1,25 +1,14 @@
-<% content_for :head do -%>
-	<script src="http://d3js.org/d3.v3.min.js"/>
+<% content_for :body do -%>
+	<div class='main-image'>
+		<div class='caption-mid'>
+			Quizing the Chemical<br/>
+			Factories of Oilseeds
+		</div>
+		<div class='caption'>
+			Hundreds of fatty acid structures synthesized by thousands of plants and their phylogenetic relationships
+		</div>
+	</div>
 <% end -%>
-	
-<%# content_for :jumbo do -%>
-<!-- <div class="row">
-	<div class="col-md-8">
-		<h1>Quizzing the Chemical Factories of Oilseeds</h1>
-		<p style='text-align: justify;'>
-			A database of hundreds of fatty acid structures synthesized by thousands of plant species and the phylogenetic relationships between them
-		</p>
-		<ul>
-			<li>What fatty acids do plants make?</li>
-			<li>What are the phyologenetic relationships between different plant species that produce different structures?</li>
-		</ul>
-		<sub>PhyloFAdb has been developed based on the Seed Oil Fatty Acid (SOFA) database at the Max Rubner-Institut (http://sofa.mri.bund.de). Matthäus, Bertrand. "The new database seed oil fatty acids (SOFA)." Lipid Technology 24.10 (2012): 230-234.    Aitzetmüller, Kurt, Bertrand Matthäus, and Holger Friedrich. "A new database for seed oil fatty acids—the database SOFA." European Journal of Lipid Science and Technology 105.2 (2003): 92-103.
-</sub>
-	</div>
-	<div class="col-md-4">
-		<%= image_tag "castor.jpg", class: 'img-thumbnail' %>
-	</div>
-</div> -->
-<%# end -%>
+
 
 <%= @page.content.try(:html_safe) %>

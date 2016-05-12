@@ -11,8 +11,10 @@
 <body>
 	<header>
 		<%= render 'layouts/navigation' %>
-		
 	</header>
+	<% if content_for?(:body) %>
+		<%= yield(:body) %>
+	<% end %>
 	<main role="main">
 		<%= render 'layouts/messages' %>
 		<!-- Jumbotron - primary message or actions -->
@@ -23,6 +25,7 @@
 		<% end %>
 		
 		<% if content_for?(:top_bar) || content_for?(:item_bar)%>
+		<div class='top-bar'>
 			<div class='container page-header'>
 				<% if content_for?(:item_bar) %>
 						<div class='pull-right'>
@@ -31,6 +34,8 @@
 				<% end %>
 				<%= yield(:top_bar) %>
 			</div>
+		</div>
+
 		<% end %>
 		
 		<div class='container clearfix'>

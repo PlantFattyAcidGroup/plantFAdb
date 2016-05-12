@@ -14,24 +14,82 @@ nav.navbar {
   border-bottom: 2px solid;
 }
 
+.main-image {
+  position:relative;
+  width: 100%;
+  height: 650px;
+  background: url(asset-path('green_flower.png')) no-repeat 50% 50% fixed; 
+  background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  -webkit-background-size: cover;
+}
+
+.caption-top {
+  background-color: rgba(30,30,30,0.75);
+  position:absolute;
+  color: #EEE;
+  padding:1em;
+  font: 18px;
+  bottom:0px;
+  max-width: 400px;
+  left: 5px;
+}
+
+.caption {
+//  background-color: rgba(30,30,30,0.95);
+  background-color: rgba(30,30,30,0.55);
+  position:absolute;
+  color: #EEE;
+//  border-radius: 5px 5px 5px 5px;
+  padding:1em;
+  font-size: 20px;
+  top:400px;
+  text-align:center;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+.caption-mid {
+  background-color: rgba(30,30,30,0.35);
+  position:absolute;
+  color: #EEE;
+  border: 1px solid #fff;
+  padding: .75em 1.25em .75em 1.25em;
+  font: bold 28px "Arial Black", Gadget, sans-serif;
+  width: 400px;
+  height: 125px;
+  top: 250px;
+  left:calc(50% - 200px);
+}
+
 main {
   @extend .container;
+  padding-top: 75px;
   padding-bottom: 50px;
   width: 100%;
   min-height: 600px;
-  background-image: url(asset-path('mol_tile.png'));
 }
 
   
-main .container {
-  background-image: none;
-}
+//main .container {
+//  //background-image: none;
+//}
 
 .footer {
   width: 100%;
-  border-top: 2px solid;
-  border-bottom: 2px solid;
-  background-color: $navbar-default-bg;
+  border-top: 2px solid $navbar-inverse-border;
+  color: $navbar-inverse-color;
+  background-color: $navbar-inverse-bg;
+}
+.footer a{
+  color: $navbar-inverse-link-color;
+}
+.footer a:hover{
+  color: $navbar-inverse-link-hover-color;
 }
 
 .navbar{
@@ -39,10 +97,18 @@ main .container {
 }
 .navbar-brand{
   padding:0px;
-  background-color: $navbar-default-bg;
+//  background-color: $navbar-default-bg;
 }
-.container .page-header{
-  background: none;
+
+.page-header{
+  padding-bottom:2em;  
+//  width: 100%;
+//  height: 100px;
+//  background: url(asset-path('sunflowers.png')) no-repeat 50% 50% fixed;
+//  background-size: cover;
+//  -moz-background-size: cover;
+//  -o-background-size: cover;
+//  -webkit-background-size: cover;
 }
 
 .row {
@@ -90,19 +156,6 @@ section {
   @extend .btn-primary;
   @extend .btn-xs;
 }
-// Override input font color
-.form-control {
-  color: black;
-}
-
-.table th {
-	color:$gray-dark;
-  background: $gray-lighter;
-}
-
-.panel-primary .table th a {
-  color:$gray-dark; 
-}
 
 table.table-centered tbody > tr > td {
   vertical-align: middle;
@@ -121,11 +174,8 @@ th .sortable {
   background-repeat: no-repeat;
   background-position: right center;
 }
-// panel primary dropdowns
-.panel-primary .panel-heading a {
-  color: #FFF;
-}
-.panel-primary li {
+
+.panel li {
   list-style-type: none;
 }
 
@@ -134,4 +184,21 @@ th .sortable {
 }
 .field {
   margin-top: .75em;
+}
+
+@media (max-width: $screen-sm-min) {
+    .pull-right-sm {
+        float: right;
+    }
+    .pull-left-sm {
+        float: left;
+    }
+}
+@media (min-width: $screen-sm-min) {
+    .pull-right-md {
+        float: right;
+    }
+    .pull-left-md {
+        float: left;
+    }
 }

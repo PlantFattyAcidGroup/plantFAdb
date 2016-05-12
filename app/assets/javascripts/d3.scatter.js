@@ -35,8 +35,8 @@
         .attr("width", width)
         .attr("height", height )
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .style('pointer-events','all')
 
         
         console.log(hoverEl)
@@ -125,7 +125,7 @@
           })
         .on('mouseover',function(d){
           var me = d3.select(this)
-          me.style('stroke','#999')
+          me.style('stroke','#ccc')
           setHoverMessage(d,hoverEl);
         })
         .on('mouseout',function(d){
@@ -135,6 +135,9 @@
         })
         .on('click',function(d){
           handleClick(d)
+        })
+        svg.on('click',function(d){
+          clearHoverMessage(hoverEl);
         })
         scatterGroup.call(draw);
       })
