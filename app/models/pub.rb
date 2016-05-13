@@ -1,5 +1,6 @@
 class Pub < ActiveRecord::Base
-  has_and_belongs_to_many :plants
+  has_many :plants_pubs, dependent: :destroy
+  has_many :plants, through: :plants_pubs
   has_many :sofa_tabs
   has_many :results
   serialize :original_pubs, Array
@@ -82,7 +83,7 @@ class Pub < ActiveRecord::Base
         )
         crt += 1
         new_pub.save!
-        new_pub.plants = pubs.map(&:plants).flatten
+        new_pub.plants = pubs.map(&:plants).flatten.uniq
         pubs.each do |p|
           p.results.update_all(pub_id: new_pub.id)
           p.sofa_tabs.update_all(pub_id: new_pub.id)

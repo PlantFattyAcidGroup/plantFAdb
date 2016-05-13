@@ -1,14 +1,15 @@
 class PlantsController < ApplicationController
+  require "unicode_utils/upcase"
   load_and_authorize_resource
   # GET /plants
   def index
     @plants = @plants.order(sort_column + ' ' + sort_direction+", id asc")
-    .joins("left outer join (select count(p.id) pub_count, l.id plant_id from plants_pubs p left outer join plants l on p.plant_id = l.id group by l.id) pub on pub.plant_id = plants.id ")
+    .joins("left outer join (select count(distinct(p.pub_id)) pub_count, l.id plant_id from plants_pubs p left outer join plants l on p.plant_id = l.id group by l.id) pub on pub.plant_id = plants.id ")
     .joins("left outer join (select count(r.id) result_count, l.id plant_id from results r left outer join plants l on r.plant_id = l.id group by l.id) res on res.plant_id = plants.id ")
     .page(params[:page])
     .select("plants.*, pub.pub_count, res.result_count")
     if(params[:query])
-      q = params[:query].upcase
+      q = UnicodeUtils.upcase(params[:query])
       @plants = @plants.where('
         upper(sofa_name) LIKE ?
         OR upper(note) LIKE ?
@@ -18,18 +19,10 @@ class PlantsController < ApplicationController
         OR upper(genus) LIKE ?
         OR upper(species) LIKE ?
         OR upper(tnrs_family) LIKE ?
-        OR upper(tnrs_name) LIKE ?',
-        "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%"
+        OR upper(tnrs_name) LIKE ?
+        OR upper(common_name) LIKE ?',
+        "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
       )
-    end
-    unless params[:status].blank?
-      @plants = @plants.where(name_status: params[:status])
-    end
-    unless params[:accepted_rank].blank?
-      @plants = @plants.where(accepted_rank: params[:accepted_rank])
-    end
-    unless params[:matched_rank].blank?
-      @plants = @plants.where(matched_rank: params[:matched_rank])
     end
     if params[:fmt] == 'tree'
       @format_partial = 'tree'
@@ -37,7 +30,42 @@ class PlantsController < ApplicationController
       @format_partial = 'listing'
     end
     if @format_partial == 'tree'
-      @fatty_acids = FattyAcid.with_results.order("measures.name asc")
+      #@fatty_acids = FattyAcid.with_results.order("measures.name asc")
+       @fatty_acids = FattyAcid.where("delta_notation in(
+         '16:0',
+         '18:1-delta-9c',
+         '20:0',
+         '14:0',
+         '18:3-delta-9c,12c,15c',
+         '16:1',
+         '22:0',
+         '12:0',
+         '20:1-delta-11c',
+         '20:1',
+         '18:1-delta-11c',
+         '24:0',
+         '16:1-delta-9c',
+         '10:0',
+         '18:3-delta-6c,9c,12c',
+         '22:1-delta-13c',
+         '22:1',
+         '18:3-delta-5c,9c,12c',
+         '8:0',
+         '8,9-cpe-18:1',
+         '9,10-cpe-19:1',
+         '9,10-cpa-19:0',
+         '24:1-delta-15c',
+         '12-OH-18:1-delta-9c',
+         '15,16-O-18:2-delta-9c,12c',
+         '9,10-O-18:1-delta-12c',
+         '18:3-delta-9t,11t,13t',
+         '20:1cy',
+         '20:2cy',
+         '14:1cy',
+         '12:1cy',
+         '18:1-delta-6a'
+       )").order("measures.name asc")
+      
       @selected = FattyAcid.find_by(id: params[:measure_id]) if params[:measure_id]
       @min = nil
       @max = 0

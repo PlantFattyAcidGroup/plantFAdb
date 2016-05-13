@@ -4,12 +4,6 @@
 	
 	<div class="panel-heading clearfix">
 		<div class='pull-right'><%= page_entries_info plants %></div>
-		<%= left_dropdown_select "status", :name_status, Plant.select("name_status").group(:name_status)
-			.count.to_a.sort{|a,b| b[1]<=>a[1]}.collect{|key,cnt| ["#{key} : #{cnt}", key]} %>
-		<%= left_dropdown_select "accepted rank", :accepted_rank, Plant.select("accepted_rank").group(:accepted_rank)
-			.count.to_a.sort{|a,b| b[1]<=>a[1]}.collect{|key,cnt| ["#{key} : #{cnt}", key]} %>
-		<%= left_dropdown_select "matched rank", :matched_rank, Plant.select("accepted_rank").group(:matched_rank)
-			.count.to_a.sort{|a,b| b[1]<=>a[1]}.collect{|key,cnt| ["#{key} : #{cnt}", key]} %>
 	</div>
 	
   <table class='table table-striped'>

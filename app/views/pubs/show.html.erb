@@ -57,7 +57,7 @@
 		<% if @pub.url %>
 			<p>
 			  <strong>URL:</strong>
-			  <%= link_to @pub.url, "https://doi.org/#{@pub.doi}", target: '_blank'%>
+			  <%= link_to @pub.url, @pub.url, target: '_blank'%>
 			</p>
 		<% end %>
 		

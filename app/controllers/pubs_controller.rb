@@ -1,14 +1,19 @@
 class PubsController < ApplicationController
+  require "unicode_utils/upcase"
   load_and_authorize_resource  
   # GET /publications
   def index
     if params[:plant_id]
-      @pubs = @pubs.includes(:plants).references(:plants).where('plants.id = ?',params[:plant_id])
+      
+      @pubs = @pubs.joins('
+        LEFT OUTER JOIN "PLANTS_PUBS" ON "PLANTS_PUBS"."PUB_ID" = "PUBS"."ID"'
+      )
+      .where('plants_pubs.plant_id = ?',params[:plant_id])
     end
     @pubs = @pubs.order(sort_column + ' ' + sort_direction + ", pubs.id ASC")
     @pubs = @pubs.joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join pubs p on r.pub_id = p.id group by p.id) pub on pub.pub_id = pubs.id ")
     if(params[:query])
-      q = params[:query].upcase
+      q = UnicodeUtils.upcase(params[:query])
       @pubs = @pubs.where('
         upper(wos_year) LIKE ?
         OR upper(wos_authors) LIKE ?

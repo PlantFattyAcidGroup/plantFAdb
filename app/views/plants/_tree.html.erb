@@ -13,7 +13,7 @@
 	    <div class='form-group'>
 				<%= hidden_field_tag :fmt, 'tree' %>
 		    <label for="query">Molecule:</label>
-				<%= select_tag :measure_id, options_from_collection_for_select(@fatty_acids, :id, :name_with_count, params[:measure_id]),include_blank: true, class: 'form-control' %>
+				<%= select_tag :measure_id, options_from_collection_for_select(@fatty_acids, :id, :name, params[:measure_id]),include_blank: true, class: 'form-control' %>
 				<%= submit_tag "Update", class: "btn btn-primary "%>
 			</div>
 	  <% end %>

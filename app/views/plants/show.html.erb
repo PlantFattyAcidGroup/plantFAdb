@@ -45,7 +45,7 @@
 				<% unless @plant.tropicos_url.blank? %>
 			    <legend>External Link(s)</legend>
 					<% @plant.tropicos_url.split(";").each do |url| %>
-			    	<%= link_to url %><br/>
+			    	<%= link_to url, url, target: '_blank' %><br/>
 					<% end %>
 				<% end %>
 		
@@ -67,18 +67,6 @@
 					  <p>
 					    <b>Name:</b>
 							<%= @plant.tnrs_name %>
-					  </p>
-					  <p>
-					    <b>Accepted Rank:</b>
-							<%= @plant.accepted_rank %>
-					  </p>
-					  <p>
-					    <strong>Matched rank:</strong>
-					    <%= @plant.matched_rank %>
-					  </p>
-					  <p>
-					    <strong>Name status:</strong>
-					    <%= @plant.name_status %>
 					  </p>
 				</div>
 			</div>
@@ -113,7 +101,7 @@
 			<legend>Data</legend>
 			<p>The graphs below are built from data across all publications stored in the database.</p>
 			<span> 
-				<%= link_to "View #{pluralize @plant.pubs.count,"Publication"}", pubs_path(plant_id: @plant.id) %>
+				<%= link_to "View #{pluralize @plant.pubs.uniq.count,"Publication"}", pubs_path(plant_id: @plant.id) %>
 			</span> |
 			<span>
 				<%= link_to "View #{pluralize @plant.results.count, "Data Point"}", results_path(plant_id: @plant.id) %>

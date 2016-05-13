@@ -43,6 +43,7 @@ gem 'terminal-table'
 gem 'summernote-rails'
 gem 'codemirror-rails'
 gem 'friendly_id'
+gem 'unicode_utils'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

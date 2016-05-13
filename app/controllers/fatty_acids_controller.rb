@@ -1,4 +1,5 @@
 class FattyAcidsController < ApplicationController
+  require "unicode_utils/upcase"
   load_and_authorize_resource
   # GET /fatty_acids
   def index
@@ -6,7 +7,7 @@ class FattyAcidsController < ApplicationController
     .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id group by m.id) res on res.measure_id = measures.id ")
     .select("measures.*, res.result_count")
     if(params[:query])
-      q = params[:query].upcase
+      q = UnicodeUtils.upcase(params[:query])
       @fatty_acids = @fatty_acids.where('
         upper(name) like ?
         OR upper(other_names) LIKE ?
