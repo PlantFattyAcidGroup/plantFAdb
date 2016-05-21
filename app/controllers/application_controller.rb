@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   
   def set_file_headers
     file_name = "#{resource_name}.csv"
-    headers["Content-Type"] = "text/csv"
+    headers["Content-Type"] = "text/csv; charset=utf-8"
     headers["Content-disposition"] = "attachment; filename='#{file_name}'"
   end
   
