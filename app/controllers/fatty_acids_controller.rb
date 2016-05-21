@@ -38,10 +38,11 @@ class FattyAcidsController < ApplicationController
       format.html{
         @fatty_acids = @fatty_acids.page(params[:page])
       }
-      # CSV download
+      # TXT download
       format.csv{
-        render_csv do |out|
-          out << CSV.generate_line(["ID","Delta notation","Name","Other Names","Formula","Mass", "Cas number", "Sofa mol ID", "LipidMaps ID", "PubChem ID","Systematic Names(s)", "Trivial Name(s)","Result Count"])
+        render_tab do |out|
+          out << CSV.generate_line(["ID","Delta notation","Name","Other Names","Formula","Mass", "Cas number", "Sofa mol ID", "LipidMaps ID", "PubChem ID","Systematic Names(s)", "Trivial Name(s)","Result Count"],
+          col_sep: "\t")
           @fatty_acids.find_each(batch_size: 500) do |item|
             out << CSV.generate_line([
               item.id,
@@ -57,7 +58,7 @@ class FattyAcidsController < ApplicationController
               item.systematic_names.map(&:name).join("; "),
               item.trivial_names.map(&:name).join("; "),
               item.result_count
-            ])
+            ], col_sep: "\t")
           end
         end
       }

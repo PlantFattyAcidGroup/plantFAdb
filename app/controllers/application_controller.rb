@@ -12,8 +12,8 @@ class ApplicationController < ActionController::Base
   end
     
   private
-  def render_csv
-    set_file_headers
+  def render_tab
+    set_tab_headers
     set_streaming_headers
     response.status = 200
     #setting the body to an enumerator, rails will iterate this enumerator
@@ -22,7 +22,23 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def set_file_headers
+  def render_csv
+    set_csv_headers
+    set_streaming_headers
+    response.status = 200
+    #setting the body to an enumerator, rails will iterate this enumerator
+    self.response_body = Enumerator.new do |y|
+      yield y
+    end
+  end
+
+  def set_tab_headers
+    file_name = "#{resource_name}.txt"
+    headers["Content-Type"] = "text/txt; charset=utf-8"
+    headers["Content-disposition"] = "attachment; filename='#{file_name}'"
+  end
+  
+  def set_csv_headers
     file_name = "#{resource_name}.csv"
     headers["Content-Type"] = "text/csv; charset=utf-8"
     headers["Content-disposition"] = "attachment; filename='#{file_name}'"
