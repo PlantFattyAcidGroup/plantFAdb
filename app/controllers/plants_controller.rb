@@ -74,11 +74,13 @@ class PlantsController < ApplicationController
           if params[:measure_id].blank?
             v1 = Result.joins(:measure, :plant)
             .where("measures.type ='FattyAcid'")
+            .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
             .where("plants.order_name='#{parent.name}'")
             .count
           else
             v1 = Result.joins(:measure, :plant)
             .where("measures.id = ?", params[:measure_id])
+            .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
             .where("plants.order_name = '#{parent.name}'")
             .maximum(:value).to_f.try(:round,4)
           end
