@@ -13,6 +13,7 @@
         <th><%= sortable('species','Species') %></th>
 				<th><%= sortable('family','Family') %></th>
 				<th><%= sortable('order_name', 'Order') %></th>
+				<th><%= sortable('avg_oil_content', 'Oil Content') %></th>
         <th><%= sortable('pub_count','Publications') %></th>
         <th><%= sortable('result_count','Data points') %></th>
       </tr>
@@ -25,6 +26,7 @@
 					<td><%= link_to plant.species||'-', plant %></td>
 					<td><%= plant.family %></td>
 					<td><%= plant.order_name %></td>
+					<td><%= plant.avg_oil_content.try(:round,1) %></td>
           <td><%= link_to plant.pub_count, pubs_path(plant_id: plant.id) if plant.pub_count %></td>
           <td><%= link_to plant.result_count, results_path(plant_id: plant.id) if plant.result_count %></td>
         </tr>

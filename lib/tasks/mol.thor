@@ -251,15 +251,15 @@ class Mol < Thor
   def load_opsin
     require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
     puts "There are #{FattyAcid.count} fatty acids"
-    fa = FattyAcid.with_results
-    puts "#{fa.length} have results"
+    fa = FattyAcid.all
+    #puts "#{fa.length} have results"
     mols = fa.reject{|f| f.lipidmap_id=='ambiguous'}
     puts "#{mols.length} of these are not ambiguous"
     puts "Of these:"
     with_cas = mols.reject{|m| m.cas_number.blank?}
     puts "- #{with_cas.length} have a cas RN"
-    with_name = mols.reject{|m| m.name.blank? || m.formula.blank?}
-    puts "- #{with_name.length} have a name and formula"
+    with_name = mols.reject{|m| m.name.blank?}
+    puts "- #{with_name.length} have a name"
     puts "Of the named molecules:"
     no_opsin = with_name.select{|n| n.inchi.blank?}
     puts "#{no_opsin.length} have no inchi"

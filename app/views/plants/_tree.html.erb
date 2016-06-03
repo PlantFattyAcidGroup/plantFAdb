@@ -1,20 +1,31 @@
-<div class='row pull-right'>
-	<div class='col-md-12'>
-		<% if @selected %>
-			Showing the maximum value for <%= @selected.name %> across all publications<br/>
-		<% else %>
-		  Showing the count of results across all publications <br/>
-		<% end %>
-	</div>
-</div>
 <div class='row'>
 	<div class='col-md-12'>
-	  <%= form_tag nil, method: :get, class: 'form-inline search' do %>
-	    <div class='form-group'>
-				<%= hidden_field_tag :fmt, 'tree' %>
+		<p><b>
+			<% if @selected %>
+				Showing the maximum value across all publications for <%= link_to @selected.name_with_common, @selected %> <br/>
+			<% elsif params[:category] %>
+				Showing maximum value for <%= link_to params[:category], fatty_acids_path(category: params[:category]) %> members
+			<% else %>
+			  Showing the count of results across all publications <br/>
+			<% end %>
+		</b></p>
+	</div>
+</div>
+
+<div class='row'>
+	<div class='col-md-12'>
+	  <%= form_tag nil, method: :get do %>
+		<%= hidden_field_tag :fmt, 'tree' %>
+	    <div class='col-md-4 form-group'>
+		    <label for="query">Category:</label>
+				<%= select_tag :category, options_for_select(@categories,params[:category]), include_blank: true, class: 'form-control', onchange: 'this.form.submit()' %>
+		<% end %>
+	  <%= form_tag nil, method: :get do %>
+		<%= hidden_field_tag :fmt, 'tree' %>
+			</div>
+	    <div class='col-md-8 form-group'>
 		    <label for="query">Molecule:</label>
-				<%= select_tag :measure_id, options_from_collection_for_select(@fatty_acids, :id, :name, params[:measure_id]),include_blank: true, class: 'form-control' %>
-				<%= submit_tag "Update", class: "btn btn-primary "%>
+				<%= select_tag :measure_id, options_from_collection_for_select(@fatty_acids, :id, :name_with_common, params[:measure_id]),include_blank: true, class: 'form-control', onchange: 'this.form.submit()' %>
 			</div>
 	  <% end %>
 	</div>

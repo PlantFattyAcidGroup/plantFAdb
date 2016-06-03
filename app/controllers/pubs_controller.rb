@@ -10,7 +10,7 @@ class PubsController < ApplicationController
       )
       .where('plants_pubs.plant_id = ?',params[:plant_id])
     end
-    @pubs = @pubs.order(sort_column + ' ' + sort_direction + ", pubs.id ASC")
+    @pubs = @pubs.order(sort_column + ' ' + sort_direction + " nulls last, pubs.id ASC")
     @pubs = @pubs.joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join pubs p on r.pub_id = p.id group by p.id) pub on pub.pub_id = pubs.id ")
     if(params[:query])
       q = UnicodeUtils.upcase(params[:query])

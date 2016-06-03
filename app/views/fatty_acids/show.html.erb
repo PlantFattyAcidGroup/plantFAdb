@@ -44,9 +44,7 @@
 		<p>
 			<strong>External Database IDs:</strong><br/>
 	    <span style='display:inline-block;width:7em'>CAS registry:</span>
-	      <%= link_to @fatty_acid.cas_number,
-	      "http://www.chem.sis.nlm.nih.gov/chemidplus/rn/#{@fatty_acid.cas_number}",
-	      :target => '_blank' if @fatty_acid.cas_number%><br/>
+	      <%= @fatty_acid.cas_number %><br/>
 	    <span style='display:inline-block;width:7em'>Sofa Mol:</span>
 	      <%= link_to @fatty_acid.sofa_mol_id,
 	      "http://sofa.mri.bund.de/Show_ResultTable.php?Mol_ID=#{@fatty_acid.sofa_mol_id}&Nota=MOL_ID",

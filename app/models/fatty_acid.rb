@@ -11,4 +11,8 @@ class FattyAcid < Measure
   def name_with_count
     "#{name||'?-'+delta_notation} (#{results.count})"
   end
+  
+  def name_with_common
+    [common_name,name].compact.join(" - ")
+  end
 end

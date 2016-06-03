@@ -3,11 +3,19 @@ class PlantsController < ApplicationController
   load_and_authorize_resource
   # GET /plants
   def index
-    @plants = @plants.order(sort_column + ' ' + sort_direction+", id asc")
+    oil_content = Parameter.where("upper(delta_notation)='OIL CONTENT'").first
+    @plants = @plants.order(sort_column + ' ' + sort_direction+" nulls last, id asc")
     .joins("left outer join (select count(distinct(p.pub_id)) pub_count, l.id plant_id from plants_pubs p left outer join plants l on p.plant_id = l.id group by l.id) pub on pub.plant_id = plants.id ")
     .joins("left outer join (select count(r.id) result_count, l.id plant_id from results r left outer join plants l on r.plant_id = l.id group by l.id) res on res.plant_id = plants.id ")
     .page(params[:page])
-    .select("plants.*, pub.pub_count, res.result_count")
+    if oil_content
+      @plants = @plants.joins("left outer join (
+        select avg(r.value) avg_oil_content, p.id plant_id from results r left outer join plants p on r.plant_id = p.id where r.measure_id = #{oil_content.id} group by p.id
+      ) oil_res on oil_res.plant_id = plants.id ")
+      .select("plants.*, pub.pub_count, res.result_count, oil_res.avg_oil_content")
+    else
+      @plants = @plants.select("plants.*, pub.pub_count, res.result_count")
+    end
     if(params[:query])
       q = UnicodeUtils.upcase(params[:query])
       @plants = @plants.where('
@@ -30,59 +38,67 @@ class PlantsController < ApplicationController
       @format_partial = 'listing'
     end
     if @format_partial == 'tree'
+      @categories = FattyAcid.select("distinct(category)").map(&:category).compact
+      params[:category] = @categories.first if params[:measure_id].blank? && params[:category].blank?
       #@fatty_acids = FattyAcid.with_results.order("measures.name asc")
-       @fatty_acids = FattyAcid.where("delta_notation in(
-         '16:0',
-         '18:1-delta-9c',
-         '20:0',
-         '14:0',
-         '18:3-delta-9c,12c,15c',
-         '16:1',
-         '22:0',
-         '12:0',
-         '20:1-delta-11c',
-         '20:1',
-         '18:1-delta-11c',
-         '24:0',
-         '16:1-delta-9c',
-         '10:0',
-         '18:3-delta-6c,9c,12c',
-         '22:1-delta-13c',
-         '22:1',
-         '18:3-delta-5c,9c,12c',
-         '8:0',
-         '8,9-cpe-18:1',
-         '9,10-cpe-19:1',
-         '9,10-cpa-19:0',
-         '24:1-delta-15c',
-         '12-OH-18:1-delta-9c',
-         '15,16-O-18:2-delta-9c,12c',
-         '9,10-O-18:1-delta-12c',
-         '18:3-delta-9t,11t,13t',
-         '20:1cy',
-         '20:2cy',
-         '14:1cy',
-         '12:1cy',
-         '18:1-delta-6a'
-       )").order("measures.name asc")
+      @fatty_acids = FattyAcid.where("delta_notation in(
+        '16:0',
+        '18:1-delta-9c',
+        '20:0',
+        '14:0',
+        '18:3-delta-9c,12c,15c',
+        '16:1',
+        '22:0',
+        '12:0',
+        '20:1-delta-11c',
+        '20:1',
+        '18:1-delta-11c',
+        '24:0',
+        '16:1-delta-9c',
+        '10:0',
+        '18:3-delta-6c,9c,12c',
+        '22:1-delta-13c',
+        '22:1',
+        '18:3-delta-5c,9c,12c',
+        '8:0',
+        '8,9-cpe-18:1',
+        '9,10-cpe-19:1',
+        '9,10-cpa-19:0',
+        '24:1-delta-15c',
+        '12-OH-18:1-delta-9c',
+        '15,16-O-18:2-delta-9c,12c',
+        '9,10-O-18:1-delta-12c',
+        '18:3-delta-9t,11t,13t',
+        '20:1cy',
+        '20:2cy',
+        '14:1cy',
+        '12:1cy',
+        '18:1-delta-6a'
+      )").order("measures.name asc")
       
       @selected = FattyAcid.find_by(id: params[:measure_id]) if params[:measure_id]
       @min = nil
       @max = 0
       @tree = TreeNode.arrange_serializable(:order => :id) do |parent, children|
         if children.empty?
-          if params[:measure_id].blank?
-            v1 = Result.joins(:measure, :plant)
-            .where("measures.type ='FattyAcid'")
-            .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
-            .where("plants.order_name='#{parent.name}'")
-            .count
-          else
+          if params[:measure_id]
             v1 = Result.joins(:measure, :plant)
             .where("measures.id = ?", params[:measure_id])
             .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
             .where("plants.order_name = '#{parent.name}'")
             .maximum(:value).to_f.try(:round,4)
+          elsif params[:category]
+            v1 = Result.joins(:measure, :plant)
+            .where("measures.category = ?", params[:category])
+            .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
+            .where("plants.order_name = '#{parent.name}'")
+            .maximum(:value).to_f.try(:round,4)
+          else
+            v1 = Result.joins(:measure, :plant)
+            .where("measures.type ='FattyAcid'")
+            .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
+            .where("plants.order_name='#{parent.name}'")
+            .count
           end
           v1||=0
           # get leaf stats

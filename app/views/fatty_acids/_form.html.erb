@@ -19,20 +19,16 @@
 			    <%= f.text_field :name, class: 'form-control' %>
 			  </div>
 			  <div class="field">
+			    <%= f.label :common_name %><br>
+			    <%= f.text_field :common_name, class: 'form-control' %>
+			  </div>
+			  <div class="field">
 			    <%= f.label :other_names %><br>
 			    <%= f.text_area :other_names, class: 'form-control', rows: 4 %>
 			  </div>
 			  <div class="field">
-			    <%= f.label :formula %><br>
-			    <%= f.text_field :formula, class: 'form-control' %>
-			  </div>
-			  <div class="field">
-			    <%= f.label :delta_notation %><br>
-			    <%= f.text_field :delta_notation, class: 'form-control' %>
-			  </div>
-			  <div class="field">
-			    <%= f.label :mass %><br>
-			    <%= f.text_field :mass, class: 'form-control' %>
+			    <%= f.label :category %><br>
+			    <%= f.text_field :category, class: 'form-control' %>
 			  </div>
 			  <div class="field">
 			    <%= f.label :image_link %> (overrides opsin image)<br>
@@ -80,6 +76,18 @@
 			  <div class="field">
 			    <%= f.label :smiles %><br>
 			    <%= f.text_field :smiles, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :formula %><br>
+			    <%= f.text_field :formula, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :delta_notation %><br>
+			    <%= f.text_field :delta_notation, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :mass %><br>
+			    <%= f.text_field :mass, class: 'form-control' %>
 			  </div>
 			</div>
 		</div>

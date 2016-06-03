@@ -416,4 +416,100 @@ class Plant < Thor
     puts to_fix.length
     puts to_fix.map(&:inspect).join("\n")
   end
+  
+  desc 'check_chinese_db', "Check Chinese database"
+  def check_chinese_db filename
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    puts Dir.pwd
+    file = File.open(filename,'r')
+    ch_plant_names = file.readlines
+    genus_exact = 0
+    species_exact = 0
+    found_genus = 0
+    found_species = 0
+    found_tnrs_name_genus = 0
+    found_tnrs_name_species = 0
+    genus = []
+    species = []
+    exact_both = 0
+    wild_both = 0
+    tnrs_both = 0
+    genus_species = {}
+    blank = 0
+    blank_species = 0
+    ch_plant_names.each do |c|
+      if c.blank?
+        blank +=1
+        next
+      end
+      cln = c.strip.gsub(/\s+/,' ').gsub("'","").gsub("\n",'')
+      clean = cln.split(' ')
+      genus << clean[0].upcase
+      genus_species[clean[0].upcase]||=[]
+      if clean[1]
+        species << clean[1].upcase
+        genus_species[clean[0].upcase]<<clean[1].upcase
+      else
+        puts "empty species: (#{cln.inspect})"
+        blank_species+=1
+      end
+      
+      
+    end
+    puts "Checking exact matches"
+    pbar = ProgressBar.new(genus_species.length)
+    genus_species.each do |genus,species_arr|
+      species_arr.uniq.each do |species|
+        if ::Plant.where("upper(genus) = '#{genus}' AND upper(species) = '#{species}'").first
+          exact_both +=1
+        elsif ::Plant.where("upper(genus) like '%#{genus}%' AND upper(species) like '%#{species}%'").first
+          wild_both +=1
+        elsif ::Plant.where("upper(tnrs_name) like '%#{genus}%' AND upper(tnrs_name) like '%#{species}%'").first
+          tnrs_both +=1
+        end
+      end
+      pbar.increment!
+    end
+    puts "\nChecking split matches"
+    pbar = ProgressBar.new(genus.uniq.length + species.uniq.length)
+    genus.uniq.each do |g|
+      if ::Plant.where("upper(genus) = '#{g}'").first
+        genus_exact +=1
+      elsif ::Plant.where("upper(genus) like '%#{g}%'").first
+        found_genus +=1
+      elsif ::Plant.where("upper(tnrs_name) like '%#{g}%'").first 
+        found_tnrs_name_genus +=1
+      end
+      pbar.increment!
+    end
+    species.uniq.each do |p|
+      if ::Plant.where("upper(species) = '#{p}'").first
+        species_exact +=1
+      elsif ::Plant.where("upper(species) like '%#{p}%'").first
+        found_species +=1
+      elsif ::Plant.where("upper(tnrs_name) like '%#{p}%'").first 
+        found_tnrs_name_species +=1
+      end
+      pbar.increment!
+    end
+    puts "unique entries: #{ch_plant_names.uniq.reject(&:blank?).length}"
+    puts "unique genus: #{genus.uniq.length}"
+    puts "unique species: #{species.uniq.length}"
+    puts "blank entries: #{blank}"
+    puts "blank species entries: #{blank_species}"
+    puts "-----"
+    puts "Exact genus species combo found: #{exact_both}"
+    puts "wildcard genus species combo found: #{wild_both}"
+    puts "tnrs_name genus species combo found: #{tnrs_both}"
+    puts "-----"
+    puts "Genus Found: #{genus_exact + found_genus + found_tnrs_name_genus}"
+    puts "-- exact: #{genus_exact}" 
+    puts "-- wildcard: #{found_genus}" 
+    puts "-- in tnrs name: #{found_tnrs_name_genus}"
+    puts "Species Found: #{species_exact + found_species + found_tnrs_name_species}"
+    puts "-- exact: #{species_exact}" 
+    puts "-- wildcard: #{found_species}" 
+    puts "-- in tnrs name: #{found_tnrs_name_species}"
+  end
+  
 end

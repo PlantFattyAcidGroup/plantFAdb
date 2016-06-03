@@ -3,7 +3,8 @@ class FattyAcidsController < ApplicationController
   load_and_authorize_resource
   # GET /fatty_acids
   def index
-    @fatty_acids = @fatty_acids.order(sort_column + ' ' + sort_direction + ', measures.id asc')
+    @categories = FattyAcid.select("distinct(category)").map(&:category).compact
+    @fatty_acids = @fatty_acids.order(sort_column + ' ' + sort_direction + ' nulls last, measures.id asc')
     .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id group by m.id) res on res.measure_id = measures.id ")
     .select("measures.*, res.result_count")
     if(params[:query])
@@ -17,8 +18,10 @@ class FattyAcidsController < ApplicationController
         OR upper(sofa_mol_id) LIKE ?
         OR upper(lipidmap_id) LIKE ?
         OR upper(formula) LIKE ?
+        OR upper(category) LIKE ?
+        OR upper(common_name) LIKE ?
         OR mass = ?',
-        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", q.to_f
+        "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", q.to_f
       )
     end
     case params[:has_data]
@@ -33,6 +36,10 @@ class FattyAcidsController < ApplicationController
     when 'false'
       @fatty_acids = @fatty_acids.where("cas_number is null")
     end
+    if params[:category]
+      @fatty_acids = @fatty_acids.where(category: params[:category])
+    end
+    
     respond_to do |format|
       # Base html query
       format.html{
@@ -44,7 +51,7 @@ class FattyAcidsController < ApplicationController
           out << CSV.generate_line(["ID","Delta notation","Name","Other Names","Formula","Mass", "Cas number", "Sofa mol ID", "LipidMaps ID", "PubChem ID","Systematic Names(s)", "Trivial Name(s)","Result Count"])
           @fatty_acids.find_each(batch_size: 500) do |item|
             out << CSV.generate_line([
-              item.id,
+              (can? :edit, item) ? "=HYPERLINK(\"#{root_url}js_redirect.html?page=#{edit_fatty_acid_path(item.id)}\",\"#{item.id}\")" : item.id,
               " #{item.delta_notation}",
               item.name,
               item.other_names,
@@ -107,7 +114,7 @@ class FattyAcidsController < ApplicationController
   private
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:fatty_acid).permit(:name,:other_names,:formula, :type, :delta_notation, :image_link,
+      params.require(:fatty_acid).permit(:name, :common_name, :other_names, :category, :formula, :type, :delta_notation, :image_link,
         :cas_number, :sofa_mol_id, :lipidmap_id, :pubchem_id, :chebi_id, :structure, :mass,
         :inchi,:stdinchi,:stdinchikey,:smiles)
     end
