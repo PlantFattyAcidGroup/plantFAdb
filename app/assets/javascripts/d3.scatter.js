@@ -133,6 +133,7 @@
           me.style('stroke','none')
           clearHoverMessage(hoverEl);
         })
+        .on('mousemove',function(){setHoverPosition(hoverEl,svg)})
         .on('click',function(d){
           handleClick(d)
         })
@@ -160,7 +161,13 @@
       })
     }
     
-    setHoverMessage = function(d){
+		setHoverPosition = function(hoverEl,svg){
+			var coord = d3.mouse(svg.node())
+			hoverEl.style('right',Math.min(parseInt(width-coord[0]-margin.left+3),width-margin.left-margin.right-100)+'px')
+			.style('bottom',parseInt(height-coord[1]-margin.top+3)+'px')
+		}
+    
+    setHoverMessage = function(d,hoverEl){
       var text = d.object[categoryMethod]+' : '
       text += d.values.length+' datapoint'+(d.values.length>1 ? 's' : '')
       hoverEl.style('display','')

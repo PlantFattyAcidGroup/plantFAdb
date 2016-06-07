@@ -16,6 +16,11 @@
 			Filtering on <%= @measure.class %>: <b><%= link_to @measure.name, @measure %></b>
 		</p>
 	<% end %>
+	<% if params[:category] %>
+		<p>
+			Filtering on category: <b><%= link_to params[:category],fatty_acids_path(category: params[:category]) %></b>
+		</p>
+	<% end %>
 <% end %>
 
 <% content_for :item_bar do %>
@@ -44,10 +49,17 @@
   <table class='table table-striped'>
     <thead>
       <tr>
-        <th><%= sortable "measures.type", "Measure" %></th>
-				<th><%= sortable "measures.name", "Name" %></th>
-        <th><%= sortable "measures.delta_notation", "Notation" %></th>
-        <th><%= sortable "pubs.authors", "Publication" %></th>
+				<% unless @measure %>
+	        <th><%= sortable "measures.type", "Measure" %></th>
+					<th><%= sortable "measures.name", "Name" %></th>
+	        <th><%= sortable "measures.delta_notation", "Notation" %></th>
+				<% end %>
+				<% unless @pub %>
+        	<th><%= sortable "pubs.authors", "Publication" %></th>
+				<% end %>
+				<% unless @plant %>
+					<th><%= sortable "plants.genus", "Plant" %></th>
+				<% end %>
         <th><%= sortable "value" %></th>
         <th><%= sortable "unit" %></th>
       </tr>
@@ -56,10 +68,17 @@
     <tbody>
       <% @results.each do |result| %>
         <tr>
-          <td><%= result.measure.try :type %></td>
-					<td><%= result.measure.try :name %></td>
-          <td><%= result.measure.try :delta_notation %></td>
-          <td><%= link_to result.pub.display_name, result.pub if result.pub %></td>
+					<% unless @measure %>
+          	<td><%= result.measure.try :type %></td>
+						<td><%= result.measure.try :name %></td>
+          	<td><%= result.measure.try :delta_notation %></td>
+					<% end %>
+					<% unless @pub %>
+          	<td><%= link_to result.pub.display_name, result.pub if result.pub %></td>
+					<% end %>
+					<% unless @plant %>
+						<td><%= link_to result.plant.display_name, result.plant if result.plant %></td>
+					<% end %>
           <td><%= result.value.round(2) %></td>
           <td><%= result.unit %></td>         
         </tr>

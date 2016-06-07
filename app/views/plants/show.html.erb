@@ -99,7 +99,11 @@
 	<div class='col-md-8'>
 		<div class='well' style='overflow:scroll'>
 			<legend>Data</legend>
-			<p>The graphs below are built from data across all publications stored in the database.</p>
+			<small>
+				The graphs below are built from data across all publications stored in the database.
+				Mouse over individual Fatty Acid Data for link to data and publication.<br/>
+				<i>In cases where some publications report, for example 18:1, and other publications report 18:1-delta-9c (oleic), data are presented separately on the x-axis. </i> 
+			</small><br/>
 			<span> 
 				<%= link_to "View #{pluralize @plant.pubs.uniq.count,"Publication"}", pubs_path(plant_id: @plant.id) %>
 			</span> |
@@ -108,7 +112,7 @@
 			</span>
 			<% unless @fatty_acid_data.empty? %>
 				<legend><h5>Fatty Acid Data</h5></legend>
-					<div id='fa_plant_data_viz_0' style='min-width:700px;height:350px'></div>
+					<div id='fa_plant_data_viz_0' style='min-width:700px;height:350px;position:relative'></div>
 			<% end %>
 			<% unless @parameter_data.empty? %>
 			<legend><h5>Parameters</h5></legend>

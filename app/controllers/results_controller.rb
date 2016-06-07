@@ -180,7 +180,7 @@ class ResultsController < ApplicationController
       params.require(:result).permit(:value, :unit, :measure_id, :pub_id)
     end
     def sort_column
-      params[:sort]||"value"
+      params[:sort]|| (params[:plant_id] ? "delta_notation asc, value" : "value")
     end
     def sort_direction  
       %w[asc desc].include?(params[:direction]) ?  params[:direction] : "desc"  
