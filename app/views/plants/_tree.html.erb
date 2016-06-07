@@ -2,11 +2,11 @@
 	<div class='col-md-12'>
 		<p><b>
 			<% if @selected %>
-				Showing the maximum value across all publications for <%= link_to @selected.name_with_common, @selected %> <br/>
-			<% elsif params[:category] %>
+				Showing the maximum yield across all publications for <%= link_to @selected.name_with_common, @selected %> <br/>
+			<% elsif !params[:category].blank? %>
 				Showing maximum value for <%= link_to params[:category], fatty_acids_path(category: params[:category]) %> members
 			<% else %>
-			  Showing the count of results across all publications <br/>
+			  Showing the count of results across all publications. Select an option below to view maximum yield <br/>
 			<% end %>
 		</b></p>
 	</div>
@@ -58,11 +58,8 @@ path.link {
 	font-family: Verdana;
 	font-weight: bold;
 	fill: #222;
-	cursor: pointer;
-	border: 2px solid blue;
-}
-.node:hover {
-	font-size: 11px;
+/*	cursor: pointer;
+*/	border: 2px solid blue;
 }
 
 .node circle {
@@ -84,6 +81,11 @@ line.separator {
 
 rect.bar {
 	cursor: pointer;
+}
+rect.hidden-bar {
+	cursor: pointer;
+	visibility: hidden;
+	pointer-events: all;
 }
 </style>
 
@@ -171,8 +173,19 @@ rect.bar {
 			var nodeEnter = node.enter().append("g")
 	      .attr("class", "node")
 				.attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-				.on("click", nodeClick);
-				
+				.on("click", function(d){
+					if(totalCount(d) > 0){nodeClick(d);}
+				})
+				.on("mouseover",function(){
+					var el = d3.select(this);
+					el.style('font-size', function(d){return (totalCount(d) > 0 && d.taxon.length < 3) ? '11px' : '10px'});
+					el.style('cursor', function(d){return (totalCount(d) > 0 && d.taxon.length < 3) ? 'pointer' : 'default'});
+				})
+				.on("mouseout",function(){
+					var d = d3.select(this)
+					d.style('font-size', '10px')
+					d.style('cursor','default')
+				})
 			nodeEnter.append("circle")
 				.attr("r", 1e-6)
 				.style('stroke',function(d){ return getColor(d); })
@@ -294,7 +307,7 @@ rect.bar {
         })
 				.on('mousemove',function(){setHoverPosition()})
 				
-			var maxLeaf = d3.max(leaf.data(),function(d){return maxVal(d)||1;})
+			var maxLeaf = d3.max(leaf.data(),function(d){return <%= @value_method %>(d)||1;})
 			var hx = d3.scale.linear()
 				.range([0,histRange])
 				.domain([0,maxLeaf])
@@ -305,7 +318,14 @@ rect.bar {
 				
 			var aX = baseSvg.select('g.x.axis')
 				.call(xAxis);
-			
+				
+			leafEnter.append("rect")
+				.attr("class", "hidden-bar")
+				.attr("x", histStart)
+				.attr("width",0)
+				.attr("y", function(d) { return d.x+barOffset; })
+				.attr("height", 0)
+				
 			leafEnter.append("rect")
 				.attr("class", "bar")
 				.attr("x", histStart)
@@ -316,12 +336,19 @@ rect.bar {
 					return getColor(d);
 				})
 				.style('stroke','#444')
-				
-			leaf.select('rect')
+			
+			leaf.select('rect.hidden-bar')
 				.transition()
 				.duration(duration)
 				.attr("x", histStart)
-				.attr("width",function(d){ return hx(maxVal(d)||0)})
+				.attr("width",function(d){ return hx(maxLeaf||0)})
+				.attr("y", function(d) { return d.x+barOffset; })
+				.attr("height", function(d) { return barheight; });
+			leaf.select('rect.bar')
+				.transition()
+				.duration(duration)
+				.attr("x", histStart)
+				.attr("width",function(d){ return hx(<%= @value_method %>(d)||0)})
 				.attr("y", function(d) { return d.x+barOffset; })
 				.attr("height", function(d) { return barheight; });	
 				
@@ -341,7 +368,6 @@ rect.bar {
 		}
 		
 		window.onresize = function(){
-			console.log('resize');
 			width = $("#tree").width();
 			baseSvg.attr('width',width);
 			histWidth =parseInt(width*.35);
@@ -387,7 +413,6 @@ rect.bar {
 					if(d.taxon.length > 2 || d.count == 0){return;}
 					// need to load children
 					d3.json('<%= plant_yield_results_path(measure_type: 'FattyAcid', measure_id: params[:measure_id], category: params[:category]).html_safe %>'+'&taxon='+d.taxon.join(","),function(error,nodes){
-						console.log(nodes);
 						d.children = nodes;
 						currentRoot = d.parent ? (d.parent.parent ? d.parent.parent : d.parent) : d
 						//currentRoot = d.parent ? d.parent : d
@@ -413,9 +438,9 @@ rect.bar {
     setHoverMessage = function(d){
 			
       var html = '<b>'+d.name+'</b><br/>'
-      html += 'Max Yield: '+maxVal(d).toFixed(2)+'%</br>'
-			html += 'Avg Yield: '+avgVal(d).toFixed(2)+'%</br>'
-			html += 'Datapoints: '+totalCount(d)
+      html += 'Max Yield: '+(maxVal(d)||0).toFixed(2)+'%</br>'
+			html += 'Avg Yield: '+(avgVal(d)||0).toFixed(2)+'%</br>'
+			html += 'Datapoints: '+totalCount(d)||0
       hoverEl.style('display','')
       .html(html)
 			

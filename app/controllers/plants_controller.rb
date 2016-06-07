@@ -39,7 +39,6 @@ class PlantsController < ApplicationController
     end
     if @format_partial == 'tree'
       @categories = FattyAcid.select("distinct(category)").map(&:category).compact
-      params[:category] = @categories.first if params[:measure_id].blank? && params[:category].blank?
       #@fatty_acids = FattyAcid.with_results.order("measures.name asc")
       @fatty_acids = FattyAcid.where("delta_notation in(
         '16:0',
@@ -95,35 +94,31 @@ class PlantsController < ApplicationController
   		}
       
       @selected = FattyAcid.find_by(id: params[:measure_id]) if params[:measure_id]
-      @min = nil
-      @max = 0
+      # @min = nil
+      # @max = 0
+      @value_method = (params[:measure_id].blank?&&params[:category].blank?) ? 'totalCount' : 'maxVal'
       @tree = TreeNode.arrange_serializable(:order => :id) do |parent, children|
         max = avg = count = color = nil
         if children.empty?
-          if params[:measure_id]
+          if !params[:measure_id].blank?
             results = Result.joins(:measure, :plant)
             .where("measures.id = ?", params[:measure_id])
             .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
             .where("plants.order_name = '#{parent.name}'")
-            count = results.count
-            max = results.maximum(:value).to_f.try(:round,4)
-            avg = results.average(:value).to_f.try(:round,4)
-          elsif params[:category]
+          elsif !params[:category].blank?
             results = Result.joins(:measure, :plant)
             .where("measures.category = ?", params[:category])
             .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
             .where("plants.order_name = '#{parent.name}'")
-            count = results.count
-            max = results.maximum(:value).to_f.try(:round,4)
-            avg = results.average(:value).to_f.try(:round,4)
           else
-            # v1 = Result.joins(:measure, :plant)
-            #   .where("measures.type ='FattyAcid'")
-            #   .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
-            #   .where("plants.order_name='#{parent.name}'")
-            #   .count
-            # count=v1
+            results = Result.joins(:measure, :plant)
+              .where("measures.type ='FattyAcid'")
+              .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
+              .where("plants.order_name='#{parent.name}'")
           end
+          count = results.count
+          max = results.maximum(:value).to_f.try(:round,4)
+          avg = results.average(:value).to_f.try(:round,4)
         else
           name = parent.name.downcase.gsub(' ','_').to_sym
           color = phyloColors[name]

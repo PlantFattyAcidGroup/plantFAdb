@@ -73,7 +73,7 @@ class ResultsController < ApplicationController
     if params[:measure_id] && @measure = Measure.find_by(id: params[:measure_id])
       @results = @results.where(measure_id: params[:measure_id])
     end
-    if params[:category]
+    unless params[:category].blank?
       @results = @results.where("measures.category = ?", params[:category])
     end
     unless params[:taxon].blank?
