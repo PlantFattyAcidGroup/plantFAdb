@@ -230,7 +230,7 @@ class PlantsController < ApplicationController
   private
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:plant).permit(:common_name, :tnrs_family, :tnrs_name, :accepted_rank, :name_status, :matched_rank, :family, :genus, :species, :tropicos_url, :note)
+      params.require(:plant).permit(:common_name, :tnrs_family, :tnrs_name, :accepted_rank, :name_status, :matched_rank, :order_name, :family, :genus, :species, :tropicos_url, :note)
     end
     
     def sort_column
