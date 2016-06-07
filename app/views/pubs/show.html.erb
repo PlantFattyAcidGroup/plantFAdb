@@ -134,7 +134,7 @@
       <td><%= link_to plant.species||"Unknown", plant %></td>
       <td><%= plant.order_name %></td>
       <td><%= plant.family %></td>
-			<td><%= link_to plant.results.where(pub_id: @pub.id).count, results_path(pub_id: @pub.id, plant_id: plant.id) %></td>
+			<td><%= link_to plant.results.viewable.where(pub_id: @pub.id).count, results_path(pub_id: @pub.id, plant_id: plant.id) %></td>
     </tr>
     <% end %>
   </tbody>

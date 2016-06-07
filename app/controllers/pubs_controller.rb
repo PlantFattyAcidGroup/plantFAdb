@@ -11,7 +11,8 @@ class PubsController < ApplicationController
       .where('plants_pubs.plant_id = ?',params[:plant_id])
     end
     @pubs = @pubs.order(sort_column + ' ' + sort_direction + " nulls last, pubs.id ASC")
-    @pubs = @pubs.joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join pubs p on r.pub_id = p.id group by p.id) pub on pub.pub_id = pubs.id ")
+    @pubs = @pubs.joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join pubs p on r.pub_id = p.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by p.id) res on res.pub_id = pubs.id ")
+    @pubs = @pubs.select("pubs.*, res.result_count")
     if(params[:query])
       q = UnicodeUtils.upcase(params[:query])
       @pubs = @pubs.where('

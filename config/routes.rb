@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   resources :tocopherols
   resources :sterols
   resources :fatty_acids
-  resources :results
+  resources :results do
+    get 'plant_yield', on: :collection
+  end
   resources :names
   resources :measures
   resources :publications

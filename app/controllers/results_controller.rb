@@ -3,10 +3,11 @@ class ResultsController < ApplicationController
   # GET /results
   def index
     @measure_types = Measure.select(:type).distinct.map(&:type)
-    logger.info { "\nmeasure type: #{@measure_types.inspect}\n\n" }
     @results = @results.order(sort_column + ' ' + sort_direction).order("results.id ASC")
-    .includes(:measure, :pub)
-    .references(:measure, :pub)
+    .includes(:measure, :pub, :plant)
+    .references(:measure, :pub, :plant)
+    .where(measures: {type: ['FattyAcid','Parameter']})
+    .where(unit:  ['GLC-Area-%','weight-%'])
     if params[:query]
       q = params[:query].upcase
       @results = @results.where('
@@ -23,6 +24,10 @@ class ResultsController < ApplicationController
         "%#{q}%","%#{q}%","%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
       )
     end
+    unless params[:taxon].blank?
+      taxon = params[:taxon].split(',').map(&:strip)
+      @results = apply_taxon(@results,taxon)
+    end
     if params[:measure_type]
       @results = @results.where("measures.type =?",params[:measure_type])
     end
@@ -34,6 +39,9 @@ class ResultsController < ApplicationController
     end
     if params[:measure_id] && @measure = Measure.find_by(id: params[:measure_id])
       @results = @results.where(measure_id: params[:measure_id])
+    end
+    if params[:category]
+      @results = @results.where("measures.category = ?", params[:category])
     end
     respond_to do |format|
       # Base html query
@@ -57,6 +65,41 @@ class ResultsController < ApplicationController
     end
   end
 
+  def plant_yield
+    @results = Result.includes(:measure, :pub, :plant)
+    .references(:measure, :pub, :plant)
+    .where(measures: {type: ['FattyAcid']})
+    .where(unit:  ['GLC-Area-%','weight-%'])
+    if params[:measure_id] && @measure = Measure.find_by(id: params[:measure_id])
+      @results = @results.where(measure_id: params[:measure_id])
+    end
+    if params[:category]
+      @results = @results.where("measures.category = ?", params[:category])
+    end
+    unless params[:taxon].blank?
+      taxon = params[:taxon].split(',').map(&:strip)
+      @results = apply_taxon(@results,taxon,{group: true})
+    end
+    count = @results.count
+    max = @results.maximum(:value)#.to_f.try(:round,4)
+    avg = @results.average(:value)#.to_f.try(:round,4)
+      
+    data = []
+    count.each do |name,cnt|
+      data << {
+        id: name,
+        name: name.is_a?(Array) ? name.join(' ') : name,
+        common_name: name,
+        max: max[name].to_f.try(:round,4),
+        avg: avg[name].to_f.try(:round,4),
+        count: cnt,
+        taxon: taxon+name.split(',')
+      }
+    end
+    
+    render json: data
+  end
+  
   # GET /results/1
   def show
   end
@@ -94,6 +137,44 @@ class ResultsController < ApplicationController
   end
 
   private
+    def apply_taxon(results, taxon,opts={})
+      return results if taxon.blank? || taxon.empty?
+      case taxon.length
+      # clade / order
+      when 1
+        # Check for higher clade tree member first
+        if t = TreeNode.find_by(name: taxon[0])
+          names = t.subtree.map(&:name)
+          results = results.where(plants: {order_name: names})
+        else
+          # lookup order
+          results = results.where(plants: {order_name: taxon[0]})
+        end
+        results = results.group(:family) if opts[:group]
+      # order,family
+      when 2
+        results = results.where(plants: {
+          order_name: taxon[0],
+          family: taxon[1]
+        })
+        results = results.group(:genus,:species) if opts[:group]
+      # order,family,genus
+      when 3
+        results = results.where(plants: {
+          order_name: taxon[0],
+          family: taxon[1],
+          genus: taxon[2]
+        })
+      else
+        results = results.where(plants: {
+          order_name: taxon[0],
+          family: taxon[1],
+          genus: taxon[2],
+          species: taxon[3]
+        })
+      end
+      return results
+    end
     # Only allow a trusted parameter "white list" through.
     def resource_params
       params.require(:result).permit(:value, :unit, :measure_id, :pub_id)

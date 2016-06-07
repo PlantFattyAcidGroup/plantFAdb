@@ -31,7 +31,7 @@
 	</div>
 </div>
 
-<div id='tree' class='well' style="width:100%;padding:1%"></div>
+<div id='tree' class='well' style="width:100%;padding:1%;position:relative"></div>
 <style>
 .axis {
   font: 10px sans-serif;
@@ -58,15 +58,21 @@ path.link {
 	font-family: Verdana;
 	font-weight: bold;
 	fill: #222;
+	cursor: pointer;
+	border: 2px solid blue;
 }
+.node:hover {
+	font-size: 11px;
+}
+
 .node circle {
-  stroke: none;
+  stroke-width: 3px;
 }
 
 .node rect {
 /*	stroke: #fff;*/
 	stroke-width: 2px;
-	fill-opacity: .5;
+/*	fill-opacity: .5;*/
 /*	fill: #fff;*/
 }
 
@@ -77,58 +83,31 @@ line.separator {
 }
 
 rect.bar {
-	fill: #444;
+	cursor: pointer;
 }
 </style>
 
 
 	<script>
-	phyloColors ={
-		root: "#777",
-    spermatophyte: "#DDD",
-    gymnosperms: "#B0744C",
-    anita: "#D3EEF5",
-    angiosperms: "#D3EEF5",
-    magnoliids: "#86C0CE",
-    monocots: "#B0D4B7",
-    commelinids: "#63B384",
-    eudicots: "#FFF27B",
-    core_eudicots: "#C6D979",
-    rosids: "#F4D2DD",
-    fabids: "#ECB5CA",
-    malvids: "#E58BAF",
-    asterid: "#F6D7BA",
-    lamiids: "#EEB688",
-    campanulids: "#E6955E",
-	}
-	
-		// function computeTextRotation(d) {
-		// 	return (x(d.x + d.dx / 2) - Math.PI / 2) / Math.PI * 180;
-		// 	//return (x(d.x +d.dx*.5) * (180/Math.PI)-90)
-		// }
-		// function textOpacity(d){
-		// 	var path = document.getElementById("path-"+d.id);
-		// 	if( (this.getComputedTextLength()) > path.getTotalLength()/2 || d.name == 'root'){
-		// 		return 0;
-		// 	}else{
-		// 		return 1;
-		// 	}
-		// }
-
 		var width = $("#tree").width(),
 			height = 1000;
-		var leftMargin = 10
+		var leftMargin = 5
 		var rightMargin = 20
 		var rightTextMargin = 125
 		var histWidth =parseInt(width*.35)
 		var histRange = histWidth-rightMargin
 		var histStart = width-histWidth
-		var headerHeight = 50
+		var headerHeight = 35
 		var boxOffset = -6
 		var boxheight = 12
 		var barOffset = -5
 		var barheight = 10
 		
+    var hoverEl = d3.select("#tree").append("div")
+    .style('display','none')
+    .style('position','absolute')
+    .attr('class','well')
+			
 		var baseSvg = d3.select("#tree").append("svg")
 		    .attr("width", width)
 		    .attr("height", height)
@@ -136,439 +115,313 @@ rect.bar {
 		var svg = baseSvg.append("g")
     	.attr("transform", "translate("+leftMargin+","+headerHeight+")");
 		
-		
-		/// Layout Grid
+  	var measureNode = svg.append('text')
+					.attr('class','node')
+  				.attr('visibility', 'hidden')
+
+
+			
+		/// Vertical Line Grid
 		
 		baseSvg.append("line")
 		.attr("class", "separator")
-		.attr("x1",histStart+leftMargin-2)
+		.attr("x1",histStart+leftMargin-1)
 		.attr("y1",headerHeight)
-		.attr("x2",histStart+leftMargin-2)
+		.attr("x2",histStart+leftMargin-1)
 		.attr("y2",height)
-		
-				
+			
+		// hist axis
+		baseSvg.append("g")
+			.attr("class", "x axis")
+			.attr("transform", "translate("+(leftMargin+histStart)+"," + 30 + ")")
+			
 		var cluster = d3.layout.cluster()
-		    .size([height-headerHeight, width - leftMargin - rightTextMargin - histWidth]);
-
+		    .size([height-headerHeight, width - leftMargin - rightTextMargin - histWidth])
+			
 		var diagonal = d3.svg.diagonal()
 		    .projection(function(d) { return [d.y, d.x]; });
 
 		var	root = <%= @tree.to_json.html_safe %>
 		root=root[0];
-		//node = root;
-								
-	  var nodes = cluster.nodes(root),
-	      links = cluster.links(nodes);
+		root.x0 = (height-headerHeight) / 2;
+		root.y0 = leftMargin;
 		
-		// Edges
-	  var link = svg.selectAll(".link")
-	      .data(links)
-	    .enter().append("path")
-	      .attr("class", "link")
-	      .attr("d", diagonal)
-	  				.attr('stroke',function(d){
-	  					var source_name = d.source.name;
-	  					return phyloColors[source_name.toLowerCase().replace(" ", "_")];
-	  				})
-		// Node Group				
-  	var measureNode = svg.append('text')
-					.attr('class','node')
-  				.attr('visibility', 'hidden')
-		var node = svg.selectAll("g.node")
-      .data(nodes)
-			.enter().append("g")
-      .attr("class", "node")
-      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
-		// Node Dot
-		node.append("circle")
-			.attr("r", 5)
-			.attr('fill',function(d){
-				return phyloColors[(d.children ? d : d.parent).name.toLowerCase().replace(" ", "_")];
-			})
-		// Node text box
-		node.append("rect")
-			.attr("x",function(d){
-				var offset = d.children ? -(3 + (measureNode.text(d.name).node().getComputedTextLength()+4)): 3
-				return (d.y+offset) < 0 ? -d.y : offset
-			})
-			.attr("y", boxOffset)
-			.attr("width",function(d){return (measureNode.text(d.name).node().getComputedTextLength()+4)})
-			.attr("height", boxheight)
-			.attr('stroke',function(d){
-				return phyloColors[(d.children ? d : d.parent).name.toLowerCase().replace(" ", "_")];
-			})
-			.attr("fill",function(d){
-				return phyloColors[(d.children ? d : d.parent).name.toLowerCase().replace(" ", "_")];
-			})
-		// Node text 
-		node.append("text")
-			.attr("x",function(d){
-				var offset = d.children ? -(1 + (measureNode.text(d.name).node().getComputedTextLength()+4)): 5
-				return (d.y+offset) < 0 ? -(d.y-2) : offset
-			})
-			.attr("dy", 4)
-			.style("text-anchor", function(d) { return "start"})//return d.children ? "end" : "start"; })
-			.text(function(d) { return d.name; });
-			//.attr("dx", function(d) { return d.children ? -5 : 5; })
+		// recursive data functions
+		var maxVal = function(d){ return d.max || d3.max((d.children||d._children||[]),function(child){return maxVal(child);});}
+		var avgVal = function(d){ return d.avg || d3.mean((d.children||d._children||[]),function(child){return maxVal(child);});}
+		var totalCount = function(d){ return d.count || d3.sum((d.children||d._children||[]),function(child){return totalCount(child);});}
+		var getColor = function(d){ return d.color || (d.parent ? getColor(d.parent) : '#222');}
 		
-		/// Histogram
-		var leaf = svg.selectAll("g.leafnode")
-			.data(nodes.filter(function(d){ return d.children==null}))
-			.enter().append("g")
-			.attr("class","leafnode")
+		var duration = 750;
+		var currentRoot = root;
+		update(root)
+		
+		function update(source) {
 			
-		var maxVal = d3.max(leaf.data(),function(d){return d.v1;})
-		var hx = d3.scale.linear()
-			.range([0,histRange])
-			.domain([0,maxVal])
-		var xAxis = d3.svg.axis()
-			.scale(hx)
-			.orient("top");
+			// Compute the new tree layout.			
+		  var nodes = cluster.nodes(currentRoot);
+		  nodes[0].y += 35;
+			var links = cluster.links(nodes);
 		
-		baseSvg.append("g")
-			.attr("class", "x axis")
-			.attr("transform", "translate("+(leftMargin+histStart)+"," + 30 + ")")
-			.call(xAxis);
-				
-		leaf.append("rect")
-			.attr("class", "bar")
-			.attr("x", histStart)
-			.attr("width", function(d){ return hx(d.v1)})
-			.attr("y", function(d) { return d.x+barOffset; })
-			.attr("height", function(d) { return barheight; });	
-		
-		// // Partition with value 1 == no 'child' size change
-		// var partition = d3.layout.partition()
-		//     .sort(null)
-		//     .value(function(d) { return 1; });
-		//
-		// // Keep track of the node that is currently being displayed as the root.
-		// var node;
-		//
-		// var	root = <%= @tree.to_json.html_safe %>
-		// root=root[0];
-		// node = root;
-		//
-		// // groups
-		// 	  var nodes = svg.datum(root).selectAll("g.nodes")
-		// 	  .data(partition.nodes)
-		// var g = nodes.enter().append("g").attr("class",'nodes')
-		//
-		// // parent / child
-		// var parent_g = g.filter(function(d){ return d.children!=null})
-		// var leaf_g = g.filter(function(d){ return d.children==null})
-		//
-		// var maxVal = d3.max(leaf_g.data(),function(d){return d.v1;})
-		
-		// // setup domains
-		// var outerRing = width*.1 // 10%
-		// innerRingPadding = 2
-		// outerHistBuffer = width*.1
-		// histPadding = innerRingPadding
-		// radius = (width / 2)-(outerHistBuffer+outerRing+innerRingPadding+histPadding);
-		//
-		// //outer font size
-		// var maxName = d3.max(leaf_g.data(), function(d){return d.common_name.length});
-		// var labelTextSize = Math.floor((outerRing-innerRingPadding) / (maxName+2))*1.8;
-		//
-		// var hx = d3.scale.linear()
-		// 		.range([0,outerHistBuffer])
-		// 		.domain([0,maxVal])
-		//
-		// var x = d3.scale.linear()
-		//     .range([0, 2 * Math.PI]);
-		//
-		// var y = d3.scale.linear()
-		//     .range([20, radius]);
-		
-
-		// var x = d3.scale.linear()
-		//     .range([0, height]);
-		//
-		// var y = d3.scale.linear()
-		//     .range([0, width]);
-				
-			// var rect = g.append("rect")
-			// 	.attr("y", function(d) { return x(d.x); })
-			//       	.attr("x", function(d) {
-			// 		if(d.children){
-			// 			return Math.max(0, y(d.y));
-			// 		}else{
-			// 			return Math.max(0, y(1-d.dy));
-			// 		}
-			// 	})
-			//       	.attr("height", function(d) { return x(d.dx); })
-			//       	.attr("width", function(d) { return y(d.dy) })
-			// 	.style("fill", function(d){
-			// 		return d.name=='root' ? 'rgba(70,70,70,.7)' :
-			// 		phyloColors[(d.children ? d : d.parent).name.toLowerCase().replace(" ", "_")];
-			// 	})
-			// 	.style("stroke",function(d){
-			// 		return d.children ? '#FFF' : ''
-			// 	})
-			// 	.on("click", click)
-		  //  .each(stash);
+			// Update Node Group				
+			var node = svg.selectAll("g.node")
+	      .data(nodes, function(d) { return d.id })
 			
-			//
-			// var text = g.append('text')
-			// 	.attr("y", function(d) { return x(d.x)+(x(d.dx)/2) + 5; })
-			//       	.attr("x", function(d) {
-			// 		if(d.children){
-			// 			return Math.max(0, y(d.y)+5);
-			// 		}else{
-			// 			return Math.max(0, y(1-d.dy)+5);
-			// 		}
+			// Enter any new nodes at the parent's previous position.
+			var nodeEnter = node.enter().append("g")
+	      .attr("class", "node")
+				.attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+				.on("click", nodeClick);
+				
+			nodeEnter.append("circle")
+				.attr("r", 1e-6)
+				.style('stroke',function(d){ return getColor(d); })
+				.style('fill',function(d){ return '#fff' })
+
+			// nodeEnter.append("rect")
+			// 	.attr("x",function(d){
+			// 		var offset = d.children ? -(3 + (measureNode.text(d.name).node().getComputedTextLength()+4)): 3
+			// 		return (d.y+offset) < 0 ? -d.y : offset
 			// 	})
-			// 	.text(function(d){return d.name})
-			// 	.style('fill',"#222")
-			// 	.style('font-size','15px')
-// 		// bars for datapoints
-// 		var histArc = d3.svg.arc()
-// 		    .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx*.25))); })
-// 		    .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx*.75))); })
-// 		    .innerRadius(function(d) {
-// 					return Math.max(0, y(1-d.dy)+outerRing+histPadding);
-// 				})
-// 		    .outerRadius(function(d) {
-// 					return Math.max(0, y(1-d.dy)+outerRing+histPadding+hx(d.v1));
-// 				});
-//
-// // Bar histogram
-// 			var bar_path = leaf_g.append("path")
-// 				.attr("d", histArc)
-// 				.attr("fill",'#333')
+			// 	.attr("y", boxOffset)
+			// 	.attr("width",function(d){return (measureNode.text(d.name).node().getComputedTextLength()+4)})
+			// 	.attr("height", boxheight)
+			// 	.attr('stroke',function(d){
+			// 		return getColor(d);
+			// 	})
+			// 	.attr("fill",function(d){
+			// 		return getColor(d);
+			// 	})
+			// 	.style("fill-opacity", 1e-6)
+			// 	.style("stroke-opacity", 1e-6);
 				
-		// // Leaf nodes are 'pushed' to the outter most layer
-		// var arc = d3.svg.arc()
-		//     .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
-		//     .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
-		//     .innerRadius(function(d) {
-		// 			if(d.children){
-		// 				return Math.max(0, y(d.y));
-		// 			}else{
-		// 				return Math.max(0, y(1-d.dy)+innerRingPadding);
-		// 			}
-		// 		})
-		//     .outerRadius(function(d) {
-		// 			if(d.children){
-		// 				return Math.max(0, y(d.y + d.dy));
-		// 			}else{
-		// 				return Math.max(0, y(1-d.dy)+outerRing);
-		// 			}
-		// 		});
-		
-		
-		// var path = g.append("path")
-		// 	    .attr("d", arc)
-		// 	.style("fill", function(d){
-		// 		return d.name=='root' ? 'rgba(70,70,70,.7)' :
-		// 		phyloColors[(d.children ? d : d.parent).name.toLowerCase().replace(" ", "_")];
-		// 	})
-		// 	.style("stroke",function(d){
-		// 		return d.children ? '#FFF' : ''
-		// 	})
-		// 	.on("click", click)
-		// 	    .each(stash);
-//
-// 		var labelArc = d3.svg.arc()
-// 				// This arc 'flips' to show text in the proper orientation
-// 				.startAngle(function(d) {
-// 					var end = x(d.x+d.dx);
-// 					var start = x(d.x);
-// 					var half = (end-start)/2;
-// 					var point = (end-half)*180/Math.PI;
-// 					if(start <0){return 0;}
-// 					return Math.max(0, Math.min(2 * Math.PI, ( (point<270 && point>90) ? x(d.x+d.dx) : x(d.x)) )); })
-// 				.endAngle(function(d) {
-// 					var end = x(d.x+d.dx);
-// 					var start = x(d.x);
-// 					var half = (end-start)/2;
-// 					var point = (end-half)*180/Math.PI;
-// 					if(start<=0 && end >= (Math.PI*2) ){return (Math.PI*4)}
-// 					return Math.max(0, Math.min(2 * Math.PI, ( (point<270&&point>90) ? x(d.x) : x(d.x+d.dx)) )); })
-// 		    .innerRadius(function(d) {
-// 					var end = x(d.x+d.dx);
-// 					var start = x(d.x);
-// 					var half = (end-start)/2;
-// 					var point = (end-half)*180/Math.PI;
-// 					if(start<=0 && end >= (Math.PI*2) ){point=0}
-// 					return Math.max(0, (point<270&&point>90) ? y(d.y + d.dy)-Math.min(y(d.dy*.25),3.5) : y(d.y)+Math.min(y(d.dy*.25),3.5));
-// 				})
-// 		    .outerRadius(function(d) {
-// 					var end = x(d.x+d.dx);
-// 					var start = x(d.x);
-// 					var half = (end-start)/2;
-// 					var point = (end-half)*180/Math.PI;
-// 					if(start<=0 && end >= (Math.PI*2) ){point=0}
-// 					return Math.max(0, (point<270&&point>90) ? y(d.y + d.dy)-Math.min(y(d.dy*.25),3.5) : y(d.y)+Math.min(y(d.dy*.25),3.5));
-// 				});
-//
-// arcs
-//
-// // parent label paths
-// 			var labelpath = parent_g.append("path")
-// 				.attr("d",labelArc)
-// 				.attr("id",function(d,i){return "path-"+d.id})
-// 				.attr("fill",'none')
-// 				.attr("stroke",'none')
-//
-//
-//
-// // parent labels
-// 			var p_text = parent_g.append("text")
-// 				.attr("class","inner-label")
-// 				.attr("pointer-events", "none")
-// 				.attr('text-anchor', 'middle')
-// 				.style("font-size",function(d){
-// 					return Math.min([y(d.dy)*.5],14)+"px"
-// 				})
-// 				.append("textPath")
-// 				.attr('startOffset', '25%')
-// 				.attr("xlink:href", function(d){return "#path-"+d.id})
-// 				.text(function(d) {return d.common_name;})
-// 				.attr('opacity',textOpacity)
-//
-// // leaf labels
-// 			var c_text_g = leaf_g.append("g")
-// 		 		// translate to the desired point and set the rotation
-// 				.attr("transform", function(d){ return "rotate(" + computeTextRotation(d) + ") translate("+y(1-d.dy)+")";})
-//
-// 			var c_text = c_text_g.append("text")
-// 				.attr('text-anchor', 'middle')
-// 				.attr("class","outer-label")
-// 				.attr("pointer-events","none")
-// 				.style("font-size",function(d){
-// 					return labelTextSize+"px"
-// 				})
-// 				.text(function(d){return d.name})
-// 				.attr("transform", function(d){
-// 					return "translate("+((this.getComputedTextLength()/2.0)+innerRingPadding+(labelTextSize/2.0))+") rotate("+(x(d.x)>Math.PI ? 180 : 0)+")"})
-// 		 		.attr("dy", ".3em") // vertical-align
-//
-					
-					
-					
-			// Tween data
-			// d3.selectAll("input").on("change", function change() {
-			// 		    var value = this.value === "count"
-			// 		        ? function() { return 1; }
-			// 		        : function(d) { return d.size; };
-			//
-			// 		    path
-			// 			.data(partition.value(value).nodes)
-			// 		      .transition()
-			// 		        .duration(700)
-			// 		        .attrTween("d", arcTweenData);
-			// 		  });
-
-		  function click(d) {
-		    node = d;
-		    // fade out all text elements
-				// 		    p_text.attr("opacity", 0);
-				var dur = 1000;
+			nodeEnter.append("text")
+				.attr("x",function(d){
+					var offset = d.children ? -(1 + (measureNode.text(d.name).node().getComputedTextLength()+4)): 5
+					return (d.y+offset) < 0 ? -(d.y-2) : offset
+				})
+				.attr("dy", 4)
+				.style("text-anchor", function(d) { return "start"})
+				.text(function(d) { return d.name; })
+				.style("fill-opacity", 1e-6)
+			
+		  // Transition nodes
+		  var nodeUpdate = node.transition()
+		      .duration(duration)
+		      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 				
-	    	path.transition()
-	      	.duration(dur)
-	      	.attrTween("d", arcTweenZoom(d))
-					.attr("opacity", function(d){
-						return d.y < node.y ? 0.5 : 1 
+		  nodeUpdate.select("circle")
+		      .attr("r", 5)
+					.style('fill',function(d){
+						// Definite children hidden
+						if(d._children && d._children.length>0){return getColor(d);}
+						// Possible children to load
+						if(d.taxon.length < 3 && d.count && d.count > 0 && (!d.children || d.children.length == 0)){return getColor(d);}
+						// All else open
+						return '#fff'
+						
 					})
-				
-				// inner labels
-		    labelpath.transition()
-		      .duration(dur)
-		      .attrTween("d", labelArcTweenZoom)
-					
-					p_text.transition().duration(dur).each('end',function(){
-						var d = d3.select(this);
-						d.attr('opacity', textOpacity);
+			// nodeUpdate.select("rect")
+			// 		.style("fill-opacity", .5)
+			// 		.style("stroke-opacity", 1)
+			// 		.attr("x",function(d){
+			// 			var offset = d.children ? -(3 + (measureNode.text(d.name).node().getComputedTextLength()+4)): 3
+			// 			return (d.y+offset) < 0 ? -d.y : offset
+			// 		})
+		  nodeUpdate.select("text")
+		      .style("fill-opacity", 1)
+					.attr("x",function(d){
+						var offset = d.children ? -(1 + (measureNode.text(d.name).node().getComputedTextLength()+4)): 5
+						return (d.y+offset) < 0 ? -(d.y-2) : offset
 					})
-				
-				//outer labels
-				c_text_g.attr("opacity", function(d){return (d.x >= node.x && (d.x + d.dx).toFixed(3) <= (node.x + node.dx).toFixed(3))  ? 1 : 0 }); //hide out of range
-				c_text_g.transition().duration(dur)
-				.attrTween("transform", outer_g_tween_zoom())
-				.select("text")
-				.attrTween("transform", outer_c_tween_zoom())
-				
-				//bars
-				bar_path.transition().duration(dur)
-				.attrTween("d", histArcTweenZoom)
-		  }
 
-		// Setup for switching data: stash the old values for transition.
-		function stash(d) {
-		  d.x0 = d.x;
-		  d.dx0 = d.dx;
+		  // Transition exiting nodes to the parent's new position.
+		  var nodeExit = node.exit().transition()
+		      .duration(duration)
+		      .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+		      .remove();
+
+		  nodeExit.select("circle")
+		      .attr("r", 1e-6);
+			// nodeExit.select("rect")
+			// 		.style("fill-opacity", 1e-6)
+			// 		.style("stroke-opacity", 1e-6);
+		  nodeExit.select("text")
+		      .style("fill-opacity", 1e-6);
+					
+			// Update the links
+			var link = svg.selectAll("path.link")
+			    .data(links, function(d) { return d.target.id; })
+			link.enter().insert("path","g")
+			    .attr("class", "link")
+					.attr("d", function(d) {
+		        var o = {x: source.x0, y: source.y0};
+		        return diagonal({source: o, target: o});
+		      })
+					.attr('stroke',function(d){
+						return getColor(d.source);
+					})
+		  // Transition links to their new position.
+		  link.transition()
+		      .duration(duration)
+		      .attr("d", diagonal);
+					
+		  // Transition exiting nodes to the parent's new position.
+		  link.exit().transition()
+		      .duration(duration)
+		      .attr("d", function(d) {
+		        var o = {x: source.x, y: source.y};
+		        return diagonal({source: o, target: o});
+		      })
+		      .remove();
+			
+			/// Histogram
+			var leaf = svg.selectAll("g.leafnode")
+				.data(nodes.filter(function(d){ return d.children==null}),function(d){ return d.id})
+			
+			var leafEnter = leaf.enter().append("g")
+				.attr("class","leafnode")
+				.on("click", dataClick)
+        .on('mouseover',function(d){
+          var me = d3.select(this)
+          me.style('opacity',0.75)
+          setHoverMessage(d);
+        })
+        .on('mouseout',function(d){
+          var me = d3.select(this)
+          me.style('opacity',1)
+          clearHoverMessage();
+        })
+				.on('mousemove',function(){setHoverPosition()})
+				
+			var maxLeaf = d3.max(leaf.data(),function(d){return maxVal(d)||1;})
+			var hx = d3.scale.linear()
+				.range([0,histRange])
+				.domain([0,maxLeaf])
+			
+			var xAxis = d3.svg.axis()
+				.scale(hx)
+				.orient("top");
+				
+			var aX = baseSvg.select('g.x.axis')
+				.call(xAxis);
+			
+			leafEnter.append("rect")
+				.attr("class", "bar")
+				.attr("x", histStart)
+				.attr("width",0)//function(d){ return hx(maxVal(d)); })
+				.attr("y", function(d) { return d.x+barOffset; })
+				.attr("height", 0)
+				.style('fill', function(d){
+					return getColor(d);
+				})
+				.style('stroke','#444')
+				
+			leaf.select('rect')
+				.transition()
+				.duration(duration)
+				.attr("x", histStart)
+				.attr("width",function(d){ return hx(maxVal(d)||0)})
+				.attr("y", function(d) { return d.x+barOffset; })
+				.attr("height", function(d) { return barheight; });	
+				
+			var leafExit = leaf.exit()
+				.transition()
+      	.duration(duration)
+				.remove();
+			leafExit.select('rect')
+      	.attr("width", 0)
+      
+			  // Stash the old positions for transition.
+			  nodes.forEach(function(d) {
+			    d.x0 = d.x;
+			    d.y0 = d.y;
+			  });
+				
 		}
 		
-		function outer_g_tween_zoom(){
-			return function(d, i) {
-				return function(t){
-					return "rotate(" + ((x(d.x + d.dx / 2) - Math.PI / 2) / Math.PI * 180) + ") translate("+y(1-d.dy)+")"
-				}
-			}
-		}
-		function outer_c_tween_zoom(){
-			return function(d, i) {
-				var me = this;
-				return function(t){
-					return "translate("+((me.getComputedTextLength()/2.0)+innerRingPadding+(labelTextSize/2.0))+") rotate("+(x(d.x)>Math.PI ? 180 : 0)+")"
-				}
-			}
-		}
+		window.onresize = function(){
+			console.log('resize');
+			width = $("#tree").width();
+			baseSvg.attr('width',width);
+			histWidth =parseInt(width*.35);
+ 		 	histRange = histWidth-rightMargin
+			histStart = width-histWidth
+			
+			baseSvg.select("line.separator")
+				.transition()
+      	.duration(duration)
+				.attr("x1",histStart+leftMargin-1)
+				.attr("x2",histStart+leftMargin-1)
+			baseSvg.select("g.x.axis")
+				.transition()
+      	.duration(duration)
+				.attr("transform", "translate("+(leftMargin+histStart)+"," + 30 + ")")
+			cluster.size([height-headerHeight, width - leftMargin - rightTextMargin - histWidth]);
+			update(root)
+		};
+		
+		// Toggle children on click.
+		function nodeClick(d) {
+			// displayed children need collapse
+		  if (d.children) {
 
-		// When switching data: interpolate the arcs in data space.
-		function arcTweenData(a, i) {
-		  var oi = d3.interpolate({x: a.x0, dx: a.dx0}, a);
-		  function tween(t) {
-		    var b = oi(t);
-		    a.x0 = b.x;
-		    a.dx0 = b.dx;
-		    return arc(b);
-		  }
-		  if (i == 0) {
-		   // If we are on the first arc, adjust the x domain to match the root node
-		   // at the current zoom level. (We only need to do this once.)
-		    var xd = d3.interpolate(x.domain(), [node.x, node.x + node.dx]);
-		    return function(t) {
-		      x.domain(xd(t));
-		      return tween(t);
-		    };
+				if(d == currentRoot){
+					//currentRoot = root
+					//currentRoot = d.parent ? (d.parent.parent ? d.parent.parent : d.parent) : d
+					currentRoot = d.parent ? d.parent : d
+				}else{
+			    d._children = d.children;
+			    d.children = null;
+					//if(currentRoot != root){currentRoot = d.parent ? (d.parent.parent ? d.parent.parent : d.parent) : d}
+				}
 		  } else {
-		    return tween;
-		  }
-		}
+				// hidden children need show
+				if (d._children) {
+					currentRoot = d.parent ? (d.parent.parent ? d.parent.parent : d.parent) : d
+					//currentRoot = d.parent ? d.parent : d
+			    d.children = d._children;
+			    d._children = null;
+				} else {
+					// No more loading after genus,species
+					if(d.taxon.length > 2 || d.count == 0){return;}
+					// need to load children
+					d3.json('<%= plant_yield_results_path(measure_type: 'FattyAcid', measure_id: params[:measure_id], category: params[:category]).html_safe %>'+'&taxon='+d.taxon.join(","),function(error,nodes){
+						console.log(nodes);
+						d.children = nodes;
+						currentRoot = d.parent ? (d.parent.parent ? d.parent.parent : d.parent) : d
+						//currentRoot = d.parent ? d.parent : d
+						update(d);
+					})
+				}
 
-		// When zooming: interpolate the scales.
-		function arcTweenZoom(d) {
-		  var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]); // Clicked node's domain
-			//yd = d3.interpolate(y.domain(), [d.y, 1]); // clicked node's begin radius to 100%
-					//yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]); // root node - no padding otherwise add 20px
-		  return function(d, i) {
-				// first / root node actually changes the domain
-		    if(i){
-					return function(t) {
-						return arc(d);
-					}
-				// all others
-		    }else{
-					return function(t) {
-						x.domain(xd(t));
-						//y.domain(yd(t))//.range(yr(t));
-						return arc(d);
-					};
-		    }
-		  };
+		  }
+		  update(d);
 		}
-		function labelArcTweenZoom(d) {
-			return function(t) {
-				return labelArc(d);
-			};
+		
+		// open results tab
+		function dataClick(d) {
+			window.open('<%= results_path(measure_type: 'FattyAcid', measure_id: params[:measure_id], category: params[:category]).html_safe%>'+'&taxon='+d.taxon.join(","),'_blank')
 		}
-		function histArcTweenZoom(d){
-			return function(t){
-				return histArc(d);
-			}
+		
+		setHoverPosition = function(){
+			var coord = d3.mouse(svg.node())
+			hoverEl.style('right',parseInt(width-coord[0]+rightMargin+3)+'px')
+			.style('bottom',parseInt(height-coord[1]-headerHeight+3)+'px')
 		}
+		
+    setHoverMessage = function(d){
+			
+      var html = '<b>'+d.name+'</b><br/>'
+      html += 'Max Yield: '+maxVal(d).toFixed(2)+'%</br>'
+			html += 'Avg Yield: '+avgVal(d).toFixed(2)+'%</br>'
+			html += 'Datapoints: '+totalCount(d)
+      hoverEl.style('display','')
+      .html(html)
+			
+    }
+    
+    clearHoverMessage = function(){
+      hoverEl.style('display','none')
+    }
 		</script>

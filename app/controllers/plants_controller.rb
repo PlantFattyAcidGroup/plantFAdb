@@ -6,7 +6,7 @@ class PlantsController < ApplicationController
     oil_content = Parameter.where("upper(delta_notation)='OIL CONTENT'").first
     @plants = @plants.order(sort_column + ' ' + sort_direction+" nulls last, id asc")
     .joins("left outer join (select count(distinct(p.pub_id)) pub_count, l.id plant_id from plants_pubs p left outer join plants l on p.plant_id = l.id group by l.id) pub on pub.plant_id = plants.id ")
-    .joins("left outer join (select count(r.id) result_count, l.id plant_id from results r left outer join plants l on r.plant_id = l.id group by l.id) res on res.plant_id = plants.id ")
+    .joins("left outer join (select count(r.id) result_count, l.id plant_id from results r left outer join plants l on r.plant_id = l.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by l.id) res on res.plant_id = plants.id ")
     .page(params[:page])
     if oil_content
       @plants = @plants.joins("left outer join (
@@ -75,49 +75,73 @@ class PlantsController < ApplicationController
         '12:1cy',
         '18:1-delta-6a'
       )").order("measures.name asc")
+  		phyloColors ={
+        root: "#777",
+  	    spermatophyte: "#DDD",
+  	    gymnosperms: "#B0744C",
+  	    anita: "#D3EEF5",
+  	    angiosperms: "#D3EEF5",
+  	    magnoliids: "#86C0CE",
+  	    monocots: "#B0D4B7",
+  	    commelinids: "#63B384",
+  	    eudicots: "#FFF27B",
+  	    core_eudicots: "#C6D979",
+  	    rosids: "#F4D2DD",
+  	    fabids: "#ECB5CA",
+  	    malvids: "#E58BAF",
+  	    asterid: "#F6D7BA",
+  	    lamiids: "#EEB688",
+  	    campanulids: "#E6955E",
+  		}
       
       @selected = FattyAcid.find_by(id: params[:measure_id]) if params[:measure_id]
       @min = nil
       @max = 0
       @tree = TreeNode.arrange_serializable(:order => :id) do |parent, children|
+        max = avg = count = color = nil
         if children.empty?
           if params[:measure_id]
-            v1 = Result.joins(:measure, :plant)
+            results = Result.joins(:measure, :plant)
             .where("measures.id = ?", params[:measure_id])
             .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
             .where("plants.order_name = '#{parent.name}'")
-            .maximum(:value).to_f.try(:round,4)
+            count = results.count
+            max = results.maximum(:value).to_f.try(:round,4)
+            avg = results.average(:value).to_f.try(:round,4)
           elsif params[:category]
-            v1 = Result.joins(:measure, :plant)
+            results = Result.joins(:measure, :plant)
             .where("measures.category = ?", params[:category])
             .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
             .where("plants.order_name = '#{parent.name}'")
-            .maximum(:value).to_f.try(:round,4)
+            count = results.count
+            max = results.maximum(:value).to_f.try(:round,4)
+            avg = results.average(:value).to_f.try(:round,4)
           else
-            v1 = Result.joins(:measure, :plant)
-            .where("measures.type ='FattyAcid'")
-            .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
-            .where("plants.order_name='#{parent.name}'")
-            .count
+            # v1 = Result.joins(:measure, :plant)
+            #   .where("measures.type ='FattyAcid'")
+            #   .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
+            #   .where("plants.order_name='#{parent.name}'")
+            #   .count
+            # count=v1
           end
-          v1||=0
-          # get leaf stats
-          @min||=v1
-          @max=v1 if v1 > @max
-          @min=v1 if v1 < @min
         else
-          v1 = 1
+          name = parent.name.downcase.gsub(' ','_').to_sym
+          color = phyloColors[name]
         end
         {
-          id: parent.id,
+          id: parent.name,
           name: parent.name,
           common_name: parent.common_name,
-          #value: Plant.where(order_name: parent.name).count,
-          v1: v1,
-          children: children
+          max: max,
+          avg: avg, 
+          count: count,
+          children: children,
+          color: color,
+          taxon: [parent.name]
         }
       end
-    end
+      logger.info { @tree.to_yaml }
+    end # end tree partial
     respond_to do |format|
       # Base html query
       format.html{ @plants = @plants.page params[:page]}
@@ -158,7 +182,7 @@ class PlantsController < ApplicationController
   def show
     @fatty_acid_data = {}
     @parameter_data = {}
-    @results = @plant.results.includes(:measure).order("measures.delta_notation")
+    @results = @plant.results.includes(:measure).order("measures.delta_notation").where(unit: ['GLC-Area-%','weight-%'])
     @results.where("measures.type = 'FattyAcid'").each do |result|
       next unless result.unit == 'GLC-Area-%' || result.unit == 'weight-%'
       @fatty_acid_data[result.measure_id]||={object:result.measure,values:[]}
