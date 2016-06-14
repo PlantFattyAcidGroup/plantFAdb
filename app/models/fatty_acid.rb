@@ -13,6 +13,6 @@ class FattyAcid < Measure
   end
   
   def name_with_common
-    [common_name,name].compact.join(" - ")
+    [delta_notation,common_name,name].compact.join("; ")
   end
 end

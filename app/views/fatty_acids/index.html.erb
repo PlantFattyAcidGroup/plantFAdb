@@ -17,7 +17,6 @@
 		<div class='pull-right'><%= page_entries_info @fatty_acids %></div>
 		<div class='pull-left' style="margin-right:1em">Filters:</div>
 		<%= left_dropdown_select "data", :has_data, [['Has data points','true'],['No data points','false']] %>
-		<%= left_dropdown_select "registry number", :has_cas, [['Has CAS registry number','true'],['No CAS registry number','false']] %>
 		<%= left_dropdown_select "category", :category, @categories.map{|c| [c,c]} %>
 	</div>
 	
@@ -29,7 +28,7 @@
 				<th style='white-space:nowrap'>Other Names</th>
 				<th><%= sortable 'Formula' %></th>
 				<th><%= sortable 'Mass' %></th>
-				<th><%= sortable 'delta_notation', 'Delta Notation' %></th>
+				<th><%= sortable 'delta_notation', '∆ Notation' %></th>
 				<th><%= sortable 'sofa_mol_id', 'SOFA ID'%></th>
         <th><%= sortable 'result_count', 'Data Points'%></th>
 				<th>Phylo Tree</th>

@@ -24,18 +24,19 @@ class FattyAcidsController < ApplicationController
         "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", q.to_f
       )
     end
+    params[:has_data]||='true'
     case params[:has_data]
     when 'true'
       @fatty_acids = @fatty_acids.where("res.result_count is not null")
     when 'false'
       @fatty_acids = @fatty_acids.where("res.result_count is null")
     end
-    case params[:has_cas]
-    when 'true'
-      @fatty_acids = @fatty_acids.where("cas_number is not null")
-    when 'false'
-      @fatty_acids = @fatty_acids.where("cas_number is null")
-    end
+    # case params[:has_cas]
+    # when 'true'
+    #   @fatty_acids = @fatty_acids.where("cas_number is not null")
+    # when 'false'
+    #   @fatty_acids = @fatty_acids.where("cas_number is null")
+    # end
     if params[:category]
       @fatty_acids = @fatty_acids.where(category: params[:category])
     end
