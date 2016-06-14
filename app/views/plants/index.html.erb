@@ -1,14 +1,9 @@
 <% content_for :top_bar do %>
 	<h1 class="pagetitle">Plants</h1>
-	<ul class="nav nav-pills">
-		<li style="padding:10px"></li>
-	  <%= content_tag(:li, (link_to "Tree", plants_path(fmt: 'tree')), class: "#{'active' if @format_partial == 'tree'}")  %>
-	  <%= content_tag(:li, (link_to "Listing", plants_path(fmt: 'listing')), class: "#{'active' if @format_partial == 'listing'}")  %>
-	</ul>
 <% end %>
 
 <% content_for :item_bar do %>
     <%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
 <% end %>
 	
-<%= render @format_partial, plants: @plants %>
+<%= render 'listing', plants: @plants %>

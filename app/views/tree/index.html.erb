@@ -1,16 +1,20 @@
+<% content_for :top_bar do %>
 <div class='row'>
 	<div class='col-md-12'>
 		<p><b>
 			<% if @selected %>
-				Showing the maximum yield across all publications for <%= link_to @selected.name_with_common, @selected %> <br/>
+				Showing the maximum wt% across all publications for FA: <%= link_to @selected.name_with_common, @selected %> <br/>
 			<% elsif !params[:category].blank? %>
-				Showing maximum value for <%= link_to params[:category], fatty_acids_path(category: params[:category]) %> members
+				Showing maximum wt% for all FA in category: <%= link_to params[:category], fatty_acids_path(category: params[:category]) %>
 			<% else %>
-			  Showing the count of results across all publications. Select an option below to view maximum yield <br/>
+			  Showing the number of datapoints across all publications for a phylogenetic class. <br/>
+				Select an option from boxes below to display maximum wt% of a FA, or FA within a structural group.<br/>
 			<% end %>
 		</b></p>
+		<p>Click on a node to expand or contract phylogenetic level. ( Open circles on leaf nodes indicate no data available )</p>
 	</div>
 </div>
+<% end %>
 
 <div class='row'>
 	<div class='col-md-12'>
@@ -31,7 +35,15 @@
 	</div>
 </div>
 
-<div id='tree' class='well' style="width:100%;padding:1%;position:relative"></div>
+<div id='tree' class='well' style="width:100%;padding:1%;position:relative">
+	<div style='position:absolute;top:2px;right:15%'>
+		<% if @selected || !params[:category].blank?%>
+			wt%
+		<% else %>
+			datapoints
+		<% end %>
+	</div>
+</div>
 <style>
 .axis {
   font: 10px sans-serif;
@@ -95,7 +107,7 @@ rect.hidden-bar {
 			height = 1000;
 		var leftMargin = 5
 		var rightMargin = 20
-		var rightTextMargin = 125
+		var rightTextMargin = 150
 		var histWidth =parseInt(width*.35)
 		var histRange = histWidth-rightMargin
 		var histStart = width-histWidth
@@ -159,7 +171,7 @@ rect.hidden-bar {
 		update(root)
 		
 		function update(source) {
-			
+			cluster.size([height-headerHeight, width - leftMargin - rightTextMargin - histWidth])
 			// Compute the new tree layout.			
 		  var nodes = cluster.nodes(currentRoot);
 		  nodes[0].y += 35;

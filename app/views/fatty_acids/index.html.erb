@@ -53,7 +53,7 @@
           <td><%= fatty_acid.delta_notation %></td>
 					<td><%= fatty_acid.sofa_mol_id %></td>
           <td><%= link_to fatty_acid.result_count, results_path(measure_id: fatty_acid.id) if fatty_acid.result_count %></td>
-        	<td><%= link_to "Tree", plants_path(fmt: 'tree', measure_id: fatty_acid.id) if fatty_acid.result_count %></td>
+        	<td><%= link_to "Tree", tree_index_path(measure_id: fatty_acid.id) if fatty_acid.result_count %></td>
 				</tr>
       <% end %>
     </tbody>
