@@ -17,13 +17,8 @@
 <% end %>
 
 <div class='row'>
-	<div class='well col-md-8' style='height:400px;overflow-y:auto'>
+	<div class='well col-sm-12 col-md-5' style='overflow:auto'>
 		<legend>Citation</legend>
-		<!--		<p>
-				  <strong>Title:</strong>
-				  <#%= @pub.wos_title %>
-				</p> -->
-
 		<p>
 		  <strong>Authors:</strong>
 		  <%= @pub.wos_authors %>
@@ -67,9 +62,8 @@
 			  <%= link_to @pub.doi, "https://doi.org/#{@pub.doi}", target: '_blank'%>
 			</p>
 		<% end %>
-	</div>
-	<div class='well col-md-4'>
-		<div style='height:255px;overflow-y:auto'>
+		
+		<div style='overflow:auto'>
 			<legend>SOFA citation(s)</legend>
 			<% if @pub.original_pubs.empty? %>
 				<% pubs = [@pub]  %>
@@ -106,37 +100,38 @@
 			<% end %>
 		</div>
 		
-		<div style='height:105px;overflow-y:auto'>
+		<div style=''>
 			<legend>SOFA Table(s)</legend>
 			<% @pub.sofa_tabs.each do |tab| %>
 				<div style='float:left;margin:0.25em'><%= link_to (tab.sofa_tab_id||'#'), tab.sofa_url %></div>
 			<% end %>
 		</div>
 	</div>
+
+	<div class='col-sm-12 col-md-7 well'>
+		<legend>Plants</legend>
+		<table class="table">
+		  <thead>
+		    <th>Genus</th>
+		    <th>Species</th>
+				<th>Order</th>
+		    <th>Family</th>
+				<th>Data Points</th>
+		  </thead>
+		  <tbody>
+		    <% @pub.plants.order("genus, species").uniq.each do |plant| %>
+		    <tr>
+		      <td><%= link_to plant.genus||"Unknown", plant %></td>
+		      <td><%= link_to plant.species||"Unknown", plant %></td>
+		      <td><%= plant.order_name %></td>
+		      <td><%= plant.family %></td>
+					<td><%= link_to plant.results.viewable.where(pub_id: @pub.id).count, results_path(pub_id: @pub.id, plant_id: plant.id) %></td>
+		    </tr>
+		    <% end %>
+		  </tbody>
+		</table>
+	</div>
 </div>
 
 
-<hr/>
-
-<h2 class='smalltitle'>Plant(s)</h2>
-<table class="table">
-  <thead>
-    <th>Genus</th>
-    <th>Species</th>
-		<th>Order</th>
-    <th>Family</th>
-		<th>Data Points</th>
-  </thead>
-  <tbody>
-    <% @pub.plants.order("genus, species").uniq.each do |plant| %>
-    <tr>
-      <td><%= link_to plant.genus||"Unknown", plant %></td>
-      <td><%= link_to plant.species||"Unknown", plant %></td>
-      <td><%= plant.order_name %></td>
-      <td><%= plant.family %></td>
-			<td><%= link_to plant.results.viewable.where(pub_id: @pub.id).count, results_path(pub_id: @pub.id, plant_id: plant.id) %></td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
 
