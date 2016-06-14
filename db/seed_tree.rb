@@ -1,11 +1,4 @@
-root = TreeNode.create name: 'root'
-
-#root.children.create name: '', common_name: 'Liverworts', note: ''
-#root.children.create name: '', common_name: 'Mosses', note: ''
-#root.children.create name: '', common_name: 'Hornworts', note: ''
-#root.children.create name: '', common_name: 'Lycophytes', note: ''
-
-ferns = root.children.create name: 'Monilophytes', common_name: 'Ferns', note: ''
+root = TreeNode.create name: 'Plantae'
 
 seed_plants = root.children.create name: 'Spermatophyte', common_name: 'Seed Plants', note: '' 
 
@@ -106,3 +99,10 @@ angio = seed_plants.children.create name: 'Angiosperms', common_name: 'Flowering
             camp.children.create name: 'Apiales', common_name: 'Apiales', note: ''
             camp.children.create name: 'Paracryphiales', common_name: 'Paracryphiales', note: ''
             camp.children.create name: 'Dipsacales', common_name: 'Dipsacales', note: ''
+            
+mosses = root.children.create name: 'Lycophytes', common_name: 'Clubmosses', note: ''
+  mosses.children.create name: 'Lycopodiales', common_name: 'Clubmosses'
+ferns = root.children.create name: 'Monilophytes', common_name: 'Ferns', note: ''
+  ferns.children.create name: 'Polypodiales', common_name: 'Ferns'
+  ferns.children.create name: 'Equisetales', common_name: 'Horsetails'
+   

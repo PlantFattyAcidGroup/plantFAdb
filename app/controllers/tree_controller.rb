@@ -38,7 +38,9 @@ class TreeController < ApplicationController
       '18:1-delta-6a'
     )").order("measures.name asc")
 		phyloColors ={
-      root: "#777",
+      plantae: "#EEE",
+      lycophytes: "#aa7243",
+      monilophytes: "#7a5230",
 	    spermatophyte: "#DDD",
 	    gymnosperms: "#B0744C",
 	    anita: "#D3EEF5",
