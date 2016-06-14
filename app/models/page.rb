@@ -1,9 +1,11 @@
 class Page < ActiveRecord::Base
+  validates :title, presence: true, uniqueness: true
+  
   include FriendlyId
   friendly_id :title
     
   def self.path name
-    page = Page.find_by(title:name)
+    page = Page.where(title: name).first
     if page
       return Rails.application.routes.url_helpers.page_path(page)
     else

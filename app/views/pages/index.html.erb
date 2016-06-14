@@ -3,8 +3,15 @@
 <% end %>
 
 <% content_for :item_bar do %>
-
+	<% if can? :create, Page %>
+		<%= link_to "New Page", new_page_path, class: 'btn btn-primary' %>
+	<% end %>
 <% end %>
+
+<p>
+	For direct page links, append the page title to the pages path: <%= request.original_url %><br/>
+	For example: <a href="<%= request.original_url %>/downloads"><%= request.original_url %>/downloads</a>
+</p>
 
 <div class='panel table-responsive'>
 	
@@ -22,8 +29,13 @@
         <tr>
 					<td><%= page.title %></td>
 					<td><%= page.description %></td>
-            <td>
-            <%= link_to 'Edit', edit_page_path(page) %>
+          <td>
+						<% if can? :edit, page %>
+           		<%= link_to 'Edit', edit_page_path(page) %>
+						<% end %>
+						<% if(can? :delete, page) && @static_pages.exclude?(page.title)%>
+							| <%= link_to 'Delete', page,  method: :delete, data: { confirm: "Delete page: #{page.title} ?" } %>
+						<% end %>
           </td>
         </tr>
       <% end %>
