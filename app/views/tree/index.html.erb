@@ -127,6 +127,11 @@ rect.hidden-bar {
     .style('display','none')
     .style('position','absolute')
     .attr('class','well')
+		
+    var nodeHoverEl = d3.select("#tree").append("div")
+    .style('display','none')
+    .style('position','absolute')
+    .attr('class','well')
 			
 		var baseSvg = d3.select("#tree").append("svg")
 		    .attr("width", width)
@@ -194,16 +199,24 @@ rect.hidden-bar {
 				.on("click", function(d){
 					if(totalCount(d) > 0){nodeClick(d);}
 				})
-				.on("mouseover",function(){
+				.on("mouseover",function(d){
 					var el = d3.select(this);
-					el.style('font-size', function(d){return (totalCount(d) > 0 && d.taxon.length < 3) ? '11px' : '10px'});
-					el.style('cursor', function(d){return (totalCount(d) > 0 && d.taxon.length < 3) ? 'pointer' : 'default'});
+					el.style('font-size', function(d){
+						return (totalCount(d) > 0 && d.taxon.length < 3) ? '11px' : '10px'
+					});
+					el.style('cursor', function(d){
+						return (totalCount(d) > 0 && d.taxon.length < 3) ? 'pointer' : 'default'
+					});
+					setNodeHoverMessage(d);
 				})
 				.on("mouseout",function(){
 					var d = d3.select(this)
 					d.style('font-size', '10px')
 					d.style('cursor','default')
+					clearNodeHoverMessage();
 				})
+				.on('mousemove',function(){setNodeHoverPosition()})
+				
 			nodeEnter.append("circle")
 				.attr("r", 1e-6)
 				.style('stroke',function(d){ return getColor(d); })
@@ -446,7 +459,26 @@ rect.hidden-bar {
 		function dataClick(d) {
 			window.open('<%= results_path(measure_type: 'FattyAcid', measure_id: params[:measure_id], category: params[:category]).html_safe%>'+'&taxon='+d.taxon.join(","),'_blank')
 		}
+
 		
+		setNodeHoverPosition = function(){
+			var coord = d3.mouse(svg.node())
+			nodeHoverEl.style('left',parseInt(coord[0]+leftMargin+3)+'px')
+			.style('bottom',parseInt(height-coord[1]-headerHeight+3)+'px')
+		}
+		
+    setNodeHoverMessage = function(d){
+      var html = '<b>Name: </b>'+d.name+'<br/>'
+      html += '<b>Common Name</b>: '+d.common_name+'<br/>'
+      nodeHoverEl.style('display','')
+      .html(html)
+			
+    }
+    
+    clearNodeHoverMessage = function(){
+      nodeHoverEl.style('display','none')
+    }
+				
 		setHoverPosition = function(){
 			var coord = d3.mouse(svg.node())
 			hoverEl.style('right',parseInt(width-coord[0]+rightMargin+3)+'px')

@@ -100,6 +100,5 @@ class TreeController < ApplicationController
         taxon: [parent.name]
       }
     end
-    logger.info { @tree.to_yaml }
   end
 end
