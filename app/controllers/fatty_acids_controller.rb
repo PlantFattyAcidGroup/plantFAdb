@@ -55,7 +55,7 @@ class FattyAcidsController < ApplicationController
     # when 'false'
     #   @fatty_acids = @fatty_acids.where("cas_number is null")
     # end
-    if params[:category]
+    unless params[:category].blank?
       @fatty_acids = @fatty_acids.where(category: params[:category])
     end
     
