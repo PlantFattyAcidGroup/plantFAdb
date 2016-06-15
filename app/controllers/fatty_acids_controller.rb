@@ -24,6 +24,24 @@ class FattyAcidsController < ApplicationController
         "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", q.to_f
       )
     end
+    unless params[:mass_min].blank?
+      @fatty_acids = @fatty_acids.where("mass >= ?",params[:mass_min].to_i)
+    end
+    unless params[:mass_max].blank?
+      @fatty_acids = @fatty_acids.where("mass <= ?",params[:mass_max].to_i)
+    end
+    unless params[:delta_notation_query].blank?
+      q = UnicodeUtils.upcase(params[:delta_notation_query])
+      @fatty_acids = @fatty_acids.where("upper(delta_notation) like ?","%#{q}%")
+    end
+    unless params[:name_query].blank?
+      q = UnicodeUtils.upcase(params[:name_query])
+      @fatty_acids = @fatty_acids.where("upper(name) like ?
+      OR upper(other_names) LIKE ?
+      OR upper(common_name) LIKE ?",
+      "%#{q}%","%#{q}%","%#{q}%")
+    end
+    
     params[:has_data]||='true'
     case params[:has_data]
     when 'true'

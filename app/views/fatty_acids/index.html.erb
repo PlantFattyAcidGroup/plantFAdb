@@ -1,6 +1,18 @@
 <% content_for :top_bar do %>
 	<h1 class="pagetitle">Fatty Acids</h1>
 	<span class='small'>Structures drawn at OPSIN (opsin.ch.cam.uk)</span>
+	<% unless params[:name_query].blank? %>
+		<p>Filtering on Name: <b><%= params[:name_query] %></b></p>
+	<% end %>
+	<% unless params[:delta_notation_query].blank? %>
+		<p>Filtering on Delta Notation: <b><%= params[:delta_notation_query] %></b></p>
+	<% end %>
+	<% unless params[:mass_min].blank? %>
+		<p>Filtering mass less than: <b><%= params[:mass_min] %></b></p>
+	<% end %>
+	<% unless params[:mass_max].blank? %>
+		<p>Filtering mass greather than: <b><%= params[:mass_max] %></b></p>
+	<% end %>
 <% end %>
 
 <% content_for :item_bar do %>
@@ -8,8 +20,41 @@
 <% end %>
 
 
-
-<%= render 'shared/page_and_search', items: @fatty_acids  %>
+<%= render partial: 'shared/page_and_search', locals: {items: @fatty_acids, show_advanced: true} %>
+<div id='advanced_search' class='well form-horizontal' style='display:none;width:100%'>
+	<%= form_tag nil, method: :get do %>
+		
+		<div class='form-group'>
+			
+			<%= label_tag :name_query, "Name", class: 'col-sm-2' %>
+			<div class='col-sm-8'>
+				<%= text_field_tag :name_query, params[:name_query], class: 'form-control' %>
+			</div>
+		</div>
+	
+		<div class='form-group'>
+			<%= label_tag :delta_notation_query, "Delta Notation", class: 'col-sm-2' %>
+			<div class='col-sm-8'>
+				<%= text_field_tag :delta_notation_query, params[:delta_notation_query], class: 'form-control' %>
+			</div>
+		</div>
+		
+		<div class='form-group'>
+			<div class='col-sm-2'>
+				<%= label_tag :mass, "Mass Range" %>
+			</div>
+			<div class='col-sm-10 form-inline'>
+				Min
+				<%= number_field_tag :mass_min, params[:mass_min], class: 'form-control' %>
+				Max
+				<%= number_field_tag :mass_max, params[:mass_max], class: 'form-control'%>
+			</div>
+		</div>
+		
+		<%= submit_tag "Search", class: "btn btn-info"%>
+		<%= link_to "Clear Query", fatty_acids_path, class: 'btn btn-warning pull-right' %>
+	<% end %>
+</div>
 
 <div class='panel table-responsive'>
 	

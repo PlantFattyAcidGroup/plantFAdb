@@ -1,15 +1,26 @@
 <div class='row'>
-	<div class='col-sm-12 col-md-8 pull-left'>
+	<div class='col-xs-12 col-sm-7 col-md-8 pull-left'>
 		<ul class="pagination">
 			<%= paginate items %>
 		</ul>
 	</div>
-	<div class='col-xs-12 col-sm-4 search'>
+	<div class='col-xs-12 col-sm-5 col-md-4 search'>
     <%= form_tag nil, method: :get do %>
+		<% params.except(:commit,:action,:controller,:utf8,:query).each do |parameter, val| %>
+			<%= hidden_field_tag parameter, val %>
+		<% end %>
       <div class='form-inline pull-left-sm pull-right-md'>
-		    <label for="query">Search:</label>
-				<%= text_field_tag :query, params[:query], class: 'form-control' %>
-				<%= submit_tag "Go", class: "btn btn-info "%>
+				<div class='form-group'>
+			    <label for="query">Search:</label>
+					<%= text_field_tag :query, params[:query], class: 'form-control' %>
+					<%= submit_tag "Go", class: "btn btn-info"%>
+				</div>
+				<% if defined? show_advanced and show_advanced %>
+					<br/>
+					<div class='pull-left-sm pull-right-md'>
+						<%= link_to "Advanced Query", '#', onclick: "$('#advanced_search').toggle()"%>
+					</div>
+				<% end %>
 			</div>
     <% end %>
 	</div>

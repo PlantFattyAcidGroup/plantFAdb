@@ -37,7 +37,7 @@ module ApplicationHelper
   # github style filters
   def dropdown_select label, param, array
     hsh_clear={}
-    hsh_clear[param]=nil
+    hsh_clear[param]=''
     html = "<li class='dropdown'>
 			<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
 				#{label} <span class='caret'></span>

@@ -178,6 +178,9 @@ th .sortable {
 .panel li {
   list-style-type: none;
 }
+.panel.table-responsive {
+  min-height: 250px;
+}
 
 .popover {
   max-width: 500px;
@@ -201,4 +204,16 @@ th .sortable {
     .pull-left-md {
         float: left;
     }
+}
+
+.form-inline .form-control {
+  display: inline-block;
+  width: auto;
+  vertical-align: middle;
+}
+
+.form-inline .form-group {
+  display: inline-block;
+  margin-bottom: 0;
+  vertical-align: middle;
 }
