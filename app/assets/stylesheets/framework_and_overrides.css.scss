@@ -54,13 +54,14 @@ nav.navbar {
 }
 
 .caption-mid {
+  text-align:center;
   background-color: rgba(30,30,30,0.35);
   position:absolute;
   color: #EEE;
   border: 1px solid #fff;
   padding: .75em 1.25em .75em 1.25em;
   font: bold 28px "Arial Black", Gadget, sans-serif;
-  width: 400px;
+  width: 420px;
   height: 125px;
   top: 250px;
   left:calc(50% - 200px);
