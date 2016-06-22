@@ -463,8 +463,8 @@ rect.hidden-bar {
 		
 		setNodeHoverPosition = function(){
 			var coord = d3.mouse(svg.node())
-			nodeHoverEl.style('left',parseInt(coord[0]+leftMargin+3)+'px')
-			.style('bottom',parseInt(height-coord[1]-headerHeight+3)+'px')
+			nodeHoverEl.style('left',parseInt(coord[0]+leftMargin+10)+'px')
+			.style('bottom',parseInt(height-coord[1]-headerHeight+10)+'px')
 		}
 		
     setNodeHoverMessage = function(d){
