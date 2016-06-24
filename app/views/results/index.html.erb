@@ -60,6 +60,7 @@
 				<% unless @plant %>
 					<th><%= sortable "plants.genus", "Plant" %></th>
 				<% end %>
+				<th>Sofa Table</th>
         <th><%= sortable "value" %></th>
         <th><%= sortable "unit" %></th>
       </tr>
@@ -79,6 +80,7 @@
 					<% unless @plant %>
 						<td><%= link_to result.plant.display_name, result.plant if result.plant %></td>
 					<% end %>
+					<td><%= link_to result.publication.try(:sofa_tab_id), SofaTab.sofa_url(result.publication.try(:sofa_tab_id)), target: '_blank'%></td>
           <td><%= result.value.round(2) %></td>
           <td><%= result.unit %></td>         
         </tr>
