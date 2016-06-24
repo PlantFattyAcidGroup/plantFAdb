@@ -100,10 +100,12 @@
 		<div class='well' style='overflow:scroll'>
 			<legend>Data</legend>
 			<small>
-				The graphs below are built from data across all publications stored in the database.
-				Mouse over individual Fatty Acid Data for link to data and publication.<br/>
-				<i>In cases where some publications report, for example 18:1, and other publications report 18:1-delta-9c (oleic), data are presented separately on the x-axis. </i> 
-			</small><br/>
+				Mouse over individual data points for link to data and publication.<br/>
+				The graphs are built from data from all publications in the database with this species name.
+				In some cases this results in data from more than one variety included in the graph.
+				In other cases the same species may have multiple graphs because of differences in names recorded for the plant.
+				
+			</small><br/><br/>
 			<span> 
 				<%= link_to "View #{pluralize @plant.pubs.uniq.count,"Publication"}", pubs_path(plant_id: @plant.id) %>
 			</span> |
@@ -112,7 +114,15 @@
 			</span>
 			<% unless @fatty_acid_data.empty? %>
 				<legend><h5>Fatty Acid Data</h5></legend>
-					<div id='fa_plant_data_viz_0' style='min-width:700px;height:350px;position:relative'></div>
+					<div id='fa_plant_data_viz_0' style='min-width:700px;height:350px;position:relative'>
+						
+					</div>
+					<div style='margin-left:5em;margin-right:3em'>
+						<small><i>
+						In cases where some publications report, for example 18:1, and other publications report 18:1-delta-9c (oleic),
+						data are presented separately on the x-axis.
+						</i></small>
+					</div>
 			<% end %>
 			<% unless @parameter_data.empty? %>
 			<legend><h5>Parameters</h5></legend>
