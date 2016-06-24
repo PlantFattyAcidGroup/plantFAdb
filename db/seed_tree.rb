@@ -1,12 +1,10 @@
-root = TreeNode.create name: 'Plantae'
+root = TreeNode.create name: 'Plantae', common_name: '', note: ''
 
 seed_plants = root.children.create name: 'Spermatophyte', common_name: 'Seed Plants', note: '' 
 
 gmyno = seed_plants.children.create name: 'Gymnosperms', common_name: 'Gymnosperm', note: ''
   gmyno.children.create name: 'Cycadales', common_name: 'Palm', note: ''
   gmyno.children.create name: 'Ginkgoales', common_name: 'Ginkgo', note: ''
-#  gmyno.children.create name: '', common_name: 'Ephedra', note: ''
-#  gmyno.children.create name: '', common_name: 'Welwitschia', note: ''
   gmyno.children.create name: 'Gnetales', common_name: 'Gnetum', note: ''
   gmyno.children.create name: 'Pinales', common_name: 'Pine', note: ''
  
@@ -101,8 +99,8 @@ angio = seed_plants.children.create name: 'Angiosperms', common_name: 'Flowering
             camp.children.create name: 'Dipsacales', common_name: 'Dipsacales', note: ''
             
 mosses = root.children.create name: 'Lycophytes', common_name: 'Clubmosses', note: ''
-  mosses.children.create name: 'Lycopodiales', common_name: 'Clubmosses'
+  mosses.children.create name: 'Lycopodiales', common_name: 'Clubmosses', note: ''
 ferns = root.children.create name: 'Monilophytes', common_name: 'Ferns', note: ''
-  ferns.children.create name: 'Polypodiales', common_name: 'Ferns'
-  ferns.children.create name: 'Equisetales', common_name: 'Horsetails'
+  ferns.children.create name: 'Polypodiales', common_name: 'Ferns', note: ''
+  ferns.children.create name: 'Equisetales', common_name: 'Horsetails', note: ''
    

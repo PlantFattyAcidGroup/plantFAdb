@@ -202,6 +202,7 @@ rect.hidden-bar {
 		}
 		var duration = 750;
 		var currentRoot = root;
+		updateHeight();
 		update(root)
 		
 		function update(source) {
@@ -281,12 +282,22 @@ rect.hidden-bar {
 		      .attr("r", 5)
 					.style('fill',function(d){
 						// Definite children hidden
-						if(d._children && d._children.length>0){return getColor(d);}
-						// Possible children to load
-						if(d.taxon.length < 3 && d.count && d.count > 0 && (!d.children || d.children.length == 0)){return getColor(d);}
-						// All else open
-						return '#fff'
-						
+						if(d._children || d.children || (d.count)){return getColor(d);}
+						else{return '#fff'}
+					})
+					.style("fill-opacity", function(d){
+						if(d.taxon.length>2&&d.count){
+							return 0
+						}else{
+							return 1
+						}
+					})
+					.style("stroke-opacity", function(d){
+						if(d.taxon.length>2&&d.count){
+							return 0
+						}else{
+							return 1
+						}
 					})
 			// nodeUpdate.select("rect")
 			// 		.style("fill-opacity", .5)
@@ -421,6 +432,22 @@ rect.hidden-bar {
 				
 		}
 		
+		function updateHeight(){
+			var nodes = cluster.nodes(currentRoot);
+			var leaves = nodes.filter(function(d){ return d.children==null});
+			height = leaves.length*(barheight*1.5)+headerHeight
+			height = d3.max([height,600])
+			console.log(leaves.length,barheight,height)
+			baseSvg.transition()
+      	.duration(duration)
+				.attr('height',height)
+			baseSvg.select('line.separator')
+				.transition()
+      	.duration(duration)
+				.attr('y2',height)
+			return height
+		}
+		
 		window.onresize = function(){
 			width = $("#tree").width();
 			baseSvg.attr('width',width);
@@ -471,17 +498,20 @@ rect.hidden-bar {
 						d.loaded = true;
 						currentRoot = d.parent ? (d.parent.parent ? d.parent.parent : d.parent) : d
 						//currentRoot = d.parent ? d.parent : d
+						updateHeight();
 						update(d);
 					})
 				}
 
 		  }
+			updateHeight();
 		  update(d);
 		}
 		
 		function resetNodes() {
 			openOriginalChildren(root)
 			currentRoot = root;
+			updateHeight();
 			update(root)
 		}
 		// open results tab

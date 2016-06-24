@@ -85,6 +85,19 @@ class ResultsController < ApplicationController
     avg = @results.average(:value)#.to_f.try(:round,4)
       
     data = []
+    p = get_plants(taxon).count
+    p.each do |name,p_cnt|
+      unless count[name]
+        data << {
+          id: name,
+          name: name.is_a?(Array) ? name.join(' ') : name,
+          common_name: name,
+          max: nil, avg: nil, count: nil, taxon: taxon+name.split(',')
+        }
+      end
+    end
+    logger.info count.inspect
+    logger.info { p.inspect }
     count.each do |name,cnt|
       data << {
         id: name,
@@ -174,6 +187,37 @@ class ResultsController < ApplicationController
         })
       end
       return results
+    end
+    
+    def get_plants(taxon)
+      return [] if taxon.blank? || taxon.empty?
+      case taxon.length
+      when 1
+        # Check for higher clade tree member first
+        if t = TreeNode.find_by(name: taxon[0])
+          names = t.subtree.map(&:name)
+          plants = Plant.where(order_name: names)
+        else
+          # lookup order
+          plants = Plant.where(order_name: taxon[0])
+        end
+        plants = plants.group(:family)
+      when 2
+        plants = Plant.where(
+          order_name: taxon[0],
+          family: taxon[1]
+        )
+        plants = plants.group(:genus,:species)
+      when 3
+        plants = Plant.where(
+          order_name: taxon[0],
+          family: taxon[1],
+          genus: taxon[2]
+        )
+        plants = plants.group(:species)
+      else
+        plants= []
+      end
     end
     # Only allow a trusted parameter "white list" through.
     def resource_params
