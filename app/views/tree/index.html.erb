@@ -527,8 +527,8 @@ rect.hidden-bar {
 		}
 		
     setNodeHoverMessage = function(d){
-      var html = '<b>Name: </b>'+d.name+'<br/>'
-      html += '<b>Common Name</b>: '+d.common_name+'<br/>'
+      var html = '<b>'+d.name+'</b><br/>'
+      if(d.note){html += d.note+'<br/>';}
       nodeHoverEl.style('display','')
       .html(html)
 			
