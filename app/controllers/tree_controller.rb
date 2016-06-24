@@ -91,7 +91,7 @@ class TreeController < ApplicationController
       {
         id: parent.name,
         name: parent.name,
-        common_name: parent.common_name,
+        note: parent.note,
         max: max,
         avg: avg, 
         count: count,
