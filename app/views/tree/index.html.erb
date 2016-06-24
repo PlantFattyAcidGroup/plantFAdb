@@ -43,6 +43,9 @@
 			datapoints
 		<% end %>
 	</div>
+	<div style='position:absolute;top:5px;left:5px'>
+		<button submit='button' class='btn btn-default' onclick='resetNodes();$(this).blur()'>Reset</button>
+	</div>
 </div>
 <p>
 	Phylogenetic relationships shown are adapted from the Angiosperm Phylogeny Poster (2016)
@@ -180,7 +183,23 @@ rect.hidden-bar {
 		var avgVal = function(d){ return d.avg || d3.mean((d.children||d._children||[]),function(child){return maxVal(child);});}
 		var totalCount = function(d){ return d.count || d3.sum((d.children||d._children||[]),function(child){return totalCount(child);});}
 		var getColor = function(d){ return d.color || (d.parent ? getColor(d.parent) : '#222');}
-		
+		var openOriginalChildren = function(d){ 
+			if(d._children && !d.loaded){
+				d.children=d._children;
+				d._children=null;
+			}
+			if(d.children){
+				if(d.loaded){
+					d._children = d.children;
+					d.children = null;
+				}else{
+					d.children.forEach(function(child){
+						openOriginalChildren(child);
+					});
+				}
+			}
+
+		}
 		var duration = 750;
 		var currentRoot = root;
 		update(root)
@@ -417,7 +436,7 @@ rect.hidden-bar {
 			baseSvg.select("g.x.axis")
 				.transition()
       	.duration(duration)
-				.attr("transform", "translate("+(leftMargin+histStart)+"," + 30 + ")")
+				.attr("transform", "translate("+(leftMargin+histStart)+"," + (headerHeight-2) + ")")
 			cluster.size([height-headerHeight, width - leftMargin - rightTextMargin - histWidth]);
 			update(root)
 		};
@@ -449,6 +468,7 @@ rect.hidden-bar {
 					// need to load children
 					d3.json('<%= plant_yield_results_path(measure_type: 'FattyAcid', measure_id: params[:measure_id], category: params[:category]).html_safe %>'+'&taxon='+d.taxon.join(","),function(error,nodes){
 						d.children = nodes;
+						d.loaded = true;
 						currentRoot = d.parent ? (d.parent.parent ? d.parent.parent : d.parent) : d
 						//currentRoot = d.parent ? d.parent : d
 						update(d);
@@ -459,6 +479,11 @@ rect.hidden-bar {
 		  update(d);
 		}
 		
+		function resetNodes() {
+			openOriginalChildren(root)
+			currentRoot = root;
+			update(root)
+		}
 		// open results tab
 		function dataClick(d) {
 			window.open('<%= results_path(measure_type: 'FattyAcid', measure_id: params[:measure_id], category: params[:category]).html_safe%>'+'&taxon='+d.taxon.join(","),'_blank')
