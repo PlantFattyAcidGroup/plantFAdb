@@ -35,7 +35,7 @@
 	</div>
 </div>
 
-<div id='tree' class='well' style="width:100%;padding:1%;position:relative">
+<div id='tree' class='well' style="width:100%;padding:0;position:relative">
 	<div style='position:absolute;top:2px;right:15%'>
 		<% if @selected || !params[:category].blank?%>
 			wt%
@@ -91,6 +91,10 @@ path.link {
 /*	fill: #fff;*/
 }
 
+.hover.well {
+	pointer-events: none;
+}
+
 line.separator {
 	stroke-width: 2px;
 	stroke: #444;
@@ -117,7 +121,7 @@ rect.hidden-bar {
 		var histWidth =parseInt(width*.35)
 		var histRange = histWidth-rightMargin
 		var histStart = width-histWidth
-		var headerHeight = 35
+		var headerHeight = 45
 		var boxOffset = -6
 		var boxheight = 12
 		var barOffset = -5
@@ -126,12 +130,12 @@ rect.hidden-bar {
     var hoverEl = d3.select("#tree").append("div")
     .style('display','none')
     .style('position','absolute')
-    .attr('class','well')
+    .attr('class','hover well')
 		
     var nodeHoverEl = d3.select("#tree").append("div")
     .style('display','none')
     .style('position','absolute')
-    .attr('class','well')
+    .attr('class','hover well')
 			
 		var baseSvg = d3.select("#tree").append("svg")
 		    .attr("width", width)
@@ -158,7 +162,7 @@ rect.hidden-bar {
 		// hist axis
 		baseSvg.append("g")
 			.attr("class", "x axis")
-			.attr("transform", "translate("+(leftMargin+histStart)+"," + 30 + ")")
+			.attr("transform", "translate("+(leftMargin+histStart)+"," + (headerHeight-2) + ")")
 			
 		var cluster = d3.layout.cluster()
 		    .size([height-headerHeight, width - leftMargin - rightTextMargin - histWidth])
@@ -462,9 +466,9 @@ rect.hidden-bar {
 
 		
 		setNodeHoverPosition = function(){
-			var coord = d3.mouse(svg.node())
-			nodeHoverEl.style('left',parseInt(coord[0]+leftMargin+10)+'px')
-			.style('bottom',parseInt(height-coord[1]-headerHeight+10)+'px')
+			var coord = d3.mouse(baseSvg.node())
+			nodeHoverEl.style('left',parseInt(coord[0]+leftMargin)+'px')
+			.style('bottom',parseInt(height-coord[1])+'px')
 		}
 		
     setNodeHoverMessage = function(d){
