@@ -12,7 +12,15 @@ class FattyAcid < Measure
     "#{name||'?-'+delta_notation} (#{results.count})"
   end
   
-  def name_with_common
-    [delta_notation,common_name,name].compact.join("; ")
+  def display_name
+    text = "#{delta_notation} "
+    text += " #{common_name} "
+    text += " #{name}" 
+  end
+  
+  def display_html
+    text = "<span style='width:200px;display:inline-block'><b>#{delta_notation}</b></span> "
+    text += "<span style='width:200px;color:blue;display:inline-block'><i>#{common_name}</i></span>"
+    text += " <span>#{name}</span>" 
   end
 end

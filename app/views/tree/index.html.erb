@@ -3,7 +3,7 @@
 	<div class='col-md-12'>
 		<p><b>
 			<% if @selected %>
-				Showing the maximum wt% across all publications for FA: <%= link_to @selected.name_with_common, @selected %> <br/>
+				Showing the maximum wt% across all publications for FA: <%= link_to @selected.display_name, @selected %> <br/>
 			<% elsif !params[:category].blank? %>
 				Showing maximum wt% for all FA in category: <%= link_to params[:category], fatty_acids_path(category: params[:category]) %>
 			<% else %>
@@ -18,20 +18,41 @@
 
 <div class='row'>
 	<div class='col-md-12'>
-	  <%= form_tag nil, method: :get do %>
-		<%= hidden_field_tag :fmt, 'tree' %>
-	    <div class='col-md-4 form-group'>
-		    <label for="query">Category:</label>
-				<%= select_tag :category, options_for_select(@categories,params[:category]), include_blank: true, class: 'form-control', onchange: 'this.form.submit()' %>
-		<% end %>
-	  <%= form_tag nil, method: :get do %>
-		<%= hidden_field_tag :fmt, 'tree' %>
-			</div>
-	    <div class='col-md-8 form-group'>
-		    <label for="query">Molecule:</label>
-				<%= select_tag :measure_id, options_from_collection_for_select(@fatty_acids, :id, :name_with_common, params[:measure_id]),include_blank: true, class: 'form-control', onchange: 'this.form.submit()' %>
-			</div>
-	  <% end %>
+	  <%#= form_tag nil, method: :get do %>
+		<div class='pull-left' style='margin:1em;margin-top:1.5em'>Filter by:</div>
+	    <!-- <div class='col-md-4 form-group'> -->
+				<div class="dropdown pull-left"  style='margin:1em'>
+				  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownCategory" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				    Category
+				    <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu" aria-labelledby="dropdownCategory">
+						<% @categories.each do |cat| %>
+							<li><%= link_to cat, tree_index_path(category: cat) %></li>
+						<% end %>
+				  </ul>
+				</div>
+		    <!-- <label for="query">Category:</label> -->
+				<%#= select_tag :category, options_for_select(@categories,params[:category]), include_blank: true, class: 'form-control', onchange: 'this.form.submit()' %>
+		<%# end %>
+	  <%#= form_tag nil, method: :get do %>
+			<!-- </div> -->
+	    <!-- <div class='col-md-8 form-group'> -->
+				<div class="dropdown pull-left"  style='margin:1em'>
+				  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMolecule" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				    Molecule
+				    <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu" aria-labelledby="dropdownMolecule">
+						<% @fatty_acids.each do |fa| %>
+							<li><%= link_to fa.display_html.html_safe, tree_index_path(measure_id: fa.id) %></li>
+						<% end %>
+				  </ul>
+				</div>
+				<!-- <label for="query">Molecule:</label> -->
+				<%#= select_tag :measure_id, options_from_collection_for_select(@fatty_acids, :id, :display_name, params[:measure_id]),include_blank: true, class: 'form-control', onchange: 'this.form.submit()' %>
+			<!-- </div> -->
+	  <%# end %>
 	</div>
 </div>
 

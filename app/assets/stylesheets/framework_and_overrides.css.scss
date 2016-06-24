@@ -190,6 +190,16 @@ th .sortable {
   margin-top: .75em;
 }
 
+@media (max-width: $screen-md-min) {
+  .nav {
+    font-size: 12px;
+  }
+  .nav li a {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+}
+
 @media (max-width: $screen-sm-min) {
     .pull-right-sm {
         float: right;
