@@ -1,5 +1,5 @@
 class TreeController < ApplicationController
-  skip_authorization_check :only => :index
+  skip_authorization_check
   def index
     @categories = FattyAcid.select("distinct(category)").map(&:category).compact
     #@fatty_acids = FattyAcid.with_results.order("measures.name asc")
@@ -32,6 +32,12 @@ class TreeController < ApplicationController
        '24:1-delta-15c',
        '24:0'
     )").order("measures.mass asc")
+    
+    @selected = FattyAcid.find_by(id: params[:measure_id]) if params[:measure_id]
+    @value_method = (params[:measure_id].blank?&&params[:category].blank?) ? 'totalCount' : 'maxVal'
+  end
+  
+  def data
 		phyloColors ={
       plantae: "#EEE",
       lycophytes: "#aa7243",
@@ -52,12 +58,7 @@ class TreeController < ApplicationController
 	    lamiids: "#EEB688",
 	    campanulids: "#E6955E",
 		}
-    
-    @selected = FattyAcid.find_by(id: params[:measure_id]) if params[:measure_id]
-    # @min = nil
-    # @max = 0
-    @value_method = (params[:measure_id].blank?&&params[:category].blank?) ? 'totalCount' : 'maxVal'
-    @tree = TreeNode.arrange_serializable(:order => :id) do |parent, children|
+    tree = TreeNode.arrange_serializable(:order => :id) do |parent, children|
       max = avg = count = color = nil
       if children.empty?
         if !params[:measure_id].blank?
@@ -95,5 +96,6 @@ class TreeController < ApplicationController
         taxon: [parent.name]
       }
     end
+    render json: tree
   end
 end

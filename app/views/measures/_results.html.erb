@@ -28,12 +28,17 @@
 	      <td><%= link_to result.plant.try( :display_name)||"Unknwon", result.plant %></td>
 	      <td><%= link_to result.pub.display_name, result.pub if result.pub%></td>
 	      <td><%= result.value %></td>
-	      <td><%= result.unit %></td>
+	      <td><%= '*' if result.old_mol_val %> <%= result.unit %></td> 
 	    </tr>
 	    <% end %>
 	  </tbody>
 	</table>
 </div>
 
+<% unless @results.map(&:old_mol_val).compact.empty? %>
+	<div class='pull-right'>
+		<i>* Converted from mol %</i>
+	</div>
+<% end %>
 
 

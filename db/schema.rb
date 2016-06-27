@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160603153221) do
+ActiveRecord::Schema.define(version: 20160627132240) do
 
   create_table "measures", force: :cascade do |t|
     t.string   "type"
@@ -128,6 +128,7 @@ ActiveRecord::Schema.define(version: 20160603153221) do
     t.integer  "pub_id",         precision: 38
     t.integer  "plant_id",       precision: 38
     t.decimal  "value",          precision: 8,  scale: 2
+    t.decimal  "old_mol_val",    precision: 8,  scale: 2
   end
 
   add_index "results", ["measure_id"], name: "index_results_on_measure_id"

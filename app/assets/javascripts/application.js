@@ -20,4 +20,5 @@
 //= require codemirror/modes/htmlmixed
 //= require summernote
 //= require d3.v3.min
+//= require parallax.min
 //= require_tree .

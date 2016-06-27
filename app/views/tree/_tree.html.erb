@@ -1,0 +1,90 @@
+<p>
+	Phylogenetic relationships shown are adapted from the Angiosperm Phylogeny Poster (2016)
+	<%= link_to "http://www2.biologie.fu-berlin.de/sysbot/poster/poster1.pdf",
+	"http://www2.biologie.fu-berlin.de/sysbot/poster/poster1.pdf" %>.
+	Not all nodes or branches are shown.
+</p>
+<% measure_id ||=nil; category||=nil;%>
+<script>
+	var tree;
+	$(document).ready(function(){
+		d3.json('<%= data_tree_index_path(measure_id: measure_id, category: category) %>',function(error, json){
+			$("#loading-indicator").remove()
+			var t = $('#tree')
+			t.show()
+			t.append("<div style='position:absolute;top:2px;right:15%'><%= value_method=='totalCount' ? 'datapoints' : 'wt%' %></div>")
+			tree = d3.phylotree()
+				.element('#tree')
+				.data(json)
+				.dataFunc(function(d){
+					return '<%= plant_yield_results_path(measure_type: 'FattyAcid', measure_id: measure_id, category: category).html_safe %>'+'&taxon='+d.taxon.join(",")
+				})
+				.dataClick(function(d){
+					window.open('<%= results_path(measure_type: 'FattyAcid', measure_id: measure_id, category: category).html_safe%>'+'&taxon='+d.taxon.join(","),'_blank')
+				})
+				.valueMethod('<%= value_method %>')
+				.draw()
+		})
+	});
+
+</script>
+<style>
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #444;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+	stroke: #444;
+	stroke-width: 2px;
+}
+path.link {
+	fill: none;
+	stroke-width: 3px;
+}
+
+.node {
+	font-size: 10px;
+	font-family: Verdana;
+	font-weight: bold;
+	fill: #222;
+/*	cursor: pointer;
+*/	border: 2px solid blue;
+}
+
+.node circle {
+  stroke-width: 3px;
+}
+
+.node rect {
+/*	stroke: #fff;*/
+	stroke-width: 2px;
+/*	fill-opacity: .5;*/
+/*	fill: #fff;*/
+}
+
+.hover.well {
+	pointer-events: none;
+}
+
+line.separator {
+	stroke-width: 2px;
+	stroke: #444;
+	shape-rendering: crispEdges;
+}
+
+rect.bar {
+	cursor: pointer;
+}
+rect.hidden-bar {
+	cursor: pointer;
+	visibility: hidden;
+	pointer-events: all;
+}
+</style>

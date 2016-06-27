@@ -67,19 +67,26 @@ class FattyAcidsController < ApplicationController
       # TXT download
       format.csv{
         render_csv do |out|
-          out << CSV.generate_line(["ID","Delta notation","Name","Other Names","Formula","Mass", "Cas number", "Sofa mol ID", "LipidMaps ID", "PubChem ID","Systematic Names(s)", "Trivial Name(s)","Result Count"])
+          out << CSV.generate_line(["ID","Delta notation","Name","Common Name","Other Names","Category","Formula","Mass", "inchi","stdinchi","stdinchikey","smiles","Cas number", "Sofa mol ID", "LipidMaps ID", "PubChem ID", "ChEBI ID","SOFA Systematic Names(s)", "SOFA Trivial Name(s)","Result Count"])
           @fatty_acids.find_each(batch_size: 500) do |item|
             out << CSV.generate_line([
               (can? :edit, item) ? "=HYPERLINK(\"#{root_url}js_redirect.html?page=#{edit_fatty_acid_path(item.id)}\",\"#{item.id}\")" : item.id,
               " #{item.delta_notation}",
               item.name,
+              item.common_name,
               item.other_names,
+              item.category,
               item.formula,
               item.mass,
+              item.inchi,
+              item.stdinchi,
+              item.stdinchikey,
+              item.smiles,
               item.cas_number,
               item.sofa_mol_id,
               item.lipidmap_id,
               item.pubchem_id,
+              item.chebi_id,
               item.systematic_names.map(&:name).join("; "),
               item.trivial_names.map(&:name).join("; "),
               item.result_count

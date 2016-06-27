@@ -4,8 +4,8 @@ class ResultsController < ApplicationController
   def index
     @measure_types = Measure.select(:type).distinct.map(&:type)
     @results = @results.order(sort_column + ' ' + sort_direction).order("results.id ASC")
-    .includes(:measure, :pub, :plant)
-    .references(:measure, :pub, :plant)
+    .includes(:measure, :pub, :publication, :plant)
+    .references(:measure, :pub, :publication, :plant)
     .where(measures: {type: ['FattyAcid','Parameter']})
     .where(unit:  ['GLC-Area-%','weight-%'])
     if params[:query]
@@ -15,13 +15,14 @@ class ResultsController < ApplicationController
         OR upper(measures.type) LIKE ?
         OR upper(measures.delta_notation) LIKE ?
         OR upper(unit) LIKE ?
-        OR upper(year) LIKE ?
-        OR upper(authors) LIKE ?
-        OR upper(journal) LIKE ?
-        OR upper(volume) LIKE ?
-        OR upper(page) LIKE ?
-        OR upper(remarks) LIKE ?',
-        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
+        OR upper(pubs.year) LIKE ?
+        OR upper(pubs.authors) LIKE ?
+        OR upper(pubs.journal) LIKE ?
+        OR upper(pubs.volume) LIKE ?
+        OR upper(pubs.page) LIKE ?
+        OR upper(pubs.remarks) LIKE ?
+        OR upper(publications.sofa_tab_id) LIKE ?',
+        "%#{q}%", "%#{q}%","%#{q}%","%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
       )
     end
     unless params[:taxon].blank?

@@ -512,4 +512,36 @@ class Plant < Thor
     puts "-- in tnrs name: #{found_tnrs_name_species}"
   end
   
+  desc 'add_common_name FILE', "add common name to plants"
+  def add_common_name filename
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    PaperTrail.enabled = false
+    file = File.open(filename,'r')
+    puts "loading file data"
+    names = {}
+    blanks = 0
+    total = 0
+    file.each_with_index do |line,idx|
+      id,name = line.chomp.split("\t")
+      total +=1
+      if name.blank?
+        blanks +=1
+        next
+      end
+      if names[id]
+        puts "Double entry?!: #{id}\t#{name}"
+      else
+        names[id]=name
+      end
+    end
+    puts "Found: #{names.keys.length} unique IDs and #{blanks} empty entries for #{total} lines"
+    pbar = ProgressBar.new(names.length)
+    names.each do |key,val|
+      pbar.increment!
+      p = ::Plant.find(key)
+      p.update_attribute(:common_name,val)
+    end
+    
+  end
+  
 end
