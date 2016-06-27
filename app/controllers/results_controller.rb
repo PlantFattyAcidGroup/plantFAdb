@@ -86,19 +86,6 @@ class ResultsController < ApplicationController
     avg = @results.average(:value)#.to_f.try(:round,4)
       
     data = []
-    p = get_plants(taxon).count
-    p.each do |name,p_cnt|
-      unless count[name]
-        data << {
-          id: name,
-          name: name.is_a?(Array) ? name.join(' ') : name,
-          common_name: name,
-          max: nil, avg: nil, count: nil, taxon: taxon+name.split(',')
-        }
-      end
-    end
-    logger.info count.inspect
-    logger.info { p.inspect }
     count.each do |name,cnt|
       data << {
         id: name,
@@ -110,7 +97,22 @@ class ResultsController < ApplicationController
         taxon: taxon+name.split(',')
       }
     end
-    
+    data = data.sort{|a,b|a[:name]<=>b[:name]}
+    p = get_plants(taxon).count
+    p_data = []
+    p.each do |name,p_cnt|
+      next unless name
+      unless count[name]
+        p_data << {
+          id: name,
+          name: name.is_a?(Array) ? name.join(' ') : name,
+          common_name: name,
+          max: nil, avg: nil, count: nil, taxon: taxon+name.split(',')
+        }
+      end
+    end
+    p_data.sort!{|a,b|a[:name]<=>b[:name]}
+    data.concat(p_data)
     render json: data
   end
   
