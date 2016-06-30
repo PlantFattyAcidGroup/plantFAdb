@@ -15,11 +15,13 @@ class ResultsController < ApplicationController
         OR upper(measures.type) LIKE ?
         OR upper(measures.delta_notation) LIKE ?
         OR upper(unit) LIKE ?
-        OR upper(pubs.year) LIKE ?
-        OR upper(pubs.authors) LIKE ?
-        OR upper(pubs.journal) LIKE ?
-        OR upper(pubs.volume) LIKE ?
-        OR upper(pubs.page) LIKE ?
+        OR upper(pubs.wos_year) LIKE ?
+        OR upper(pubs.wos_authors) LIKE ?
+        OR upper(pubs.wos_journal) LIKE ?
+        OR upper(pubs.wos_volume) LIKE ?
+        OR upper(pubs.wos_pages) LIKE ?
+        OR upper(pubs.wos_title) LIKE ?
+        OR upper(pubs.wos_uid) LIKE ?
         OR upper(pubs.remarks) LIKE ?
         OR upper(publications.sofa_tab_id) LIKE ?
         OR upper(plants.common_name) LIKE ?
@@ -28,7 +30,7 @@ class ResultsController < ApplicationController
         OR upper(plants.family) LIKE ?
         OR upper(plants.order_name) LIKE ?
         OR upper(plants.sofa_name) LIKE ?',
-        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%","%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
+        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%","%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
       )
     end
     unless params[:taxon].blank?
@@ -233,9 +235,15 @@ class ResultsController < ApplicationController
       params.require(:result).permit(:value, :unit, :measure_id, :pub_id)
     end
     def sort_column
-      params[:sort]|| (params[:plant_id] ? "delta_notation asc, value" : "value")
+      if params[:pub_id]
+        params[:sort]|| "plants.genus asc, plants.species asc, pubs.authors, delta_notation asc, value"
+      elsif params[:taxon]
+        params[:sort]|| "plants.genus asc, plants.species asc, delta_notation asc, value"
+      else
+        params[:sort]|| (params[:plant_id] ? "delta_notation asc, value" : "value")
+      end
     end
-    def sort_direction  
+    def sort_direction
       %w[asc desc].include?(params[:direction]) ?  params[:direction] : "desc"  
     end
 end
