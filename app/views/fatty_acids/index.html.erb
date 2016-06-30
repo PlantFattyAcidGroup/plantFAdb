@@ -1,6 +1,11 @@
 <% content_for :top_bar do %>
 	<h1 class="pagetitle">Fatty Acids</h1>
-	<span class='small'>Structures drawn at OPSIN (opsin.ch.cam.uk)</span>
+	<span class='small'><sup>1</sup>
+		Structures drawn at OPSIN (opsin.ch.cam.uk)
+	</span><br/>
+	<span class='small'><sup>2</sup>
+		Note:  Many publications report FA contents as 18:1, 18:2, 18:3, etc. without specifying double bond position or configuration whereas other analyses specify oleic (18:1 delta 9c), linoleic acid, etc.  SOFA (and PhyloFAdb) store these data separately. 
+	</span>
 	<% unless params[:name_query].blank? %>
 		<p>Filtering on Name: <b><%= params[:name_query] %></b></p>
 	<% end %>
