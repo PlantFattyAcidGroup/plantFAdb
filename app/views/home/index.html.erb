@@ -13,7 +13,17 @@
 	
 	<div class="container" style='margin-top:3em;margin-bottom:5em'>
 
-		<div class='row'>	
+		<div class='row'>
+		  <div class="col-sm-12 col-md-4">
+		    <div class="highlight well">
+		      <h3>Fatty Acids</h3>
+		      <p>
+						Structure images and info for >330 Fa.
+						Click Name to see species that produce a FA, publications, and data.
+						Click 'Tree' to display phylogentic distribution of a FA</p>
+		      <p><%= link_to "List FA", fatty_acids_path, class: 'btn btn-primary' %></p>
+		    </div>
+		  </div>
 			<div class="col-sm-12 col-md-4">
 		    <div class="highlight well">
 		      <h3>Phylogeny</h3>
@@ -29,19 +39,9 @@
 		      <h3>Plants</h3>
 		      <p>
 						FA analysis for > 7000 plants.
-						Click on species for graphs of FA composition, oild content,
+						Click on species for graphs of FA composition, oil content,
 						and links to publications and individual data sets.</p>
 		      <p><%= link_to "List Plants", plants_path, class: 'btn btn-primary' %></p>
-		    </div>
-		  </div>
-		  <div class="col-sm-12 col-md-4">
-		    <div class="highlight well">
-		      <h3>Fatty Acids</h3>
-		      <p>
-						Structure images and info for >330 Fa.
-						Click Name to see species that produce a FA, publications, and data.
-						Click 'Tree' to display phylogentic distribution of a FA</p>
-		      <p><%= link_to "List FA", fatty_acids_path, class: 'btn btn-primary' %></p>
 		    </div>
 		  </div>
 		</div>

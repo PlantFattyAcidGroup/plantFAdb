@@ -436,8 +436,10 @@
     setHoverMessage = function(d){
 		
       var html = '<b>'+d.name+'</b><br/>'
-      html += 'Max Yield: '+(maxVal(d)||0).toFixed(2)+'%</br>'
-  		html += 'Avg Yield: '+(avgVal(d)||0).toFixed(2)+'%</br>'
+      if(valueMethod != 'totalCount'){
+        html += 'Max Yield: '+(maxVal(d)||0).toFixed(2)+'%</br>'
+  		  //html += 'Avg Yield: '+(avgVal(d)||0).toFixed(2)+'%</br>' 
+      }
   		html += 'Datapoints: '+totalCount(d)||0
       hoverEl.style('display','')
       .html(html)
