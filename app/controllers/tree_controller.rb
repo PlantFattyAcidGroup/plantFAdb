@@ -79,7 +79,7 @@ class TreeController < ApplicationController
         end
         count = results.count
         max = results.maximum(:value).to_f.try(:round,4)
-        avg = results.average(:value).to_f.try(:round,4)
+        #avg = results.average(:value).to_f.try(:round,4)
       else
         name = parent.name.downcase.gsub(' ','_').to_sym
         color = phyloColors[name]
