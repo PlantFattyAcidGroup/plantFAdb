@@ -16,7 +16,7 @@ class Ability
       can :read, Plant
       can :read, Pub
       can :read, FattyAcid
-      can :read, Result
+      can [:read,:plant_yield], Result
       can [:read, :update], User, id: user.id
     end
     #
