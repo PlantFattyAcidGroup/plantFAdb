@@ -1,11 +1,11 @@
 <% content_for :body do -%>
 	<div class="parallax-window" data-parallax="scroll" data-image-src="<%= image_path("green_flower.png") %>">
-		<div class='row' style='height:700px'>
+		<div class='row' style='height:600px'>
 			<div class='caption-mid'>
 				Quizzing the Chemical<br/>
 				Factories of Oilseeds
 			</div>
-			<div class='caption'>
+			<div class='caption-bot'>
 				Hundreds of fatty acid structures synthesized by thousands of plants and their phylogenetic relationships
 			</div>
 		</div>
@@ -15,40 +15,52 @@
 
 		<div class='row'>
 		  <div class="col-sm-12 col-md-4">
-		    <div class="highlight well">
-		      <h3>Fatty Acids</h3>
-		      <p>
-						Structure images and info for >330 Fa.
-						Click Name to see species that produce a FA, publications, and data.
-						Click 'Tree' to display phylogentic distribution of a FA</p>
-		      <p><%= link_to "List FA", fatty_acids_path, class: 'btn btn-primary' %></p>
+		    <!-- <div class="highlight well"> -->
+				<div class="highlight thumbnail">
+					<div style='height:275px'><%= image_tag 'm_211.png', style: 'padding-top:75px'%></div>
+					<div class='caption'>
+			      <h3>Fatty Acids</h3>
+			      <p>
+							Structure images and info for >330 FA.
+							Click Name to see species that produce a FA, publications, and data.
+							Click 'Tree' to display phylogentic distribution of a FA</p>
+			      <p><%= link_to "List FA", fatty_acids_path, class: 'btn btn-primary' %></p>
+					</div>
 		    </div>
 		  </div>
 			<div class="col-sm-12 col-md-4">
-		    <div class="highlight well">
-		      <h3>Phylogeny</h3>
-		      <p>
-						Explore relationships between unusual FA structures and plants that produce them.
-						Clicking "Tree" at top of any page shows overview of all PhyloFAdb data coverage of the plant kingdom.
-					</p>
-		      <p><%= link_to "View Tree", tree_index_path, class: 'btn btn-primary' %></p>
+		    <!-- <div class="highlight well"> -->
+				<div class="highlight thumbnail">
+					<%= image_tag 'tree_thumb.jpg', style:'height:275px'%>
+					<div class='caption'>
+			      <h3>Phylogeny</h3>
+			      <p>
+							Explore relationships between unusual FA structures and plants that produce them.
+							Clicking "Tree" at top of any page shows overview of all PhyloFAdb data coverage of the plant kingdom.
+						</p>
+			      <p><%= link_to "View Tree", tree_index_path, class: 'btn btn-primary' %></p>
+					</div>
 		    </div>
 		  </div>
 		  <div class="col-sm-12 col-md-4">
-		    <div class="highlight well">
-		      <h3>Plants</h3>
-		      <p>
-						FA analysis for > 7000 plants.
-						Click on species for graphs of FA composition, oil content,
-						and links to publications and individual data sets.</p>
-		      <p><%= link_to "List Plants", plants_path, class: 'btn btn-primary' %></p>
+		    <!-- <div class="highlight well"> -->
+				<div class="highlight thumbnail">
+					<%= image_tag 'castor.jpg', style:'height:275px' %>
+					<div class='caption'>
+			      <h3>Plants</h3>
+			      <p>
+							FA analysis for > 7000 plants.
+							Click on species for graphs of FA composition, oil content,
+							and links to publications and individual data sets.</p>
+			      <p><%= link_to "List Plants", plants_path, class: 'btn btn-primary' %></p>
+					</div>
 		    </div>
 		  </div>
 		</div>
 		
 		<hr/>
 		
-		<div class='row'>
+		<div class='container'>
 			
 			<p>PhyloFAdb is under development and is based on the Seed Oil Fatty Acid (SOFA) database at the Max Rubner-Institute ( http://sofa.mri.bund.de ).</p>
 			<br/>

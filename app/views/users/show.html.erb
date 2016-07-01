@@ -3,7 +3,9 @@
 <% end %>
 
 <% content_for :item_bar do -%>
-	<%= link_to 'Show All Users', users_path, class: 'btn btn-primary' %>
+	<% if current_user.is_admin? %>
+		<%= link_to 'Show All Users', users_path, class: 'btn btn-primary' %>
+	<% end %>
 <% end -%>
 	
 

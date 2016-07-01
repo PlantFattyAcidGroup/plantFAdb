@@ -13,6 +13,7 @@ class Ability
       can :manage, Result
       can [:read, :update], User, id: user.id
     else
+      can :read, Page
       can :read, Plant
       can :read, Pub
       can :read, FattyAcid
