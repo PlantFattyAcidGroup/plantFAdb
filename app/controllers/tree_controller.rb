@@ -96,6 +96,7 @@ class TreeController < ApplicationController
         taxon: [parent.name]
       }
     end
+    expires_in 24.hours
     render json: tree
   end
 end
