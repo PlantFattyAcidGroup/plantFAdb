@@ -1,3 +1,11 @@
+<% content_for :title do -%>
+ PhyloFAdb: <%= @plant.genus %> <%= @plant.species %> <%= "- #{@plant.common_name}" if @plant.common_name %>
+<% end -%>
+
+<% content_for :description do -%>
+ Plant fatty acid compositions and phylogenetics. <%= @plant.genus %> <%= @plant.species %> <%= "- #{@plant.common_name}" if @plant.common_name %>
+<% end -%>
+
 <% content_for :top_bar do %>
 	<h1 class="pagetitle">
 		<% if @plant.genus.blank? && @plant.species.blank? %>

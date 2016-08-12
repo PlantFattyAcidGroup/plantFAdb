@@ -12,7 +12,7 @@
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
 				<%= application_top_navbar_items %>
-				<li class="<%= (params[:id] == 'downloads') ? 'active' : '' %>"><%= link_to "Downloads", Page.path('downloads') %></li>
+				<li class="<%= (params[:id] == 'downloads') ? 'active' : '' %>"><%= link_to "Resources", Page.path('downloads') %></li>
 				<li class="dropdown <%= 'active' if params[:id] =~ /(help)|(contact)|(about)/ %>">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 						Help <span class="caret"></span>
