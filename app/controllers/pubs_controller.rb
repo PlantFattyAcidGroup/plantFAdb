@@ -23,10 +23,36 @@ class PubsController < ApplicationController
         OR upper(wos_pages) LIKE ?
         OR upper(wos_uid) LIKE ?
         OR upper(wos_title) LIKE ?
+        OR upper(abstract) LIKE ?
         OR upper(doi) LIKE ?',
-        "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%" )
+        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%" )
     end
-
+    
+    unless params[:title_query].blank?
+      q = UnicodeUtils.upcase(params[:title_query])
+      @pubs = @pubs.where("upper(wos_title) like ?","%#{q}%")
+    end
+    
+    unless params[:author_query].blank?
+      q = UnicodeUtils.upcase(params[:author_query])
+      @pubs = @pubs.where("upper(wos_authors) like ?","%#{q}%")
+    end
+    
+    unless params[:abstract_query].blank?
+      q = UnicodeUtils.upcase(params[:abstract_query])
+      @pubs = @pubs.where("upper(abstract) like ?","%#{q}%")
+    end
+    
+    unless params[:journal_query].blank?
+      q = UnicodeUtils.upcase(params[:journal_query])
+      @pubs = @pubs.where("upper(wos_journal) like ?","%#{q}%")
+    end
+    
+    unless params[:year_query].blank?
+      q = UnicodeUtils.upcase(params[:year_query])
+      @pubs = @pubs.where("upper(wos_year) like ?","%#{q}%")
+    end
+    
     respond_to do |format|
       # Base html query
       format.html{ @pubs = @pubs.page params[:page]}

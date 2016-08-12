@@ -7,7 +7,25 @@
 <% end -%>
 
 <% content_for :top_bar do %>
-	<h1 class="pagetitle">Publications</h1>
+	<h1 class="pagetitle">Literature Listing</h1>
+  <p>
+    Information on over 1500 publications on plant fatty acids with links to species analyzed, analytical data, and full text of publications
+  </p>
+	<% unless params[:title_query].blank? %>
+		<p>Filtering on Title: <b><%= params[:title_query] %></b></p>
+	<% end %>
+	<% unless params[:author_query].blank? %>
+		<p>Filtering on Author: <b><%= params[:author_query] %></b></p>
+	<% end %>
+	<% unless params[:abstract_query].blank? %>
+		<p>Filtering on Abstract: <b><%= params[:abstract_query] %></b></p>
+	<% end %>
+	<% unless params[:journal_query].blank? %>
+		<p>Filtering on Journal: <b><%= params[:journal_query] %></b></p>
+	<% end %>
+	<% unless params[:year_query].blank? %>
+		<p>Filtering on Year: <b><%= params[:year_query] %></b></p>
+	<% end %>
 <% end %>
 
 <% content_for :item_bar do %>
@@ -22,7 +40,83 @@
     <%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
 <% end %>
 
-<%= render 'shared/page_and_search', items: @pubs  %>
+<div class='row'>
+	<div class='col-xs-12 col-sm-7 col-md-8 pull-left'>
+		<ul class="pagination">
+			<%= paginate @pubs %>
+		</ul>
+	</div>
+	<div class='col-xs-12 col-sm-5 col-md-4 search'>
+    <%= form_tag nil, method: :get do %>
+		<% params.except(:commit,:action,:controller,:utf8,:query).each do |parameter, val| %>
+			<%= hidden_field_tag parameter, val %>
+		<% end %>
+      <div class='form-inline pull-left-sm pull-right-md'>
+				<div class='form-group'>
+          <a href='<%= Page.path('help') %>' class='glyphicon glyphicon-question-sign' data-toggle='tooltip' data-html='true' title="
+            Simple search includes Author, title, journal, abstract and year. <br/><br/>
+            
+            Diacritical marks such as German umlaut(ä, ö and ü) are not recorded consistently in the literature and should be searched with more than one spelling. <br/> e.g. <br/>
+            Ölsäure -> Oelsaeure or Olsaure <br/>
+            Aitzetmüller -> Aitzetmueller or Aitzetmuller<br/><br/>
+            
+            Click for more details.
+          "></a>
+			    <label for="query">Search:</label>
+					<%= text_field_tag :query, params[:query], class: 'form-control' %>
+					<%= submit_tag "Go", class: "btn btn-info"%>
+				</div>
+					<br/>
+					<div class='pull-left-sm pull-right-md'>
+						<%= link_to "Advanced Query", '#', onclick: "$('#advanced_search').toggle()"%>
+					</div>
+			</div>
+    <% end %>
+	</div>
+</div>
+
+<div id='advanced_search' class='well form-horizontal' style='display:none;width:100%'>
+	<%= form_tag nil, method: :get do %>
+		
+		<div class='form-group'>
+			<%= label_tag :title_query, "Title", class: 'col-sm-2' %>
+			<div class='col-sm-8'>
+				<%= text_field_tag :title_query, params[:title_query], class: 'form-control' %>
+			</div>
+		</div>
+    
+		<div class='form-group'>
+			<%= label_tag :author_query, "Author", class: 'col-sm-2' %>
+			<div class='col-sm-8'>
+				<%= text_field_tag :author_query, params[:author_query], class: 'form-control' %>
+			</div>
+		</div>
+		
+		<div class='form-group'>
+			<%= label_tag :abstract_query, "Abstract", class: 'col-sm-2' %>
+			<div class='col-sm-8'>
+				<%= text_field_tag :abstract_query, params[:abstract_query], class: 'form-control' %>
+			</div>
+		</div>
+    
+		<div class='form-group'>
+			<%= label_tag :journal_query, "Journal", class: 'col-sm-2' %>
+			<div class='col-sm-8'>
+				<%= text_field_tag :journal_query, params[:journal_query], class: 'form-control' %>
+			</div>
+		</div>
+    
+		<div class='form-group'>
+			<%= label_tag :year_query, "Year", class: 'col-sm-2' %>
+			<div class='col-sm-8'>
+				<%= text_field_tag :year_query, params[:year_query], class: 'form-control' %>
+			</div>
+		</div>
+		
+		<%= submit_tag "Search", class: "btn btn-info"%>
+		<%= link_to "Clear Query", pubs_path, class: 'btn btn-warning pull-right' %>
+	<% end %>
+</div>
 
 <div class='panel table-responsive'>
 	

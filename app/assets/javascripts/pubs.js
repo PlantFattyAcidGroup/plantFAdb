@@ -1,7 +1,7 @@
 $( function(){		 
   $('form #doi_lookup').on('click',function(){		 
     var doi = $("#pub_doi").val();		 
-    $.get( "http://api.crossref.org/works/"+doi, function(data) {		 
+    $.get( "https://api.crossref.org/works/"+doi, function(data) {		 
       console.log("lookup crossref")		 
       console.log(data)		 
       ref = data.message;

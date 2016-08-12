@@ -1,4 +1,29 @@
-<%= render 'shared/page_and_search', items: plants  %>
+<div class='row'>
+	<div class='col-xs-12 col-sm-7 col-md-8 pull-left'>
+		<ul class="pagination">
+			<%= paginate plants %>
+		</ul>
+	</div>
+	<div class='col-xs-12 col-sm-5 col-md-4 search'>
+    <%= form_tag nil, method: :get do %>
+		<% params.except(:commit,:action,:controller,:utf8,:query).each do |parameter, val| %>
+			<%= hidden_field_tag parameter, val %>
+		<% end %>
+      <div class='form-inline pull-left-sm pull-right-md'>
+				<div class='form-group'>
+          <a href='<%= Page.path('help') %>'class='glyphicon glyphicon-question-sign' data-toggle='tooltip' data-html='true' title="
+            Search includes Order, family, Genus, species, common names and names from the SOFA database.<br/><br/>
+            
+            Click for more details.
+          "></a>
+			    <label for="query">Search:</label>
+					<%= text_field_tag :query, params[:query], class: 'form-control' %>
+					<%= submit_tag "Go", class: "btn btn-info"%>
+				</div>
+			</div>
+    <% end %>
+	</div>
+</div>
 
 <div class='panel table-responsive'>
 	
