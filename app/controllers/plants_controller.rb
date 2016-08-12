@@ -29,7 +29,7 @@ class PlantsController < ApplicationController
         OR upper(tnrs_family) LIKE ?
         OR upper(tnrs_name) LIKE ?
         OR upper(common_name) LIKE ?
-        OR upper(genus || ' ' || species) LIKE ?',
+        OR upper(genus || \' \' || species) LIKE ?',
         "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
       )
     end
