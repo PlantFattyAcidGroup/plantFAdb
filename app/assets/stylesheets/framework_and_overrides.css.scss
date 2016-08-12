@@ -69,12 +69,26 @@ nav.navbar {
 
 main {
   @extend .container;
-  padding-top: 75px;
+  padding-top: 95px;
   padding-bottom: 50px;
   width: 100%;
   min-height: 600px;
 }
 
+.sub-header {
+  position: fixed;
+  top: 75px;
+  left: 0;
+  width: 100%;
+  font-size: $font-size-base;
+  color: darken($navbar-inverse-link-color,5%);
+  background: darken($navbar-inverse-bg, 5%);
+  padding-top:3px;
+};
+
+.sub-header a {
+  color: darken($navbar-inverse-link-color,25%);
+}
 .footer {
   width: 100%;
   border-top: 2px solid $navbar-inverse-border;
@@ -197,6 +211,9 @@ th .sortable {
   .nav li a {
     padding-right: 5px;
     padding-left: 5px;
+  }
+  .sub-header {
+    font-size: $font-size-small;
   }
 }
 

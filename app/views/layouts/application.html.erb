@@ -27,6 +27,14 @@
 		<%= yield(:body) %>
 	<% end %>
 	<main role="main">
+    <% unless params[:controller]=='home' %>
+      <div class='sub-header'>
+        <div class='container'>
+          Exploring Phylogenetic Relationships between Hundreds of Plant Fatty Acids Synthesized by Thousands of Plants.
+          <%= link_to "more details ...", Page.path('about') %>
+        </div>
+      </div>
+    <% end %>
 		<%= render 'layouts/messages' %>
 		<!-- Jumbotron - primary message or actions -->
 		<% if content_for?(:jumbo) %>
