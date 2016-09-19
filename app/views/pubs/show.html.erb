@@ -127,13 +127,13 @@
 				<th>Data Points</th>
 		  </thead>
 		  <tbody>
-		    <% @pub.plants.order("genus, species").uniq.each do |plant| %>
+		    <% @pub.plants_pubs.includes(:plant).order("plants.genus, plants.species").each do |pb| %>
 		    <tr>
-		      <td><%= link_to plant.genus||"Unknown", plant %></td>
-		      <td><%= link_to plant.species||"Unknown", plant %></td>
-		      <td><%= plant.order_name %></td>
-		      <td><%= plant.family %></td>
-					<td><%= link_to plant.results.viewable.where(pub_id: @pub.id).count, results_path(pub_id: @pub.id, plant_id: plant.id) %></td>
+		      <td><%= link_to pb.plant.genus||"Unknown", pb.plant %></td>
+		      <td><%= link_to pb.plant.species||"Unknown", pb.plant %></td>
+		      <td><%= pb.plant.order_name %></td>
+		      <td><%= pb.plant.family %></td>
+					<td><%= link_to pb.plant.results.viewable.where(pub_id: @pub.id).count, plants_pub_path(pb) %></td>
 		    </tr>
 		    <% end %>
 		  </tbody>

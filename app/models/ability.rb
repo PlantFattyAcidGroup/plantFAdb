@@ -19,6 +19,7 @@ class Ability
       can :read, FattyAcid
       can [:read,:plant_yield], Result
       can [:read, :update], User, id: user.id
+      can :read, PlantsPub
     end
     #
     # The first argument to `can` is the action you are giving the user

@@ -4,8 +4,12 @@ class FattyAcidsController < ApplicationController
   # GET /fatty_acids
   def index
     @categories = FattyAcid.select("distinct(category)").map(&:category).compact.sort
-    @fatty_acids = @fatty_acids.order(sort_column + ' ' + sort_direction + ' nulls last, measures.id asc')
-    .joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id where unit in ('GLC-Area-%','weight-%') group by m.id) res on res.measure_id = measures.id ")
+    if ActiveRecord::Base.connection.adapter_name.downcase =~ /.*sqlite.*/
+      @fatty_acids = @fatty_acids.order(sort_column + ' ' + sort_direction + ', measures.id asc')
+    else
+      @fatty_acids = @fatty_acids.order(sort_column + ' ' + sort_direction + ' nulls last, measures.id asc')
+    end
+    @fatty_acids = @fatty_acids.joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id where unit in ('GLC-Area-%','weight-%') group by m.id) res on res.measure_id = measures.id ")
     .select("measures.*, res.result_count")
     if(params[:query])
       q = UnicodeUtils.upcase(params[:query])

@@ -4,8 +4,12 @@ class PlantsController < ApplicationController
   # GET /plants
   def index
     oil_content = Parameter.where("upper(delta_notation)='OIL CONTENT'").first
-    @plants = @plants.order(sort_column + ' ' + sort_direction+" nulls last, id asc")
-    .joins("left outer join (select count(distinct(p.pub_id)) pub_count, l.id plant_id from plants_pubs p left outer join plants l on p.plant_id = l.id group by l.id) pub on pub.plant_id = plants.id ")
+    if ActiveRecord::Base.connection.adapter_name.downcase =~ /.*sqlite.*/
+      @plants = @plants.order(sort_column + ' ' + sort_direction+", id asc")
+    else
+      @plants = @plants.order(sort_column + ' ' + sort_direction+" nulls last, id asc")
+    end
+    @plants = @plants.joins("left outer join (select count(distinct(p.pub_id)) pub_count, l.id plant_id from plants_pubs p left outer join plants l on p.plant_id = l.id group by l.id) pub on pub.plant_id = plants.id ")
     .joins("left outer join (select count(r.id) result_count, l.id plant_id from results r left outer join plants l on r.plant_id = l.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by l.id) res on res.plant_id = plants.id ")
     .page(params[:page])
     if oil_content
@@ -77,7 +81,7 @@ class PlantsController < ApplicationController
     @results.where("measures.type = 'FattyAcid'").each do |result|
       next unless result.unit == 'GLC-Area-%' || result.unit == 'weight-%'
       @fatty_acid_data[result.measure_id]||={object:result.measure,values:[]}
-      @fatty_acid_data[result.measure_id][:values]<<result.value.round(2)
+      @fatty_acid_data[result.measure_id][:values]<<result.value.to_f.round(2)
     end
     @fatty_acid_data = @fatty_acid_data.map{|k,v| v}
     @results.where("measures.type = 'Parameter'").each do |result|

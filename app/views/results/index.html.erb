@@ -81,13 +81,15 @@
           	<td><%= link_to result.measure.try(:delta_notation), result.measure %></td>
 					<% end %>
 					<% unless @pub %>
-          	<td><%= link_to result.pub.display_name, result.pub if result.pub %></td>
+            <!-- <td><%= link_to result.pub.display_name, result.pub if result.pub %></td> -->
+            <td><%= link_to result.pub.display_name, result.plants_pub if result.pub %></td> 
 					<% end %>
 					<% unless @plant %>
-						<td><%= link_to result.plant.display_name, result.plant if result.plant %></td>
+            <!-- <td><%= link_to result.plant.display_name, result.plant if result.plant %></td> -->
+            <td><%= link_to result.plant.display_name, result.plants_pub if result.plant %></td> 
 					<% end %>
 					<td><%= link_to result.publication.try(:sofa_tab_id), SofaTab.sofa_url(result.publication.try(:sofa_tab_id)), target: '_blank'%></td>
-          <td><%= result.value.round(2) %></td>
+          <td><%= result.value.to_f.round(2) %></td>
           <td><%= '*' if result.old_mol_val %> <%= result.unit %></td>         
         </tr>
       <% end %>

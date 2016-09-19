@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160701145300) do
+ActiveRecord::Schema.define(version: 20160917165921) do
 
   create_table "measures", force: :cascade do |t|
     t.string   "type"
@@ -79,6 +79,8 @@ ActiveRecord::Schema.define(version: 20160701145300) do
   create_table "plants_pubs", force: :cascade do |t|
     t.integer "pub_id",   precision: 38
     t.integer "plant_id", precision: 38
+    t.string  "remarks"
+    t.string  "notes"
   end
 
   create_table "publications", force: :cascade do |t|

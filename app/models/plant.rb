@@ -6,6 +6,11 @@ class Plant < ActiveRecord::Base
   has_paper_trail
   
   def display_name
-    "#{genus} #{species}"
+    if genus.blank? && species.blank?
+      family || order_name || sofa_family || sofa_name || 'Unknown Plant'
+    else
+      "#{genus} #{species}"
+    end
   end
+  
 end

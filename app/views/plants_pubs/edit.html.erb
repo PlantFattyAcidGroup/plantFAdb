@@ -1,0 +1,9 @@
+<% content_for :top_bar do %>
+  <%= render :partial => "header", locals: {pub: @plants_pub.pub, plant: @plants_pub.plant} %>
+<% end %>
+
+<% content_for :item_bar do %>
+  <%= link_to 'Cancel', @plants_pub, class: 'btn btn-primary' %>
+<% end %>
+
+<%= render 'form' %>

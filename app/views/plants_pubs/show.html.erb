@@ -1,0 +1,24 @@
+<% content_for :title do -%>
+ PhyloFAdb: <%= @plant.genus %> <%= @plant.species %> <%= "- #{@plant.common_name}" if @plant.common_name %> data
+<% end -%>
+
+<% content_for :description do -%>
+ Plant fatty acid compositions and phylogenetics. <%= @plant.genus %> <%= @plant.species %> <%= "- #{@plant.common_name}" if @plant.common_name %>
+<% end -%>
+
+<% content_for :top_bar do %>
+  <%= render :partial => "header", locals: {pub: @pub, plant: @plant} %>
+  <% if @plants_pub.remarks %>
+    <b>Remarks:</b> <br/>
+    <%= @plants_pub.remarks %>
+  <% end %>
+<% end %>
+
+<% content_for :item_bar do %>
+  <% if can? :edit, @plants_pub %>
+    <%= link_to 'Edit', edit_plants_pub_path(@plants_pub), class: 'btn btn-primary' %>
+  <% end %>
+<% end %>
+
+<%= render partial: "results", locals: {results: @results} %>
+

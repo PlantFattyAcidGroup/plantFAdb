@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       post 'condense_wos'
     end
   end
+  resources :plants_pubs
   
   devise_for :users
   resources :users
