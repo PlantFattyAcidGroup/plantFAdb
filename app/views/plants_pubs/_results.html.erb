@@ -26,7 +26,7 @@
 	    <tr>
       	<td><%= result.measure.try :type %></td>
 				<td><%= result.measure.try :name %></td>
-      	<td><%= link_to result.measure.try(:delta_notation), result.measure %></td>
+      	<td><%= link_to_if result.measure.is_a?(FattyAcid), result.measure.try(:delta_notation), result.measure %></td>
 	      <td><%= result.value %></td>
 	      <td><%= '*' if result.old_mol_val %> <%= result.unit %></td>
         <td><%= result.value.to_f.round(2) %></td>
