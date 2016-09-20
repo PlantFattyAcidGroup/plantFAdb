@@ -75,7 +75,7 @@ class ResultsController < ApplicationController
   end
 
   def plant_yield
-    @results = Result.includes(:measure, :pub, :plant)
+    @results = Result.includes(:measure, :pub, :plant).published
     .references(:measure, :pub, :plant)
     .where(measures: {type: ['FattyAcid']})
     .where(unit:  ['GLC-Area-%','weight-%'])
@@ -207,24 +207,24 @@ class ResultsController < ApplicationController
         # Check for higher clade tree member first
         if t = TreeNode.find_by(name: taxon[0])
           names = t.subtree.map(&:name)
-          plants = Plant.where(order_name: names)
+          plants = Plant.where(order_name: names).published
         else
           # lookup order
-          plants = Plant.where(order_name: taxon[0])
+          plants = Plant.where(order_name: taxon[0]).published
         end
         plants = plants.group(:family)
       when 2
         plants = Plant.where(
           order_name: taxon[0],
           family: taxon[1]
-        )
+        ).published
         plants = plants.group(:genus,:species)
       when 3
         plants = Plant.where(
           order_name: taxon[0],
           family: taxon[1],
           genus: taxon[2]
-        )
+        ).published
         plants = plants.group(:species)
       else
         plants= []

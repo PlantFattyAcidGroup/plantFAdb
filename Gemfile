@@ -44,6 +44,9 @@ gem 'summernote-rails'
 gem 'codemirror-rails'
 gem 'friendly_id'
 gem 'unicode_utils'
+gem 'draftsman'
+gem 'local_time'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

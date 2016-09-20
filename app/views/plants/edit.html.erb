@@ -6,4 +6,43 @@
   <%= link_to 'Back', plants_path, class: 'btn btn-primary' %>
 <% end %>
 
+<div class='well'>
+	<legend>SOFA Data</legend>
+  <div class="field">
+    <b>SOFA Family</b>
+    <%= @plant.sofa_family %>
+  </div>
+	
+  <div class="field">
+    <b>SOFA Name</b>
+    <%= @plant.sofa_name %>
+  </div>
+
+  <div class="field">
+    <b>Publications</b>
+    <%= link_to @plant.pubs.count, pubs_path(plant_id: @plant.id) %>
+  </div>
+
+  <div class="field">
+    <b>Results</b>
+    <%= link_to @plant.results.count, results_path(plant_id: @plant.id) %>
+  </div>
+</div>
+<br/>
+<div class='well'>
+	<legend>TNRS Accepted data</legend>
+  <div class="field">
+    <b>TNRS Family</b>
+		<%= @plant.tnrs_family %>
+  </div>
+  <div class="field">
+    <b>TNRS Name</b>
+		<%= @plant.tnrs_name %>
+  </div>
+  <div class="field">
+    <b>Accepted Rank</b>
+		<%= @plant.accepted_rank %>
+  </div>
+</div>
+
 <%= render 'form' %>

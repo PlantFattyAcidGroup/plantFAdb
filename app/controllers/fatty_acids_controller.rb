@@ -64,6 +64,7 @@ class FattyAcidsController < ApplicationController
       @fatty_acids = @fatty_acids.where(category: params[:category])
     end
     
+    @fatty_acids = @fatty_acids.published
     respond_to do |format|
       # Base html query
       format.html{
@@ -121,8 +122,8 @@ class FattyAcidsController < ApplicationController
 
   # POST /fatty_acids
   def create
-    if @fatty_acid.save
-      redirect_to @fatty_acid, notice: 'Fatty acid was successfully created.'
+    if @fatty_acid.draft_creation
+      redirect_to @fatty_acid, notice: 'A draft of the new Fatty Acid was successfully created.'
     else
       render :new
     end
@@ -130,8 +131,9 @@ class FattyAcidsController < ApplicationController
 
   # PATCH/PUT /fatty_acids/1
   def update
-    if @fatty_acid.update(resource_params)
-      redirect_to @fatty_acid, notice: 'Fatty acid was successfully updated.'
+    @fatty_acid.attributes = resource_params
+    if @fatty_acid.draft_update
+      redirect_to @fatty_acid, notice: 'A draft of the Fatty acid update was saved successfully.'
     else
       render :edit
     end

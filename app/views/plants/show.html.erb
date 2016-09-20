@@ -7,6 +7,9 @@
 <% end -%>
 
 <% content_for :top_bar do %>
+  <% unless @plant.published? %>
+    <p class='bg-warning'>This is an unpublished draft. <%= link_to 'Click here to view all draft data', drafts_path %></p>
+  <% end %>
 	<h1 class="pagetitle">
 		<% if @plant.genus.blank? && @plant.species.blank? %>
 		 <%= @plant.family || @plant.order_name || @plant.sofa_family || @plant.sofa_name %>

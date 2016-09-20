@@ -334,3 +334,24 @@ th .sortable {
 .thumbnail .carousel-control.right {
   background-image:none ;
 }
+
+.create-tag {
+  background-color: $brand-success;
+  padding: 2px 5px;
+  color: white;
+  border-radius: 5px;
+}
+
+.update-tag {
+  background-color: $brand-warning;
+  padding: 2px 5px;
+  color: white;
+  border-radius: 5px;
+}
+
+.destroy-tag {
+  background-color: $brand-danger;
+  padding: 2px 5px;
+  color: white;
+  border-radius: 5px;
+}

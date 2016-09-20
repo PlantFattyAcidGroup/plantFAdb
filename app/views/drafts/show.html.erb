@@ -1,0 +1,54 @@
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Draft <%= @draft.id %></h1><br/>
+  <span class='<%= @draft.event %>-tag'><%= @draft.create? ? "New" : @draft.destroy? ? "Delete" : "Update"  %></span><br/>
+<% end %>
+
+<% content_for :item_bar do %>
+	<%= link_to 'Back', drafts_path, class: 'btn btn-primary' %>
+<% end %>
+
+<div class='pull-left'>
+  <%= User.find_by(id: @draft.whodunnit).try(:email)  %>
+</div>
+<div class='pull-right'>
+  <%= link_to 'Publish', draft_path(@draft), method: :put, class: 'btn btn-success', style: 'margin-right:1em' %>
+  <%= link_to 'Revert', draft_path(@draft), method: :delete, class: 'btn btn-default' %>
+</div>
+
+
+<br/>
+<br/>
+
+<div class='well col-sm-12 col-md-6'>
+  <legend>Item details</legend>
+  <b>Type:</b> <%= @draft.item.display_type %><br/>
+  <b>Name:</b> <%= @draft.item.display_name %><br/><br/>
+  <%= link_to "Click here to view current item", @draft.item %>
+</div>
+<% if @draft.update? %>
+  <div class='well col-sm-12 col-md-6'>
+    <legend>Changes</legend>
+    <table class='table'>
+      <thead>
+        <th>Field</th>
+        <th>Old</th>
+        <th>New</th>
+      </thead>
+        <% @draft.changeset.each do |field, vals| %>
+          <tr>
+            <td><%= field %></td>
+            <td><%= vals[0] %></td>
+            <td><%= vals[1] %></td>
+          </tr>
+        <% end %>
+    </table>
+  </div>
+<% end %>
+
+<% unless @draft.draft_publication_dependencies.empty? %>
+  <%= render :partial => "dependencies", locals: {dependencies: @draft.draft_publication_dependencies} %>
+<% end %>
+
+<% unless @draft.draft_reversion_dependencies.empty? %>
+  <%= render :partial => "dependencies", locals: {dependencies: @draft.draft_reversion_dependencies} %>
+<% end %>

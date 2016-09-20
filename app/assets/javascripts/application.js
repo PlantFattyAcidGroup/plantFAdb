@@ -21,4 +21,5 @@
 //= require summernote
 //= require d3.v3.min
 //= require parallax.min
+//= require local_time
 //= require_tree .

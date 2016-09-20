@@ -7,6 +7,9 @@
 <% end -%>
 
 <% content_for :top_bar do %>
+  <% unless @fatty_acid.published? %>
+    <p class='bg-warning'>This is an unpublished draft. <%= link_to 'Click here to view all draft data', drafts_path %></p>
+  <% end %>
 	<h1 class="pagetitle"><%= @fatty_acid.name || @fatty_acid.delta_notation %> <small style='white-space:nowrap'><%= "(#{@fatty_acid.common_name})" if @fatty_acid.common_name%></small></h1>
 <% end %>
 

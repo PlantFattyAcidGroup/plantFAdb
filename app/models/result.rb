@@ -4,6 +4,7 @@ class Result < ActiveRecord::Base
   belongs_to :pub
   belongs_to :plant
   has_paper_trail
+  has_drafts
   scope :viewable, -> { includes(:measure).where(measures: {type: ['FattyAcid','Parameter']}).where(unit:  ['GLC-Area-%','weight-%']) }
   def plants_pub
     PlantsPub.find_by(plant: plant, pub: pub)

@@ -24,7 +24,7 @@ Rails.application.routes.draw do
     end
   end
   resources :plants_pubs
-  
+  resources :drafts
   devise_for :users
   resources :users
   resources :pages

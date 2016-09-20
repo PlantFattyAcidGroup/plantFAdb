@@ -7,11 +7,14 @@ class Ability
     if user.is_admin?
       can :manage, :all
     elsif user.is_editor?
-      can :manage, Plant
-      can :manage, Pub
-      can :manage, FattyAcid
-      can :manage, Result
+      can [:read, :create, :update], Plant
+      can [:read, :create, :update], Pub
+      can [:read, :create, :update], FattyAcid
+      can [:read, :create, :update, :plant_yield], Result
+      can [:read, :create, :update], PlantsPub
       can [:read, :update], User, id: user.id
+      # cannot update draft (update is used for 'publish')
+      can [:read, :create, :destroy], Draftsman::Draft, whodunnit: user.id.to_s
     else
       can :read, Page
       can :read, Plant

@@ -25,6 +25,11 @@
 						<li><%= link_to "About PhyloFA", Page.path('about') %></li>
           </ul>
 				</li>
+        <% if can? :create, Draftsman::Draft %>
+          <li class='<%= 'active' if params[:controller]=~/draft/ %>'>
+            <%= link_to "Manage Data", drafts_path %>
+          </li>
+        <% end %>
 				<% if user_signed_in? && current_user.is_admin? %>
 				<li class="dropdown <%= 'active' if params[:controller] == 'users' ||( params[:controller] == 'pages' && params[:action] == 'index') %>">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">

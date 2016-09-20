@@ -37,6 +37,7 @@ class PlantsController < ApplicationController
         "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
       )
     end
+    @plants = @plants.published
     respond_to do |format|
       # Base html query
       format.html{ @plants = @plants.page params[:page]}
@@ -100,8 +101,8 @@ class PlantsController < ApplicationController
 
   # POST /plants
   def create
-    if @plant.save
-      redirect_to @plant, notice: 'Plant was successfully created.'
+    if @plant.draft_creation
+      redirect_to @plant, notice: 'A draft of the new Plant was successfully created.'
     else
       render :new
     end
@@ -109,8 +110,9 @@ class PlantsController < ApplicationController
 
   # PATCH/PUT /plants/1
   def update
-    if @plant.update(resource_params)
-      redirect_to [:edit,@plant], notice: 'Plant was successfully updated.'
+    @plant.attributes = resource_params
+    if @plant.draft_update
+      redirect_to [:edit,@plant], notice: 'A draft of the Plant update was saved successfully.'
     else
       render :edit
     end

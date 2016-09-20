@@ -1,0 +1,24 @@
+<div class='well col-sm-12 col-md-6'>
+  <legend>Publication dependencies <small><br/><%= dependencies.count %></small></legend>
+  <table class='table'>
+    <thead>
+			<th></th>
+      <th>Draft</th>
+			<th>Name</th>
+			<th>Type</th>
+    </thead>
+      <% dependencies.each do |draft| %>
+        <% item = draft.reify %>
+        <tr>
+				<td>
+          <span class='<%= draft.event %>-tag'>
+            <%= draft.create? ? "New" : draft.destroy? ? "Delete" : "Update"  %>
+          </span>
+        </td>
+        <td><%= link_to draft.id, drafts_path(draft) %></td>
+        <td><%= item.display_name %></td>
+        <td><%= item.display_type %></td>
+        </tr>
+      <% end %>
+  </table>
+</div>

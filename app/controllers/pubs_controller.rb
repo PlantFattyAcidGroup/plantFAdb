@@ -56,7 +56,7 @@ class PubsController < ApplicationController
       q = UnicodeUtils.upcase(params[:year_query])
       @pubs = @pubs.where("upper(wos_year) like ?","%#{q}%")
     end
-    
+    @pubs = @pubs.published
     respond_to do |format|
       # Base html query
       format.html{ @pubs = @pubs.page params[:page]}

@@ -58,7 +58,10 @@ ActiveRecord::Schema.define(version: 20161012203920) do
     t.integer  "draft_id"
     t.datetime "published_at"
     t.datetime "trashed_at"
+<<<<<<< 10eabc4aa3d60af40e17b778e7f8cafcbceaa8e2
     t.string   "iupac_name"
+=======
+>>>>>>> working draft create / update, needs pub form + add data
   end
 
   create_table "names", force: :cascade do |t|

@@ -4,10 +4,18 @@ class Pub < ActiveRecord::Base
   has_many :sofa_tabs
   has_many :results
   serialize :original_pubs, Array
-  has_paper_trail
+  validates :wos_authors, presence: true
+  validates :wos_journal, presence: true
+  validates :wos_title, presence: true
   
+  has_paper_trail
+  has_drafts
   def display_name
     "#{wos_authors} #{wos_year ? "(#{wos_year})" : ''}. #{wos_journal} #{wos_volume} #{wos_pages}"
+  end
+  
+  def display_type
+    "Publication"
   end
   
   def self.condense_wos
