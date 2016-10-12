@@ -19,11 +19,7 @@ class FattyAcid < Measure
   def display_name
     text = "#{delta_notation} "
     text += " #{common_name} "
-    text += " #{name}" 
-  end
-  
-  def display_type
-    "Fatty Acid"
+    text += " - #{name}" 
   end
   
   def display_html

@@ -7,6 +7,9 @@
 <% end -%>
 
 <% content_for :top_bar do %>
+  <% unless @pub.published? %>
+    <p class='bg-warning'>This is an unpublished draft. <%= link_to 'Click here to view all draft data', drafts_path %></p>
+  <% end %>
 	<h1 class="pagetitle"><%= @pub.wos_title %></h1>
 <% end %>
 
@@ -127,13 +130,14 @@
 				<th>Data Points</th>
 		  </thead>
 		  <tbody>
-		    <% @pub.plants_pubs.includes(:plant).order("plants.genus, plants.species").each do |pb| %>
+		    <% @plants_pubs.includes(:plant).order("plants.genus, plants.species").each do |pb| %>
 		    <tr>
 		      <td><%= link_to pb.plant.genus||"Unknown", pb.plant %></td>
 		      <td><%= link_to pb.plant.species||"Unknown", pb.plant %></td>
 		      <td><%= pb.plant.order_name %></td>
 		      <td><%= pb.plant.family %></td>
-					<td><%= link_to pb.plant.results.viewable.where(pub_id: @pub.id).count, plants_pub_path(pb) %></td>
+          <% results = pb.published? ? pb.results.published : pb.results %>
+					<td><%= link_to results.count, plants_pub_path(pb) %></td>
 		    </tr>
 		    <% end %>
 		  </tbody>

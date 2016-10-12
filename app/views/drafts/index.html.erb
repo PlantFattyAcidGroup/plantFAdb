@@ -40,15 +40,17 @@ Pending updates are shown below. They will be reviewed by the administrator befo
             </span>
           </td>
           <td><%= item.display_name %></td>
-          <td><%= item.display_type %></td>
+          <td><%= item.class.model_name.human %></td>
           <% if current_user.is_admin? %><td><%= User.find_by(id:draft.whodunnit).try(:email) %></td><% end %>
           <td><%= local_time_ago(draft.updated_at) %></td>
-          <td style='text-align:right'>
+          <td style='text-align:right;white-space:nowrap'>
             <% if current_user.is_admin? %>
               <%= link_to 'Publish', draft_path(draft), method: :put, class: 'btn btn-success', style: 'margin-right:1em' %>
             <% end %>
-            <%= link_to 'Details', draft.create? ? draft.item : draft_path(draft), class: 'btn btn-info', style: 'margin-right:1em' %>
-            <%= link_to 'Revert', draft_path(draft), method: :delete, class: 'btn btn-default' %>
+            <!-- Special Pub link -->
+            <%= link_to "Add Data", new_plants_pub_path(pub_id: draft.item.id), class: 'btn btn-default', style: 'margin-right:1em' if draft.item.kind_of?(Pub)%>
+            <%= link_to 'Details', draft_path(draft), class: 'btn btn-info', style: 'margin-right:1em' %>
+            <%= link_to 'Revert', draft_path(draft), method: :delete, class: 'btn btn-warning', style: 'margin-right:1em'  %>
           </td>
         </tr>
       <% end %>

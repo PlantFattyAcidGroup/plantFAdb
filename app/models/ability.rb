@@ -7,7 +7,8 @@ class Ability
     if user.is_admin?
       can :manage, :all
     elsif user.is_editor?
-      can [:read, :create, :update], Plant
+      can :autocomplete_measure_name, Measure
+      can [:read, :create, :update, :autocomplete_plant_name], Plant
       can [:read, :create, :update], Pub
       can [:read, :create, :update], FattyAcid
       can [:read, :create, :update, :plant_yield], Result

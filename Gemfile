@@ -46,6 +46,8 @@ gem 'friendly_id'
 gem 'unicode_utils'
 gem 'draftsman'
 gem 'local_time'
+gem 'jquery-ui-rails'
+gem 'rails-jquery-autocomplete'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -68,5 +70,6 @@ group :development, :test do
   
   gem 'rails_layout'
   gem 'seed_dump'
+  gem 'railroady'
 end
 

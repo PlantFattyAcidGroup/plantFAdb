@@ -84,6 +84,7 @@ main {
   color: $navbar-inverse-link-active-color;
   background: darken($navbar-inverse-bg, 5%);
   padding-top:3px;
+  z-index: 1000;
 };
 
 .sub-header a {
@@ -133,6 +134,7 @@ section {
   position: fixed;
   top: 80px;
   width: 95%;
+  z-index: 1010;
 }
 // Styles for form views
 // using Bootstrap
@@ -161,6 +163,7 @@ section {
 #error_explanation:not(:empty) {
   @extend .alert;
   @extend .alert-danger;
+  z-index: 1010;
 }
 
 #error_explanation h2 {
@@ -333,6 +336,13 @@ th .sortable {
 }
 .thumbnail .carousel-control.right {
   background-image:none ;
+}
+
+.info-tag {
+  background-color: $brand-info;
+  padding: 2px 5px;
+  color: white;
+  border-radius: 5px;
 }
 
 .create-tag {

@@ -27,7 +27,9 @@
 				</li>
         <% if can? :create, Draftsman::Draft %>
           <li class='<%= 'active' if params[:controller]=~/draft/ %>'>
-            <%= link_to "Manage Data", drafts_path %>
+            <% draft_count=Draftsman::Draft.accessible_by(current_ability).includes(:item).where(item_type: ["Pub","Plant","Measure","PlantsPub"]).count %>
+            <% count_tag = draft_count > 0 ? '<sup class="info-tag">'+draft_count.to_s+'</sup>' : '' %>
+            <%= link_to ("Data "+count_tag).html_safe, drafts_path %>
           </li>
         <% end %>
 				<% if user_signed_in? && current_user.is_admin? %>

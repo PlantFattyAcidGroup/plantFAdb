@@ -1,15 +1,43 @@
-class PlantsPubsController < ApplicationController
+class PlantsPubsController < ApplicationController  
   load_and_authorize_resource
   def show
     @plant = @plants_pub.plant
     @pub = @plants_pub.pub
-    @results = Result.where(plant_id: @plant.id, pub_id: @pub.id)
+    @results = @plants_pub.results.includes(:measure)
       .order(sort_column + ' ' + sort_direction)
       .viewable
-      .page(params[:page])
+      .page(params[:page]).published
+  end
+  
+  def new
+    @plants_pub.pub = Pub.find(params[:pub_id])
+    @pub = @plants_pub.pub || Pub.new
+    @result = @plants_pub.results.build
+    @results = []
+  end
+  
+  def create
+    if @plants_pub.draft_creation
+      redirect_to edit_plants_pub_path(@plants_pub), notice: 'A draft of the new Plant table was successfully created.'
+    else
+      @pub = @plants_pub.pub || Pub.new
+      @result = @plants_pub.results.build
+      @results = []
+      render :new
+    end
   end
   
   def edit
+    @results = @plants_pub.results.page(params[:page]).includes(:measure)
+    if params[:sort].blank?
+      @results = @results.order(created_at: :desc)
+    else
+      @results = @results.order(sort_column + ' ' + sort_direction)
+    end
+    all_measures = @plants_pub.pub.plants_pubs.includes(results: [:measure]).map(&:results).flatten.map(&:measure).uniq
+    used_measures = @plants_pub.results.includes(:measure).map(&:measure).uniq
+    measure = (all_measures-used_measures).first
+    @result = @plants_pub.results.build(measure: measure)
   end
   
   def update
@@ -22,11 +50,11 @@ class PlantsPubsController < ApplicationController
   
   protected
   def sort_column
-    params[:sort] || "results.value"
+    ['unit','value','measures.delta_notation','measures.name', 'measures.type'].find{|c| c==params[:sort]} || "results.value"
   end
   
   def resource_params
-    params.require(:plants_pub).permit(:remarks, :notes)
+    params.require(:plants_pub).permit(:remarks, :notes, :plant_id, :pub_id)
   end
   
 end

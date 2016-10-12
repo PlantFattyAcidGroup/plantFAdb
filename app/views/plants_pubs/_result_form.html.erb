@@ -1,0 +1,23 @@
+<%= form_for result do |f| %>
+  <div class='col-md-5'>
+      <%= f.label :measure %><br>
+      <%= autocomplete_field_tag :measure, result.measure.try(:display_name), autocomplete_measure_name_measures_path,
+            placeholder: 'measure name...',
+            class: 'form-control',
+            id_element: "#result_measure_id_#{result.id||'new'}", required: true %>
+      <%= f.hidden_field :measure_id, value: result.measure_id, required: true, id: "result_measure_id_#{result.id||'new'}"%>
+  </div>
+  <div class='col-md-2'>
+      <%= f.label :value %><br>
+      <%= f.number_field :value, class: 'form-control', required: true %>
+  </div>
+  <div class='col-md-2'>
+      <%= f.label :unit %><br>
+      <%= f.select :unit, options_for_select(['weight-%','Mol%']), {},class: 'form-control' %>
+  </div>
+  <%= f.hidden_field :plants_pub_id, value: plants_pub_id %>
+  <div class='col-md-3'>
+    <br/>
+    <%= f.submit class: 'btn btn-info btn-block' %>
+  </div>
+<% end %>

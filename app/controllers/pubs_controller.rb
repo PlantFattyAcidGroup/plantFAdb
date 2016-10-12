@@ -15,7 +15,7 @@ class PubsController < ApplicationController
     else
       @pubs = @pubs.order(sort_column + ' ' + sort_direction + " nulls last, pubs.id ASC")
     end
-    @pubs = @pubs.joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join pubs p on r.pub_id = p.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by p.id) res on res.pub_id = pubs.id ")
+    @pubs = @pubs.joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join plants_pubs pl_tbl on pl_tbl.id = r.plants_pub_id left outer join pubs p on pl_tbl.pub_id = p.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by p.id) res on res.pub_id = pubs.id ")
     @pubs = @pubs.select("pubs.*, res.result_count")
     if(params[:query])
       q = UnicodeUtils.upcase(params[:query])
@@ -131,6 +131,7 @@ class PubsController < ApplicationController
   
   # GET /publications/1
   def show
+    @plants_pubs = @pub.published? ? @pub.plants_pubs.published : @pub.plants_pubs
   end
 
   # GET /publications/new
@@ -143,8 +144,8 @@ class PubsController < ApplicationController
 
   # POST /publications
   def create
-    if @pub.save
-      redirect_to @pub, notice: 'Pub was successfully created.'
+    if @pub.draft_creation
+      redirect_to @pub, notice: 'A draft of the new Publication was successfully created.'
     else
       render :new
     end
@@ -152,8 +153,9 @@ class PubsController < ApplicationController
 
   # PATCH/PUT /publications/1
   def update
-    if @pub.update(resource_params)
-      redirect_to @pub, notice: 'Pub was successfully updated.'
+    @pub.attributes = resource_params
+    if @pub.draft_update
+      redirect_to @pub, notice: 'A draft of the Publication update was saved.'
     else
       render :edit
     end

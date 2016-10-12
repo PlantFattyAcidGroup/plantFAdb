@@ -19,36 +19,46 @@
 <br/>
 <br/>
 
-<div class='well col-sm-12 col-md-6'>
-  <legend>Item details</legend>
-  <b>Type:</b> <%= @draft.item.display_type %><br/>
-  <b>Name:</b> <%= @draft.item.display_name %><br/><br/>
-  <%= link_to "Click here to view current item", @draft.item %>
-</div>
-<% if @draft.update? %>
-  <div class='well col-sm-12 col-md-6'>
-    <legend>Changes</legend>
-    <table class='table'>
-      <thead>
-        <th>Field</th>
-        <th>Old</th>
-        <th>New</th>
-      </thead>
-        <% @draft.changeset.each do |field, vals| %>
-          <tr>
-            <td><%= field %></td>
-            <td><%= vals[0] %></td>
-            <td><%= vals[1] %></td>
-          </tr>
-        <% end %>
-    </table>
+<div class='container'>
+  <div class='well col-sm-12 col-md-5'>
+    <legend>Item details</legend>
+    <b>Type:</b> <%= @draft.item.class.model_name.human %><br/>
+    <b>Name:</b> <%= @draft.item.display_name %><br/><br/>
+    <%= link_to "Click here to view current item", @draft.item %>
   </div>
-<% end %>
 
-<% unless @draft.draft_publication_dependencies.empty? %>
-  <%= render :partial => "dependencies", locals: {dependencies: @draft.draft_publication_dependencies} %>
-<% end %>
+  <div class='col-md-1'></div>
+  <% if @draft.update? %>
+    <div class='well col-sm-12 col-md-6'>
+      <legend>Changes</legend>
+      <table class='table'>
+        <thead>
+          <th>Field</th>
+          <th>Old</th>
+          <th>New</th>
+        </thead>
+          <% @draft.changeset.each do |field, vals| %>
+            <tr>
+              <td><%= field %></td>
+              <td><%= vals[0] %></td>
+              <td><%= vals[1] %></td>
+            </tr>
+          <% end %>
+      </table>
+    </div>
+  <% end %>
+</div>
 
-<% unless @draft.draft_reversion_dependencies.empty? %>
-  <%= render :partial => "dependencies", locals: {dependencies: @draft.draft_reversion_dependencies} %>
-<% end %>
+<div class='container'>
+  <div class='panel panel-default'>
+    <div class='panel-heading'><h2 class="panel-title">Dependent Items</h2></div>
+    <div class='panel-body'>
+      <% unless (@draft.draft_publication_dependencies||[]).empty? %>
+          <%= render :partial => "dependencies", locals: {dependencies: @draft.draft_publication_dependencies, name: 'Publish'} %>
+      <% end %>
+      <% unless (@draft.draft_reversion_dependencies||[]).empty? %>
+          <%= render :partial => "dependencies", locals: {dependencies: @draft.draft_reversion_dependencies, name: 'Revert'} %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -118,10 +118,10 @@
 				
 			</small><br/><br/>
 			<span> 
-				<%= link_to "View #{pluralize @plant.pubs.uniq.count,"Publication"}", pubs_path(plant_id: @plant.id) %>
+				<%= link_to "View #{pluralize @plant.pubs.published.uniq.count,"Publication"}", pubs_path(plant_id: @plant.id) %>
 			</span> |
 			<span>
-				<%= link_to "View #{pluralize @plant.results.viewable.count, "Data Point"}", results_path(plant_id: @plant.id) %>
+				<%= link_to "View #{pluralize @plant.results.published.viewable.count, "Data Point"}", results_path(plant_id: @plant.id) %>
 			</span>
 			<% unless @fatty_acid_data.empty? %>
 				<legend><h5>Fatty Acid Data</h5></legend>

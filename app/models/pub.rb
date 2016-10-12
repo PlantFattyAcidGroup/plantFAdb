@@ -2,7 +2,7 @@ class Pub < ActiveRecord::Base
   has_many :plants_pubs, dependent: :destroy
   has_many :plants, through: :plants_pubs
   has_many :sofa_tabs
-  has_many :results
+  has_many :results, through: :plants_pubs
   serialize :original_pubs, Array
   validates :wos_authors, presence: true
   validates :wos_journal, presence: true
@@ -11,11 +11,7 @@ class Pub < ActiveRecord::Base
   has_paper_trail
   has_drafts
   def display_name
-    "#{wos_authors} #{wos_year ? "(#{wos_year})" : ''}. #{wos_journal} #{wos_volume} #{wos_pages}"
-  end
-  
-  def display_type
-    "Publication"
+    "<i>#{wos_title}</i> #{wos_authors} #{wos_journal} #{wos_year.blank? ? '' : "(#{wos_year})"}  #{wos_volume} #{wos_pages}".html_safe
   end
   
   def self.condense_wos

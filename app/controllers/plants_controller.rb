@@ -10,11 +10,11 @@ class PlantsController < ApplicationController
       @plants = @plants.order(sort_column + ' ' + sort_direction+" nulls last, id asc")
     end
     @plants = @plants.joins("left outer join (select count(distinct(p.pub_id)) pub_count, l.id plant_id from plants_pubs p left outer join plants l on p.plant_id = l.id group by l.id) pub on pub.plant_id = plants.id ")
-    .joins("left outer join (select count(r.id) result_count, l.id plant_id from results r left outer join plants l on r.plant_id = l.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by l.id) res on res.plant_id = plants.id ")
+    .joins("left outer join (select count(r.id) result_count, l.id plant_id from results r left outer join plants_pubs pl_tbl on pl_tbl.id = r.plants_pub_id left outer join plants l on pl_tbl.plant_id = l.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by l.id) res on res.plant_id = plants.id ")
     .page(params[:page])
     if oil_content
       @plants = @plants.joins("left outer join (
-        select avg(r.value) avg_oil_content, p.id plant_id from results r left outer join plants p on r.plant_id = p.id where r.measure_id = #{oil_content.id} group by p.id
+        select avg(r.value) avg_oil_content, p.id plant_id from results r left outer join plants_pubs pl_tbl on pl_tbl.id = r.plants_pub_id left outer join plants p on pl_tbl.plant_id = p.id where r.measure_id = #{oil_content.id} group by p.id
       ) oil_res on oil_res.plant_id = plants.id ")
       .select("plants.*, pub.pub_count, res.result_count, oil_res.avg_oil_content")
     else
@@ -123,7 +123,28 @@ class PlantsController < ApplicationController
     @plant.destroy
     redirect_to plants_url, notice: 'Plant was successfully destroyed.'
   end
-
+  
+  def autocomplete_plant_name
+    q = UnicodeUtils.upcase(params[:term]||'')
+    plants = Plant.where('
+        upper(sofa_name) LIKE ?
+        OR upper(sofa_family) LIKE ?
+        OR upper(sofa_family || \' \' || sofa_name) LIKE ?
+        OR upper(genus) LIKE ?
+        OR upper(species) LIKE ?
+        OR upper(tnrs_family) LIKE ?
+        OR upper(tnrs_name) LIKE ?
+        OR upper(tnrs_family || \' \' || tnrs_name) LIKE ?
+        OR upper(common_name) LIKE ?
+        OR upper(genus || \' \' || species) LIKE ?
+        OR upper(family || \' \' || genus || \' \' || species) LIKE ?
+        OR upper(order_name || \' \' || family || \' \' || genus || \' \' || species) LIKE ?',
+        "#{q}%","#{q}%","#{q}%", "#{q}%", "#{q}%", "#{q}%", "#{q}%","#{q}%", "#{q}%", "#{q}%", "#{q}%", "#{q}%"
+      )
+    .order('genus, species, sofa_name').limit(15)
+    render :json => plants.map { |plant| {:id => plant.id, :label => "#{plant.display_name} - #{plant.common_name}", :value => plant.display_name} }
+  end
+  
   private
     # Only allow a trusted parameter "white list" through.
     def resource_params

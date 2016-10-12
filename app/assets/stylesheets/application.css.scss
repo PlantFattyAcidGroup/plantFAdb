@@ -13,6 +13,7 @@
  *= require framework_and_overrides
  *= require_self
  *= require c3.min
+ *= require jquery-ui/autocomplete
  */
 @import "codemirror";
 @import "codemirror/themes/monokai";

@@ -4,8 +4,8 @@ class ResultsController < ApplicationController
   def index
     @measure_types = Measure.select(:type).distinct.map(&:type)
     @results = @results.order(sort_column + ' ' + sort_direction).order("results.id ASC")
-    .includes(:measure, :pub, :publication, :plant)
-    .references(:measure, :pub, :publication, :plant)
+    .includes(:measure, :publication, plants_pub: [:plant, :pub])
+    .references(:measure, :publication, plants_pub: [:plant, :pub])
     .where(measures: {type: ['FattyAcid','Parameter']})
     .where(unit:  ['GLC-Area-%','weight-%'])
     if params[:query]
@@ -41,10 +41,10 @@ class ResultsController < ApplicationController
       @results = @results.where("measures.type =?",params[:measure_type])
     end
     if params[:plant_id] && @plant = Plant.find_by(id: params[:plant_id])
-      @results = @results.where(plant_id: params[:plant_id])
+      @results = @results.where(plants_pubs: {plant_id: params[:plant_id]})
     end
     if params[:pub_id] && @pub = Pub.find_by(id: params[:pub_id])
-      @results = @results.where(pub_id: params[:pub_id])
+      @results = @results.where(plants_pubs: {pub_id: params[:pub_id]})
     end
     if params[:measure_id] && @measure = Measure.find_by(id: params[:measure_id])
       @results = @results.where(measure_id: params[:measure_id])
@@ -75,7 +75,7 @@ class ResultsController < ApplicationController
   end
 
   def plant_yield
-    @results = Result.includes(:measure, :pub, :plant).published
+    @results = Result.includes(:measure, plants_pub: [:plant, :pub]).published
     .references(:measure, :pub, :plant)
     .where(measures: {type: ['FattyAcid']})
     .where(unit:  ['GLC-Area-%','weight-%'])
@@ -138,17 +138,20 @@ class ResultsController < ApplicationController
 
   # POST /results
   def create
-    if @result.save
-      redirect_to @result, notice: 'Result was successfully created.'
+    if @result.draft_creation
+      @result.plants_pub.attributes = {updated_at: Time.now}
+      @result.plants_pub.draft_update
+      redirect_to edit_plants_pub_path(@result.plants_pub), notice: 'Datapoint Created.'
     else
-      render :new
+      redirect_to edit_plants_pub_path(params[:result][:plants_pub_id])
     end
   end
 
   # PATCH/PUT /results/1
   def update
-    if @result.update(resource_params)
-      redirect_to @result, notice: 'Result was successfully updated.'
+    @result.attributes = resource_params
+    if @result.draft_update
+      redirect_to edit_plants_pub_path(@result.plants_pub), notice: 'Datapoint updated.'
     else
       render :edit
     end
@@ -156,8 +159,9 @@ class ResultsController < ApplicationController
 
   # DELETE /results/1
   def destroy
-    @result.destroy
-    redirect_to results_url, notice: 'Result was successfully destroyed.'
+    path = edit_plants_pub_path(@result.plants_pub)
+    @result.draft_destruction
+    redirect_to path, notice: 'Datapoint removed.'
   end
 
   private
@@ -230,10 +234,12 @@ class ResultsController < ApplicationController
         plants= []
       end
     end
+    
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:result).permit(:value, :unit, :measure_id, :pub_id)
+      params.require(:result).permit(:value, :unit, :measure_id, :plants_pub_id)
     end
+    
     def sort_column
       if params[:pub_id]
         params[:sort]|| "plants.genus asc, plants.species asc, pubs.authors, delta_notation asc, value"
@@ -243,6 +249,7 @@ class ResultsController < ApplicationController
         params[:sort]|| (params[:plant_id] ? "delta_notation asc, value" : "value")
       end
     end
+    
     def sort_direction
       %w[asc desc].include?(params[:direction]) ?  params[:direction] : "desc"  
     end
