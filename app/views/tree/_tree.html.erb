@@ -12,7 +12,7 @@
 			$("#loading-indicator").remove()
 			var t = $('#tree')
 			t.show()
-			t.append("<div style='position:absolute;top:2px;right:10%'><%= value_method=='totalCount' ? 'number of datapoints for taxon' : 'wt% for FA / category' %></div>")
+			t.append("<div style='font-size:140%;position:absolute;top:2px;right:10%'><%= value_method=='totalCount' ? 'number of datapoints for taxon' : 'wt% for FA / category' %></div>")
 			tree = d3.phylotree()
 				.element('#tree')
 				.data(json)

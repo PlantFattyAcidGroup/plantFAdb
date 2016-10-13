@@ -124,14 +124,15 @@
     <thead>
       <tr>
 				<th style="width:300px">Structure</th>
+        <th>Phylo Tree</th>
 				<th><%= sortable 'name','Systematic Name' %></th>
+        <th><%= sortable 'delta_notation', '∆ Notation' %></th>
 				<th style='white-space:nowrap'>Other Names</th>
 				<th><%= sortable 'Formula' %></th>
 				<th><%= sortable 'Mass' %></th>
-				<th><%= sortable 'delta_notation', '∆ Notation' %></th>
-				<th><%= sortable 'sofa_mol_id', 'SOFA ID'%></th>
-        <th><%= sortable 'result_count', 'Data Points'%></th>
-				<th>Phylo Tree</th>
+        <th><%= sortable 'result_count', 'Data<br/>Points'%></th>
+        <th><%= sortable 'sofa_mol_id', 'SOFA<br/>ID'%></th>
+				
       </tr>
     </thead>
 
@@ -145,19 +146,30 @@
 							<%= link_to image_tag("http://opsin.ch.cam.ac.uk/opsin/#{fatty_acid.name}.png"), fatty_acid if fatty_acid.name %>
 						<% end %>
 					</td>
+          <td><%= link_to 'Tree', tree_index_path(measure_id: fatty_acid.id),
+                    {target: '_blank',
+                    title: "View on Phylogenetic Tree"} if fatty_acid.result_count %></td>
 					<td><%= link_to fatty_acid.name, fatty_acid if fatty_acid.name%></td>
+          <td><%= fatty_acid.delta_notation %></td>
 					<td><%= truncate("#{[fatty_acid.common_name,fatty_acid.other_names].compact.join('; ')}",{length: 150}) %></td>
 					<td style='white-space:nowrap'><%= fatty_acid.formula %></td>
 					<td><%= fatty_acid.mass %></td>
-          <td><%= fatty_acid.delta_notation %></td>
-					<td><%= fatty_acid.sofa_mol_id %></td>
+          
+					
           <td><%= link_to fatty_acid.result_count, results_path(measure_id: fatty_acid.id) if fatty_acid.result_count %></td>
-        	<td><%= link_to "Tree", tree_index_path(measure_id: fatty_acid.id) if fatty_acid.result_count %></td>
+          <td><%= fatty_acid.sofa_mol_id %></td>
 				</tr>
       <% end %>
     </tbody>
   </table>
 </div>
 
+<div class='row'>
+	<div class='col-xs-12 col-sm-6 col-md-5'>
+		<ul class="pagination pull-left">
+			<%= paginate @fatty_acids %>
+		</ul>
+	</div>
+</div>
 <% content_for :footer do -%>
 <% end -%>

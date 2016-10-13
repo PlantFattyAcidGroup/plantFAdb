@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160917165921) do
+ActiveRecord::Schema.define(version: 20161012203920) do
 
   create_table "measures", force: :cascade do |t|
     t.string   "type"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20160917165921) do
     t.string   "image_link"
     t.string   "common_name"
     t.string   "category"
+    t.string   "iupac"
   end
 
   create_table "names", force: :cascade do |t|

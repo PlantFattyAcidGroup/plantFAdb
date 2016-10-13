@@ -15,9 +15,6 @@
         of plants and their phylogenetic
         relationships
 			</div>
-      <!-- <div class='caption-bot'>
-        Hundreds of fatty acids synthesized by thousands of plants and their phylogenetic relationships
-      </div> -->
 		</div>
 	</div>
 	
@@ -25,7 +22,6 @@
 
 		<div class='row'>
 		  <div class="col-sm-12 col-md-4">
-		    <!-- <div class="highlight well"> -->
 				<div class="highlight thumbnail">
 					<div style='height:275px'><%= image_tag 'm_211.png', style: 'padding-top:75px'%></div>
 					<div class='caption'>
@@ -39,21 +35,57 @@
 		    </div>
 		  </div>
 			<div class="col-sm-12 col-md-4">
-		    <!-- <div class="highlight well"> -->
-				<div class="highlight thumbnail">
-					<%= image_tag 'tree_thumb.jpg', style:'height:275px'%>
-					<div class='caption'>
-			      <h3>Phylogeny</h3>
-			      <p>
-							Explore relationships between unusual FA structures and plants that produce them.
-							Clicking "Tree" at top of any page shows overview of all PhyloFAdb data coverage of the plant kingdom.
-						</p>
-			      <p><%= link_to "View Tree", tree_index_path, class: 'btn btn-primary' %></p>
-					</div>
-		    </div>
+        <div class="highlight thumbnail">
+          <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+              <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+              <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+              <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+            </ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+              <div class="item active">
+                <!-- <img src="..." alt="..."> -->
+                <%= image_tag 'Slide1.png'%>
+                <div class="carousel-caption">
+                  <p>Phylogenetic distribution of Octanoic Acid</p>
+                </div>
+              </div>
+              <div class="item">
+                <%= image_tag 'Slide2.png'%>
+                <div class="carousel-caption">
+                  <p>Family level distribution of Octanoic Acid</p>
+                </div>
+              </div>
+              <div class="item">
+                <%= image_tag 'Slide3.png'%>
+                <div class="carousel-caption">
+                  <p>Species level distribution of Octanoic Acid</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Controls -->
+            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+  				<div class='caption'>
+  		      <h3>Phylogeny</h3>
+  		      <p>
+  						Explore relationships between unusual FA structures and plants that produce them.
+  		      </p>
+            <p><%= link_to "View Tree", tree_index_path, class: 'btn btn-primary' %></p>
+  				</div>
+        </div>
 		  </div>
 		  <div class="col-sm-12 col-md-4">
-		    <!-- <div class="highlight well"> -->
 				<div class="highlight thumbnail">
 					<%= image_tag 'castor.jpg', style:'height:275px' %>
 					<div class='caption'>
@@ -80,21 +112,6 @@
 		</div>
 		
 	</div>
-	
-	<!-- <div class="parallax-window" data-parallax="scroll" data-image-src="<%= image_path("sunflowers.png") %>"></div> -->
-	<!-- <div class='container'>
-		<h1>Phylogenetic Tree</h1>
-		<h3>
-			Number of datapoints across all publications for a phylogenetic class. More filter options are available on the tree page.
-		</h3>
-		<div id='tree' class='well' style="min-height:400px;width:100%;padding:0;position:relative;display:none">
-			<span id='loading-indicator' class="glyphicon glyphicon-refresh gly-spin"></span>
-		</div>
-		<%#= render partial: "tree/tree", locals: {value_method: 'totalCount'}%>
-	</div> -->
-	
-	<!-- <div class="parallax-window" data-parallax="scroll" data-image-src="<%= image_path("red_sunflower.png") %>"></div> -->
-	<!-- <div class="parallax-window" data-parallax="scroll" data-image-src="<%= image_path("castor_green.png") %>"></div> -->
 
 <% end -%>
 

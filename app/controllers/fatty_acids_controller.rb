@@ -71,7 +71,7 @@ class FattyAcidsController < ApplicationController
       # TXT download
       format.csv{
         render_csv do |out|
-          out << CSV.generate_line(["ID","Delta notation","Name","Common Name","Other Names","Category","Formula","Mass", "inchi","stdinchi","stdinchikey","smiles","Cas number", "Sofa mol ID", "LipidMaps ID", "PubChem ID", "ChEBI ID","SOFA Systematic Names(s)", "SOFA Trivial Name(s)","Result Count"])
+          out << CSV.generate_line(["ID","Delta notation","Name","Common Name","Other Names","Category","Formula","Mass","IUPAC Name","inchi","stdinchi","stdinchikey","smiles","Cas number", "Sofa mol ID", "LipidMaps ID", "PubChem ID", "ChEBI ID","SOFA Systematic Names(s)", "SOFA Trivial Name(s)","Result Count"])
           @fatty_acids.find_each(batch_size: 500) do |item|
             out << CSV.generate_line([
               (can? :edit, item) ? "=HYPERLINK(\"#{root_url}js_redirect.html?page=#{edit_fatty_acid_path(item.id)}\",\"#{item.id}\")" : item.id,
@@ -82,6 +82,7 @@ class FattyAcidsController < ApplicationController
               item.category,
               item.formula,
               item.mass,
+              item.iupac_name,
               item.inchi,
               item.stdinchi,
               item.stdinchikey,
@@ -146,7 +147,7 @@ class FattyAcidsController < ApplicationController
     def resource_params
       params.require(:fatty_acid).permit(:name, :common_name, :other_names, :category, :formula, :type, :delta_notation, :image_link,
         :cas_number, :sofa_mol_id, :lipidmap_id, :pubchem_id, :chebi_id, :structure, :mass,
-        :inchi,:stdinchi,:stdinchikey,:smiles)
+        :inchi,:stdinchi,:stdinchikey,:smiles,:iupac_name)
     end
     
     def sort_column

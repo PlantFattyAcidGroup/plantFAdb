@@ -312,3 +312,21 @@ th .sortable {
     transform: rotate(359deg);
   }
 }
+
+.carousel img {
+  height:275px !important;
+  max-width:100%;
+}
+.carousel-caption{
+  font-size:14px;
+  background: rgba(30,30,30,0.5);
+  left: 10%;
+  right: 10%;
+}
+
+.carousel-control.left {
+  background-image:none ;
+}
+.carousel-control.right {
+  background-image:none ;
+}
