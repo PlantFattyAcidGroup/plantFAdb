@@ -21,19 +21,6 @@
 	<div class="container" style='margin-top:3em;margin-bottom:5em'>
 
 		<div class='row'>
-		  <div class="col-sm-12 col-md-4">
-				<div class="highlight thumbnail">
-					<div style='height:275px'><%= image_tag 'm_211.png', style: 'padding-top:75px'%></div>
-					<div class='caption'>
-			      <h3>Fatty Acids</h3>
-			      <p>
-							Structure images and info for >330 FA.
-							Click Name to see species that produce a FA, publications, and data.
-							Click 'Tree' to display phylogentic distribution of a FA</p>
-			      <p><%= link_to "List FA", fatty_acids_path, class: 'btn btn-primary' %></p>
-					</div>
-		    </div>
-		  </div>
 			<div class="col-sm-12 col-md-4">
         <div class="highlight thumbnail">
           <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
@@ -84,6 +71,19 @@
             <p><%= link_to "View Tree", tree_index_path, class: 'btn btn-primary' %></p>
   				</div>
         </div>
+		  </div>
+		  <div class="col-sm-12 col-md-4">
+				<div class="highlight thumbnail">
+					<div style='height:275px'><%= image_tag 'm_211.png', style: 'padding-top:75px'%></div>
+					<div class='caption'>
+			      <h3>Fatty Acids</h3>
+			      <p>
+							Structure images and info for >330 FA.
+							Click Name to see species that produce a FA, publications, and data.
+							Click 'Tree' to display phylogentic distribution of a FA</p>
+			      <p><%= link_to "List FA", fatty_acids_path, class: 'btn btn-primary' %></p>
+					</div>
+		    </div>
 		  </div>
 		  <div class="col-sm-12 col-md-4">
 				<div class="highlight thumbnail">

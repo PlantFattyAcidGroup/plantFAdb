@@ -24,8 +24,9 @@ class FattyAcidsController < ApplicationController
         OR upper(formula) LIKE ?
         OR upper(category) LIKE ?
         OR upper(common_name) LIKE ?
+        OR upper(iupac_name) LIKE ?
         OR mass = ?',
-        "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", q.to_f
+        "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", q.to_f
       )
     end
     unless params[:mass_min].blank?

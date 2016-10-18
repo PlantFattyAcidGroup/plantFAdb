@@ -6,5 +6,12 @@ namespace :db do
       puts "Seeding #{filename}..."
       load(filename) if File.exist?(filename)
     end
+    task :reload_tree => :environment do
+      puts "removing tree"
+      puts TreeNode.destroy_all
+      puts "Loading new tree"
+      ENV['SEED']='db/seed_tree.rb'
+      Rake::Task["db:seed:single"].invoke
+    end
   end
 end

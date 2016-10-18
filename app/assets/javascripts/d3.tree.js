@@ -224,7 +224,7 @@
   	        return diagonal({source: o, target: o});
   	      })
   				.attr('stroke',function(d){
-  					return getColor(d.source);
+  					return getColor(d.target);
   				})
   	  // Transition links to their new position.
   	  link.transition()

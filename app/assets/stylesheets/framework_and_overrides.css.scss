@@ -81,7 +81,7 @@ main {
   left: 0;
   width: 100%;
   font-size: $font-size-base;
-  color: darken($navbar-inverse-link-color,5%);
+  color: $navbar-inverse-link-active-color;
   background: darken($navbar-inverse-bg, 5%);
   padding-top:3px;
 };
@@ -318,10 +318,12 @@ th .sortable {
   max-width:100%;
 }
 .carousel-caption{
-  font-size:14px;
+  font-size:12px;
   background: rgba(30,30,30,0.5);
-  left: 10%;
-  right: 10%;
+  left: 15%;
+  right: 15%;
+  padding-bottom:15px;
+  padding-top:5px;
 }
 
 .carousel-control.left {

@@ -54,9 +54,14 @@ class TreeController < ApplicationController
 	    rosids: "#F4D2DD",
 	    fabids: "#ECB5CA",
 	    malvids: "#E58BAF",
-	    asterid: "#F6D7BA",
+	    asterids: "#F6D7BA",
 	    lamiids: "#EEB688",
 	    campanulids: "#E6955E",
+      dilleniales: "#FAE7EC",
+      santalales: "#FBEBD7",
+      berberidopsidales: "#FBEBD7",
+      caryophyllales: "#FBEBD7"
+      
 		}
     tree = TreeNode.arrange_serializable(:order => :id) do |parent, children|
       max = avg = count = color = nil
@@ -80,10 +85,9 @@ class TreeController < ApplicationController
         count = results.count
         max = results.maximum(:value).to_f.try(:round,4)
         #avg = results.average(:value).to_f.try(:round,4)
-      else
-        name = parent.name.downcase.gsub(' ','_').to_sym
-        color = phyloColors[name]
       end
+      name = parent.name.downcase.gsub(' ','_').to_sym
+      color = phyloColors[name]
       {
         id: parent.name,
         name: parent.name,

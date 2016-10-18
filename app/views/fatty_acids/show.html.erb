@@ -36,6 +36,13 @@
 	    <strong>Mass:</strong>
 	    <%= @fatty_acid.mass %>
 	  </p>
+    
+    <% if @fatty_acid.iupac_name %>
+	  <p>
+	    <strong>IUPAC name:</strong>
+	    <%= @fatty_acid.iupac_name %>
+	  </p>
+    <% end %>
 	</div>
 	<div class='col-md-6'>
 		<% if @fatty_acid.image_link %>

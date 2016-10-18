@@ -48,9 +48,9 @@ angio = seed_plants.children.create name: 'Angiosperms', common_name: 'Flowering
 
       core = dicot.children.create name: 'Core eudicots', common_name: '', note: ''
         core.children.create name: 'Gunnerales', common_name: '', note: 'contains 2 families and 2 genera: Gunnera (Giant Rhubarb -family Gunneraceae) and Myrothamnus (family Myrothamnaceae)'
-        core.children.create name: 'Dilleniales', common_name: '', note: 'one family, Dilleniaceae. Western Peony'
         
         rosid = core.children.create name: 'Rosids', common_name: '', note: ''
+          rosid.children.create name: 'Dilleniales', common_name: '', note: 'one family, Dilleniaceae. Western Peony'
           rosid.children.create name: 'Saxifragales', common_name: '', note: 'Incl. witch hazel,  peonies,  currants , gooseberries, and saxifrage'
           rosid.children.create name: 'Vitales', common_name: '', note: 'grape order; most member are vines or lianas'
 
