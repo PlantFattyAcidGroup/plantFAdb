@@ -313,22 +313,24 @@ th .sortable {
   }
 }
 
-.carousel img {
+.thumbnail .carousel img {
   height:275px !important;
   max-width:100%;
 }
-.carousel-caption{
+.thumbnail .carousel-caption{
   font-size:12px;
   background: rgba(30,30,30,0.5);
-  left: 15%;
-  right: 15%;
-  padding-bottom:15px;
+  left: 20%;
+  right: 20%;
+  padding-bottom:10px;
   padding-top:5px;
 }
-
-.carousel-control.left {
+.thumbnail .carousel-indicators{
+  bottom: 10px;
+}
+.thumbnail .carousel-control.left {
   background-image:none ;
 }
-.carousel-control.right {
+.thumbnail .carousel-control.right {
   background-image:none ;
 }
