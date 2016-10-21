@@ -40,11 +40,11 @@ class TreeController < ApplicationController
   def data
 		phyloColors ={
       plantae: "#EEE",
-      gymnosperms: "#D8D8CF",
-      lycophytes: "#E1AB84",
-      monilophytes: "#DDC2AA",
-	    spermatophyte: "#DDD",
-	    anita: "#D3EEF5",
+      gymnosperms: "#BE9FE6",
+      lycophytes: "#D0D0D0",
+      monilophytes: "#CCC",
+	    spermatophyte: "#E0E0E0",
+	    anita: "#D0ECF2",
 	    angiosperms: "#D3EEF5",
 	    magnoliids: "#86C0CE",
 	    monocots: "#B0D4B7",
