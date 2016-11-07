@@ -1,10 +1,10 @@
 class AddPlantsPubIdToResult < ActiveRecord::Migration
   def change
-    # add_column :results, :plants_pub_id, :integer
-    # change_table :plants_pubs do |t|
-    #   t.index :plant_id
-    #   t.index :pub_id
-    # end
+    add_column :results, :plants_pub_id, :integer
+    change_table :plants_pubs do |t|
+      t.index :plant_id
+      t.index :pub_id
+    end
 
     reversible do |dir|
       dir.up do
