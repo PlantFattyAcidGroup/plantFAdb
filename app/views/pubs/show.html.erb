@@ -15,7 +15,10 @@
 
 <% content_for :item_bar do %>
 	<%= link_to 'Back', pubs_path, class: 'btn btn-primary' %>
-  <% if can? :edit, @pub %> <%= link_to 'Edit', edit_pub_path(@pub), class: 'btn btn-primary' %> <% end %>
+  <% if can? :edit, @pub %>
+    <%= link_to 'Edit', edit_pub_path(@pub), class: 'btn btn-primary' %>
+    <%= link_to "Add Data", new_plants_pub_path(pub_id: @pub.id), class: 'btn btn-primary' %>
+  <% end %>
 <% end %>
 
 <% if @pub.abstract %>
