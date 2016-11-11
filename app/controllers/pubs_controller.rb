@@ -3,19 +3,23 @@ class PubsController < ApplicationController
   load_and_authorize_resource  
   # GET /publications
   def index
-    if params[:plant_id]
-      
-      @pubs = @pubs.joins('
-        LEFT OUTER JOIN "PLANTS_PUBS" ON "PLANTS_PUBS"."PUB_ID" = "PUBS"."ID"'
-      )
-      .where('plants_pubs.plant_id = ?',params[:plant_id])
-    end
+
     if ActiveRecord::Base.connection.adapter_name.downcase =~ /.*sqlite.*/
       @pubs = @pubs.order(sort_column + ' ' + sort_direction + ", pubs.id ASC")
     else
       @pubs = @pubs.order(sort_column + ' ' + sort_direction + " nulls last, pubs.id ASC")
     end
-    @pubs = @pubs.joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join plants_pubs pl_tbl on pl_tbl.id = r.plants_pub_id left outer join pubs p on pl_tbl.pub_id = p.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by p.id) res on res.pub_id = pubs.id ")
+
+    if params[:plant_id]
+      @pubs = @pubs.joins('
+        LEFT OUTER JOIN "PLANTS_PUBS" ON "PLANTS_PUBS"."PUB_ID" = "PUBS"."ID"'
+      )
+      .where('plants_pubs.plant_id = ?',params[:plant_id])
+      .joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join plants_pubs pl_tbl on pl_tbl.id = r.plants_pub_id AND pl_tbl.plant_id = #{params[:plant_id].to_i} left outer join pubs p on pl_tbl.pub_id = p.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by p.id) res on res.pub_id = pubs.id ")
+    else
+      @pubs = @pubs.joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join plants_pubs pl_tbl on pl_tbl.id = r.plants_pub_id left outer join pubs p on pl_tbl.pub_id = p.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by p.id) res on res.pub_id = pubs.id ")
+    end
+    
     @pubs = @pubs.select("pubs.*, res.result_count")
     if(params[:query])
       q = UnicodeUtils.upcase(params[:query])

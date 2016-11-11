@@ -5,8 +5,11 @@ class PlantsPubsController < ApplicationController
     @pub = @plants_pub.pub
     @results = @plants_pub.results.includes(:measure)
       .order(sort_column + ' ' + sort_direction)
-      .viewable
-      .page(params[:page]).published
+      .page(params[:page]).viewable
+      
+    if @plants_pub.published?
+      @results = @results.published
+    end
   end
   
   def new
@@ -50,7 +53,7 @@ class PlantsPubsController < ApplicationController
   
   protected
   def sort_column
-    ['unit','value','measures.delta_notation','measures.name', 'measures.type'].find{|c| c==params[:sort]} || "results.value"
+    ['measures.mass','unit','value','measures.delta_notation','measures.name', 'measures.type'].find{|c| c==params[:sort]} || "measures.mass"
   end
   
   def resource_params

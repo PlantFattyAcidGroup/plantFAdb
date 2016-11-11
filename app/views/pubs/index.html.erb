@@ -156,7 +156,7 @@
 					<td><%= publication.wos_pages %></td>
 					<td><%= link_to publication.doi, "https://doi.org/#{publication.doi}", target: '_blank' if publication.doi && publication.doi.downcase != 'none' %></td>
 					<td><%= publication.wos_uid %></td>
-          <td><%= link_to publication.result_count, results_path(pub_id: publication.id) %></td>
+          <td><%= link_to publication.result_count||0, results_path(pub_id: publication.id) %></td>
         </tr>
       <% end %>
     </tbody>

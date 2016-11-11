@@ -135,12 +135,12 @@
 		  <tbody>
 		    <% @plants_pubs.includes(:plant).order("plants.genus, plants.species").each do |pb| %>
 		    <tr>
-		      <td><%= link_to pb.plant.genus||"Unknown", pb.plant %></td>
-		      <td><%= link_to pb.plant.species||"Unknown", pb.plant %></td>
+		      <td><%= link_to pb.plant.genus||"Unknown", plants_pub_path(pb) %></td>
+		      <td><%= link_to pb.plant.species||"Unknown", plants_pub_path(pb) %></td>
 		      <td><%= pb.plant.order_name %></td>
 		      <td><%= pb.plant.family %></td>
           <% results = pb.published? ? pb.results.published : pb.results %>
-					<td><%= link_to results.count, plants_pub_path(pb) %></td>
+					<td> <%= results.count %></td>
 		    </tr>
 		    <% end %>
 		  </tbody>
