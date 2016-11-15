@@ -77,8 +77,8 @@
                 <th></th>
           	  </thead>
           	  <tbody>
-          	    <% @results.each do |result| %>
-                <% result = result.draft.reify if result.draft?%>
+          	    <% @results.each do |r| %>
+                <% result = (r.draft? ? r.draft.reify : r) %>
           	    <tr>
                 	<td><%= result.measure.try :type %></td>
           				<td><%= result.measure.try :name %></td>
@@ -86,8 +86,8 @@
           	      <td><%= result.value.to_f.round(2) %></td>
           	      <td><%= '*' if result.old_mol_val %> <%= result.unit %></td>
                   <td>
-                    <% if result.draft? %>
-                      <%= link_to "<span style='margin-right:1em' class='#{result.draft.event}-tag'>#{result.draft.create? ? "New" : result.draft.destroy? ? "Delete" : "Update" }</span>".html_safe, draft_path(result.draft)%>
+                    <% if r.draft? %>
+                      <%= link_to "<span style='margin-right:1em' class='#{r.draft.event}-tag'>#{r.draft.create? ? "New" : r.draft.destroy? ? "Delete" : "Update" }</span>".html_safe, draft_path(r.draft)%>
                     <% end %>
                     <a href='#' style='margin-right:1em' onclick='$("#result_<%= result.id %>").toggle();event.preventDefault()'><i class='glyphicon glyphicon-edit'></i></a>
                     <%= link_to "<i class='glyphicon glyphicon-remove-circle'></i>".html_safe, result, method: :delete, data: {confirm: 'Remove this result from the table?'} %>
