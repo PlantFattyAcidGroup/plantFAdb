@@ -5,6 +5,11 @@ class DraftsController < ApplicationController
                      .order('updated_at DESC')
                      .where(item_type: ["Pub","Plant","Measure","PlantsPub"])
                      .page(params[:page])
+    @versions = PaperTrail::Version.order('created_at DESC').page(params[:version_page]).per(100)
+    unless params[:show_result_versions]=='true'
+      @versions = @versions.where.not(item_type: ["Result"])
+    end
+    
   end
 
   def show

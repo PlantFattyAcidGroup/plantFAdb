@@ -15,6 +15,9 @@
 Pending updates are shown below. They will be reviewed by the administrator before public release.
 
 <div class='panel table-responsive'>
+	<ul class="pagination">
+		<%= paginate @drafts %>
+	</ul>
 	<div class='pull-right'><%= page_entries_info @drafts %></div>	
   <table class='table table-striped table-centered'>
     <thead>
@@ -57,3 +60,45 @@ Pending updates are shown below. They will be reviewed by the administrator befo
     </tbody>
   </table>
 </div>
+
+<% if current_user.is_admin? %>
+
+<h1 class='pagetitle'>History</h1>
+
+<div class='panel table-responsive'>
+	<ul class="pagination">
+		<%= paginate @versions, :param_name => :version_page %>
+	</ul>
+	<div class='pull-right'><%= page_entries_info @versions %></div>
+  <table class='table table-striped table-centered'>
+    <thead>
+      <tr>
+				<th>Time</th>
+				<th>Type</th>
+				<th>Item</th>
+        <th>Action</th>
+        <th>Changeset</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      
+      <% @versions.each do |version| %>
+        <tr>
+          <td><%= local_time_ago version.created_at %></td>
+          <td><%= version.item_type %></td>
+          <td>
+            <% if version.event=='destroy' %>
+              <% version.item_id %>
+            <% else %>
+              <%= link_to version.item.try(:display_name)||version.item_id, version.item %>
+            <% end %>
+          </td>
+          <td><%= version.event %></td>
+          <td><%=h version.changeset  %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% end %>
