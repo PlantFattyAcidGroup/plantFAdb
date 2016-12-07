@@ -173,6 +173,7 @@ class PubsController < ApplicationController
     end
   
     def sort_column
-      params[:sort] || "pubs.wos_authors, pubs.wos_year"
+      col = ['wos_authors','wos_year', 'wos_title', 'wos_journal', 'wos_volume','doi','wos_uid', 'result_count'].find{|c| c==params[:sort]}
+      col || "pubs.wos_authors, pubs.wos_year"
     end
 end

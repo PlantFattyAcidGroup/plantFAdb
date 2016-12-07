@@ -235,15 +235,20 @@ class ResultsController < ApplicationController
       params.require(:result).permit(:value, :unit, :measure_id, :pub_id)
     end
     def sort_column
-      if params[:pub_id]
-        params[:sort]|| "plants.genus asc, plants.species asc, pubs.authors, delta_notation asc, value"
+      col = ['measures.type','measure.name', 'pubs.authors', 'plants.genus', 'unit','value','measures.delta_notation'].find{|c| c==params[:sort]}
+      if col
+        col
+      elsif params[:pub_id]
+        "plants.genus asc, plants.species asc, pubs.authors, delta_notation asc, value"
       elsif params[:taxon]
-        params[:sort]|| "plants.genus asc, plants.species asc, delta_notation asc, value"
+        "plants.genus asc, plants.species asc, delta_notation asc, value"
+      elsif params[:plant_id]
+        "delta_notation asc, value"
       else
-        params[:sort]|| (params[:plant_id] ? "delta_notation asc, value" : "value")
+        "value"
       end
     end
     def sort_direction
-      %w[asc desc].include?(params[:direction]) ?  params[:direction] : "desc"  
+      params[:direction]=='asc' ? params[:direction] : "desc" 
     end
 end
