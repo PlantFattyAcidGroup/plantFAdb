@@ -1,5 +1,6 @@
 class ResultsController < ApplicationController
   load_and_authorize_resource
+  
   # GET /results
   def index
     @measure_types = Measure.select(:type).distinct.map(&:type)
@@ -141,9 +142,15 @@ class ResultsController < ApplicationController
     if @result.draft_creation
       @result.plants_pub.attributes = {updated_at: Time.now}
       @result.plants_pub.draft_update
-      redirect_to edit_plants_pub_path(@result.plants_pub), notice: 'Datapoint Created.'
+      @plants_pub = @result.plants_pub
+      @original_result = (@result.draft? ? @result.draft.reify : @result)
+      @form_id = params[:form_id]
+      
+      respond_to do |format|
+       format.js
+      end
     else
-      redirect_to edit_plants_pub_path(params[:result][:plants_pub_id])
+      redirect_to edit_plants_pub_path(@result.plants_pub_id), notice: 'Datapoint could not be created.'
     end
   end
 
@@ -151,17 +158,19 @@ class ResultsController < ApplicationController
   def update
     @result.attributes = resource_params
     if @result.draft_update
-      redirect_to edit_plants_pub_path(@result.plants_pub), notice: 'Datapoint updated.'
+      @result.plants_pub.attributes = {updated_at: Time.now}
+      @result.plants_pub.draft_update
+      
+      redirect_to edit_plants_pub_path(@result.plants_pub_id)
     else
-      render :edit
+      redirect_to edit_plants_pub_path(@result.plants_pub_id), notice: 'Datapoint could not be updated.'
     end
   end
 
   # DELETE /results/1
   def destroy
-    path = edit_plants_pub_path(@result.plants_pub)
     @result.draft_destruction
-    redirect_to path, notice: 'Datapoint removed.'
+    redirect_to edit_plants_pub_path(@result.plants_pub_id), notice: 'Datapoint removed.'
   end
 
   private

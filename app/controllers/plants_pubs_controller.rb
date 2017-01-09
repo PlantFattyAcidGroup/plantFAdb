@@ -15,7 +15,9 @@ class PlantsPubsController < ApplicationController
   def new
     @plants_pub.pub = Pub.find(params[:pub_id])
     @pub = @plants_pub.pub || Pub.new
-    @result = @plants_pub.results.build
+    [10027,10035,10046].each do |id|
+      @result = @plants_pub.results.build(measure_id: id)
+    end
     @results = []
   end
   
@@ -37,10 +39,28 @@ class PlantsPubsController < ApplicationController
     else
       @results = @results.order(sort_column + ' ' + sort_direction)
     end
+    
+    ### Prefill measures
+    default_measures = Measure.find([10027,10035,10046,10051,10066,10074,10077,10090,10114,10127,10131,10147,10152,10000])
+    
+    ### All measures from publication
     all_measures = @plants_pub.pub.plants_pubs.includes(results: [:measure]).map(&:results).flatten.map(&:measure).uniq
-    used_measures = @plants_pub.results.includes(:measure).map(&:measure).uniq
-    measure = (all_measures-used_measures).first
-    @result = @plants_pub.results.build(measure: measure)
+    
+    ### Used measures from this publication-plant
+    used_measures = @plants_pub.results.map(&:measure).uniq
+    
+    (default_measures-used_measures).each do |m|
+      @results << @plants_pub.results.build(measure: m)
+    end
+    (all_measures-used_measures-default_measures).each do |m|
+      @results << @plants_pub.results.build(measure: m)
+    end
+    
+    @results = @results.sort_by{|r| r.measure.try(:delta_notation) || ''}
+    
+    5.times do |i|
+      @results << @plants_pub.results.build
+    end
   end
   
   def update
