@@ -26,12 +26,13 @@ class ResultsController < ApplicationController
         OR upper(pubs.remarks) LIKE ?
         OR upper(publications.sofa_tab_id) LIKE ?
         OR upper(plants.common_name) LIKE ?
+        OR upper(plants.variety) LIKE ?
         OR upper(plants.species) LIKE ?
         OR upper(plants.genus) LIKE ?
         OR upper(plants.family) LIKE ?
         OR upper(plants.order_name) LIKE ?
         OR upper(plants.sofa_name) LIKE ?',
-        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%","%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
+        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%","%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
       )
     end
     unless params[:taxon].blank?

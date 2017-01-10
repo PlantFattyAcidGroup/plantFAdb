@@ -1,9 +1,9 @@
 <% content_for :title do -%>
- PhyloFAdb: <%= @plant.genus %> <%= @plant.species %> <%= "- #{@plant.common_name}" if @plant.common_name %>
+ PhyloFAdb: <%= @plant.genus %> <%= @plant.species %> <%= "(var. #{@plant.variety})" if @plant.variety %> <%= "- #{@plant.common_name}" if @plant.common_name %>
 <% end -%>
 
 <% content_for :description do -%>
- Plant fatty acid compositions and phylogenetics. <%= @plant.genus %> <%= @plant.species %> <%= "- #{@plant.common_name}" if @plant.common_name %>
+ Plant fatty acid compositions and phylogenetics. <%= @plant.genus %> <%= @plant.species %> <%= "(var. #{@plant.variety})" if @plant.variety %> <%= "- #{@plant.common_name}" if @plant.common_name %>
 <% end -%>
 
 <% content_for :top_bar do %>
@@ -14,7 +14,7 @@
 		<% if @plant.genus.blank? && @plant.species.blank? %>
 		 <%= @plant.family || @plant.order_name || @plant.sofa_family || @plant.sofa_name %>
 		<% else %>
-			<%= @plant.genus %> <%= @plant.species %>
+			<%= @plant.genus %> <%= @plant.species %> <%= "(var. #{@plant.variety})" if @plant.variety %>
 		<% end %>
 		<small style='white-space:nowrap'><%= @plant.common_name %></small>
 	</h1>
@@ -53,6 +53,13 @@
 					</p>
 				<% end %>
 			
+				<% unless @plant.tissue.blank? || @plant.tissue == 'Unknown' %>
+          <p>
+            <strong>Tissue</strong>
+            <%= @plant.tissue %>
+          </p>
+				<% end %>
+        
 				<% unless @plant.tropicos_url.blank? %>
 			    <legend>External Link(s)</legend>
 					<% @plant.tropicos_url.split(";").each do |url| %>

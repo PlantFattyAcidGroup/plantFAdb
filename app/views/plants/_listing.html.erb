@@ -36,6 +36,7 @@
       <tr>
         <th><%= sortable('genus','Genus') %></th>
         <th><%= sortable('species','Species') %></th>
+				<th><%= sortable('variety', 'Variety') %></th>
 				<th><%= sortable('common_name','Common Name') %></th>
 				<th><%= sortable('family','Family') %></th>
 				<th><%= sortable('order_name', 'Order') %></th>
@@ -50,6 +51,7 @@
         <tr>
 					<td><%= link_to plant.genus||'-', plant %></td>
 					<td><%= link_to plant.species||'-', plant %></td>
+					<td><%= plant.variety %></td>
 					<td><%= plant.common_name %></td>
 					<td><%= plant.family %></td>
 					<td><%= plant.order_name %></td>

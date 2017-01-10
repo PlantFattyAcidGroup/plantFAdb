@@ -46,6 +46,14 @@
 	    <%= f.label :species %>*<br>
 	    <%= f.text_field :species, class: 'form-control', required: true %>
 	  </div>
+	  <div class="field">
+	    <%= f.label :variety %><br>
+	    <%= f.text_field :variety, class: 'form-control' %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :tissue %>*<br>
+	    <%= f.select :tissue, options_for_select(['Fruit','Kernel','Leaf','Seed','Unknown'], @plant.tissue || 'Seed'), {required: true}, {class: 'form-control'} %>
+	  </div>
 	</div>
 	<!-- <div style='float:left;width:35%'> -->
 	<div class='col-md-6'>

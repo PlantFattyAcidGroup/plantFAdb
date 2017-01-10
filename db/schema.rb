@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161012203920) do
+ActiveRecord::Schema.define(version: 20170109221647) do
 
   create_table "drafts", force: :cascade do |t|
     t.string   "item_type",                     null: false
@@ -33,32 +33,33 @@ ActiveRecord::Schema.define(version: 20161012203920) do
   add_index "drafts", ["whodunnit"], name: "index_drafts_on_whodunnit"
 
   create_table "measures", force: :cascade do |t|
-    t.string   "type"
-    t.string   "delta_notation"
-    t.string   "cas_number"
-    t.string   "sofa_mol_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.string   "lipidmap_id"
-    t.string   "pubchem_id"
-    t.string   "chebi_id"
-    t.text     "structure"
-    t.string   "mass"
-    t.string   "name"
-    t.string   "other_names",    limit: 3999
-    t.string   "formula"
-    t.string   "cml"
-    t.string   "inchi"
-    t.string   "stdinchi"
-    t.string   "stdinchikey"
-    t.string   "smiles"
-    t.string   "image_link"
-    t.string   "common_name"
-    t.string   "category"
-    t.integer  "draft_id"
-    t.datetime "published_at"
-    t.datetime "trashed_at"
-    t.string   "iupac_name"
+    t.string    "type"
+    t.string    "delta_notation"
+    t.string    "cas_number"
+    t.string    "sofa_mol_id"
+    t.datetime  "created_at",                                           null: false
+    t.datetime  "updated_at",                                           null: false
+    t.string    "lipidmap_id"
+    t.string    "pubchem_id"
+    t.string    "chebi_id"
+    t.text      "structure"
+    t.string    "old_mass"
+    t.string    "name"
+    t.string    "other_names",    limit: 3999
+    t.string    "formula"
+    t.text      "cml"
+    t.string    "inchi"
+    t.string    "stdinchi"
+    t.string    "stdinchikey"
+    t.string    "smiles"
+    t.decimal   "mass",                        precision: 7,  scale: 2
+    t.string    "image_link"
+    t.string    "common_name"
+    t.string    "category"
+    t.string    "iupac_name"
+    t.integer   "draft_id",                    precision: 38
+    t.timestamp "published_at",   limit: 6
+    t.timestamp "trashed_at",     limit: 6
   end
 
   create_table "names", force: :cascade do |t|
@@ -80,8 +81,8 @@ ActiveRecord::Schema.define(version: 20161012203920) do
   create_table "plants", force: :cascade do |t|
     t.string    "sofa_name"
     t.string    "sofa_family"
-    t.datetime  "created_at",                                null: false
-    t.datetime  "updated_at",                                null: false
+    t.datetime  "created_at",                                                    null: false
+    t.datetime  "updated_at",                                                    null: false
     t.string    "tnrs_name"
     t.string    "tnrs_family"
     t.string    "note",          limit: 3999
@@ -99,6 +100,8 @@ ActiveRecord::Schema.define(version: 20161012203920) do
     t.integer   "draft_id",                   precision: 38
     t.timestamp "published_at",  limit: 6
     t.timestamp "trashed_at",    limit: 6
+    t.string    "variety"
+    t.string    "tissue",                                    default: "Unknown"
   end
 
   create_table "plants_pubs", force: :cascade do |t|
@@ -163,8 +166,8 @@ ActiveRecord::Schema.define(version: 20161012203920) do
     t.integer   "publication_id",           precision: 38
     t.datetime  "created_at",                                        null: false
     t.datetime  "updated_at",                                        null: false
-    t.integer   "pub_id_old",               precision: 38
-    t.integer   "plant_id_old",             precision: 38
+    t.integer   "pub_id",                   precision: 38
+    t.integer   "plant_id",                 precision: 38
     t.decimal   "value",                    precision: 8,  scale: 2
     t.decimal   "old_mol_val",              precision: 8,  scale: 2
     t.integer   "draft_id",                 precision: 38
@@ -174,7 +177,7 @@ ActiveRecord::Schema.define(version: 20161012203920) do
   end
 
   add_index "results", ["measure_id"], name: "index_results_on_measure_id"
-  add_index "results", ["pub_id_old"], name: "idx$$_00010001"
+  add_index "results", ["pub_id"], name: "idx$$_00010001"
   add_index "results", ["publication_id"], name: "i_results_publication_id"
 
   create_table "sofa_tabs", force: :cascade do |t|

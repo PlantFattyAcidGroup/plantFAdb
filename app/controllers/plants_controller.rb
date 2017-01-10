@@ -33,8 +33,9 @@ class PlantsController < ApplicationController
         OR upper(tnrs_family) LIKE ?
         OR upper(tnrs_name) LIKE ?
         OR upper(common_name) LIKE ?
+        OR upper(variety) LIKE ?
         OR upper(genus || \' \' || species) LIKE ?',
-        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
+        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
       )
     end
     @plants = @plants.published
@@ -44,7 +45,7 @@ class PlantsController < ApplicationController
       # CSV download
       format.csv{
         render_csv do |out|
-          out << CSV.generate_line(["ID","Common Name","Genus", "Species", "Family", "Order", "Tropicos URL", "Note",
+          out << CSV.generate_line(["ID","Common Name","Genus", "Species", "Family", "Order", "Variety", "Tropicos URL", "Note",
             "TNRS Family", "TNRS Name", "Accepted Rank", "Matched Rank", "Name Status",
             "SOFA Family", "SOFA Name",
             "Publication Count","Result Count"])
@@ -56,6 +57,7 @@ class PlantsController < ApplicationController
               item.species,
               item.family,
               item.order_name,
+              item.variety,
               item.tropicos_url,
               item.note,
               item.tnrs_family,
@@ -136,10 +138,11 @@ class PlantsController < ApplicationController
         OR upper(tnrs_name) LIKE ?
         OR upper(tnrs_family || \' \' || tnrs_name) LIKE ?
         OR upper(common_name) LIKE ?
+        OR upper(variety) LIKE ?
         OR upper(genus || \' \' || species) LIKE ?
         OR upper(family || \' \' || genus || \' \' || species) LIKE ?
         OR upper(order_name || \' \' || family || \' \' || genus || \' \' || species) LIKE ?',
-        "#{q}%","#{q}%","#{q}%", "#{q}%", "#{q}%", "#{q}%", "#{q}%","#{q}%", "#{q}%", "#{q}%", "#{q}%", "#{q}%"
+        "#{q}%","#{q}%","#{q}%", "#{q}%", "#{q}%", "#{q}%", "#{q}%","#{q}%", "#{q}%", "#{q}%", "#{q}%", "#{q}%", "#{q}%"
       )
     .order('genus, species, sofa_name').limit(15)
     render :json => plants.map { |plant| {:id => plant.id, :label => "#{plant.display_name} - #{plant.common_name}", :value => plant.display_name} }
@@ -148,7 +151,7 @@ class PlantsController < ApplicationController
   private
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:plant).permit(:common_name, :tnrs_family, :tnrs_name, :accepted_rank, :name_status, :matched_rank, :order_name, :family, :genus, :species, :tropicos_url, :note)
+      params.require(:plant).permit(:common_name, :tnrs_family, :tnrs_name, :accepted_rank, :name_status, :matched_rank, :order_name, :family, :genus, :species, :tropicos_url, :note, :variety, :tissue)
     end
     
     def sort_column
