@@ -9,7 +9,6 @@ class DraftsController < ApplicationController
     unless params[:show_result_versions]=='true'
       @versions = @versions.where.not(item_type: ["Result"])
     end
-    
   end
 
   def show

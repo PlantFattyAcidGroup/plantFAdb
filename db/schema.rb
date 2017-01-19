@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170109221647) do
+ActiveRecord::Schema.define(version: 20170119214614) do
 
   create_table "drafts", force: :cascade do |t|
     t.string   "item_type",                     null: false
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20170109221647) do
     t.integer   "draft_id",                    precision: 38
     t.timestamp "published_at",   limit: 6
     t.timestamp "trashed_at",     limit: 6
+    t.integer   "user_id",                     precision: 38
   end
 
   create_table "names", force: :cascade do |t|
@@ -102,6 +103,7 @@ ActiveRecord::Schema.define(version: 20170109221647) do
     t.timestamp "trashed_at",    limit: 6
     t.string    "variety"
     t.string    "tissue",                                    default: "Unknown"
+    t.integer   "user_id",                    precision: 38
   end
 
   create_table "plants_pubs", force: :cascade do |t|
@@ -114,6 +116,7 @@ ActiveRecord::Schema.define(version: 20170109221647) do
     t.timestamp "trashed_at",   limit: 6
     t.datetime  "created_at"
     t.datetime  "updated_at"
+    t.integer   "user_id",                precision: 38
   end
 
   add_index "plants_pubs", ["plant_id"], name: "index_plants_pubs_on_plant_id"
@@ -157,6 +160,7 @@ ActiveRecord::Schema.define(version: 20170109221647) do
     t.integer   "draft_id",                   precision: 38
     t.timestamp "published_at",  limit: 6
     t.timestamp "trashed_at",    limit: 6
+    t.integer   "user_id",                    precision: 38
   end
 
   create_table "results", force: :cascade do |t|

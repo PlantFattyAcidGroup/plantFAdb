@@ -22,6 +22,7 @@ class PlantsPubsController < ApplicationController
   end
   
   def create
+    @plants_pub.user_id = current_user.try(:id)
     if @plants_pub.draft_creation
       redirect_to edit_plants_pub_path(@plants_pub), notice: 'A draft of the new Plant table was successfully created.'
     else
@@ -61,6 +62,7 @@ class PlantsPubsController < ApplicationController
     5.times do |i|
       @results << @plants_pub.results.build
     end
+    @total_percent = @results.select{|r| r.measure.class == FattyAcid}.map(&:value).compact.sum
   end
   
   def update

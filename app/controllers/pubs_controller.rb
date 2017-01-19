@@ -148,6 +148,7 @@ class PubsController < ApplicationController
 
   # POST /publications
   def create
+    @pub.user_id = current_user.try(:id)
     if @pub.draft_creation
       redirect_to @pub, notice: 'A draft of the new Publication was successfully created.'
     else

@@ -63,7 +63,7 @@ Pending updates are shown below. They will be reviewed by the administrator befo
 
 <% if current_user.is_admin? %>
 
-<h1 class='pagetitle'>History</h1>
+<h1 class='pagetitle'>History - admin only</h1>
 
 <div class='panel table-responsive'>
 	<ul class="pagination">
@@ -95,7 +95,7 @@ Pending updates are shown below. They will be reviewed by the administrator befo
             <% end %>
           </td>
           <td><%= version.event %></td>
-          <td><%=h version.changeset  %></td>
+          <td><%=h version.changeset.reject{|k,v| ["created_at", "id", "user_id", "updated_at"].include?(k)}  %></td>
         </tr>
       <% end %>
     </tbody>

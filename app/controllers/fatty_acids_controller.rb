@@ -122,6 +122,7 @@ class FattyAcidsController < ApplicationController
 
   # POST /fatty_acids
   def create
+    @fatty_acid.user_id = current_user.try(:id)
     if @fatty_acid.draft_creation
       redirect_to @fatty_acid, notice: 'A draft of the new Fatty Acid was successfully created.'
     else

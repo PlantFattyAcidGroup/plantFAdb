@@ -103,6 +103,7 @@ class PlantsController < ApplicationController
 
   # POST /plants
   def create
+    @plant.user_id = current_user.try(:id)
     if @plant.draft_creation
       redirect_to @plant, notice: 'A draft of the new Plant was successfully created.'
     else
