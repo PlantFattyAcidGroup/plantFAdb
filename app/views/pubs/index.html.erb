@@ -30,10 +30,10 @@
 
 <% content_for :item_bar do %>
 		<% if current_user.is_admin?%>
-			<%= link_to "Condense Using WOS UID", condense_wos_pubs_path, class: 'btn btn-primary',
+			<%#= link_to "Condense Using WOS UID", condense_wos_pubs_path, class: 'btn btn-primary',
 			method: :post,
 			data: {confirm: "This will take some time to run. ALL pubs with the same UID will be condensed into a single new publication. Pubs with a blank UID or 'none' will be skipped"} %>
-			<%= link_to "Condense Using DOI", condense_doi_pubs_path, class: 'btn btn-primary',
+			<%#= link_to "Condense Using DOI", condense_doi_pubs_path, class: 'btn btn-primary',
 			method: :post,
 			data: {confirm: "This will take some time to run. ALL pubs with the same DOI will be condensed into a single new publication. Pubs with a blank DOI or a doi of 'none' will be skipped"} %>
 		<% end %>
