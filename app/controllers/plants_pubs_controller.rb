@@ -75,7 +75,8 @@ class PlantsPubsController < ApplicationController
   
   protected
   def sort_column
-    ['measures.mass','unit','value','measures.delta_notation','measures.name', 'measures.type'].find{|c| c==params[:sort]} || "measures.mass"
+    col = ['measures.mass','unit','value','measures.delta_notation','measures.name', 'measures.type'].find{|c| c==params[:sort]}
+    col || "measures.mass"
   end
   
   def resource_params

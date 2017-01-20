@@ -155,10 +155,11 @@ class FattyAcidsController < ApplicationController
     end
     
     def sort_column
+      col = ['mass','name', 'delta_notation', 'formula', 'sofa_mol_id','result_count'].find{|c| c==params[:sort]}
       if params[:action] == 'index'
-        params[:sort]||"mass"
+        col ||"mass"
       else
-        params[:sort] || "results.value"
+        col || "results.value"
       end
       
     end
