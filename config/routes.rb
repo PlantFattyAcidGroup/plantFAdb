@@ -14,9 +14,13 @@ Rails.application.routes.draw do
     get 'plant_yield', on: :collection
   end
   resources :names
-  resources :measures
+  resources :measures do
+    get :autocomplete_measure_name, :on => :collection
+  end
   resources :publications
-  resources :plants
+  resources :plants do
+    get :autocomplete_plant_name, :on => :collection
+  end
   resources :pubs do
     collection do
       post 'condense_doi'
@@ -24,7 +28,7 @@ Rails.application.routes.draw do
     end
   end
   resources :plants_pubs
-  
+  resources :drafts
   devise_for :users
   resources :users
   resources :pages

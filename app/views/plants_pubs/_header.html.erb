@@ -2,7 +2,7 @@
   Publication: <%= link_to pub.wos_title||'Unknown Publication', pub %>
 </h1>
 <h1 class="">
-  Plant: <%= link_to plant.display_name, plant %>
+  Plant: <%= link_to plant.display_name, plant %> <%= "(var. #{plant.variety})" if plant.variety %>
   <small style='white-space:nowrap'>
   <%= plant.common_name %>
   </small>

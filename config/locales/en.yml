@@ -21,3 +21,8 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    models:
+      pub: Publication
+      plants_pub: Publication Table
+      result: DataPoint

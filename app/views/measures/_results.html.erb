@@ -25,8 +25,8 @@
 	    <% @results.each do |result| %>
 	    <tr>
 	      <!-- <td><%= result.measure.delta_notation %></td> -->
-	      <td><%= link_to result.plant.try( :display_name)||"Unknwon", result.plant %></td>
-	      <td><%= link_to result.pub.display_name, result.pub if result.pub%></td>
+	      <td><%= link_to result.plant.try( :display_name)||"Unknwon", result.plants_pub %></td>
+	      <td><%= link_to result.pub.display_name, result.plants_pub if result.plants_pub%></td>
 	      <td><%= result.value %></td>
 	      <td><%= '*' if result.old_mol_val %> <%= result.unit %></td> 
 	    </tr>

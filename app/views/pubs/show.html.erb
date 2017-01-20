@@ -7,12 +7,18 @@
 <% end -%>
 
 <% content_for :top_bar do %>
+  <% unless @pub.published? %>
+    <p class='bg-warning'>This is an unpublished draft. <%= link_to 'Click here to view all draft data', drafts_path %></p>
+  <% end %>
 	<h1 class="pagetitle"><%= @pub.wos_title %></h1>
 <% end %>
 
 <% content_for :item_bar do %>
 	<%= link_to 'Back', pubs_path, class: 'btn btn-primary' %>
-  <% if can? :edit, @pub %> <%= link_to 'Edit', edit_pub_path(@pub), class: 'btn btn-primary' %> <% end %>
+  <% if can? :edit, @pub %>
+    <%= link_to 'Edit', edit_pub_path(@pub), class: 'btn btn-primary' %>
+    <%= link_to "Add Data", new_plants_pub_path(pub_id: @pub.id), class: 'btn btn-primary' %>
+  <% end %>
 <% end %>
 
 <% if @pub.abstract %>
@@ -127,13 +133,14 @@
 				<th>Data Points</th>
 		  </thead>
 		  <tbody>
-		    <% @pub.plants_pubs.includes(:plant).order("plants.genus, plants.species").each do |pb| %>
+		    <% @plants_pubs.includes(:plant).order("plants.genus, plants.species").each do |pb| %>
 		    <tr>
-		      <td><%= link_to pb.plant.genus||"Unknown", pb.plant %></td>
-		      <td><%= link_to pb.plant.species||"Unknown", pb.plant %></td>
+		      <td><%= link_to pb.plant.genus||"Unknown", plants_pub_path(pb) %></td>
+		      <td><%= link_to pb.plant.species||"Unknown", plants_pub_path(pb) %></td>
 		      <td><%= pb.plant.order_name %></td>
 		      <td><%= pb.plant.family %></td>
-					<td><%= link_to pb.plant.results.viewable.where(pub_id: @pub.id).count, plants_pub_path(pb) %></td>
+          <% results = pb.published? ? pb.results.published : pb.results %>
+					<td> <%= results.count %></td>
 		    </tr>
 		    <% end %>
 		  </tbody>

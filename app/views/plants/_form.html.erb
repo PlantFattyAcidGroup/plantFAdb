@@ -10,44 +10,7 @@
       </ul>
     </div>
   <% end %>
-	<div class='well'>
-		<legend>SOFA Data</legend>
-	  <div class="field">
-	    <b><%= f.label :sofa_family %></b>
-	    <%= f.object.sofa_family %>
-	  </div>
-		
-	  <div class="field">
-	    <b><%= f.label :sofa_name %></b>
-	    <%= f.object.sofa_name %>
-	  </div>
-	
-	  <div class="field">
-	    <b>Publications</b>
-	    <%= link_to f.object.pubs.count, pubs_path(plant_id: f.object.id) %>
-	  </div>
-	
-	  <div class="field">
-	    <b>Results</b>
-	    <%= link_to f.object.results.count, results_path(plant_id: f.object.id) %>
-	  </div>
-	</div>
-	<br/>
-	<div class='well'>
-		<legend>TNRS Accepted data</legend>
-	  <div class="field">
-	    <b><%= f.label :tnrs_family %></b>
-			<%= f.object.tnrs_family %>
-	  </div>
-	  <div class="field">
-	    <b><%= f.label :tnrs_name %></b>
-			<%= f.object.tnrs_name %>
-	  </div>
-	  <div class="field">
-	    <b><%= f.label :accepted_rank %></b>
-			<%= f.object.accepted_rank %>
-	  </div>
-	</div>
+
 	
 <div class='container'>
 	<!-- <div style='float:left;width:25%'> -->
@@ -68,20 +31,28 @@
 	<!-- <div style='float:left;width:25%'> -->
 	<div class='col-md-3'>
 	  <div class="field">
-	    <%= f.label :order_name, "Order" %><br>
-	    <%= f.text_field :order_name, class: 'form-control' %>
+	    <%= f.label :order_name, "Order" %>*<br>
+	    <%= f.text_field :order_name, class: 'form-control', required: true%>
 	  </div>
 	  <div class="field">
-	    <%= f.label :family %><br>
-	    <%= f.text_field :family, class: 'form-control' %>
+	    <%= f.label :family %>*<br>
+	    <%= f.text_field :family, class: 'form-control', required: true %>
 	  </div>
 	  <div class="field">
-	    <%= f.label :genus %><br>
-	    <%= f.text_field :genus, class: 'form-control' %>
+	    <%= f.label :genus %>*<br>
+	    <%= f.text_field :genus, class: 'form-control', required: true %>
 	  </div>
 	  <div class="field">
-	    <%= f.label :species %><br>
-	    <%= f.text_field :species, class: 'form-control' %>
+	    <%= f.label :species %>*<br>
+	    <%= f.text_field :species, class: 'form-control', required: true %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :variety %><br>
+	    <%= f.text_field :variety, class: 'form-control' %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :tissue %>*<br>
+	    <%= f.select :tissue, options_for_select(['Fruit','Kernel','Leaf','Seed','Unknown'], @plant.tissue || 'Seed'), {required: true}, {class: 'form-control'} %>
 	  </div>
 	</div>
 	<!-- <div style='float:left;width:35%'> -->

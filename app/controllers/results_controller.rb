@@ -1,11 +1,12 @@
 class ResultsController < ApplicationController
   load_and_authorize_resource
+  
   # GET /results
   def index
     @measure_types = Measure.select(:type).distinct.map(&:type)
     @results = @results.order(sort_column + ' ' + sort_direction).order("results.id ASC")
-    .includes(:measure, :pub, :publication, :plant)
-    .references(:measure, :pub, :publication, :plant)
+    .includes(:measure, :publication, plants_pub: [:plant, :pub])
+    .references(:measure, :publication, plants_pub: [:plant, :pub])
     .where(measures: {type: ['FattyAcid','Parameter']})
     .where(unit:  ['GLC-Area-%','weight-%'])
     if params[:query]
@@ -25,12 +26,13 @@ class ResultsController < ApplicationController
         OR upper(pubs.remarks) LIKE ?
         OR upper(publications.sofa_tab_id) LIKE ?
         OR upper(plants.common_name) LIKE ?
+        OR upper(plants.variety) LIKE ?
         OR upper(plants.species) LIKE ?
         OR upper(plants.genus) LIKE ?
         OR upper(plants.family) LIKE ?
         OR upper(plants.order_name) LIKE ?
         OR upper(plants.sofa_name) LIKE ?',
-        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%","%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
+        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%","%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
       )
     end
     unless params[:taxon].blank?
@@ -41,10 +43,10 @@ class ResultsController < ApplicationController
       @results = @results.where("measures.type =?",params[:measure_type])
     end
     if params[:plant_id] && @plant = Plant.find_by(id: params[:plant_id])
-      @results = @results.where(plant_id: params[:plant_id])
+      @results = @results.where(plants_pubs: {plant_id: params[:plant_id]})
     end
     if params[:pub_id] && @pub = Pub.find_by(id: params[:pub_id])
-      @results = @results.where(pub_id: params[:pub_id])
+      @results = @results.where(plants_pubs: {pub_id: params[:pub_id]})
     end
     if params[:measure_id] && @measure = Measure.find_by(id: params[:measure_id])
       @results = @results.where(measure_id: params[:measure_id])
@@ -75,7 +77,7 @@ class ResultsController < ApplicationController
   end
 
   def plant_yield
-    @results = Result.includes(:measure, :pub, :plant)
+    @results = Result.includes(:measure, plants_pub: [:plant, :pub]).published
     .references(:measure, :pub, :plant)
     .where(measures: {type: ['FattyAcid']})
     .where(unit:  ['GLC-Area-%','weight-%'])
@@ -138,26 +140,38 @@ class ResultsController < ApplicationController
 
   # POST /results
   def create
-    if @result.save
-      redirect_to @result, notice: 'Result was successfully created.'
+    if @result.draft_creation
+      @result.plants_pub.attributes = {updated_at: Time.now}
+      @result.plants_pub.draft_update
+      @plants_pub = @result.plants_pub
+      @original_result = (@result.draft? ? @result.draft.reify : @result)
+      @form_id = params[:form_id]
+      
+      respond_to do |format|
+       format.js
+      end
     else
-      render :new
+      redirect_to edit_plants_pub_path(@result.plants_pub_id), notice: 'Datapoint could not be created.'
     end
   end
 
   # PATCH/PUT /results/1
   def update
-    if @result.update(resource_params)
-      redirect_to @result, notice: 'Result was successfully updated.'
+    @result.attributes = resource_params
+    if @result.draft_update
+      @result.plants_pub.attributes = {updated_at: Time.now}
+      @result.plants_pub.draft_update
+      
+      redirect_to edit_plants_pub_path(@result.plants_pub_id)
     else
-      render :edit
+      redirect_to edit_plants_pub_path(@result.plants_pub_id), notice: 'Datapoint could not be updated.'
     end
   end
 
   # DELETE /results/1
   def destroy
-    @result.destroy
-    redirect_to results_url, notice: 'Result was successfully destroyed.'
+    @result.draft_destruction
+    redirect_to edit_plants_pub_path(@result.plants_pub_id), notice: 'Datapoint removed.'
   end
 
   private
@@ -207,33 +221,35 @@ class ResultsController < ApplicationController
         # Check for higher clade tree member first
         if t = TreeNode.find_by(name: taxon[0])
           names = t.subtree.map(&:name)
-          plants = Plant.where(order_name: names)
+          plants = Plant.where(order_name: names).published
         else
           # lookup order
-          plants = Plant.where(order_name: taxon[0])
+          plants = Plant.where(order_name: taxon[0]).published
         end
         plants = plants.group(:family)
       when 2
         plants = Plant.where(
           order_name: taxon[0],
           family: taxon[1]
-        )
+        ).published
         plants = plants.group(:genus,:species)
       when 3
         plants = Plant.where(
           order_name: taxon[0],
           family: taxon[1],
           genus: taxon[2]
-        )
+        ).published
         plants = plants.group(:species)
       else
         plants= []
       end
     end
+    
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:result).permit(:value, :unit, :measure_id, :pub_id)
+      params.require(:result).permit(:value, :unit, :measure_id, :plants_pub_id)
     end
+    
     def sort_column
       col = ['measures.type','measure.name', 'pubs.authors', 'plants.genus', 'unit','value','measures.delta_notation'].find{|c| c==params[:sort]}
       if col
@@ -248,6 +264,7 @@ class ResultsController < ApplicationController
         "value"
       end
     end
+    
     def sort_direction
       params[:direction]=='asc' ? params[:direction] : "desc" 
     end

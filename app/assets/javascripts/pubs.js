@@ -9,7 +9,7 @@ $( function(){
         var title = ref.title.join('; ');
       } catch (e) { var title = ''} 
       try {		 
-        var year = ref.issued['date-parts'][0];
+        var year = ref.issued['date-parts'][0][0];
       } catch (e) { var year = ''} 
       try {		 
         var authors = ref.author.map(function(a){return a.family+', '+a.given}).join('; ');		 

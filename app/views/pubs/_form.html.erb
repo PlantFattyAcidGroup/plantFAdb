@@ -11,31 +11,48 @@
     </div>
   <% end %>
 <div class='row'>
-	<div class='col-md-6'>
+  <div class='col-md-6'>
 	  <div class="field">
-			
-	    <%= f.label :doi %> <%= link_to 'Lookup (crossref)', '#', class: 'btn btn-info pull-right', id: 'doi_lookup' %><br><br>
-	    <%= f.text_field :doi, class: 'form-control' %>
+	    <%= f.label :wos_title, 'Title' %>*<br>
+	    <%= f.text_field :wos_title, class: 'form-control', required: true %>
 	  </div>
 	  <div class="field">
-	    <%= f.label :wos_uid %><br>
+	    <%= f.label :wos_authors, 'Authors' %>*<br>
+	    <%= f.text_field :wos_authors, class: 'form-control', required: true  %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :wos_journal, 'Journal' %>*<br>
+	    <%= f.text_field :wos_journal, class: 'form-control', required: true  %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :abstract, 'Abstract' %><br>
+	    <%= f.text_area :abstract, class: 'form-control', rows: 10  %>
+	  </div>
+	</div>
+  
+	<div class='col-md-6'>
+	  <div class="field">
+	    <%= f.label :doi %><br>
+      <div class='row'>
+        <div class='col-md-7'>
+          <%= f.text_field :doi, class: 'form-control' %>
+        </div>
+        <div class='col-md-5'>
+          <%= link_to 'Lookup DOI (crossref)', '#', class: 'btn btn-info pull-right', id: 'doi_lookup' %>
+        </div>
+      </div>
+	  </div>
+	  <div class="field">
+	    <%= f.label :wos_uid, 'UID' %><br>
 	    <%= f.text_field :wos_uid, class: 'form-control' %>
 	  </div>
 	  <div class="field">
-	    <%= f.label :wos_title, 'Title' %><br>
-	    <%= f.text_field :wos_title, class: 'form-control' %>
-	  </div>		
+	    <%= f.label :url, 'URL' %><br>
+	    <%= f.text_field :url, class: 'form-control'  %>
+	  </div>
 	  <div class="field">
 	    <%= f.label :wos_year, 'Year' %><br>
 	    <%= f.text_field :wos_year, class: 'form-control' %>
-	  </div>
-	  <div class="field">
-	    <%= f.label :wos_authors, 'Authors' %><br>
-	    <%= f.text_field :wos_authors, class: 'form-control'  %>
-	  </div>
-	  <div class="field">
-	    <%= f.label :wos_journal, 'Journal' %><br>
-	    <%= f.text_field :wos_journal, class: 'form-control'  %>
 	  </div>
 	  <div class="field">
 	    <%= f.label :wos_volume, 'Volume' %><br>
@@ -45,25 +62,20 @@
 	    <%= f.label :wos_pages, 'Pages' %><br>
 	    <%= f.text_field :wos_pages, class: 'form-control'  %>
 	  </div>
-	  <div class="field">
-	    <%= f.label :url, 'URL' %><br>
-	    <%= f.text_field :url, class: 'form-control'  %>
-	  </div>
-	  <div class="field">
-	    <%= f.label :abstract, 'Abstract' %><br>
-	    <%= f.text_area :abstract, class: 'form-control', rows: 10  %>
-	  </div>
-	</div>
-	
+  </div>  
+
+</div>
+<br/>
+<div class='row'>
+  <div class="col-md-6 actions">
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
+  
+  <% unless @pub.original_pubs.empty? %>
 	<div class='well col-md-4'>
 		<div style='height:300px;overflow-y:auto'>
 			<legend>SOFA citation(s)</legend>
-			<% if @pub.original_pubs.empty? %>
-				<% pubs = [@pub]  %>
-			<% else %>
-				<% pubs = @pub.original_pubs %>
-			<% end %>
-			<% pubs.each do |pub| %>
+			<% @pub.original_pubs.each do |pub| %>
 				<div class='well'>
 					<p>
 					  <strong>Authors:</strong>
@@ -100,11 +112,7 @@
 			<% end %>
 		</div>
 	</div>
-	
+	<% end %>
 </div>
-<br/>
-<div class="actions">
-  <%= f.submit class: 'btn btn-primary' %>
-</div>
-	
+
 <% end %>

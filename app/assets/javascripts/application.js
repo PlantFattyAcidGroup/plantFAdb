@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui/autocomplete
+//= require autocomplete-rails
 //= require bootstrap-sprockets
 //= require codemirror
 //= require codemirror/modes/xml
@@ -21,4 +23,5 @@
 //= require summernote
 //= require d3.v3.min
 //= require parallax.min
+//= require local_time
 //= require_tree .

@@ -64,6 +64,7 @@ class FattyAcidsController < ApplicationController
       @fatty_acids = @fatty_acids.where(category: params[:category])
     end
     
+    @fatty_acids = @fatty_acids.published
     respond_to do |format|
       # Base html query
       format.html{
@@ -105,7 +106,7 @@ class FattyAcidsController < ApplicationController
 
   # GET /fatty_acids/1
   def show
-    @results = @fatty_acid.results.includes(:pub, :plant)
+    @results = @fatty_acid.results.includes(plants_pub: [:pub, :plant])
     .order(sort_column + ' ' + sort_direction)
     .page(params[:page])
     #.joins("left outer join (select count(pub_results.id) result_count, this_result.id result_id from publications p left outer join results this_result on p.id = this_result.publication_id left outer join results pub_results on pub_results.publication_id = p.id group by this_result.id) res on res.result_id = results.id ")  
@@ -121,8 +122,9 @@ class FattyAcidsController < ApplicationController
 
   # POST /fatty_acids
   def create
-    if @fatty_acid.save
-      redirect_to @fatty_acid, notice: 'Fatty acid was successfully created.'
+    @fatty_acid.user_id = current_user.try(:id)
+    if @fatty_acid.draft_creation
+      redirect_to @fatty_acid, notice: 'A draft of the new Fatty Acid was successfully created.'
     else
       render :new
     end
@@ -130,8 +132,9 @@ class FattyAcidsController < ApplicationController
 
   # PATCH/PUT /fatty_acids/1
   def update
-    if @fatty_acid.update(resource_params)
-      redirect_to @fatty_acid, notice: 'Fatty acid was successfully updated.'
+    @fatty_acid.attributes = resource_params
+    if @fatty_acid.draft_update
+      redirect_to @fatty_acid, notice: 'A draft of the Fatty acid update was saved successfully.'
     else
       render :edit
     end

@@ -1,3 +1,4 @@
+<!-- Plant / Remarks form -->
 <%= form_for(@plants_pub) do |f| %>
   <% if @plants_pub.errors.any? %>
     <div id="error_explanation">
@@ -10,25 +11,89 @@
       </ul>
     </div>
   <% end %>
+  <div class='container'>
+    
+    <div class='col-md-6'>
+      <div class="field">
+        <%= f.label :plant %><br>
+        <%= autocomplete_field_tag :plant,'', autocomplete_plant_name_plants_path,
+              placeholder: "search plants...",
+              class: 'form-control',
+              id_element: '#plants_pub_plant_id' %>
+        <%= f.hidden_field :plant_id, value: f.object.plant_id %>
+        <%= f.hidden_field :pub_id, value: f.object.pub_id %>
+      </div>
+      <% if @plants_pub.plant %>
+        You can move this table to a different plant by entering the name above. If you don't want to change the plant, leave the field empty.
+      <% end %>
+      <div class='field'></div>
+    </div>
+    <div class='col-md-6'>
+      <div class="field">
+        <%= f.label :remarks %><br>
+        <%= f.text_area :remarks, class: 'form-control' %>
+      </div>
+      <div class="field">
+        <%= f.label :notes %><br>
+        <%= f.text_area :notes, class: 'form-control' %>
+      </div>
+    </div>
+    
+    <div class='col-md-12' style='margin-top:1em'>
+      <div class="actions">
+        <%= f.submit class: 'btn btn-primary' %>
+      </div>
+    </div>
+    
+  </div>
+
+<% end %>
+
+<br/><br/>
+
+<% unless @plants_pub.new_record?%>
+<!-- New result form -->
 <div class='container'>
-  <div class='col-sm-12 col-md-6'>
-    <div class="field">
-      <%= f.label :remarks %><br>
-      <%= f.text_area :remarks, class: 'form-control' %>
-    </div>
-  </div>
-  <div class='col-sm-12 col-md-6'>
-    <div class="field">
-      <%= f.label :notes %><br>
-      <%= f.text_area :notes, class: 'form-control' %>
+  <div class='panel panel-default'>
+    <div class="panel-heading">Manage Datapoints</div>
+    <div class='panel-body'>
+      <div class='pull-right'>Total Value: <b><%= @total_percent %></b></div>
+      <!-- <div class='container'>
+        <%#= render :partial => 'result_form', locals: {result: @result, plants_pub_id: @plants_pub.id} %>
+      </div> -->
+      
+      <br class='clear'/>
+      <div class='container'>
+        <div class='col-lg-12'>
+          <!-- Result listing -->
+          <div class='panel table-responsive'>
+          	<table class="table table-sm">
+          	  <thead>
+                <th width="45%">Measure</th>
+          	    <th width="15%">Unit</th>
+          	    <th width="20%">Value</th>
+                <th width="20%"></th>
+          	  </thead>
+          	  <tbody>
+          	    <% @results.each_with_index do |r,i| %>
+                <% result = (r.draft? ? r.draft.reify : r) %>
+                <tr id="result_<%= result.id || i %>">
+                  <td colspan='6'>
+                  <%= render partial: 'result_form', locals: {result: result, original_result: r, plants_pub_id: @plants_pub.id, form_id: "form_#{result.id || i}"} %>
+                  </td>
+                </tr>
+          	    <% end %>
+                <tr>
+                  <td colspan='6'>
+                    <%= link_to 'Add more...', edit_plants_pub_path(@plants_pub), class: 'btn btn-primary btn-block' %>
+                  </td>
+                </tr>
+          	  </tbody>
+          	</table>
+          </div>  
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
-<div class='col-md-12' style='margin-top:1em'>
-  <div class="actions">
-    <%= f.submit class: 'btn btn-primary' %>
-  </div>
-</div>
-
 <% end %>
