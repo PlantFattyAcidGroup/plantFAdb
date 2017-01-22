@@ -17,7 +17,6 @@ Draftsman.draft_class_name = 'Draft'
 # Override
 # Add dependencies function call to draft item
 class Draft < Draftsman::Draft
-  has_paper_trail
   def draft_publication_dependencies
     #results are forcefully published with plants_pubs. Clear dependents to avoid looping
     return [] if self.item.class==Result
