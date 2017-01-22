@@ -29,7 +29,7 @@
 <% end %>
 
 <% content_for :item_bar do %>
-		<% if current_user.is_admin?%>
+		<% if current_user && current_user.is_admin? %>
 			<%#= link_to "Condense Using WOS UID", condense_wos_pubs_path, class: 'btn btn-primary',
 			method: :post,
 			data: {confirm: "This will take some time to run. ALL pubs with the same UID will be condensed into a single new publication. Pubs with a blank UID or 'none' will be skipped"} %>
