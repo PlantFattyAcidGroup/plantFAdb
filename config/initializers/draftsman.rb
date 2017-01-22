@@ -17,17 +17,13 @@ Draftsman.draft_class_name = 'Draft'
 # Override
 # Add dependencies function call to draft item
 class Draft < Draftsman::Draft
+  has_paper_trail
   def draft_publication_dependencies
+    #results are forcefully published with plants_pubs. Clear dependents to avoid looping
+    return [] if self.item.class==Result
     dependencies = super
     if defined? self.item.draft_publication_dependencies
       dependencies += self.item.draft_publication_dependencies
-    end
-    dependencies.compact.uniq
-  end
-  def draft_reversion_dependencies
-    dependencies = super
-    if defined? self.item.draft_reversion_dependencies
-      dependencies += self.item.draft_reversion_dependencies
     end
     dependencies.compact.uniq
   end
