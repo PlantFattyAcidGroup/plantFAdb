@@ -10,7 +10,7 @@ class PubsController < ApplicationController
       @pubs = @pubs.order(sort_column + ' ' + sort_direction + " nulls last, pubs.id ASC")
     end
 
-    if params[:plant_id]
+    if params[:plant_id] && @plant=Plant.find_by(id: params[:plant_id].to_i)
       @pubs = @pubs.joins('
         LEFT OUTER JOIN "PLANTS_PUBS" ON "PLANTS_PUBS"."PUB_ID" = "PUBS"."ID"'
       )

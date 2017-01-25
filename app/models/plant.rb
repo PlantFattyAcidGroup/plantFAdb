@@ -14,7 +14,7 @@ class Plant < ActiveRecord::Base
     if genus.blank? && species.blank?
       family || order_name || sofa_family || sofa_name || 'Unknown Plant'
     else
-      "#{genus} #{species} -- #{sofa_name}"
+      "#{genus} #{species}"
     end
   end
 end

@@ -11,6 +11,11 @@
   <p>
     Information on over 1500 publications on plant fatty acids with links to species analyzed, analytical data, and full text of publications
   </p>
+	<% if @plant %>
+		<p>
+			Filtering on plant: <b><%= link_to @plant.display_name, @plant %></b>
+		</p>
+	<% end %>
 	<% unless params[:title_query].blank? %>
 		<p>Filtering on Title: <b><%= params[:title_query] %></b></p>
 	<% end %>
@@ -156,7 +161,11 @@
 					<td><%= publication.wos_pages %></td>
 					<td><%= link_to publication.doi, "https://doi.org/#{publication.doi}", target: '_blank' if publication.doi && publication.doi.downcase != 'none' %></td>
 					<td><%= publication.wos_uid %></td>
-          <td><%= link_to publication.result_count||0, results_path(pub_id: publication.id) %></td>
+          <% if @plant && (pb = publication.plants_pubs.where(plant_id: @plant.id).first) %>
+            <td><%= link_to publication.result_count||0, plants_pub_path(pb) %></td>
+          <% else %>
+            <td><%= link_to publication.result_count||0, results_path(pub_id: publication.id) %></td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>
