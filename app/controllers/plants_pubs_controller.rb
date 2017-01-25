@@ -57,7 +57,7 @@ class PlantsPubsController < ApplicationController
       @results << @plants_pub.results.build(measure: m)
     end
     
-    @results = @results.sort_by{|r| r.measure.try(:delta_notation) || ''}
+    @results = @results.sort_by{|r| r.measure.try(:mass) || 0}
     
     5.times do |i|
       @results << @plants_pub.results.build
