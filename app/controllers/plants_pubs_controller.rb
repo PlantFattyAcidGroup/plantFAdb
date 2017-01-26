@@ -57,7 +57,7 @@ class PlantsPubsController < ApplicationController
       @results << @plants_pub.results.build(measure: m)
     end
     
-    @results = @results.sort_by{|r| r.measure.try(:mass) || 0}
+    @results = @results.sort_by{|r| (r.measure.try(:sofa_mol_id) || "")[2..-1].to_i}
     
     5.times do |i|
       @results << @plants_pub.results.build
