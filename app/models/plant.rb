@@ -17,4 +17,8 @@ class Plant < ActiveRecord::Base
       "#{genus} #{species}"
     end
   end
+  
+  def detailed_name
+    "#{id}: #{display_name} #{variety.present? ? ('(var. '+variety+')') : ''} - #{common_name} -- #{sofa_name}"
+  end
 end

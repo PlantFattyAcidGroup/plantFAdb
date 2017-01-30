@@ -146,7 +146,7 @@ class PlantsController < ApplicationController
         "#{q}%","#{q}%","#{q}%", "#{q}%", "#{q}%", "#{q}%", "#{q}%","#{q}%", "#{q}%", "#{q}%", "#{q}%", "#{q}%", "#{q}%"
       )
     .order('genus, species, sofa_name').limit(15)
-    render :json => plants.map { |plant| {:id => plant.id, :label => "#{plant.display_name} - #{plant.common_name}", :value => plant.display_name} }
+    render :json => plants.map { |plant| {:id => plant.id, :label => plant.detailed_name, :value => plant.display_name} }
   end
   
   private
