@@ -47,7 +47,7 @@ class FattyAcidsController < ApplicationController
       "%#{q}%","%#{q}%","%#{q}%")
     end
     
-    params[:has_data]||='true'
+    #params[:has_data]||='true'
     case params[:has_data]
     when 'true'
       @fatty_acids = @fatty_acids.where("res.result_count is not null")
