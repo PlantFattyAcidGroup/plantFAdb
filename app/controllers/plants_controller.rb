@@ -45,7 +45,7 @@ class PlantsController < ApplicationController
       # CSV download
       format.csv{
         render_csv do |out|
-          out << CSV.generate_line(["ID","Common Name","Genus", "Species", "Family", "Order", "Variety", "Tropicos URL", "Note",
+          out << CSV.generate_line(["ID","Common Name","Genus", "Species", "Family", "Order", "Variety", "Tissue", "Tropicos URL", "Note",
             "TNRS Family", "TNRS Name", "Accepted Rank", "Matched Rank", "Name Status",
             "SOFA Family", "SOFA Name",
             "Publication Count","Result Count"])
@@ -58,6 +58,7 @@ class PlantsController < ApplicationController
               item.family,
               item.order_name,
               item.variety,
+              item.tissue,
               item.tropicos_url,
               item.note,
               item.tnrs_family,
