@@ -84,7 +84,6 @@ Pending updates are shown below. They will be reviewed by the administrator befo
 				<th>Item</th>
         <th>Action</th>
         <th>User</th>
-        <!-- <th>Item Creator</th> -->
         <th>Changeset</th>
       </tr>
     </thead>
@@ -103,8 +102,15 @@ Pending updates are shown below. They will be reviewed by the administrator befo
           </td>
           <td><%= version.event %></td>
           <td><%= User.find_by(id: version.whodunnit).try(:email) %></td>
-          <!-- <td><%#= (version.item.respond_to?(:user_id) ? User.find_by(id: version.item.user_id).try(:email) : '') if version.item %></td> -->
-          <td><%=h version.changeset %></td>
+          <td>
+            <div style='max-height:100px;overflow:auto'>
+              <% if version.event=='destroy' %>
+                <%= version.reify.inspect %>
+              <% else %>
+                <%=h version.changeset %>
+              <% end %>
+            </div>
+          </td>
         </tr>
       <% end %>
     </tbody>

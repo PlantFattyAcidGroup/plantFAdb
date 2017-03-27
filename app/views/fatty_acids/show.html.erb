@@ -71,7 +71,7 @@
 	    <span style='display:inline-block;width:7em'>SOFA Mol:</span>
 	      <%= link_to @fatty_acid.sofa_mol_id,
 	      "http://sofa.mri.bund.de/Show_ResultTable.php?Mol_ID=#{@fatty_acid.sofa_mol_id}&Nota=MOL_ID",
-	      :target => '_blank' %><br/>
+	      :target => '_blank' if @fatty_acid.sofa_mol_id %><br/>
 	    <span style='display:inline-block;width:7em'>Lipid Maps:</span>
 	      <%= link_to @fatty_acid.lipidmap_id, "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=#{@fatty_acid.lipidmap_id}",
 	      :target => '_blank' if @fatty_acid.lipidmap_id %><br/>

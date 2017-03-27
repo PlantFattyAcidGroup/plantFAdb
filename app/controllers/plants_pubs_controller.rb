@@ -5,11 +5,13 @@ class PlantsPubsController < ApplicationController
     @pub = @plants_pub.pub
     @results = @plants_pub.results.includes(:measure)
       .order(sort_column + ' ' + sort_direction)
-      .page(params[:page]).viewable
+      .viewable
       
     if @plants_pub.published?
       @results = @results.published
     end
+    @sofa_tabs = @results.map(&:publication).compact.map(&:sofa_tab_id).uniq
+    @results = @results.page(params[:page])
   end
   
   def new

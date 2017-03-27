@@ -136,6 +136,7 @@ class PubsController < ApplicationController
   # GET /publications/1
   def show
     @plants_pubs = @pub.published? ? @pub.plants_pubs.published : @pub.plants_pubs
+    @plants_pubs = @plants_pubs.includes(:plant, results: [:publication]).references(:plant, results: [:publication])
   end
 
   # GET /publications/new

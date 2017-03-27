@@ -171,6 +171,8 @@ class ResultsController < ApplicationController
   # DELETE /results/1
   def destroy
     @result.draft_destruction
+    @result.plants_pub.attributes = {updated_at: Time.now}
+    @result.plants_pub.draft_update
     redirect_to edit_plants_pub_path(@result.plants_pub_id), notice: 'Datapoint removed.'
   end
 
