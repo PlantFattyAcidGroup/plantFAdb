@@ -124,8 +124,12 @@ class PlantsController < ApplicationController
 
   # DELETE /plants/1
   def destroy
-    @plant.destroy
-    redirect_to plants_url, notice: 'Plant was successfully destroyed.'
+    if @plant.plants_pubs.empty?  
+      @plant.draft_destruction
+      redirect_to plants_url, notice: 'Plant marked for destruction.'
+    else
+      redirect_to plants_url, notice: 'Plant still has data. You must move or delete all publication tables referencing this plant first.'
+    end
   end
   
   def autocomplete_plant_name

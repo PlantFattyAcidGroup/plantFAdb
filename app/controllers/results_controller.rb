@@ -5,8 +5,8 @@ class ResultsController < ApplicationController
   def index
     @measure_types = Measure.select(:type).distinct.map(&:type)
     @results = @results.order(sort_column + ' ' + sort_direction).order("results.id ASC")
-    .includes(:measure, :publication, plants_pub: [:plant, :pub])
-    .references(:measure, :publication, plants_pub: [:plant, :pub])
+    .includes(:measure, :publication, dataset: [plants_pub: [:plant, :pub]])
+    .references(:measure, :publication, dataset: [plants_pub: [:plant, :pub]])
     .where(measures: {type: ['FattyAcid','Parameter']})
     .where(unit:  ['GLC-Area-%','weight-%'])
     if params[:query]
@@ -77,8 +77,8 @@ class ResultsController < ApplicationController
   end
 
   def plant_yield
-    @results = Result.includes(:measure, plants_pub: [:plant, :pub]).published
-    .references(:measure, :pub, :plant)
+    @results = Result.includes(:measure, dataset: [plants_pub: [:plant, :pub]]).published
+    .references(:measure, dataset: [plants_pub: [:plant, :pub]])
     .where(measures: {type: ['FattyAcid']})
     .where(unit:  ['GLC-Area-%','weight-%'])
     if params[:measure_id] && @measure = Measure.find_by(id: params[:measure_id])
@@ -141,12 +141,11 @@ class ResultsController < ApplicationController
   # POST /results
   def create
     if @result.draft_creation
-      @result.plants_pub.attributes = {updated_at: Time.now}
-      @result.plants_pub.draft_update
-      @plants_pub = @result.plants_pub
+      @result.dataset.attributes = {updated_at: Time.now}
+      @result.dataset.draft_update
+      @dataset = @result.dataset
       @original_result = (@result.draft? ? @result.draft.reify : @result)
       @form_id = params[:form_id]
-      
       respond_to do |format|
        format.js
       end
@@ -159,21 +158,21 @@ class ResultsController < ApplicationController
   def update
     @result.attributes = resource_params
     if @result.draft_update
-      @result.plants_pub.attributes = {updated_at: Time.now}
-      @result.plants_pub.draft_update
+      @result.dataset.attributes = {updated_at: Time.now}
+      @result.dataset.draft_update
       
-      redirect_to edit_plants_pub_path(@result.plants_pub_id)
+      redirect_to edit_plants_pub_path(@result.dataset.plants_pub_id)
     else
-      redirect_to edit_plants_pub_path(@result.plants_pub_id), notice: 'Datapoint could not be updated.'
+      redirect_to edit_plants_pub_path(@result.dataset.plants_pub_id), notice: 'Datapoint could not be updated.'
     end
   end
 
   # DELETE /results/1
   def destroy
     @result.draft_destruction
-    @result.plants_pub.attributes = {updated_at: Time.now}
-    @result.plants_pub.draft_update
-    redirect_to edit_plants_pub_path(@result.plants_pub_id), notice: 'Datapoint removed.'
+    @result.dataset.attributes = {updated_at: Time.now}
+    @result.dataset.draft_update
+    redirect_to edit_plants_pub_path(@result.dataset.plants_pub_id), notice: 'Datapoint removed.'
   end
 
   private
@@ -249,7 +248,7 @@ class ResultsController < ApplicationController
     
     # Only allow a trusted parameter "white list" through.
     def resource_params
-      params.require(:result).permit(:value, :unit, :measure_id, :plants_pub_id)
+      params.require(:result).permit(:value, :unit, :measure_id, :dataset_id)
     end
     
     def sort_column

@@ -1,7 +1,8 @@
 class Result < ActiveRecord::Base
   belongs_to :measure
   belongs_to :publication
-  belongs_to :plants_pub
+  belongs_to :dataset
+  delegate :plants_pub, to: :dataset
   delegate :plant, to: :plants_pub
   delegate :pub, to: :plants_pub
   
@@ -12,6 +13,18 @@ class Result < ActiveRecord::Base
   
   def display_name
     "#{measure.display_name}"
+  end
+  
+  def sofa_tab_id
+    publication.try(:sofa_tab_id)
+  end
+  
+  def draft_publication_dependencies
+    []
+  end
+  
+  def draft_reversion_dependencies
+    []
   end
   
 end

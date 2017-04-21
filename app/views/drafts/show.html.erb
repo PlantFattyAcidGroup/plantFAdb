@@ -8,16 +8,27 @@
 <% end %>
 
 <div class='pull-left'>
-  <%= User.find_by(id: @draft.whodunnit).try(:email)  %>
-</div>
-<div class='pull-right'>
-  <%= link_to 'Publish', draft_path(@draft), method: :put, class: 'btn btn-success', style: 'margin-right:1em' %>
-  <%= link_to 'Revert', draft_path(@draft), method: :delete, class: 'btn btn-default' %>
+  <b>User</b>: <%= User.find_by(id: @draft.whodunnit).try(:email)  %>
 </div>
 
+<div class='col-md-6  pull-right'>
+  <% if @draft.item_type=='Dataset'%>
+    <div>
+      This dataset is managed by the parent publication table. Publish or Revert this publication table to update this draft: <br/>
+      <%= link_to @draft.item.plants_pub.display_name, @draft.item.plants_pub.try(:draft) ? draft_path(@draft.item.plants_pub.draft) : @draft.item.plants_pub %>
+    </div>
+  <% elsif @draft.item_type=='Result'%>
+    <div>
+      This Result is managed by the parent dataset. Publish or Revert the dataset to update this draft: <br/>
+      <%= link_to @draft.item.dataset.display_name, @draft.item.dataset.try(:draft) ? draft_path(@draft.item.dataset.draft) : @draft.item.dataset %>
+    </div>
+  <% else %>
+    <%= link_to 'Publish', draft_path(@draft), method: :put, class: 'btn btn-success', style: 'margin-right:1em' %>
+    <%= link_to 'Revert', draft_path(@draft), method: :delete, class: 'btn btn-default' %>
+  <% end %>
+</div>
 
-<br/>
-<br/>
+<br/><br/>
 
 <div class='container'>
   <div class='well col-sm-12 col-md-5'>

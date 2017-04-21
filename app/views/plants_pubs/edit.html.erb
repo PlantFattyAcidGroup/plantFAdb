@@ -4,6 +4,7 @@
 
 <% content_for :item_bar do %>
   <%= link_to 'Cancel', @plants_pub, class: 'btn btn-primary' %>
+  <%= link_to 'Delete', @plants_pub, class: 'btn btn-warning', method: :delete, data: {confirm: "This table and #{pluralize(@plants_pub.results.count,'result')} will be marked for deletion. You can apply this change by publishing it under the Data tab. Continue?"} if can? :delete, @plants_pub %>
 <% end %>
 
 <%= render 'form' %>

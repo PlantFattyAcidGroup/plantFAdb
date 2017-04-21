@@ -15,7 +15,7 @@
   <div class='col-md-2'>
       <%= f.number_field :value, class: 'form-control input-sm values', step: :any, disabled: destroyed %>
   </div>
-  <%= f.hidden_field :plants_pub_id, value: plants_pub_id %>
+  <%= f.hidden_field :dataset_id, value: dataset_id %>
   <div class='col-md-3'>
     <% if result.persisted? %>
       <% unless destroyed %>

@@ -1,10 +1,11 @@
 class PlantsPub < ActiveRecord::Base
   belongs_to :plant
   belongs_to :pub
-  has_many :results
+  has_many :publications,  -> { distinct }, through: :results
+  has_many :datasets
+  has_many :results, through: :datasets
   validates :plant_id, presence: true, uniqueness: {scope: :pub_id}
   validates :pub_id, presence: true
-  has_many :publications,  -> { distinct }, through: :results
   
   has_paper_trail
   has_drafts
@@ -13,7 +14,11 @@ class PlantsPub < ActiveRecord::Base
   end
   
   def draft_publication_dependencies
-    results.map(&:draft).compact
+    datasets.map(&:draft).compact
+  end
+  
+  def draft_reversion_dependencies
+    datasets.map(&:draft).compact
   end
   
   def sofa_tabs

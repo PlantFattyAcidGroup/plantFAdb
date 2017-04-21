@@ -67,17 +67,17 @@ class TreeController < ApplicationController
       max = avg = count = color = nil
       if children.empty?
         if !params[:measure_id].blank?
-          results = Result.joins(:measure, plants_pub: [:plant])
+          results = Result.joins(:measure, dataset: [plants_pub: [:plant]])
           .where("measures.id = ?", params[:measure_id])
           .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
           .where("plants.order_name = '#{parent.name}'")
         elsif !params[:category].blank?
-          results = Result.joins(:measure, plants_pub: [:plant])
+          results = Result.joins(:measure, dataset: [plants_pub: [:plant]])
           .where("measures.category = ?", params[:category])
           .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
           .where("plants.order_name = '#{parent.name}'")
         else
-          results = Result.joins(:measure, plants_pub: [:plant])
+          results = Result.joins(:measure, dataset: [plants_pub: [:plant]])
             .where("measures.type ='FattyAcid'")
             .where("results.unit = 'GLC-Area-%' or results.unit = 'weight-%'")
             .where("plants.order_name='#{parent.name}'")

@@ -169,8 +169,12 @@ class PubsController < ApplicationController
 
   # DELETE /publications/1
   def destroy
-    @pub.destroy
-    redirect_to pubs_url, notice: 'Pub was successfully destroyed.'
+    if @pub.plants_pubs.empty?  
+      @pub.draft_destruction
+      redirect_to pubs_url, notice: 'Publication marked for destruction.'
+    else
+      redirect_to pubs_url, notice: 'Publication still has data. You must move or delete all publication tables first.'
+    end
   end
 
   private

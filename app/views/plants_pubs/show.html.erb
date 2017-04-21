@@ -17,17 +17,11 @@
     <br/>
   <% end %>
   
-  <% if @sofa_tabs.length > 1 %>
-    <br/><b>SOFA:</b><br/>
-    This listing combines <%= @sofa_tabs.length %> SOFA tables:
-    <div style='width:50%;max-height:75px;overflow:auto'>
-      <% @sofa_tabs.each do |tab| %>
-  		  <div style='float:left;margin:0.25em'><%= link_to tab, SofaTab.sofa_url(tab), target: '_blank' %></div>
-  		<% end %>
-    </div>
-  <% elsif @sofa_tabs.first %>
-    <br/><b>SOFA:</b><br/>
-    This listing is based on SOFA table: <%= link_to @sofa_tabs.first, SofaTab.sofa_url(@sofa_tabs.first), target: '_blank' %>
+  <h1>Datasets:</h1>
+  <% @plants_pub.datasets.each do |d| %>
+    <b><%= d.dbxref.try(:name) %>: <%= d.dbxref.try(:generate_link,d.dbxref_value) %> - <%= d.lipid_measure %></b> (<%= d.results.count %>)<br/>
+    <p><%= d.remarks %></p>
+    <br/>
   <% end %>
 
 <% end %>

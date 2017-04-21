@@ -11,7 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170119214614) do
+ActiveRecord::Schema.define(version: 20170421152827) do
+
+  create_table "datasets", force: :cascade do |t|
+    t.string    "remarks"
+    t.string    "notes"
+    t.string    "lipid_measure"
+    t.string    "dbxref_value"
+    t.integer   "plants_pub_id",           precision: 38
+    t.datetime  "created_at"
+    t.datetime  "updated_at"
+    t.integer   "draft_id",                precision: 38
+    t.timestamp "published_at",  limit: 6
+    t.timestamp "trashed_at",    limit: 6
+    t.integer   "dbxref_id",               precision: 38
+  end
+
+  create_table "dbxrefs", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "link"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "drafts", force: :cascade do |t|
     t.string   "item_type",                     null: false
@@ -62,6 +84,8 @@ ActiveRecord::Schema.define(version: 20170119214614) do
     t.timestamp "trashed_at",     limit: 6
     t.integer   "user_id",                     precision: 38
   end
+
+  add_index "measures", ["type", "id"], name: "idx$$_00010004"
 
   create_table "names", force: :cascade do |t|
     t.string   "type"
@@ -119,6 +143,7 @@ ActiveRecord::Schema.define(version: 20170119214614) do
     t.integer   "user_id",                precision: 38
   end
 
+  add_index "plants_pubs", ["plant_id", "pub_id", "id"], name: "idx$$_00010006"
   add_index "plants_pubs", ["plant_id"], name: "index_plants_pubs_on_plant_id"
   add_index "plants_pubs", ["pub_id"], name: "index_plants_pubs_on_pub_id"
 
@@ -178,11 +203,15 @@ ActiveRecord::Schema.define(version: 20170119214614) do
     t.timestamp "published_at",   limit: 6
     t.timestamp "trashed_at",     limit: 6
     t.integer   "plants_pub_id",            precision: 38
+    t.integer   "dataset_id",               precision: 38
   end
 
   add_index "results", ["measure_id"], name: "index_results_on_measure_id"
+  add_index "results", ["plants_pub_id"], name: "idx$$_00010007"
   add_index "results", ["pub_id"], name: "idx$$_00010001"
   add_index "results", ["publication_id"], name: "i_results_publication_id"
+  add_index "results", ["unit", "measure_id", "plants_pub_id"], name: "idx$$_00010005"
+  add_index "results", ["value", "id"], name: "idx$$_0001000b"
 
   create_table "sofa_tabs", force: :cascade do |t|
     t.integer "pub_id",      precision: 38

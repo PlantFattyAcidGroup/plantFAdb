@@ -106,7 +106,7 @@ class FattyAcidsController < ApplicationController
 
   # GET /fatty_acids/1
   def show
-    @results = @fatty_acid.results.includes(plants_pub: [:pub, :plant])
+    @results = @fatty_acid.results.includes(dataset:[plants_pub: [:pub, :plant]])
     .order(sort_column + ' ' + sort_direction)
     .page(params[:page])
     #.joins("left outer join (select count(pub_results.id) result_count, this_result.id result_id from publications p left outer join results this_result on p.id = this_result.publication_id left outer join results pub_results on pub_results.publication_id = p.id group by this_result.id) res on res.result_id = results.id ")  
@@ -142,8 +142,12 @@ class FattyAcidsController < ApplicationController
 
   # DELETE /fatty_acids/1
   def destroy
-    @fatty_acid.destroy
-    redirect_to fatty_acids_url, notice: 'Fatty acid was successfully destroyed.'
+    if @fatty_acid.results.empty?  
+      @fatty_acid.draft_destruction
+      redirect_to fatty_acids_url, notice: 'Fatty acid marked for destruction.'
+    else
+      redirect_to fatty_acids_url, notice: 'Fatty acid still has data. You must move or delete all datapoints first.'
+    end
   end
 
   private

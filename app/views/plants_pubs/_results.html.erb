@@ -19,9 +19,7 @@
       <th><%= sortable "measures.delta_notation", "Notation" %></th>
 	    <th><%= sortable 'value' %></th>
 	    <th><%= sortable 'unit' %></th>
-      <% if @sofa_tabs.length > 1 %>
-        <th>Sofa Table ID</th>
-      <% end %>
+      <th></th>
 	  </thead>
 	  <tbody>
 	    <% @results.each do |result| %>
@@ -31,11 +29,11 @@
       	<td><%= link_to_if result.measure.is_a?(FattyAcid), result.measure.try(:delta_notation), result.measure %></td>
 	      <td><%= result.value.to_f.round(2) %></td>
 	      <td><%= '*' if result.old_mol_val %> <%= result.unit %></td>
-        <% if @sofa_tabs.length > 1 %>
-          <td>
-            <%= link_to result.publication.sofa_tab_id, SofaTab.sofa_url(result.publication.sofa_tab_id), target: '_blank' if result.publication.try(:sofa_tab_id)  %>
-          </td>
-        <% end %>
+        <td>
+          <% if (xref = result.dataset.dbxref_value) && result.dataset.dbxref %>
+            <%= result.dataset.dbxref.generate_link(xref) %>
+          <% end %>
+        </td>
 	    </tr>
 	    <% end %>
 	  </tbody>
