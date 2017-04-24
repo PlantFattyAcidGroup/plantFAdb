@@ -21,7 +21,7 @@ class Dataset < ActiveRecord::Base
   end
   
   def total_percent
-    results.select{|r| r.measure.class == FattyAcid}.map(&:value).compact.sum
+    results.select{|r| r.measure.class == FattyAcid}.map(&:value).map(&:to_f).compact.sum.round(2)
   end
   
 end

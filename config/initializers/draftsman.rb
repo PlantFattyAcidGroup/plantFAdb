@@ -20,11 +20,15 @@ class Draft < Draftsman::Draft
   def draft_publication_dependencies
     if defined? self.item.draft_publication_dependencies
       return self.item.draft_publication_dependencies
+    else
+      return super
     end
   end
   def draft_reversion_dependencies
     if defined? self.item.draft_reversion_dependencies
       return self.item.draft_reversion_dependencies
+    else
+      return super
     end
   end
 end

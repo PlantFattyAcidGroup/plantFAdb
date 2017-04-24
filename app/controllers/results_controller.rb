@@ -54,6 +54,11 @@ class ResultsController < ApplicationController
     if params[:category]
       @results = @results.where("measures.category = ?", params[:category])
     end
+    if params[:species]
+      genus, species = params[:species].split("_")
+      @results = @results.where("lower(plants.genus)=? AND lower(plants.species)=?",genus.downcase,species.downcase)
+    end
+    
     respond_to do |format|
       # Base html query
       format.html{ @results = @results.page params[:page]}
@@ -252,11 +257,11 @@ class ResultsController < ApplicationController
     end
     
     def sort_column
-      col = ['measures.type','measure.name', 'pubs.authors', 'plants.genus', 'unit','value','measures.delta_notation'].find{|c| c==params[:sort]}
+      col = ['measures.type','measures.name', 'pubs.wos_authors', 'plants.genus', 'unit','value','measures.delta_notation'].find{|c| c==params[:sort]}
       if col
         col
       elsif params[:pub_id]
-        "plants.genus asc, plants.species asc, pubs.authors, delta_notation asc, value"
+        "plants.genus asc, plants.species asc, pubs.wos_authors, delta_notation asc, value"
       elsif params[:taxon]
         "plants.genus asc, plants.species asc, delta_notation asc, value"
       elsif params[:plant_id]

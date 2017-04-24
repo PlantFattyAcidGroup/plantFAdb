@@ -13,7 +13,7 @@
 	<% end %>
 	<% if @measure%>
 		<p>
-			Filtering on <%= @measure.class %>: <b><%= link_to @measure.name, @measure %></b>
+			Filtering on <%= @measure.class %>: <b><%= link_to @measure.name||@measure.delta_notation, @measure %></b>
 		</p>
 	<% end %>
 	<% if params[:category] %>
@@ -24,6 +24,11 @@
 	<% if params[:taxon] %>
 		<p>
 			Filtering on taxon: <b><%= params[:taxon] %></b>
+		</p>
+	<% end %>
+	<% if @species %>
+		<p>
+			Filtering on species: <b><%= link_to @species.name, species_page_path(genus: @species.genus, species: @species.species) %></b>
 		</p>
 	<% end %>
 <% end %>
@@ -61,9 +66,9 @@
 	        <th><%= sortable "measures.delta_notation", "Notation" %></th>
 				<% end %>
 				<% unless @pub %>
-        	<th><%= sortable "pubs.authors", "Publication" %></th>
+        	<th><%= sortable "pubs.wos_authors", "Publication" %></th>
 				<% end %>
-				<% unless @plant %>
+				<% unless @plant || @species%>
 					<th><%= sortable "plants.genus", "Plant" %></th>
 				<% end %>
 				<th></th>
@@ -83,7 +88,7 @@
 					<% unless @pub %>
             <td><%= link_to result.pub.display_name, result.plants_pub if result.pub %></td> 
 					<% end %>
-					<% unless @plant %>
+					<% unless @plant || @species %>
             <td><%= link_to result.plant.display_name, result.plants_pub if result.plant %></td> 
 					<% end %>
 					<td>

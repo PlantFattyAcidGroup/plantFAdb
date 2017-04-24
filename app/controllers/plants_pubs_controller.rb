@@ -40,7 +40,7 @@ class PlantsPubsController < ApplicationController
     default_measures = Measure.find([10027,10035,10046,10051,10066,10074,10077,10090,10114,10127,10131,10147,10152,10000])
     
     ### All measures from publication
-    all_measures = PlantsPub.where(pub_id: @plants_pub.pub_id).includes(datasets: [results: :measure]).map(&:datasets).flatten.map(&:results).flatten.map(&:measure).uniq
+    #all_measures = PlantsPub.where(pub_id: @plants_pub.pub_id).includes(datasets: [results: :measure]).map(&:datasets).flatten.map(&:results).flatten.map(&:measure).uniq
 
     @datasets = @plants_pub.datasets.includes(results: [:measure]).references(results: [:measure])
     @results ={}
@@ -53,9 +53,9 @@ class PlantsPubsController < ApplicationController
       (default_measures-used_measures).each do |m|
         @results[d.id] << d.results.build(measure: m)
       end
-      (all_measures-used_measures-default_measures).each do |m|
-        @results[d.id] << d.results.build(measure: m)
-      end
+      # (all_measures-used_measures-default_measures).each do |m|
+      #   @results[d.id] << d.results.build(measure: m)
+      # end
       
       r_mol = @results[d.id].select{|r| r.measure.try(:sofa_mol_id).present?}.sort_by{|r| r.measure.sofa_mol_id}
       r_new = @results[d.id].select{|r| r.measure.try(:sofa_mol_id).nil?}.sort_by{|r| r.measure.try(:mass)||0}

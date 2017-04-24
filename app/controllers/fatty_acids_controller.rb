@@ -108,7 +108,7 @@ class FattyAcidsController < ApplicationController
   def show
     @results = @fatty_acid.results.includes(dataset:[plants_pub: [:pub, :plant]])
     .order(sort_column + ' ' + sort_direction)
-    .page(params[:page])
+    .page(params[:page]).per(50)
     #.joins("left outer join (select count(pub_results.id) result_count, this_result.id result_id from publications p left outer join results this_result on p.id = this_result.publication_id left outer join results pub_results on pub_results.publication_id = p.id group by this_result.id) res on res.result_id = results.id ")  
   end
 
@@ -159,10 +159,11 @@ class FattyAcidsController < ApplicationController
     end
     
     def sort_column
-      col = ['mass','name', 'delta_notation', 'formula', 'sofa_mol_id','result_count'].find{|c| c==params[:sort]}
       if params[:action] == 'index'
+        col = ['mass','name', 'delta_notation', 'formula', 'sofa_mol_id','result_count'].find{|c| c==params[:sort]}
         col ||"mass"
       else
+        col = ['plants.genus','unit', 'value', 'pubs.was_authors'].find{|c| c==params[:sort]}
         col || "results.value"
       end
       

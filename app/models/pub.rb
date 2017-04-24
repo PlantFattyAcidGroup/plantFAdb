@@ -12,7 +12,9 @@ class Pub < ActiveRecord::Base
   has_paper_trail
   has_drafts
   def display_name
-    "<i>#{wos_title}</i> #{wos_authors} #{wos_journal} #{wos_year.blank? ? '' : "(#{wos_year})"}  #{wos_volume} #{wos_pages}".html_safe
+    s = "#{wos_title} #{wos_authors} #{wos_journal} #{wos_year.blank? ? '' : "(#{wos_year})"}  #{wos_volume} #{wos_pages}"
+    s = '-' if s.blank?
+    s.html_safe
   end
   
   def self.condense_wos

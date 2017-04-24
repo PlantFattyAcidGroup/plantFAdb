@@ -40,6 +40,8 @@ Rails.application.routes.draw do
   root 'home#index'
   
   get 'history' => 'history#index'
+  get 'species' => 'species#index', as: 'species'
+  get ':genus/:species' => 'species#show', as: 'species_page'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
