@@ -5,7 +5,7 @@ module ApplicationHelper
     {
       fatty_acids: [fatty_acids_path, [:fatty_acids]],
       tree: [tree_index_path,[:tree]],
-      plants: [plants_path,[:plants]],
+      plants: [species_path,[:plants,:species]],
       literature: [pubs_path,[:pubs]]
     }
   end

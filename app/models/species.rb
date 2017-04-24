@@ -1,8 +1,8 @@
 class Species
   attr_accessor :genus, :species
   def initialize(genus,species)
-    self.genus=genus.downcase
-    self.species = species.downcase
+    self.genus=genus.try(:downcase)||"-"
+    self.species = species.try(:downcase)||"-"
   end
   
   def id
@@ -26,7 +26,10 @@ class Species
   end
   
   def plants
-    @plants||=Plant.where("lower(genus)=? AND lower(species)=?", self.genus, self.species)
+    plant_query = Plant.all
+    plant_query = (genus == '-' ? plant_query.where('genus is null') : plant_query.where("lower(genus)=?",self.genus))
+    plant_query = (species == '-' ? plant_query.where('species is null') : plant_query.where("lower(species)=?",self.species))
+    @plants||=plant_query
   end
   
   def results

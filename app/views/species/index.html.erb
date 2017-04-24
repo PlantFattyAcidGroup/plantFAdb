@@ -58,6 +58,7 @@
 				<th><%= sortable('avg_oil_content', 'Oil Content') %></th>
         <th><%= sortable('pub_count','Publications') %></th>
         <th><%= sortable('result_count','Data points') %></th>
+        <th><%= sortable('plant_count','Plants') %></th>
       </tr>
     </thead>
 
@@ -73,6 +74,7 @@
 					<td><%= sp.avg_oil_content.try(:round,1) %></td>
           <td><%= link_to sp.pub_count, pubs_path(species: s.id) if sp.pub_count %></td>
           <td><%= link_to sp.result_count, results_path(species: s.id) if sp.result_count %></td>
+          <td><%= link_to s.plants.length, plants_path(query: s.name, target: '_blank') %></td>
         </tr>
       <% end %>
     </tbody>
