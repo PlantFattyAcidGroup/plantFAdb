@@ -56,7 +56,7 @@
 				<%= link_to "Show #{pluralize @species.plants.count,"Plant Varieties"}", "#0", onclick: '$("#plant_table").slideToggle();return false;' %>
 			</span> |
 			<span>
-				<%= link_to "View #{pluralize @species.results.published.viewable.count, "Data Point"}", results_path(species: @species.id) %>
+				<%= link_to "View #{pluralize @species.results.published.viewable.count, "Data Point"}", results_path(genus: @species.genus, species: @species.species) %>
 			</span>
       
       <div id='plant_table' style='display:none'>
@@ -178,7 +178,7 @@ function drawBoxPlot(data,el,unit){
       .html(text)
 		})
 		.click(function(d){
-			window.open('<%= results_path(species: @species.id) %>'+'&measure_id='+d.object.id,'_blank')
+			window.open('<%= results_path(genus: @species.genus, species: @species.species) %>'+'&measure_id='+d.object.id,'_blank')
 		})
 		
 	el.datum(data).call(chart)

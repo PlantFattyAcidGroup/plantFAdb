@@ -18,8 +18,8 @@
 		<% end %>
 		<small style='white-space:nowrap'><%= @plant.common_name %></small>
 	</h1>
-  <% if Species.new(@plant.genus,@plant.species).plants.count > 1 %>
-    <%= link_to "View all plant entries for this species", species_page_path(genus: @plant.genus, species: @plant.species) %>
+  <% if (s_count = Species.new(@plant.genus,@plant.species).plants.count) > 1 %>
+    <%= link_to "View species page (#{pluralize(s_count, "variety")})", species_page_path(genus: @plant.genus, species: @plant.species) %>
   <% end %>
 <% end %>
 

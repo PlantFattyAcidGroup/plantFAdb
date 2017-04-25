@@ -10,7 +10,7 @@ class PlantsPubsController < ApplicationController
     if @plants_pub.published?
       @results = @results.published
     end
-    @sofa_tabs = @results.map(&:publication).compact.map(&:sofa_tab_id).uniq
+    #@sofa_tabs = @results.map(&:publication).compact.map(&:sofa_tab_id).uniq
     @results = @results.page(params[:page])
   end
   

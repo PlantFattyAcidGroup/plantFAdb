@@ -5,38 +5,19 @@ class SpeciesController < ApplicationController
     oil_content = Parameter.where("upper(delta_notation)='OIL CONTENT'").first
     @species = Plant.all
     if ActiveRecord::Base.connection.adapter_name.downcase =~ /.*sqlite.*/
-      @species = @species.order(sort_column + ' ' + sort_direction+", id asc")
+      @species = @species.order(sort_column + ' ' + sort_direction+", plants.genus asc, plants.species asc")
     else
       @species = @species.order(sort_column + ' ' + sort_direction+" nulls last, plants.genus asc, plants.species asc")
     end
     
-    @species = @species.joins("left outer join (
-      select count(r.id) result_count, p.id plant_id
-      from results r
-        left outer join datasets d on r.dataset_id = d.id
-        left outer join plants_pubs pl_tbl on pl_tbl.id = d.plants_pub_id
-        left outer join plants p on pl_tbl.plant_id = p.id
-        left outer join measures m on m.id = r.measure_id
-        where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter')
-        group by p.id
-    ) res on res.plant_id = plants.id")
-    .joins("left outer join (
-      select avg(r.value) avg_oil_content, p.id plant_id
-      from results r
-        left outer join datasets d on r.dataset_id = d.id
-        left outer join plants_pubs pl_tbl on pl_tbl.id = d.plants_pub_id
-        left outer join plants p on pl_tbl.plant_id = p.id
-        where r.measure_id = #{oil_content.id}
-        group by p.id
-    ) oil_res on oil_res.plant_id = plants.id")
-    .joins("left outer join (
-      select count(distinct(p.pub_id)) pub_count, l.id plant_id
-      from plants_pubs p
-        join pubs on pubs.id = p.pub_id
-        left outer join plants l on p.plant_id = l.id
-        where pubs.published_at IS NOT NULL
-        group by l.id
-      ) pub on pub.plant_id = plants.id")
+    @species = @species.joins(plants_pubs: [:pub, datasets: [results: :measure]])
+                       .joins("left outer join results oil_res on oil_res.dataset_id = datasets.id and oil_res.measure_id = #{oil_content.id}")
+                       .where("results.unit in ('GLC-Area-%','weight-%')")
+                       .where("measures.type in ('FattyAcid','Parameter')")
+                       .where("plants.published_at IS NOT NULL")
+                       .where("pubs.published_at IS NOT NULL")
+                       .where("results.published_at IS NOT NULL")
+                      
       
     if(params[:query])
       q = UnicodeUtils.upcase(params[:query])
@@ -56,9 +37,14 @@ class SpeciesController < ApplicationController
         "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
       )
     end
-    @species = @species.group([:genus, :species])
-                       .select("plants.genus, plants.species, count(plants.id) plant_count, avg(oil_res.avg_oil_content) avg_oil_content, sum(pub.pub_count) pub_count, sum(res.result_count) result_count")
-                       .page(params[:page])
+    @species = @species.group([:genus, :species]).page(params[:page])
+                        .select("plants.genus, plants.species,
+                                avg(oil_res.value) avg_oil_content,
+                                count(distinct(pubs.id)) pub_count,
+                                count(distinct(results.id)) result_count,
+                                count(distinct(plants.id)) plant_count"
+                               )
+    
     respond_to do |format|
       # Base html query
       format.html{}

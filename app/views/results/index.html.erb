@@ -28,7 +28,7 @@
 	<% end %>
 	<% if @species %>
 		<p>
-			Filtering on species: <b><%= link_to @species.name, species_page_path(genus: @species.genus, species: @species.species) %></b>
+			Filtering on: <b><%= link_to @species.name, species_page_path(genus: @species.genus, species: @species.species) %></b>
 		</p>
 	<% end %>
 <% end %>

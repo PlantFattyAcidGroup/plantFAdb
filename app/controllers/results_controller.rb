@@ -54,9 +54,9 @@ class ResultsController < ApplicationController
     if params[:category]
       @results = @results.where("measures.category = ?", params[:category])
     end
-    if params[:species]
-      genus, species = params[:species].split("_")
-      @results = @results.where("lower(plants.genus)=? AND lower(plants.species)=?",genus.downcase,species.downcase)
+    if params[:genus].present? && params[:species].present?
+      @species = Species.new(params[:genus],params[:species])
+      @results = @results.where(plants: {id: @species.plants})
     end
     
     respond_to do |format|

@@ -9,16 +9,26 @@ class PlantsController < ApplicationController
     else
       @plants = @plants.order(sort_column + ' ' + sort_direction+" nulls last, id asc")
     end
-    @plants = @plants.joins("left outer join (select count(distinct(p.pub_id)) pub_count, l.id plant_id from plants_pubs p left outer join plants l on p.plant_id = l.id group by l.id) pub on pub.plant_id = plants.id ")
-    .joins("left outer join (select count(r.id) result_count, l.id plant_id from results r left outer join plants_pubs pl_tbl on pl_tbl.id = r.plants_pub_id left outer join plants l on pl_tbl.plant_id = l.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by l.id) res on res.plant_id = plants.id ")
+
+    @plants = @plants.joins("join (
+      select count(r.id) result_count, count(distinct(pl_tbl.pub_id)) pub_count, l.id plant_id
+      from results r
+        left outer join datasets d on r.dataset_id = d.id
+        left outer join plants_pubs pl_tbl on pl_tbl.id = d.plants_pub_id
+        left outer join plants l on pl_tbl.plant_id = l.id
+        left outer join measures m on m.id = r.measure_id
+      where unit in ('GLC-Area-%','weight-%')
+        AND m.type in ('FattyAcid','Parameter')
+        AND r.published_at IS NOT NULL
+      group by l.id) res on res.plant_id = plants.id ")
     .page(params[:page])
     if oil_content
       @plants = @plants.joins("left outer join (
         select avg(r.value) avg_oil_content, p.id plant_id from results r left outer join plants_pubs pl_tbl on pl_tbl.id = r.plants_pub_id left outer join plants p on pl_tbl.plant_id = p.id where r.measure_id = #{oil_content.id} group by p.id
       ) oil_res on oil_res.plant_id = plants.id ")
-      .select("plants.*, pub.pub_count, res.result_count, oil_res.avg_oil_content")
+      .select("plants.*, res.pub_count, res.result_count, oil_res.avg_oil_content")
     else
-      @plants = @plants.select("plants.*, pub.pub_count, res.result_count")
+      @plants = @plants.select("plants.*, res.pub_count, res.result_count")
     end
     if(params[:query])
       q = UnicodeUtils.upcase(params[:query])
@@ -37,6 +47,10 @@ class PlantsController < ApplicationController
         OR upper(genus || \' \' || species) LIKE ?',
         "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%"
       )
+    end
+    if params[:genus].present? && params[:species].present?
+      @species = Species.new(params[:genus],params[:species])
+      @plants = @plants.where(plants: {id: @species.plants})
     end
     @plants = @plants.published
     respond_to do |format|

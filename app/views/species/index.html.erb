@@ -66,15 +66,15 @@
       <% @species.each do |sp| %>
         <% s = Species.new(sp.genus, sp.species) %>
         <tr>
-					<td><%= link_to s.genus||'-', species_page_path(genus: s.genus, species: s.species) %></td>
-					<td><%= link_to s.species||'-', species_page_path(genus: s.genus, species: s.species) %></td>
-					<td><%= s.common_name %></td>
-					<td><%= s.family %></td>
-					<td><%= s.order_name %></td>
+					<td><%= link_to s.genus, species_page_path(genus: s.genus, species: s.species) %></td>
+					<td><%= link_to s.species, species_page_path(genus: s.genus, species: s.species) %></td>
+					<td style='max-width:150px;overflow:auto;white-space:nowrap'><%= s.common_name %></td>
+					<td style='max-width:150px;overflow:auto;white-space:nowrap'><%= s.family %></td>
+					<td style='max-width:150px;overflow:auto;white-space:nowrap'><%= s.order_name %></td>
 					<td><%= sp.avg_oil_content.try(:round,1) %></td>
-          <td><%= link_to sp.pub_count, pubs_path(species: s.id) if sp.pub_count %></td>
-          <td><%= link_to sp.result_count, results_path(species: s.id) if sp.result_count %></td>
-          <td><%= link_to s.plants.length, plants_path(query: s.name, target: '_blank') %></td>
+          <td><%= link_to sp.pub_count, pubs_path(genus: s.genus, species: s.species) if sp.pub_count %></td>
+          <td><%= link_to sp.result_count, results_path(genus: s.genus, species: s.species) if sp.result_count %></td>
+          <td><%= link_to s.plants.length, plants_path(genus: s.genus, species: s.species, target: '_blank') %></td>
         </tr>
       <% end %>
     </tbody>
