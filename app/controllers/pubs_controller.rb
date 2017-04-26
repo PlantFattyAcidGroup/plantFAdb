@@ -9,29 +9,26 @@ class PubsController < ApplicationController
     else
       @pubs = @pubs.order(sort_column + ' ' + sort_direction + " nulls last, pubs.id ASC")
     end
-      @pubs = @pubs.joins("join (
-        select count(distinct(r.id)) result_count, p.id pub_id
-        from results r
-          join datasets d on d.id = r.dataset_id
-          join plants_pubs pl_tbl on pl_tbl.id = d.plants_pub_id
-          join pubs p on pl_tbl.pub_id = p.id
-          join measures m on m.id = r.measure_id
-        where r.published_at is not null
-          and unit in ('GLC-Area-%','weight-%')
-          AND m.type in ('FattyAcid','Parameter')
-        group by p.id) res on res.pub_id = pubs.id ")
-                 
+
+    result_count = Result.viewable.published
+                         .joins(:measure, dataset: [plants_pub: [:pub, :plant]])
+                         .group("pubs.id")
+                         .select("count(distinct(results.id)) result_count, pubs.id pub_id")
+                           
     if (params[:plant_id] && @plant=Plant.find_by(id: params[:plant_id].to_i))
-      @pubs = @pubs.where(id: PlantsPub.where(plant_id:params[:plant_id]).select(:pub_id))
+      result_count = result_count.where(plants: {id: @plant.id})
     end
     
     if params[:genus].present? && params[:species].present?
       @species = Species.new(params[:genus],params[:species])
       plant_ids = @species.plants.select("plants.id")
-      species_pub_ids = PlantsPub.where(plant_id: plant_ids).select("distinct(plants_pubs.pub_id)")
-      @pubs = @pubs.where(id:  species_pub_ids) 
+      result_count = result_count.where(plants: {id: plant_ids})
     end
     
+    @pubs = @pubs.joins("join (#{result_count.to_sql}) res on res.pub_id = pubs.id")
+                 .where("res.result_count > 0")
+                 .published.select("pubs.*, res.result_count")
+                 
     if(params[:query])
       q = UnicodeUtils.upcase(params[:query])
       @pubs = @pubs.where('
@@ -71,8 +68,8 @@ class PubsController < ApplicationController
       q = UnicodeUtils.upcase(params[:year_query])
       @pubs = @pubs.where("upper(wos_year) like ?","%#{q}%")
     end
+    
 
-    @pubs = @pubs.published.select("pubs.*, res.result_count")
                  
     respond_to do |format|
       # Base html query
@@ -149,10 +146,8 @@ class PubsController < ApplicationController
   # GET /publications/1
   def show
     @plants_pubs = @pub.published? ? @pub.plants_pubs.published : @pub.plants_pubs
-    @plants_pubs = @plants_pubs.includes(:plant, datasets: [results: [:measure]])
-                               #.where("results.unit in ('GLC-Area-%','weight-%')")
-                               #.where("measures.type in ('FattyAcid','Parameter')")
-                               #.group(PlantsPub.columns.map{|c| "plants_pubs.#{c.name}"}+["plants.genus","plants.species"])
+    @plants_pubs = @plants_pubs.includes(:plant, datasets: [:dbxref])
+                               .references(:plant, datasets: [:dbxref])
                         
   end
 

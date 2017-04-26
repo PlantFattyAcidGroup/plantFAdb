@@ -3,33 +3,29 @@ class PlantsController < ApplicationController
   load_and_authorize_resource
   # GET /plants
   def index
-    oil_content = Parameter.where("upper(delta_notation)='OIL CONTENT'").first
     if ActiveRecord::Base.connection.adapter_name.downcase =~ /.*sqlite.*/
       @plants = @plants.order(sort_column + ' ' + sort_direction+", id asc")
     else
       @plants = @plants.order(sort_column + ' ' + sort_direction+" nulls last, id asc")
     end
+    
+    result_count = Result.viewable.published
+                         .joins(:measure, dataset: [plants_pub: [:plant, :pub]])
+                         .group("plants.id")
+                         .select("count(distinct(results.id)) result_count, count(distinct(pubs.id)) pub_count, plants.id plant_id")
+    
+    oil_content = Result.viewable.published
+                        .joins(:measure, dataset: [plants_pub: [:plant]])
+                        .where("upper(measures.delta_notation)='OIL CONTENT'")
+                        .group("plants.id")
+                        .select("avg(results.value) avg_oil_content, plants.id plant_id")
+    
+    @plants = @plants.published
+                     .joins("join (#{result_count.to_sql}) res on res.plant_id = plants.id")
+                     .joins("left outer join (#{oil_content.to_sql}) oil_res on oil_res.plant_id = plants.id")
+                     .where("res.result_count > 0")
+                     .select("plants.*, res.pub_count, res.result_count, oil_res.avg_oil_content")
 
-    @plants = @plants.joins("join (
-      select count(r.id) result_count, count(distinct(pl_tbl.pub_id)) pub_count, l.id plant_id
-      from results r
-        left outer join datasets d on r.dataset_id = d.id
-        left outer join plants_pubs pl_tbl on pl_tbl.id = d.plants_pub_id
-        left outer join plants l on pl_tbl.plant_id = l.id
-        left outer join measures m on m.id = r.measure_id
-      where unit in ('GLC-Area-%','weight-%')
-        AND m.type in ('FattyAcid','Parameter')
-        AND r.published_at IS NOT NULL
-      group by l.id) res on res.plant_id = plants.id ")
-    .page(params[:page])
-    if oil_content
-      @plants = @plants.joins("left outer join (
-        select avg(r.value) avg_oil_content, p.id plant_id from results r left outer join plants_pubs pl_tbl on pl_tbl.id = r.plants_pub_id left outer join plants p on pl_tbl.plant_id = p.id where r.measure_id = #{oil_content.id} group by p.id
-      ) oil_res on oil_res.plant_id = plants.id ")
-      .select("plants.*, res.pub_count, res.result_count, oil_res.avg_oil_content")
-    else
-      @plants = @plants.select("plants.*, res.pub_count, res.result_count")
-    end
     if(params[:query])
       q = UnicodeUtils.upcase(params[:query])
       @plants = @plants.where('
@@ -50,9 +46,9 @@ class PlantsController < ApplicationController
     end
     if params[:genus].present? && params[:species].present?
       @species = Species.new(params[:genus],params[:species])
-      @plants = @plants.where(plants: {id: @species.plants})
+      @plants = @plants.where(id: @species.plants)
     end
-    @plants = @plants.published
+
     respond_to do |format|
       # Base html query
       format.html{ @plants = @plants.page params[:page]}

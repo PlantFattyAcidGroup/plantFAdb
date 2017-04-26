@@ -8,7 +8,7 @@ class Result < ActiveRecord::Base
   
   has_paper_trail
   has_drafts
-  scope :viewable, -> { includes(:measure).where(measures: {type: ['FattyAcid','Parameter']}).where(unit:  ['GLC-Area-%','weight-%']) }
+  scope :viewable, -> { joins(:measure).where(measures: {type: ['FattyAcid','Parameter']}).where(unit:  ['GLC-Area-%','weight-%']) }
   validates :value, :measure_id, :unit, presence: true
   
   def display_name

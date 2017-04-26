@@ -28,4 +28,9 @@ class PlantsPub < ActiveRecord::Base
   def original_remarks
     publications.reject{|p| p.remarks.blank?}.map{|p| {sofa_tab_id: p.sofa_tab_id, remarks: p.remarks}}
   end
+  
+  def datasets_with_remarks
+    datasets.select{|d| d.remarks.present?}
+  end
+  
 end

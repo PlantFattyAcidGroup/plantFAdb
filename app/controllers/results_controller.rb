@@ -5,10 +5,10 @@ class ResultsController < ApplicationController
   def index
     @measure_types = Measure.select(:type).distinct.map(&:type)
     @results = @results.order(sort_column + ' ' + sort_direction).order("results.id ASC")
-    .includes(:measure, :publication, dataset: [plants_pub: [:plant, :pub]])
-    .references(:measure, :publication, dataset: [plants_pub: [:plant, :pub]])
-    .where(measures: {type: ['FattyAcid','Parameter']})
-    .where(unit:  ['GLC-Area-%','weight-%'])
+                       .includes(:measure, :publication, dataset: [plants_pub: [:plant, :pub]])
+                       .references(:measure, :publication, dataset: [plants_pub: [:plant, :pub]])
+                       .published.viewable
+                       
     if params[:query]
       q = params[:query].upcase
       @results = @results.where('

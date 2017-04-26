@@ -142,10 +142,10 @@
 		      <td><%= pb.plant.family %></td>
           <% results = pb.published? ? pb.results.published.viewable : pb.results %>
 					<td><%= results.count %>
-            <% unless pb.remarks.blank? and pb.datasets.with_remarks.empty? %>
+            <% unless pb.remarks.blank? and pb.datasets_with_remarks.empty? %>
               <a class='pull-right glyphicon glyphicon-info-sign' data-toggle='tooltip' data-html='true' title="
                 <%= "Remarks:<br/>#{pb.remarks}<br/><br/>" if pb.remarks %>
-                <%= pb.datasets.with_remarks.map{|d| "#{d.dbxref.try(:name)}:#{d.dbxref_value}<br/>#{d.remarks}<br/>"}.join("<br/>") %>
+                <%= pb.datasets_with_remarks.map{|d| "#{d.dbxref.try(:name)}:#{d.dbxref_value}<br/>#{d.remarks}<br/>"}.join("<br/>") %>
               "></a>
             <% end %>
           </td>

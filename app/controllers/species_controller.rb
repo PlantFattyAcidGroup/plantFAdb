@@ -9,7 +9,7 @@ class SpeciesController < ApplicationController
     else
       @species = @species.order(sort_column + ' ' + sort_direction+" nulls last, plants.genus asc, plants.species asc")
     end
-    
+                       
     @species = @species.joins(plants_pubs: [:pub, datasets: [results: :measure]])
                        .joins("left outer join results oil_res on oil_res.dataset_id = datasets.id and oil_res.measure_id = #{oil_content.id}")
                        .where("results.unit in ('GLC-Area-%','weight-%')")
