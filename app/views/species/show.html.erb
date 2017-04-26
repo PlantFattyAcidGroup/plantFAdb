@@ -199,14 +199,17 @@ $(document).ready(function(){
 	
 	<% if oil = @parameter_data["Oil content - weight-%"] %>
 		<% @parameter_data.delete("Oil content - weight-%") %>
-		var p_data_0 = <%="#{oil.map(&:to_f).unshift('Oil content - weight-%').to_json}".html_safe %>
+    var p_data_0 = <%= "#{oil.to_json}".html_safe %>
 		var chart = c3.generate({
 			bindto: '#p_plant_data_viz_0',
 			data: {
-				columns: [p_data_0],
-				types: {
-					'Oil content - weight-%': 'bar'
-				}
+        json: p_data_0,
+				type: 'bar',
+        keys: {value: ['value']},
+        names: {value: "Oil content - weight-%"},
+        onclick: function (d, element) { 
+          window.open('<%= results_path %>'+'/'+p_data_0[d.index].id,'_blank')
+        }
 			}
 		})
 	<% end %>
@@ -214,14 +217,17 @@ $(document).ready(function(){
 	
 	<% @parameter_data.each_with_index do |(key, subdata),index| %>
 		<% index +=1 if oil %>
-		<%= "var p_data_#{index} = #{subdata.map(&:to_f).unshift(key).to_json}".html_safe %>
+		<%= "var p_data_#{index} = #{subdata.to_json}".html_safe %>
 		var chart = c3.generate({
 			bindto: '<%= "#p_plant_data_viz_#{index}" %>',
 			data: {
-				columns: [<%= "p_data_#{index}" %>],
-				types: {
-					'<%= key %>': 'bar'
-				}
+				json: p_data_<%= index %>,
+        type: 'bar',
+        keys: {value: ['value']},
+				names: {value: '<%= key %>'},
+        onclick: function (d, element) { 
+          window.open('<%= results_path %>'+'/'+p_data_<%= index %>[d.index].id,'_blank')
+        }
 			}
 		})
 	<% end %>
