@@ -106,7 +106,6 @@ class Pub < ActiveRecord::Base
     }
   end
   
-  
   def self.bulk_columns
     {
       "authors" => :wos_authors,

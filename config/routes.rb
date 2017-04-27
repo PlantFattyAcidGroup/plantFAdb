@@ -42,6 +42,11 @@ Rails.application.routes.draw do
   get 'history' => 'history#index'
   get 'species' => 'species#index', as: 'species'
   get ':genus/:species' => 'species#show', as: 'species_page'
+  
+  get 'bulk_uploads' => 'bulk_uploads#index'
+  post 'check_file' => 'bulk_uploads#check_file'
+  post 'process_file' => 'bulk_uploads#process_file'
+  
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

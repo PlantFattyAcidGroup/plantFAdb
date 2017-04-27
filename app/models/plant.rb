@@ -23,7 +23,6 @@ class Plant < ActiveRecord::Base
     "#{id}: #{display_name} #{variety.present? ? ('(var. '+variety+')') : ''} - #{common_name} -- #{sofa_name}"
   end
   
-  
   def self.bulk_columns
     {
       "common name" => :common_name,
@@ -43,6 +42,5 @@ class Plant < ActiveRecord::Base
       "note" => :note
     }
   end
-  
- 
+
 end
