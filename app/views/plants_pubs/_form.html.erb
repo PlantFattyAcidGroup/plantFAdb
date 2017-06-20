@@ -88,7 +88,7 @@
                       <% result = (r.draft? ? r.draft.reify : r) %>
                       <tr id="result_<%= result.id || i %>">
                         <td colspan='6'>
-                        <%= render partial: 'result_form', locals: {result: result, original_result: r, dataset_id: dataset.id, form_id: "form_#{result.id || i}"} %>
+                        <%= render partial: 'result_form', locals: {result: result, original_result: r, dataset_id: dataset.id, form_id: "form_#{dataset.id}_#{result.id || i}"} %>
                         </td>
                       </tr>
                 	    <% end %>

@@ -155,7 +155,7 @@ class ResultsController < ApplicationController
        format.js
       end
     else
-      redirect_to edit_plants_pub_path(@result.plants_pub_id), notice: 'Datapoint could not be created.'
+      redirect_to edit_plants_pub_path(@result.dataset.plants_pub_id), notice: 'Datapoint could not be created.'
     end
   end
 
