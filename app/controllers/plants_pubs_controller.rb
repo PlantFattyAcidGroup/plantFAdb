@@ -65,7 +65,7 @@ class PlantsPubsController < ApplicationController
         @results[d.id] << d.results.build
       end      
     end
-    @plants_pub.datasets.build(lipid_measure: 'Total Oil')
+    @datasets << @plants_pub.datasets.build(lipid_measure: 'Total Oil')
   end
   
   def update
