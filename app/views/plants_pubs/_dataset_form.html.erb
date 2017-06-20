@@ -33,7 +33,7 @@
         <%= f.submit 'Update Dataset', class: 'btn btn-info' %>
       <% end %>
       <% unless destroyed %>
-        <%= link_to "<i class='glyphicon glyphicon-remove-circle'></i>".html_safe, dataset, method: :delete, data: {confirm: 'Remove this Dataset from the table?'} %>
+        <%= link_to 'Remove', dataset, method: :delete, data: {confirm: 'Remove this Dataset from the table?'}, class: 'btn btn-danger' %>
       <% end %>
     <% else %>
       <%= f.submit 'Start New Dataset', class: 'btn btn-info' %>

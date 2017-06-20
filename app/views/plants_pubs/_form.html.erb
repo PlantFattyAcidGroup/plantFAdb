@@ -68,7 +68,7 @@
             </div>
           </span>
         </div>
-        <div class='panel-body collapse <%= dataset.persisted? ? '' : 'in' %>' id='dataset-panel-<%= dataset.id %>'>
+        <div class='panel-body collapse <%= (dataset.results.count > 0) ? '' : 'in' %>' id='dataset-panel-<%= dataset.id %>'>
           <div class='row'>
             <%= render partial: 'dataset_form', locals: {dataset: dataset, plants_pub_id: @plants_pub.id} %>
           </div>

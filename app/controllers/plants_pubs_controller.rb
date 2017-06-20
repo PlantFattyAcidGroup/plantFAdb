@@ -45,7 +45,7 @@ class PlantsPubsController < ApplicationController
     @datasets = @plants_pub.datasets.includes(results: [:measure]).references(results: [:measure])
     @results ={}
     @datasets.each do |d|
-      @results[d.id] = d.results
+      @results[d.id] = d.results.to_a
       
       ### Used measures from this dataset
       used_measures = @results[d.id].map(&:measure).uniq
@@ -58,7 +58,7 @@ class PlantsPubsController < ApplicationController
       # end
       
       r_mol = @results[d.id].select{|r| r.measure.try(:sofa_mol_id).present?}.sort_by{|r| r.measure.sofa_mol_id}
-      r_new = @results[d.id].select{|r| r.measure.try(:sofa_mol_id).nil?}.sort_by{|r| r.measure.try(:mass)||0}
+      r_new = @results[d.id].reject{|r| r.measure.try(:sofa_mol_id).present?}.sort_by{|r| r.measure.try(:mass)||0}
       @results[d.id] = r_mol+r_new
     
       5.times do |i|
