@@ -18,11 +18,11 @@
 						Help <span class="caret"></span>
 					</a>
           <ul class="dropdown-menu">
-						<li><%= link_to "Tutorial", 'http://phylofadb.bch.msu.edu/tutorial.pdf' %></li>
+						<li><%= link_to "Tutorial", 'http://plantfadb.bch.msu.edu/tutorial.pdf' %></li>
 						<li><%= link_to "Documentation", Page.path('help') %></li>
 						<li><%= link_to "Contact Us", Page.path('contact') %></li>
 						<li role="separator" class="divider"></li>
-						<li><%= link_to "About PhyloFA", Page.path('about') %></li>
+						<li><%= link_to "About PlantFA", Page.path('about') %></li>
           </ul>
 				</li>
         <% if can? :create, Draftsman::Draft %>
@@ -57,7 +57,7 @@
 							<li role="separator" class="divider"></li>
 	            <li><%= link_to "Documentation", Page.path('help') %></li>
 							<li><%= link_to "Contact Us", Page.path('contact') %></li>
-							<li><%= link_to "About PhyloFA", Page.path('about') %></li>
+							<li><%= link_to "About PlantFA", Page.path('about') %></li>
 	            <li role="separator" class="divider"></li>
 	            <li><%= link_to "Log Out", destroy_user_session_url, method: :delete %></li>
 	          </ul>

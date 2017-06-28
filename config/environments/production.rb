@@ -78,6 +78,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   
   # devise mailer host
-  config.action_mailer.default_url_options = { :host => 'phylofadb.bch.msu.edu' }
+  config.action_mailer.default_url_options = { :host => 'plantfadb.bch.msu.edu' }
   config.action_mailer.delivery_method = :sendmail
 end

@@ -1,5 +1,5 @@
-# PhyloFAdb - Phylogenetic Fatty Acid Database
-http://phylofadb.bch.msu.edu
+# PlantFAdb - Phylogenetic Fatty Acid Database
+http://plantfadb.bch.msu.edu
 
 Plant based database of fatty acid compounds.
 
