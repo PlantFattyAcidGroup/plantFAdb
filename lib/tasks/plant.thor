@@ -2,6 +2,29 @@ class Plant < Thor
   require 'csv'
   ENV['RAILS_ENV'] ||= 'development'
   
+  # Load excel file of new plants
+  desc 'bulk_load [FILE]', "Load new plants in bulk from excel file"
+  method_option :test, aliases: '-t', default: false, desc: "Supply to perform validation only run with no data changes"
+  def bulk_load filename
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    STDERR.puts "loading file data"
+    plant_data = ::Plant.parse_excel(filename)
+    validated_rows = ::Plant.validate_rows(plant_data)
+    puts ::Plant.validation_to_string(validated_rows)
+    if options[:test]
+      puts "No data loaded. --test flag supplied"
+    else
+      ::Plant.transaction do
+        validated_rows[:items].each do |plant|
+          plant.published_at = Time.now
+          plant.save!
+        end
+      end
+    end
+    
+    
+  end
+  
   # THIS no opinion file was resubmitted with only genus/species
   # check if different family names were found
   desc 'check_tnrs_no_op', "Check No opinion data from TNRS"

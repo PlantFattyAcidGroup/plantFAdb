@@ -48,6 +48,7 @@ gem 'draftsman'
 gem 'local_time'
 gem 'jquery-ui-rails'
 gem 'rails-jquery-autocomplete'
+gem 'roo'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
