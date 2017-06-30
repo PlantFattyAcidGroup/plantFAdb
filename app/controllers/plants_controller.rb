@@ -21,9 +21,8 @@ class PlantsController < ApplicationController
                         .select("avg(results.value) avg_oil_content, plants.id plant_id")
     
     @plants = @plants.published
-                     .joins("join (#{result_count.to_sql}) res on res.plant_id = plants.id")
+                     .joins("left outer join (#{result_count.to_sql}) res on res.plant_id = plants.id")
                      .joins("left outer join (#{oil_content.to_sql}) oil_res on oil_res.plant_id = plants.id")
-                     .where("res.result_count > 0")
                      .select("plants.*, res.pub_count, res.result_count, oil_res.avg_oil_content")
 
     if(params[:query])
