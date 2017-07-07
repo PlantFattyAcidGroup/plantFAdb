@@ -25,8 +25,7 @@ class PubsController < ApplicationController
       result_count = result_count.where(plants: {id: plant_ids})
     end
     
-    @pubs = @pubs.joins("join (#{result_count.to_sql}) res on res.pub_id = pubs.id")
-                 .where("res.result_count > 0")
+    @pubs = @pubs.joins("left outer join (#{result_count.to_sql}) res on res.pub_id = pubs.id")
                  .published.select("pubs.*, res.result_count")
                  
     if(params[:query])
