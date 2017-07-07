@@ -7,6 +7,7 @@ class Pub < ActiveRecord::Base
   validates :wos_authors, presence: true
   validates :wos_journal, presence: true
   validates :wos_title, presence: true
+  include BulkData
   
   has_paper_trail
   has_drafts
@@ -103,4 +104,19 @@ class Pub < ActiveRecord::Base
     }
   end
   
+  
+  def self.bulk_columns
+    {
+      "authors" => :wos_authors,
+      "year" => :wos_year,
+      "title" => :wos_title,
+      "journal" => :wos_journal,
+      "volume" => :wos_volume,
+      "pages" => :wos_pages,
+      "doi" => :doi,
+      "uid" => :wos_uid,
+      "abstract" => :abstract,
+      "url" => :url
+    }
+  end
 end

@@ -1,6 +1,27 @@
 class Pub < Thor
   ENV['RAILS_ENV'] ||= 'development'
   
+  # Load excel file of new plants
+  desc 'bulk_load [FILE]', "Load new pubs in bulk from excel file"
+  method_option :test, aliases: '-t', default: false, desc: "Supply to perform validation only run with no data changes"
+  def bulk_load filename
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    STDERR.puts "loading file data"
+    data = ::Pub.parse_excel(filename)
+    validated_rows = ::Pub.validate_rows(data)
+    puts ::Pub.validation_to_string(validated_rows)
+    if options[:test]
+      puts "No data loaded. --test flag supplied"
+    else
+      ::Pub.transaction do
+        validated_rows[:items].each do |item|
+          item.published_at = Time.now
+          item.save!
+        end
+      end
+    end
+  end
+  
   
   desc 'load_endnote_xml', "load new pubs from endnote xml"
   def load_endnote_xml filename

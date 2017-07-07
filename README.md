@@ -408,6 +408,20 @@ Total pubs now: 2512
 Pubs with wos: 1245
 Pubs with doi: 783
 
+---
+
+> Jul 7 '17
+
+New chinese data load
+
+publications:
+
+thor pub:bulk_load lib/data/Bulk\ upload\ test\ chinese\ pubs\ jun23-B\ nick.xlsx
+
+  Valid Pubs: 951
+  valid field counts: {"authors"=>951, "year"=>950, "title"=>951, "journal"=>951, "volume"=>892, "pages"=>900, "doi"=>515, "uid"=>0, "abstract"=>648, "url"=>652}
+
+
 
 ---
 
