@@ -34,7 +34,7 @@ module BulkData
         end
         row_data = {}
         bulk_columns.each do |column,field|
-          row_data[field] = row[header[column]] if header[column] && !row[header[column]].blank?
+          row_data[field] = row[header[column]].to_s.strip if header[column] && !row[header[column]].blank?
         end
         rows << row_data unless row_data.empty?
       end
