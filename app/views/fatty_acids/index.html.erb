@@ -156,8 +156,10 @@
 					<td>
 						<% if fatty_acid.image_link %>
 							<%= link_to image_tag(fatty_acid.image_link), fatty_acid %>
-						<% else %>
-							<%= link_to image_tag("http://opsin.ch.cam.ac.uk/opsin/#{fatty_acid.name}.png"), fatty_acid if fatty_acid.name %>
+						<% elsif fatty_acid.name %>
+							<%= link_to image_tag("http://opsin.ch.cam.ac.uk/opsin/#{fatty_acid.name}.png"), fatty_acid %>
+            <% else %>
+              <%= link_to fatty_acid.id, fatty_acid %>
 						<% end %>
 					</td>
           <td><%= link_to 'Tree', tree_index_path(measure_id: fatty_acid.id),
