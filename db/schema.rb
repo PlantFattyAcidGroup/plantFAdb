@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170421143110) do
+ActiveRecord::Schema.define(version: 20170811220805) do
 
   create_table "datasets", force: :cascade do |t|
     t.string   "remarks"
     t.string   "notes"
-    t.string   "lipid_measure"
+    t.string   "lipid_type"
     t.string   "dbxref_value"
     t.integer  "plants_pub_id"
     t.datetime "created_at"
@@ -103,11 +103,11 @@ ActiveRecord::Schema.define(version: 20170421143110) do
   create_table "plants", force: :cascade do |t|
     t.string   "sofa_name"
     t.string   "sofa_family"
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
     t.string   "tnrs_name"
     t.string   "tnrs_family"
-    t.string   "note",          limit: 3999
+    t.string   "note",                limit: 3999
     t.string   "tnrs_match"
     t.string   "name_status"
     t.string   "family"
@@ -123,8 +123,10 @@ ActiveRecord::Schema.define(version: 20170421143110) do
     t.datetime "published_at"
     t.datetime "trashed_at"
     t.string   "variety"
-    t.string   "tissue",                     default: "Unknown"
+    t.string   "tissue",                           default: "Unknown"
     t.integer  "user_id"
+    t.string   "binomial_name"
+    t.string   "tnrs_name_submitted"
   end
 
   create_table "plants_pubs", force: :cascade do |t|

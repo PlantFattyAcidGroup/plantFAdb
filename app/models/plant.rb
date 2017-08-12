@@ -19,28 +19,59 @@ class Plant < ActiveRecord::Base
     end
   end
   
-  def detailed_name
+  def name_string
+    if binomial_name.present?
+      s=binomial_name
+    else
+      s= "#{genus} #{species}"
+      s+="(var. #{variety})" if variety
+    end
+    s+=" - #{common_name}" if common_name
+  end
+  
+  def name_html
+    if binomial_name.present?
+      s=binomial_name
+    else
+      s= "#{genus} #{species}"
+      s+="(var. #{variety})" if variety
+    end
+    s+= "<small style='white-space:nowrap'> #{common_name}</small>" if common_name
+    return s
+  end
+  
+  def autocomplete_name
     "#{id}: #{display_name} #{variety.present? ? ('(var. '+variety+')') : ''} - #{common_name} -- #{sofa_name}"
   end
   
   def self.bulk_columns
     {
       "common name" => :common_name,
-      "name status" => :name_status,
-      "matched rank" => :matched_rank,
-      "order" => :order_name,
-      "family" => :family,
+      "full binomial" => :binomial_name,
       "genus" => :genus,
       "species" => :species,
+      "family" => :family,
+      "order" => :order_name,
       "variety" => :variety,
       "tissue" => :tissue,
       "tropicos url" => :tropicos_url,
-      "tnrs name" => :tnrs_name,
+      "note" => :note,
       "tnrs family" => :tnrs_family,
+      "tnrs name" => :tnrs_name,
       "tnrs match" => :tnrs_match,
       "accepted rank" => :accepted_rank,
-      "note" => :note
+      "name submitted" => :tnrs_name_submitted,
+      "matched rank" => :matched_rank,
+      "name status" => :name_status
     }
   end
 
+  def self.download_columns
+    bulk_columns.merge({
+      "SOFA Family" => :sofa_family,
+      "SOFA Name" => :sofa_name,
+      "Publication Count" => :pub_count,
+      "Result Count" => :result_count
+    })
+  end
 end

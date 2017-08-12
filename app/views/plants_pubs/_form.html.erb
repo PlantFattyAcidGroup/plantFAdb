@@ -24,19 +24,9 @@
         <%= f.hidden_field :pub_id, value: f.object.pub_id %>
       </div>
       <% if @plants_pub.plant %>
-        You can move this table to a different plant by entering the name above. If you don't want to change the plant, leave the field empty.
+        You can move these items to a different plant by entering the name above. If you don't want to change the plant, leave the field empty.
       <% end %>
       <div class='field'></div>
-    </div>
-    <div class='col-md-6'>
-      <div class="field">
-        <%= f.label :remarks %><br>
-        <%= f.text_area :remarks, class: 'form-control' %>
-      </div>
-      <div class="field">
-        <%= f.label :notes %><br>
-        <%= f.text_area :notes, class: 'form-control' %>
-      </div>
     </div>
     
     <div class='col-md-12' style='margin-top:1em'>
@@ -50,61 +40,10 @@
 <% end %>
 
 <br/><br/>
+<h2>Datasets</h2>
+<%= link_to "Add New Dataset", new_dataset_path(plants_pub_id: @plants_pub.id), class: 'btn btn-primary' %>  
+<br/><hr/>
 
-<% unless @plants_pub.new_record?%>
-  <% @datasets.each do |dataset| %>
-    <div class='container'>
-      <div class='panel panel-default'>
-        <div class="panel-heading">
-          <span style='width:100%' data-toggle='collapse' data-target="#dataset-panel-<%= dataset.id %>" role="button" aria-haspopup="true" aria-expanded="false">
-            <div style='width:100%;color:#333'>
-              <%= dataset.persisted? ? dataset.display_name : "New Dataset" %>
-              <% if dataset.draft? %>
-                <%= link_to "<span style='margin-right:1em' class='#{dataset.draft.event}-tag'>#{dataset.draft.create? ? "New" : (dataset.draft? && dataset.draft.destroy?) ? "Delete" : "Update" }</span>".html_safe, draft_path(dataset.draft)%>
-              <% end %>
-              <span style='float:right'>
-                <%= "Total Value #{dataset.total_percent}" %>
-              </span>
-            </div>
-          </span>
-        </div>
-        <div class='panel-body collapse <%= (dataset.results.count > 0) ? '' : 'in' %>' id='dataset-panel-<%= dataset.id %>'>
-          <div class='row'>
-            <%= render partial: 'dataset_form', locals: {dataset: dataset, plants_pub_id: @plants_pub.id} %>
-          </div>
-          <div class='row'>
-            <div class='col-lg-12'>
-              <div class='panel table-responsive'>
-              	<table class="table table-sm">
-              	  <thead>
-                    <th width="45%">Measure</th>
-              	    <th width="15%">Unit</th>
-              	    <th width="20%">Value</th>
-                    <th width="20%"></th>
-              	  </thead>
-              	  <tbody>
-                    <% if dataset.persisted? %>
-                	    <% @results[dataset.id].each_with_index do |r,i| %>
-                      <% result = (r.draft? ? r.draft.reify : r) %>
-                      <tr id="result_<%= result.id || i %>">
-                        <td colspan='6'>
-                        <%= render partial: 'result_form', locals: {result: result, original_result: r, dataset_id: dataset.id, form_id: "form_#{dataset.id}_#{result.id || i}"} %>
-                        </td>
-                      </tr>
-                	    <% end %>
-                      <tr>
-                        <td colspan='6'>
-                          <%= link_to 'Add more...', edit_plants_pub_path(@plants_pub), class: 'btn btn-primary btn-block' %>
-                        </td>
-                      </tr>
-                    <% end %>
-              	  </tbody>
-              	</table>
-              </div>  
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% end %>
+<% @plants_pub.datasets.each do |d|%>
+  <%= render partial: 'datasets/result_panel', locals: {dataset: d} %>
 <% end %>

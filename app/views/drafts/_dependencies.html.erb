@@ -2,7 +2,6 @@
   <legend><small> On <%= name %>: <%= dependencies.count %></small></legend>
   <table class='table'>
     <thead>
-      <th></th>
       <th>Draft</th>
       <th>Name</th>
       <th>Type</th>
@@ -11,11 +10,12 @@
         <% item = draft.reify %>
         <tr>
           <td>
-            <span class='<%= draft.event %>-tag'>
-              <%= draft.create? ? "New" : draft.destroy? ? "Delete" : "Update"  %>
-            </span>
+            <%= link_to draft_path(draft) do %>
+              <span class='<%= draft.event %>-tag'>
+                <%= draft.create? ? "New" : draft.destroy? ? "Delete" : "Update"  %>
+              </span>
+            <% end %>
           </td>
-          <td><%= link_to draft.id, draft_path(draft) %></td>
           <td><%= item.display_name %></td>
           <td><%= draft.item.class.model_name.human  %></td>
         </tr>

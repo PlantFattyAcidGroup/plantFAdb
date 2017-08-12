@@ -2,7 +2,7 @@ class DatasetsController < ApplicationController
   load_and_authorize_resource
   
   def show
-    redirect_to [:edit,@dataset.plants_pub]
+    redirect_to edit_dataset_path @dataset
   end
   
   # GET /results/new
@@ -11,6 +11,23 @@ class DatasetsController < ApplicationController
 
   # GET /results/1/edit
   def edit
+    default_measures = Measure.find([10027,10035,10046,10051,10066,10074,10077,10090,10114,10127,10131,10147,10152,10000])
+    
+    @results = @dataset.results.to_a    
+    ### Used measures from this dataset
+    used_measures = @results.map(&:measure).uniq
+    
+    (default_measures-used_measures).each do |m|
+      @results << @dataset.results.build(measure: m)
+    end
+    
+    r_mol = @results.select{|r| r.measure.try(:sofa_mol_id).present?}.sort_by{|r| r.measure.sofa_mol_id}
+    r_new = @results.reject{|r| r.measure.try(:sofa_mol_id).present?}.sort_by{|r| r.measure.try(:mass)||0}
+    @results = r_mol+r_new
+  
+    5.times do |i|
+      @results << @dataset.results.build
+    end
   end
 
   # POST /results
@@ -18,9 +35,9 @@ class DatasetsController < ApplicationController
     if @dataset.draft_creation
       @dataset.plants_pub.attributes = {updated_at: Time.now}
       @dataset.plants_pub.draft_update
-      redirect_to edit_plants_pub_path(@dataset.plants_pub_id)
+      redirect_to edit_dataset_path(@dataset)
     else
-      redirect_to edit_plants_pub_path(@dataset.plants_pub_id), notice: 'Dataset could not be created.<br/>'+@dataset.errors.full_messages.join("<br/>")
+      render :new
     end
   end
 
@@ -30,9 +47,9 @@ class DatasetsController < ApplicationController
     if @dataset.draft_update
       @dataset.plants_pub.attributes = {updated_at: Time.now}
       @dataset.plants_pub.draft_update
-      redirect_to edit_plants_pub_path(@dataset.plants_pub_id)
+      redirect_to edit_dataset_path(@dataset)
     else
-      redirect_to edit_plants_pub_path(@dataset.plants_pub_id), notice: 'Dataset could not be updated.<br/>'+@dataset.errors.full_messages.join("<br/>")
+      render :edit
     end
   end
 
@@ -54,6 +71,6 @@ class DatasetsController < ApplicationController
   
   # Only allow a trusted parameter "white list" through.
   def resource_params
-    params.require(:dataset).permit(:dbxref_id, :dbxref_value, :remarks, :notes, :plants_pub_id, :lipid_measure)
+    params.require(:dataset).permit(:dbxref_id, :dbxref_value, :remarks, :notes, :plants_pub_id, :lipid_type)
   end
 end

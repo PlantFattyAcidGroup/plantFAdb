@@ -52,7 +52,7 @@
 	  </div>
 	  <div class="field">
 	    <%= f.label :tissue %>*<br>
-	    <%= f.select :tissue, options_for_select(['Fruit','Kernel','Leaf','Seed','Unknown'], @plant.tissue || 'Seed'), {required: true}, {class: 'form-control'} %>
+	    <%= f.select :tissue, options_for_select(Plant.pluck('distinct tissue'), @plant.tissue || 'Seed'), {required: true}, {class: 'form-control'} %>
 	  </div>
 	</div>
 	<!-- <div style='float:left;width:35%'> -->

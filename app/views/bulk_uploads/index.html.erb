@@ -13,22 +13,24 @@
     <%= form_tag check_file_path, multipart: true do |f| %>
       <%= file_field_tag :file %>
       <br/>Type:<br/>
-      <%= select_tag :datatype, options_for_select([['Publication','Pub']]) %>
+      <%= select_tag :datatype, options_for_select([['Publication','Pub'],['Plant', 'Plant']]) %>
       <br/><br/>
       <%= submit_tag 'Check File', class: 'btn btn-primary' %>
     <% end %>
   </div>
 
-  <!-- <div class='well pull-right col-md-5' style='background: #FFD'>
-    <legend>Upload File</legend>
-    <%= form_tag process_file_path, multipart: true do |f| %>
-      <%= file_field_tag :file %>
-      <br/>Type:<br/>
-      <%= select_tag :datatype, options_for_select([['Publication','Pub']]) %>
-      <br/><br/>
-      <%= submit_tag 'Process File', class: 'btn btn-warning' %>
-    <% end %>
-  </div> -->
+  <% if @error && @error.empty? %>
+    <div class='well pull-right col-md-5' style='background: #F0F5F9'>
+      <legend>Upload File</legend>
+      <%= form_tag process_file_path, multipart: true do |f| %>
+        <%= file_field_tag :file %>
+        <br/>Type:<br/>
+        <%= select_tag :datatype, options_for_select([['Publication','Pub'],['Plant','Plant']]) %>
+        <br/><br/>
+        <%= submit_tag 'Process File', class: 'btn btn-warning' %>
+      <% end %>
+    </div>
+  <% end %>
 </div>
 
 

@@ -3,7 +3,7 @@ class DraftsController < ApplicationController
   def index
     @drafts = @drafts.includes(:item)
                      .order('updated_at DESC')
-                     .where(item_type: ["Pub","Plant","Measure","PlantsPub"])
+                     .where(item_type: ["Pub","Plant","Measure","PlantsPub","Dataset"])
                      .page(params[:page])
   end
 

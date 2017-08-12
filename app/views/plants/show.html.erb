@@ -1,9 +1,9 @@
 <% content_for :title do -%>
- PlantFAdb: <%= @plant.genus %> <%= @plant.species %> <%= "(var. #{@plant.variety})" if @plant.variety %> <%= "- #{@plant.common_name}" if @plant.common_name %>
+ PlantFAdb: <%= @plant.name_string %>
 <% end -%>
 
 <% content_for :description do -%>
- Plant fatty acid compositions and phylogenetics. <%= @plant.genus %> <%= @plant.species %> <%= "(var. #{@plant.variety})" if @plant.variety %> <%= "- #{@plant.common_name}" if @plant.common_name %>
+ Plant fatty acid compositions and phylogenetics. <%= @plant.name_string %>
 <% end -%>
 
 <% content_for :top_bar do %>
@@ -11,14 +11,9 @@
     <p class='bg-warning'>This is an unpublished draft. <%= link_to 'Click here to view all draft data', drafts_path %></p>
   <% end %>
 	<h1 class="pagetitle">
-		<% if @plant.genus.blank? && @plant.species.blank? %>
-		 <%= @plant.family || @plant.order_name || @plant.sofa_family || @plant.sofa_name %>
-		<% else %>
-			<%= @plant.genus %> <%= @plant.species %> <%= "(var. #{@plant.variety})" if @plant.variety %>
-		<% end %>
-		<small style='white-space:nowrap'><%= @plant.common_name %></small>
+    <%= @plant.name_html.html_safe %>
 	</h1>
-  <% if (s_count = Species.new(@plant.genus,@plant.species).plants.count) > 1 %>
+  <% if (@plant.genus||@plant.species) && (s_count = Species.new(@plant.genus,@plant.species).plants.count) > 1 %>
     <%= link_to "View species page (#{pluralize(s_count, "variety")})", species_page_path(genus: @plant.genus, species: @plant.species) %>
   <% end %>
 <% end %>
@@ -80,7 +75,11 @@
 			<legend>Name Resolution</legend>
 			<div class='row'>
 				<div class='col-md-12  col-sm-12 col-xs-12'>
-						<legend><h5>TNRS Accepted data</h5></legend>
+						<legend><h5>TNRS data</h5></legend>
+					  <p>
+					    <b>Name Submitted:</b>
+							<%= @plant.tnrs_name_submitted %>
+					  </p>
 					  <p>
 					    <b>Family:</b>
 							<%= @plant.tnrs_family %>
@@ -89,25 +88,30 @@
 					    <b>Name:</b>
 							<%= @plant.tnrs_name %>
 					  </p>
+					  <p>
+					    <b>Match:</b>
+							<%= @plant.tnrs_match %>
+					  </p>
 				</div>
 			</div>
-			<div class='row'>
-				<div class='col-md-12 col-sm-12 col-xs-12'>
-						<legend><h5>Original SOFA Data</h5></legend>
-					  <p>
-					    <b>Family:</b>
-					    <%= @plant.sofa_family %>
-					  </p>
+      <% if @plant.sofa_family.present? || @plant.sofa_name.present? %>
+  			<div class='row'>
+  				<div class='col-md-12 col-sm-12 col-xs-12'>
+  						<legend><h5>Original SOFA Data</h5></legend>
+  					  <p>
+  					    <b>Family:</b>
+  					    <%= @plant.sofa_family %>
+  					  </p>
 
-					  <p>
-					    <b>Name:</b>
-					    <%= @plant.sofa_name %>
-					  </p>
-						<br/>
-				</div>
+  					  <p>
+  					    <b>Name:</b>
+  					    <%= @plant.sofa_name %>
+  					  </p>
+  						<br/>
+  				</div>
 		
-			</div>
-				
+  			</div>
+			<% end %>
 			<div class='clearfix row small'>
 				<div class='col-md-12'>
 					<br/>

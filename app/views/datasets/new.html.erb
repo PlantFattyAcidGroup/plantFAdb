@@ -1,0 +1,10 @@
+<% content_for :top_bar do %>
+  <h1 class="pagetitle">Create Dataset</h1>
+<% end %>
+
+
+<% content_for :item_bar do %>
+  <%= link_to 'Cancel', @dataset.plants_pub, class: 'btn btn-primary' %>
+<% end %>
+
+<%= render partial: 'form', locals: {dataset: @dataset, plants_pub_id: params[:plants_pub_id]} %>

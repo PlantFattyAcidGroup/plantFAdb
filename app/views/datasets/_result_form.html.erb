@@ -1,3 +1,6 @@
+<% if result.destroyed? %>
+<div class='col-md-5'>Result has been removed</div>
+<% else %>
 <% destroyed = original_result.draft? && original_result.draft.destroy? %>
 <%= form_for result, html: {id: form_id, class: 'result_form'} do |f| %>
   <input type="hidden" value="<%= form_id %>" name="form_id"/>  
@@ -19,14 +22,15 @@
   <div class='col-md-3'>
     <% if result.persisted? %>
       <% unless destroyed %>
-        <%= f.submit 'Update', class: 'btn btn-info input-sm' %>
+        <%= f.submit 'Save', class: 'btn btn-info input-sm' %>
       <% end %>
       <% if original_result.draft? %>
         <%= link_to "<span style='margin-right:1em' class='#{original_result.draft.event}-tag'>#{original_result.draft.create? ? "New" : destroyed ? "Delete" : "Update" }</span>".html_safe, draft_path(original_result.draft)%>
       <% end %>
       <% unless destroyed %>
-        <%= link_to "<i class='glyphicon glyphicon-remove-circle'></i>".html_safe, result, method: :delete, data: {confirm: 'Remove this result from the table?'} %>
+        <%= link_to "<i class='glyphicon glyphicon-remove-circle'></i>".html_safe, result_url(result, form_id: form_id), method: :delete, data: {remote: true, confirm: 'Remove this result from the table?'} %>
       <% end %>
     <% end %>
   </div>
+<% end %>
 <% end %>

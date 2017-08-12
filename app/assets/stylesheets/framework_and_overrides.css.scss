@@ -338,6 +338,19 @@ th .sortable {
   background-image:none ;
 }
 
+
+a .create-tag {
+  border: 2px solid $navbar-inverse-link-color;
+}
+
+a .update-tag {
+  border: 2px solid $navbar-inverse-link-color;
+}
+
+a .destroy-tag {
+  border: 2px solid $navbar-inverse-link-color;
+}
+
 .info-tag {
   background-color: $brand-info;
   padding: 2px 5px;

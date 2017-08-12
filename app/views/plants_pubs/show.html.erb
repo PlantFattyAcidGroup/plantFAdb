@@ -11,19 +11,6 @@
     <p class='bg-warning'>This is an unpublished draft. <%= link_to 'Click here to view all draft data', drafts_path %></p>
   <% end %>
   <%= render :partial => "header", locals: {pub: @pub, plant: @plant} %>
-  <% if @plants_pub.remarks %>
-    <b>Remarks:</b> <br/>
-    <%= @plants_pub.remarks %>
-    <br/>
-  <% end %>
-  
-  <h1>Datasets:</h1>
-  <% @plants_pub.datasets.each do |d| %>
-    <b><%= d.dbxref.try(:name) %>: <%= d.dbxref.try(:generate_link,d.dbxref_value) %> - <%= d.lipid_measure %></b> (<%= d.results.count %>)<br/>
-    <p><%= d.remarks %></p>
-    <br/>
-  <% end %>
-
 <% end %>
 
 <% content_for :item_bar do %>
@@ -32,6 +19,8 @@
   <% end %>
 <% end %>
 
-<h2 class='smalltitle'>Results</h2>
-<%= render partial: "results", locals: {results: @results} %>
+<h2 class='smalltitle'>Datasets</h2>
+<% @plants_pub.datasets.each do |d|%>
+  <%= render partial: 'datasets/result_panel', locals: {dataset: d, expanded: (@plants_pub.datasets.length < 2)} %>
+<% end %>
 

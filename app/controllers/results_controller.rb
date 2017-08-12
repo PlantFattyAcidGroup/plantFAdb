@@ -166,18 +166,29 @@ class ResultsController < ApplicationController
       @result.dataset.attributes = {updated_at: Time.now}
       @result.dataset.draft_update
       
-      redirect_to edit_plants_pub_path(@result.dataset.plants_pub_id)
+      redirect_to edit_dataset_path(@result.dataset)
     else
-      redirect_to edit_plants_pub_path(@result.dataset.plants_pub_id), notice: 'Datapoint could not be updated.'
+      redirect_to edit_dataset_path(@result.dataset), notice: 'Datapoint could not be updated.'
     end
   end
 
   # DELETE /results/1
   def destroy
-    @result.draft_destruction
-    @result.dataset.attributes = {updated_at: Time.now}
-    @result.dataset.draft_update
-    redirect_to edit_plants_pub_path(@result.dataset.plants_pub_id), notice: 'Datapoint removed.'
+    @dataset = @result.dataset
+    @original_result = (@result.draft? ? @result.draft.reify : @result)
+    @form_id = params[:form_id]
+    if @result.draft? && @result.draft.create?
+      @result.destroy
+    else
+      @result.draft_destroy
+      @result.dataset.attributes = {updated_at: Time.now}
+      @result.dataset.draft_update
+    end
+    respond_to do |format|
+     format.js{}
+     format.html{redirect_to edit_dataset_path(@result.dataset), notice: 'Datapoint removed.'}
+    end
+    
   end
 
   private

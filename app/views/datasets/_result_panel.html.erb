@@ -1,0 +1,57 @@
+    <div class='container'>
+      <div class='panel panel-default'>
+        <div class="panel-heading">
+          <span style='width:100%' data-toggle='collapse' data-target="#dataset-panel-<%= dataset.id %>" role="button" aria-haspopup="true" aria-expanded="false">
+            <div style='width:100%;color:#333'>
+              <%= dataset.display_name %>
+              <% if (xref = dataset.dbxref_value) && dataset.dbxref %>
+                 - <%= dataset.dbxref.generate_link(xref) %>
+              <% end %>
+              <% if dataset.remarks %>
+                <br/><div style='display:inline-block;width:50%'><%= dataset.remarks %></div>
+              <% end %>
+              <span style='float:right;margin-left:1em;margin-top:-5px'>
+                <%= link_to 'Edit', edit_dataset_path(dataset), class: 'btn btn-primary btn-sm' if can? :edit, dataset%>
+              </span>
+              <span style='float:right'>
+                <%= "Total Value #{dataset.total_percent(dataset.results.published)}" %>
+              </span>
+            </div>
+          </span>
+        </div>
+        <div class='panel-body collapse <%= ((defined? expanded) && expanded) ? 'in' : '' %>' id='dataset-panel-<%= dataset.id %>'>
+          <div class='row'>
+            <div class='col-lg-12'>
+              <div class='panel table-responsive'>
+              	<table class="table table-striped">
+              	  <thead>
+                    <th><%= sortable "measures.type", "Measure" %></th>
+              			<th><%= sortable "measures.name", "Name" %></th>
+                    <th><%= sortable "measures.delta_notation", "Notation" %></th>
+              	    <th><%= sortable 'value' %></th>
+              	    <th><%= sortable 'unit' %></th>
+              	  </thead>
+              	  <tbody>
+              	    <% dataset.results.published.each do |result| %>
+              	    <tr>
+                    	<td><%= result.measure.try :type %></td>
+              				<td><%= result.measure.try :name %></td>
+                    	<td><%= link_to_if result.measure.is_a?(FattyAcid), result.measure.try(:delta_notation), result.measure %></td>
+              	      <td><%= result.value.to_f.round(2) %></td>
+              	      <td><%= '*' if result.old_mol_val %> <%= result.unit %></td>
+              	    </tr>
+              	    <% end %>
+              	  </tbody>
+              	</table>
+              </div>  
+            </div>
+          </div>
+          <% unless dataset.results.map(&:old_mol_val).compact.empty? %>
+          	<div class='pull-right'>
+          		<i>* Converted from mol %</i>
+          	</div>
+          <% end %>
+        </div>
+        
+      </div>
+    </div>
