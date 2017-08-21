@@ -26,3 +26,8 @@ en:
       pub: Publication
       plants_pub: Publication Table
       result: DataPoint
+  helpers:
+    submit:
+      plants_pub:
+        create: 'Add Plant to Publication'
+        update: 'Change Plant for all datasets'

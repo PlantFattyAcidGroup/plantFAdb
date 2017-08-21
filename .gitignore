@@ -16,3 +16,4 @@
 !/log/.keep
 /tmp
 /lib/sofa
+config/database.yml

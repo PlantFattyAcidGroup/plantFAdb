@@ -13,8 +13,9 @@
 	<h1 class="pagetitle">
     <%= @plant.name_html.html_safe %>
 	</h1>
+  <span class='title-note'><%= @plant.note %></span>
   <% if (@plant.genus||@plant.species) && (s_count = Species.new(@plant.genus,@plant.species).plants.count) > 1 %>
-    <%= link_to "View species page (#{pluralize(s_count, "variety")})", species_page_path(genus: @plant.genus, species: @plant.species) %>
+    <%#= link_to "View species page (#{pluralize(s_count, "variety")})", species_page_path(genus: @plant.genus, species: @plant.species) %>
   <% end %>
 <% end %>
 
@@ -63,11 +64,6 @@
 					<% @plant.tropicos_url.split(";").each do |url| %>
 			    	<%= link_to url, url, target: '_blank' %><br/>
 					<% end %>
-				<% end %>
-		
-				<% unless @plant.note.blank? %>
-				   <legend>Note</legend><br>
-				   <%= @plant.note %>
 				<% end %>
 			</div>
 		</div>

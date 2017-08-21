@@ -11,43 +11,37 @@ class Plant < ActiveRecord::Base
   
   has_paper_trail
   has_drafts
+  # Binomial name
   def display_name
     if genus.blank? && species.blank?
-      family || order_name || sofa_family || sofa_name || 'Unknown Plant'
+      s=family || order_name || sofa_family || sofa_name || 'Unknown Plant'
     else
-      "#{genus} #{species}"
+      s = "#{genus.try(:capitalize)} #{species}"
+      s += " #{variety}" if variety.present?
+      s += " #{authority}" if authority.present?
     end
+    return s
   end
   
   def name_string
-    if binomial_name.present?
-      s=binomial_name
-    else
-      s= "#{genus} #{species}"
-      s+="(var. #{variety})" if variety
-    end
+    s=display_name
     s+=" - #{common_name}" if common_name
   end
   
   def name_html
-    if binomial_name.present?
-      s=binomial_name
-    else
-      s= "#{genus} #{species}"
-      s+="(var. #{variety})" if variety
-    end
+    s = display_name
     s+= "<small style='white-space:nowrap'> #{common_name}</small>" if common_name
     return s
   end
   
   def autocomplete_name
-    "#{id}: #{display_name} #{variety.present? ? ('(var. '+variety+')') : ''} - #{common_name} -- #{sofa_name}"
+    "#{id}: #{name_string}"
   end
   
   def self.bulk_columns
     {
       "common name" => :common_name,
-      "full binomial" => :binomial_name,
+      "authority" => :authority,
       "genus" => :genus,
       "species" => :species,
       "family" => :family,

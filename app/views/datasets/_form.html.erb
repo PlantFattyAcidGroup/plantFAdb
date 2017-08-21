@@ -2,7 +2,7 @@
 <% destroyed = dataset.draft? && dataset.draft.destroy? %>
   <% if dataset.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(dataset.errors.count, "error") %> prohibited this fatty_acid from being saved:</h2>
+      <h2><%= pluralize(dataset.errors.count, "error") %> prohibited this Dataset from being saved:</h2>
 
       <ul>
       <% dataset.errors.full_messages.each do |message| %>
@@ -25,7 +25,7 @@
     </div>
     <div class='col-md-2'>
       <%= f.label :dbxref_id %>
-      <%= f.select :dbxref_id, options_from_collection_for_select(Dbxref.all,:id, :name),{prompt: 'Select one...'}, class: 'form-control input-sm', disabled: destroyed %>
+      <%= f.select :dbxref_id, options_from_collection_for_select(Dbxref.all,:id, :name, d.dbxref_id),{prompt: 'Select one...'}, class: 'form-control input-sm', disabled: destroyed %>
     </div>
     <div class='col-md-2'>
       <%= f.label :dbxref_value %>
@@ -33,7 +33,7 @@
     </div>
     <div class='col-md-2'>
         <%= f.label :lipid_type %>
-        <%= f.select :lipid_type, options_for_select(['Total Oil','Cyanolipid','Triacylglycerol','Acetyltriacylglycerol','unknown'],d.lipid_type), {}, class: 'form-control input-sm', disabled: destroyed %>
+        <%= f.select :lipid_type, options_for_select(['Total Oil','Cyanolipid','Triacylglycerol','Acetyltriacylglycerol','-'],d.lipid_type), {}, class: 'form-control input-sm', disabled: destroyed %>
     </div>
     <%= f.hidden_field :plants_pub_id, value: dataset.plants_pub_id || (defined? plants_pub_id ? plants_pub_id : nil) %>
   </div>

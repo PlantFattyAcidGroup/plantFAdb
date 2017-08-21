@@ -11,9 +11,15 @@
       </ul>
     </div>
   <% end %>
-  <div class='container'>
-    
-    <div class='col-md-6'>
+  
+  <% if @plants_pub.plant %>
+    <div class='col-md-4 pull-right btn btn-sm btn-default' data-toggle='collapse' data-target="#plant-selection-form">
+      Change Plant Selection
+    </div>
+  <% end  %>
+  <div id='plant-selection-form' class='container collapse <%= @plants_pub.plant ? '' : 'in' %>'>
+
+    <div class='col-md-6' >
       <div class="field">
         <%= f.label :plant %><br>
         <%= autocomplete_field_tag :plant,'', autocomplete_plant_name_plants_path,
@@ -24,7 +30,7 @@
         <%= f.hidden_field :pub_id, value: f.object.pub_id %>
       </div>
       <% if @plants_pub.plant %>
-        You can move these items to a different plant by entering the name above. If you don't want to change the plant, leave the field empty.
+        You can associate these datasets with a different plant by entering it in the field above.
       <% end %>
       <div class='field'></div>
     </div>
@@ -37,13 +43,4 @@
     
   </div>
 
-<% end %>
-
-<br/><br/>
-<h2>Datasets</h2>
-<%= link_to "Add New Dataset", new_dataset_path(plants_pub_id: @plants_pub.id), class: 'btn btn-primary' %>  
-<br/><hr/>
-
-<% @plants_pub.datasets.each do |d|%>
-  <%= render partial: 'datasets/result_panel', locals: {dataset: d} %>
 <% end %>

@@ -4,7 +4,7 @@
 
 
 <% content_for :item_bar do %>
-  <%= link_to 'Cancel', @dataset.plants_pub, class: 'btn btn-primary' %>
+  <%= link_to 'Cancel', edit_plants_pub_path(params[:plants_pub_id]), class: 'btn btn-primary' %>
 <% end %>
 
 <%= render partial: 'form', locals: {dataset: @dataset, plants_pub_id: params[:plants_pub_id]} %>

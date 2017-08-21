@@ -8,3 +8,12 @@
 <% end %>
 
 <%= render 'form' %>
+
+<br/><br/>
+<h2>Datasets</h2>
+<%= link_to "Add New Dataset", new_dataset_path(plants_pub_id: @plants_pub.id), class: 'btn btn-primary' %>  
+<br/><hr/>
+
+<% @plants_pub.datasets.each do |d|%>
+  <%= render partial: 'datasets/result_panel', locals: {dataset: d} %>
+<% end %>
