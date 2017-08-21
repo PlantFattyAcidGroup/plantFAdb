@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170821215233) do
+ActiveRecord::Schema.define(version: 20170821222639) do
 
   create_table "datasets", force: :cascade do |t|
     t.string   "remarks"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20170821215233) do
     t.datetime "published_at"
     t.datetime "trashed_at"
     t.integer  "dbxref_id"
+    t.string   "tissue"
   end
 
   create_table "dbxrefs", force: :cascade do |t|

@@ -71,6 +71,6 @@ class DatasetsController < ApplicationController
   
   # Only allow a trusted parameter "white list" through.
   def resource_params
-    params.require(:dataset).permit(:dbxref_id, :dbxref_value, :remarks, :notes, :plants_pub_id, :lipid_type)
+    params.require(:dataset).permit(:dbxref_id, :dbxref_value, :remarks, :notes, :plants_pub_id, :lipid_type, :tissue)
   end
 end
