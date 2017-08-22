@@ -3,10 +3,13 @@ class Plant < ActiveRecord::Base
   has_many :plants_pubs, dependent: :destroy
   has_many :pubs, through: :plants_pubs
   has_many :results, through: :plants_pubs
-  validates :order_name, presence: true
-  validates :family, presence: true
-  validates :genus, presence: true
-  validates :species, presence: true
+  validates :order_name, :family, :genus, :species, presence: true
+  validates :species, uniqueness: {
+    scope: [:genus, :variety, :authority],
+    case_sensitive: false,
+    message: 'duplicate found in database (genus, species, variety, authority)'
+  }
+  
   include BulkData
   
   has_paper_trail
@@ -41,13 +44,13 @@ class Plant < ActiveRecord::Base
   def self.bulk_columns
     {
       "common name" => :common_name,
-      "authority" => :authority,
       "genus" => :genus,
       "species" => :species,
-      "family" => :family,
-      "order" => :order_name,
       "variety" => :variety,
+      "authority" => :authority,
       "tissue" => :tissue,
+      "order" => :order_name,
+      "family" => :family,
       "tropicos url" => :tropicos_url,
       "note" => :note,
       "tnrs family" => :tnrs_family,
@@ -67,5 +70,14 @@ class Plant < ActiveRecord::Base
       "Publication Count" => :pub_count,
       "Result Count" => :result_count
     })
+  end
+  
+  def bulk_valid?(plants)
+    plants.each do |plant|
+      if plant.genus.try(:downcase) == self.genus.try(:downcase) && plant.species.try(:downcase) == self.species.try(:downcase) && plant.variety.try(:downcase) == self.variety.try(:downcase) && plant.authority.try(:downcase) == self.authority.try(:downcase)
+        self.errors.add("Species", ' duplicate found in file (genus, species, variety, authority)')
+      end
+    end
+    return self.errors.empty?
   end
 end

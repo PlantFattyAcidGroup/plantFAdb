@@ -39,7 +39,7 @@ class PlantsController < ApplicationController
         OR upper(tnrs_name) LIKE :q
         OR upper(common_name) LIKE :q
         OR upper(variety) LIKE :q
-        OR upper(binomial_name) LIKE :q
+        OR upper(authority) LIKE :q
         OR upper(tnrs_name_submitted) LIKE :q
         OR upper(genus || \' \' || species) LIKE :q',
         {q: "%#{q}%"}

@@ -46,6 +46,7 @@ module BulkData
       errors = []
       items = []
       updates = []
+      new_items = []
       new_field_counts = Hash.new(0)
       new_item_count = 0
       updated_field_counts = Hash.new(0)
@@ -68,7 +69,7 @@ module BulkData
             item = self.new(d)
           end
           # Udate counts for each column
-          if item.valid?
+          if item.valid? && item.bulk_valid?(items)
             items << item
             if d_id
               if item.changed?
@@ -84,6 +85,7 @@ module BulkData
               end
             else
               new_item_count+=1
+              new_items << item
               bulk_columns.each do |c,v|
                 new_field_counts[c]+=1 unless item.send(v).blank?
               end
@@ -105,7 +107,8 @@ module BulkData
               field_counts: {new: new_field_counts, update: updated_field_counts, error: error_field_counts},
               item_counts: {new: new_item_count, update: updated_item_count, nochange: nochange_item_count, error: error_item_count},
               errors: errors,
-              updates: updates
+              updates: updates,
+              inserts: new_items
             }
     end
   
@@ -128,7 +131,18 @@ module BulkData
         message += "<tr><td>Updated</td>#{cols.map{|c| "<td>#{data[:field_counts][:update][c]}</td>"}.join("") }</tr>"
       end
       message += '</table>'
-      if data[:item_counts][:update] > 0
+      if data[:inserts].length > 0
+        message += "Example Inserts:<br/>"
+        message += <<-HTML
+          <table class='table' style='font-size:8px'>
+            <thead>#{cols.map{|c| "<th>#{c}</th>"}.join("") }</thead>
+        HTML
+          data[:inserts][0..10].each do |new_item|
+            message += "<tr>#{cols.map{|c| "<td>#{new_item.send(bulk_columns[c])}</td>"}.join("") }</tr>"
+          end
+        message += '</table>'
+      end
+      if data[:updates].length > 0
         message += "Example Updates:<br/>" + data[:updates].join("<br/><br/>")
       end
       if data[:item_counts][:error] > 0

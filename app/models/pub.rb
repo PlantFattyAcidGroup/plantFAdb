@@ -120,4 +120,7 @@ class Pub < ActiveRecord::Base
       "url" => :url
     }
   end
+  def bulk_valid?(pubs)
+    return true
+  end
 end
