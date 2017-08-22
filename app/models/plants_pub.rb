@@ -4,8 +4,8 @@ class PlantsPub < ActiveRecord::Base
   has_many :publications,  -> { distinct }, through: :results
   has_many :datasets
   has_many :results, through: :datasets
-  validates :plant_id, presence: true, uniqueness: {scope: :pub_id}
-  validates :pub_id, presence: true
+  validates :plant_id, uniqueness: {scope: :pub_id}
+  validates :pub, :plant, presence: true
   
   has_paper_trail
   has_drafts

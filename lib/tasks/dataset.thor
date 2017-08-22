@@ -91,14 +91,17 @@ class Dataset < Thor
   
   desc 'load', 'load dataset info using pub_id, fa_id and tnrs_submitted_name for plant lookup'
   method_option :test, aliases: '-t', desc: 'Test only without saving'
+  method_option :output, aliases: '-o', desc: 'Output file', required: true
   def load(dataset_file,corrections_file)
     require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
     xlsx_dataset = Roo::Spreadsheet.open(dataset_file)
     xlsx_correction = Roo::Spreadsheet.open(corrections_file)
+    out = File.open(options[:output],'w')
     parsed_rows = 0
     skipped_rows = 0
     header = nil
     rows = []
+    puts "--test supplied. Database updates will not be saved" if options[:test]
     puts "--loading corrections"
     corrections = {}
     xlsx_correction.each_row_streaming(pad_cells: true).each_with_index do |row, row_index|
@@ -171,55 +174,64 @@ class Dataset < Thor
       
       # keep results
       parsed_rows +=1
-      rows << row_data unless row_data.empty?
+      rows << [row_data,row]
     end
     
     puts "Parsed Rows: #{parsed_rows}"
     puts "Skipped Rows: #{skipped_rows}"
-    puts "Datasets with pub_id: #{rows.select{|r| r[:pub_id].present?}.length}"
-    puts "Datasets with plant_id: #{rows.select{|r| r[:plant_id].present?}.length}"
-    puts "Datasets with tissue: #{rows.select{|r| r[:tissue].present?}.length}"
-    puts "Datasets with oil_content: #{rows.select{|r| r[:tissue].present?}.length}"
+    puts "Datasets with pub_id: #{rows.select{|r| r[0][:pub_id].present?}.length}"
+    puts "Datasets with plant_id: #{rows.select{|r| r[0][:plant_id].present?}.length}"
+    puts "Datasets with tissue: #{rows.select{|r| r[0][:tissue].present?}.length}"
+    puts "Datasets with oil_content: #{rows.select{|r| r[0][:tissue].present?}.length}"
     
-    unless options[:test]
-      puts "--Saving datasets"
-      invalid_rows = []
-      new_datasets = 0
+    puts "--Saving datasets"
+    invalid_rows = []
+    new_datasets = 0
       
-      pbar = ProgressBar.new(rows.length)
+    pbar = ProgressBar.new(rows.length)
+    begin
       ::Dataset.transaction do
-        rows.each do |r|
+        rows.each do |r,row|
           pbar.increment!
-          # Get the PlantsPub
-          if r[:plant_id].blank? || r[:pub_id].blank?
-            invalid_rows << r
-            next
-          end
           pb = ::PlantsPub.find_or_create_by(plant_id: r[:plant_id], pub_id: r[:pub_id])
           unless pb.published?
             pb.published_at = Time.now
-            pb.save!
+            if pb.valid?
+              pb.save
+            else
+              invalid_rows << [row,pb.errors.full_messages]
+              next
+            end
           end
           r[:plants_pub_id] = pb.id
-            
+        
           r.delete(:plant_id)
           r.delete(:pub_id)
-         
+     
           dataset = ::Dataset.new(r)
           if dataset.valid?
             dataset.published_at = Time.now
             dataset.save
             new_datasets+=1
           else
-            invalid_rows << r
+            invalid_rows << [row,dataset.errors.full_messages]
           end
         end
+        if options[:test]
+          raise 'Rolling back transaction --test flag supplied'
+        end
       end
+      puts "Created #{new_datasets} new datasets"
+      puts "Skipped #{invalid_rows.length} invalid entries"
+    rescue
+      puts "Tried to insert #{new_datasets} new datasets"
+      puts "Skipped #{invalid_rows.length} invalid entries"
     end
-    puts "Created #{new_datasets} new datasets"
-    puts "Skipped #{invalid_rows.length} invalid entries"
     
-    
+    out.puts (['Error']+header.keys.map(&:to_s)).to_csv
+    invalid_rows.each do |row, errors|
+      out.puts "#{(errors+row.map(&:to_s)).to_csv}"
+    end
   end
   
 end

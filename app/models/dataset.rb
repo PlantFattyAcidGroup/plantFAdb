@@ -2,7 +2,7 @@ class Dataset < ActiveRecord::Base
   belongs_to :dbxref
   belongs_to :plants_pub
   has_many :results, autosave: true
-  validates :plants_pub_id, presence: true
+  validates :plants_pub, presence: true
   validates :dbxref, presence: true, if: "dbxref_value.present?"
   
   scope :with_remarks, -> {where.not(remarks: nil)}
