@@ -89,4 +89,137 @@ class Dataset < Thor
   end
   
   
+  desc 'load', 'load dataset info using pub_id, fa_id and tnrs_submitted_name for plant lookup'
+  method_option :test, aliases: '-t', desc: 'Test only without saving'
+  def load(dataset_file,corrections_file)
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    xlsx_dataset = Roo::Spreadsheet.open(dataset_file)
+    xlsx_correction = Roo::Spreadsheet.open(corrections_file)
+    parsed_rows = 0
+    skipped_rows = 0
+    header = nil
+    rows = []
+    puts "--loading corrections"
+    corrections = {}
+    xlsx_correction.each_row_streaming(pad_cells: true).each_with_index do |row, row_index|
+      # skip empty
+      next if row[1].blank? || row[2].blank?
+      corrections[row[2].to_s] = row[1].to_s
+    end
+    puts "---#{corrections.keys.length}"
+    
+    puts "--loading plants"
+    plant_lookup = ::Plant.pluck(:tnrs_name_submitted, :id).to_h
+    puts "---#{plant_lookup.keys.length}"
+    
+    puts "--loading datasets"
+    fa = ::FattyAcid.pluck(:id).map{|i| [i.to_s,'fa_'+i.to_s]}.to_h
+    cols = {
+      "keep" => :keep,
+      "plant name submitted" => :tnrs_name_submitted,
+      "plant id" => :plant_id,
+      "pub id" => :pub_id,
+      "dbxref id" => :dbxref_id,
+      "dbxref value" => :dbxref_value,
+      "remarks" => :remarks,
+      "tissue" => :tissue,
+      "lipid type" => :lipid_type,
+      "oil content" => :oil_content
+    }
+    keep_idx=nil
+    name_idx=nil
+    xlsx_dataset.each_row_streaming(pad_cells: true).each_with_index do |row, row_index|
+      
+      # Parse header
+      unless header
+        next unless row[0].try(:value)
+        next unless row[0].value.to_s.downcase.strip.gsub('*','').gsub('_',' ').gsub('-',' ')=~/#{cols.keys.join('|')}/
+        header = {}
+        row.each_with_index {|cell,idx| next unless cell; header[ActionView::Base.full_sanitizer.sanitize(cell.value.to_s.downcase.strip.gsub('*','').gsub('_',' ').gsub('-',' '))] = idx}
+        keep_idx = header["keep"]
+        name_idx = header["plant name submitted"]
+        cols.delete('keep')
+        cols.delete('plant name submitted')
+        next
+      end
+      
+      # check for skips
+      if keep_idx && row[keep_idx].try(:value).try(:strip) != 'enter'
+        skipped_rows+=1
+        next
+      end
+      
+      # build hash
+      row_data = {}
+      cols.each do |column,field|
+        row_data[field] = row[header[column]].to_s.strip if header[column] && !row[header[column]].blank?
+      end
+      
+      fa.each do |column,field|
+        row_data[field] = row[header[column]].value.to_f if header[column] && !row[header[column]].blank?
+      end
+      
+      # lookup plant by name
+      if name_idx && row_data["plant id"].blank?
+        row_name = row[name_idx].to_s.squish
+        if p_id = plant_lookup[row_name]
+          row_data[:plant_id] = p_id
+        elsif corrections[row_name] && (p_id = plant_lookup[corrections[row_name]])
+          row_data[:plant_id] = p_id
+        end
+      end
+      
+      # keep results
+      parsed_rows +=1
+      rows << row_data unless row_data.empty?
+    end
+    
+    puts "Parsed Rows: #{parsed_rows}"
+    puts "Skipped Rows: #{skipped_rows}"
+    puts "Datasets with pub_id: #{rows.select{|r| r[:pub_id].present?}.length}"
+    puts "Datasets with plant_id: #{rows.select{|r| r[:plant_id].present?}.length}"
+    puts "Datasets with tissue: #{rows.select{|r| r[:tissue].present?}.length}"
+    puts "Datasets with oil_content: #{rows.select{|r| r[:tissue].present?}.length}"
+    
+    unless options[:test]
+      puts "--Saving datasets"
+      invalid_rows = []
+      new_datasets = 0
+      
+      pbar = ProgressBar.new(rows.length)
+      ::Dataset.transaction do
+        rows.each do |r|
+          pbar.increment!
+          # Get the PlantsPub
+          if r[:plant_id].blank? || r[:pub_id].blank?
+            invalid_rows << r
+            next
+          end
+          pb = ::PlantsPub.find_or_create_by(plant_id: r[:plant_id], pub_id: r[:pub_id])
+          unless pb.published?
+            pb.published_at = Time.now
+            pb.save!
+          end
+          r[:plants_pub_id] = pb.id
+            
+          r.delete(:plant_id)
+          r.delete(:pub_id)
+         
+          dataset = ::Dataset.new(r)
+          if dataset.valid?
+            dataset.published_at = Time.now
+            dataset.save
+            new_datasets+=1
+          else
+            invalid_rows << r
+          end
+        end
+      end
+    end
+    puts "Created #{new_datasets} new datasets"
+    puts "Skipped #{invalid_rows.length} invalid entries"
+    
+    
+  end
+  
 end

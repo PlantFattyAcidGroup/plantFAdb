@@ -10,7 +10,7 @@ class PlantsPub < ActiveRecord::Base
   has_paper_trail
   has_drafts
   def display_name
-    "#{plant.display_name} :: <i>#{pub.wos_title.try(:truncate,40)}</i> #{pub.wos_authors.try(:truncate,40)}".html_safe
+    "#{plant.try(:display_name)} :: <i>#{pub.try(:wos_title).try(:truncate,40)}</i> #{pub.try(:wos_authors).try(:truncate,40)}".html_safe
   end
   
   def sofa_tabs

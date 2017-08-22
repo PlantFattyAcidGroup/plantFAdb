@@ -17,13 +17,15 @@
           </span>
         </div>
         <div class='panel-body collapse <%= ((defined? expanded) && expanded) ? 'in' : '' %>' id='dataset-panel-<%= dataset.id %>'>
-          <% if (xref = dataset.dbxref_value) && dataset.dbxref %>
-             <div class='panel'>
-               <div class='pull-left'>External Reference: <%= dataset.dbxref.generate_link(xref) %></div>
-               <div class='pull-right'><%= "Total Value: #{dataset.total_percent(dataset.results.published)}" %></div>
-               <br/>
-             </div>
-          <% end %>
+          
+          <div class='panel'>
+            <% if (xref = dataset.dbxref_value) && dataset.dbxref %>
+              <div class='pull-left'>External Reference: <%= dataset.dbxref.generate_link(xref) %></div>
+            <% end %>
+            <div class='pull-right'><%= "Total Value: #{dataset.total_percent(dataset.results.published)}" %></div>
+            <br/>
+          </div>
+          
           <div class='row'>
             <div class='col-lg-12'>
               <div class='panel table-responsive'>

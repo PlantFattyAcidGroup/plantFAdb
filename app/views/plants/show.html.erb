@@ -146,9 +146,9 @@
     		  <tbody>
     		    <% pub_tables.includes(:pub).order("pubs.wos_year desc, pubs.wos_authors asc").each do |pb| %>
     		    <tr>
-              <td><%= pb.pub.wos_year||"Unknown" %></td>
-    		      <td><%= link_to pb.pub.wos_authors||"Unknown", plants_pub_path(pb) %></td>
-    		      <td><%= link_to pb.pub.wos_title||"Unknown", plants_pub_path(pb) %></td>
+              <td><%= pb.pub.try(:wos_year)||"Unknown" %></td>
+    		      <td><%= link_to pb.pub.try(:wos_authors)||"Unknown", plants_pub_path(pb) %></td>
+    		      <td><%= link_to pb.pub.try(:wos_title)||"Unknown", plants_pub_path(pb) %></td>
               <% results = pb.published? ? pb.results.published.viewable : pb.results.viewable %>
     					<td>
                 <%= results.count %>

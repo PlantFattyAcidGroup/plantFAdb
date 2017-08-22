@@ -1,5 +1,5 @@
 <h1 class="pagetitle">
-  Publication: <%= link_to pub.wos_title||'Unknown Publication', pub %>
+  Publication: <%= link_to pub.try(:wos_title)||'Unknown Publication', pub %>
 </h1>
 <h1 class="">
   Plant: <%= link_to plant.display_name, plant %> <%= "(var. #{plant.variety})" if plant.variety %>

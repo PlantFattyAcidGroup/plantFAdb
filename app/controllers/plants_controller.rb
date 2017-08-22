@@ -80,7 +80,7 @@ class PlantsController < ApplicationController
     @fatty_acid_data = @fatty_acid_data.map{|k,v| v}
     @results.where("measures.type = 'Parameter'").each do |result|
       @parameter_data["#{result.measure.delta_notation}#{result.unit ? ' - '+result.unit : ''}"]||=[]
-      @parameter_data["#{result.measure.delta_notation}#{result.unit ? ' - '+result.unit : ''}"]<<result.value.round(2)
+      @parameter_data["#{result.measure.delta_notation}#{result.unit ? ' - '+result.unit : ''}"]<<result.value.to_f.round(2)
     end
   end
 
