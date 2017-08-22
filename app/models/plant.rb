@@ -9,7 +9,7 @@ class Plant < ActiveRecord::Base
     case_sensitive: false,
     message: 'duplicate found in database (genus, species, variety, authority)'
   }
-  validates :tnrs_name_submitted, uniqueness: {case_sensitive: false, message: 'duplicate found in database'}
+  validates :tnrs_name_submitted, uniqueness: {case_sensitive: false, message: 'duplicate found in database'}, allow_blank: true
   include BulkData
   
   has_paper_trail
@@ -77,7 +77,7 @@ class Plant < ActiveRecord::Base
       if plant.genus.try(:downcase) == self.genus.try(:downcase) && plant.species.try(:downcase) == self.species.try(:downcase) && plant.variety.try(:downcase) == self.variety.try(:downcase) && plant.authority.try(:downcase) == self.authority.try(:downcase)
         self.errors.add("Species", ' duplicate found in file (genus, species, variety, authority)')
       end
-      if plant.tnrs_name_submitted.try(:downcase) == self.tnrs_name_submitted.try(:downcase)
+      if self.tnrs_name_submitted.try(:downcase).present? && plant.tnrs_name_submitted.try(:downcase) == self.tnrs_name_submitted.try(:downcase)
         self.errors.add("TNRS Name submitted", ' duplicate found in file')
       end
     end
