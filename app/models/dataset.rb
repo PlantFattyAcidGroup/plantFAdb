@@ -33,7 +33,7 @@ class Dataset < ActiveRecord::Base
     dbxref.try(:name)
   end
   def dbxref_name=(val)
-    self.dbxref_id=dbxref.find_or_create_by(name: val).id
+    self.dbxref_id=Dbxref.find_or_create_by(name: val).id
   end
   
   def self.extra_download_columns
