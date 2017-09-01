@@ -122,6 +122,7 @@ class Dataset < Thor
       "plant name submitted" => :tnrs_name_submitted,
       "plant id" => :plant_id,
       "pub id" => :pub_id,
+      "dbxref name" => :dbxref_name,
       "dbxref id" => :dbxref_id,
       "dbxref value" => :dbxref_value,
       "remarks" => :remarks,
