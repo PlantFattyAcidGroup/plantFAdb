@@ -6,9 +6,9 @@
 	</div>
 	<div class='col-xs-12 col-sm-5 col-md-4 search'>
     <%= form_tag nil, method: :get do %>
-		<% params.except(:commit,:action,:controller,:utf8,:query).each do |parameter, val| %>
-			<%= hidden_field_tag parameter, val %>
-		<% end %>
+  		<% params.except(:commit,:action,:controller,:utf8,:query,:page).each do |parameter, val| %>
+  			<%= hidden_field_tag parameter, val %>
+  		<% end %>
       <div class='form-inline pull-left-sm pull-right-md'>
 				<div class='form-group'>
 			    <label for="query">Search:</label>

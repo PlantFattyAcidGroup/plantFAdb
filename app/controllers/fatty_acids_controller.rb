@@ -17,7 +17,7 @@ class FattyAcidsController < ApplicationController
                                .joins("left outer join (#{result_count.to_sql}) res on res.measure_id = measures.id")
                                .select("measures.*, res.result_count")
     
-    if(params[:query])
+    if(params[:query].present?)
       q = UnicodeUtils.upcase(params[:query])
       @fatty_acids = @fatty_acids.where('
         upper(name) like ?
@@ -52,11 +52,12 @@ class FattyAcidsController < ApplicationController
       OR upper(common_name) LIKE ?",
       "%#{q}%","%#{q}%","%#{q}%")
     end
-    case params[:has_data]
-    when 'true'
-      @fatty_acids = @fatty_acids.where("res.result_count is not null")
+    case params[:has_data]||='true'
     when 'false'
       @fatty_acids = @fatty_acids.where("res.result_count is null")
+    when 'true'
+      params[:has_data]='true'
+      @fatty_acids = @fatty_acids.where("res.result_count is not null")
     end
     unless params[:category].blank?
       @fatty_acids = @fatty_acids.where(category: params[:category])

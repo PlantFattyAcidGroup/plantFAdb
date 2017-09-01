@@ -28,7 +28,7 @@ class PubsController < ApplicationController
     @pubs = @pubs.joins("left outer join (#{result_count.to_sql}) res on res.pub_id = pubs.id")
                  .published.select("pubs.*, res.result_count")
                  
-    if(params[:query])
+    if(params[:query].present?)
       q = UnicodeUtils.upcase(params[:query])
       @pubs = @pubs.where('
         upper(wos_year) LIKE ?

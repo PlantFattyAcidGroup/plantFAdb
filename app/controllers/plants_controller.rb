@@ -25,7 +25,7 @@ class PlantsController < ApplicationController
                      .joins("left outer join (#{oil_content.to_sql}) oil_res on oil_res.plant_id = plants.id")
                      .select("plants.*, res.pub_count, res.result_count, oil_res.avg_oil_content")
 
-    if(params[:query])
+    if(params[:query].present?)
       q = UnicodeUtils.upcase(params[:query])
       @plants = @plants.where('
         upper(sofa_name) LIKE :q
@@ -52,7 +52,7 @@ class PlantsController < ApplicationController
 
     respond_to do |format|
       # Base html query
-      format.html{ @plants = @plants.page params[:page]}
+      format.html{ @plants = @plants.page(params[:page])}
       # CSV download
       format.csv{
         render_csv do |out|

@@ -49,7 +49,7 @@
     			  data <span class='caret'></span>
     			</a>
           <ul class='dropdown-menu'>
-            <li><%= link_to 'All Structures', params.merge({has_data: ''}) %></li>
+            <li><%= link_to ((params[:has_data].to_s=='all' ? "<span class='glyphicon glyphicon-ok' style='margin-left:-18px'></span> " : '')+'All Structures').html_safe, params.merge({has_data: 'all'}) %></li>
     				<li role='separator' class='divider'></li>
             <li>
               <%= link_to ((params[:has_data].to_s=='true' ? "<span class='glyphicon glyphicon-ok' style='margin-left:-18px'></span> " : '')+'Structures with data').html_safe, params.merge({has_data: 'true'}) %>
@@ -64,7 +64,7 @@
   </div>
 	<div class='col-xs-12 col-sm-6 col-md-4 search'>
     <%= form_tag nil, method: :get do %>
-		<% params.except(:commit,:action,:controller,:utf8,:query).each do |parameter, val| %>
+		<% params.except(:commit,:action,:controller,:utf8,:query,:page).each do |parameter, val| %>
 			<%= hidden_field_tag parameter, val %>
 		<% end %>
       <div class='form-inline pull-left-sm pull-right-md'>

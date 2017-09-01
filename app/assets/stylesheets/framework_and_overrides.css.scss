@@ -388,5 +388,10 @@ a .destroy-tag {
   float:left;
   width: 30px;
   height: 100%;
-  color: #212121;
+  color: $link-color;
 }
+
+.more-less:hover {
+  color: $link-hover-color;
+}
+  
