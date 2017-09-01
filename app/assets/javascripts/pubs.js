@@ -41,4 +41,14 @@ $( function(){
     $('[data-toggle="popover"]').popover({placement: 'right auto'})
   })
   
+  function toggleIcon(e) {
+      $(e.target)
+          .prev('.panel-heading')
+          .find(".more-less")
+          .toggleClass('glyphicon-plus glyphicon-minus');
+  }
+  $('.dataset-panel').on('hidden.bs.collapse', toggleIcon);
+  $('.dataset-panel').on('shown.bs.collapse', toggleIcon);
+  
 });
+

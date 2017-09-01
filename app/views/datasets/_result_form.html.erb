@@ -14,6 +14,9 @@
   <div class='col-md-2'>
       <%= f.select :unit, options_for_select(['weight-%','GLC-Area-%','Mol%']), {}, class: 'form-control input-sm units',
          disabled: destroyed %>
+      <% if result.persisted? && !['weight-%','GLC-Area-%','Mol%'].include?(result.unit) %>
+        <span style='color:#822'><%= result.unit %></span>
+      <% end %>
   </div>
   <div class='col-md-2'>
       <%= f.number_field :value, class: 'form-control input-sm values', step: :any, disabled: destroyed %>

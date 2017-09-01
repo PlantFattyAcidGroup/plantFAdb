@@ -4,9 +4,9 @@ class Dbxref < ActiveRecord::Base
   
   def generate_link(val)
     if link.present?
-      html = "<a href=#{link}#{val} target='_blank'>#{val}</a>".html_safe
+      html = "<a href=#{link}#{val} target='_blank'>#{name}:#{val}</a>".html_safe
     else
-      html = val
+      html = name+':'+val
     end
     return html
   end

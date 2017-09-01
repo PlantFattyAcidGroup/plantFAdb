@@ -5,11 +5,10 @@ class Plant < ActiveRecord::Base
   has_many :results, through: :plants_pubs
   validates :order_name, :family, :genus, :species, presence: true
   validates :species, uniqueness: {
-    scope: [:genus, :variety, :authority],
+    scope: [:genus, :variety, :authority, :tnrs_name_submitted],
     case_sensitive: false,
-    message: 'duplicate found in database (genus, species, variety, authority)'
+    message: 'duplicate found in database (name_submitted, genus, species, variety, authority)'
   }
-  validates :tnrs_name_submitted, uniqueness: {case_sensitive: false, message: 'duplicate found in database'}, allow_blank: true
   include BulkData
   
   has_paper_trail
@@ -74,11 +73,8 @@ class Plant < ActiveRecord::Base
   
   def bulk_valid?(plants)
     plants.each do |plant|
-      if plant.genus.try(:downcase) == self.genus.try(:downcase) && plant.species.try(:downcase) == self.species.try(:downcase) && plant.variety.try(:downcase) == self.variety.try(:downcase) && plant.authority.try(:downcase) == self.authority.try(:downcase)
-        self.errors.add("Species", ' duplicate found in file (genus, species, variety, authority)')
-      end
-      if self.tnrs_name_submitted.try(:downcase).present? && plant.tnrs_name_submitted.try(:downcase) == self.tnrs_name_submitted.try(:downcase)
-        self.errors.add("TNRS Name submitted", ' duplicate found in file')
+      if plant.tnrs_name_submitted.try(:downcase) == self.tnrs_name_submitted.try(:downcase) && plant.genus.try(:downcase) == self.genus.try(:downcase) && plant.species.try(:downcase) == self.species.try(:downcase) && plant.variety.try(:downcase) == self.variety.try(:downcase) && plant.authority.try(:downcase) == self.authority.try(:downcase)
+        self.errors.add("Species", ' duplicate found in file (name_submitted, genus, species, variety, authority)')
       end
     end
     return self.errors.empty?

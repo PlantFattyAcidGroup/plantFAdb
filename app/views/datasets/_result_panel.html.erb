@@ -1,18 +1,23 @@
     <div class='container'>
-      <div class='panel panel-default'>
+      <div class='panel panel-default dataset-panel'>
         <div class="panel-heading">
           <span style='width:100%' data-toggle='collapse' data-target="#dataset-panel-<%= dataset.id %>" role="button" aria-haspopup="true" aria-expanded="false">
             <div style='width:100%;color:#333'>
-              <%= dataset.display_name %>
-              <% if dataset.remarks %>
-                <br/><div style='display:inline-block;width:50%;font-size:10px'><%= dataset.remarks %></div>
-              <% end %>
-              <span style='float:right;margin-left:1em;margin-top:-5px'>
+              <i class="more-less glyphicon glyphicon-<%=  ((defined? expanded) && expanded) ? 'minus' : 'plus' %>"></i>
+              <div style='float:left;width:calc(90% - 170px)'>
+                <%= dataset.display_name %>
+                <% if dataset.remarks %>
+                <br/>
+                <p style='font-size:10px'><%= dataset.remarks %></p>
+                <% end %>
+              </div>
+              <span style='width:30px;float:right;margin-left:1em;margin-top:-5px'>
                 <%= link_to 'Edit', edit_dataset_path(dataset), class: 'btn btn-primary btn-sm' if can? :edit, dataset%>
               </span>
-              <span style='float:right'>
+              <span class='clearfix' style='float:right;width:100px'>
                 <%= "#{pluralize dataset.results.published.count, "Datapoint"} " %>
               </span>
+              <span class='clearfix'/>
             </div>
           </span>
         </div>
