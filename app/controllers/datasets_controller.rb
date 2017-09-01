@@ -6,9 +6,9 @@ class DatasetsController < ApplicationController
     @datasets = @datasets.joins(plants_pub: [:plant, :pub])
                          
     if ActiveRecord::Base.connection.adapter_name.downcase =~ /.*sqlite.*/
-      @datasets = @datasets.order(sort_column + ' ' + sort_direction+", id asc")
+      @datasets = @datasets.order(sort_column + ' ' + sort_direction+", datasets.id asc")
     else
-      @datasets = @datasets.order(sort_column + ' ' + sort_direction+" nulls last, id asc")
+      @datasets = @datasets.order(sort_column + ' ' + sort_direction+" nulls last, datasets.id asc")
     end
     
     result_count = Result.joins(:measure, :dataset)
