@@ -1,5 +1,6 @@
 class Pub < ActiveRecord::Base
   has_many :plants_pubs, dependent: :destroy
+  has_many :datasets, through: :plants_pubs
   has_many :plants, through: :plants_pubs
   has_many :sofa_tabs
   has_many :results, through: :plants_pubs

@@ -160,7 +160,7 @@ class DatasetsController < ApplicationController
             'res.result_count', 'res.result_total',
             'plants.genus','plants.variety','plants.species', 'plants.common_name'
           ].find{|c| c==params[:sort]}
-    col || "pubs.wos_authors, pubs.wos_year"
+    col || "pubs.wos_title, plants.genus, plants.species"
   end
   
 end

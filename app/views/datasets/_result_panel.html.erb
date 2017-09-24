@@ -6,16 +6,24 @@
               <i class="more-less glyphicon glyphicon-<%=  ((defined? expanded) && expanded) ? 'minus' : 'plus' %>"></i>
               <div style='float:left;width:calc(90% - 170px)'>
                 <%= dataset.display_name %>
+                <% unless (defined? skip_pub) && skip_pub %>
+                  - <%= dataset.pub.wos_title %>
+                <% end %>
+                <% unless (defined? skip_plant) && skip_plant %>
+                  - <%= dataset.plant.display_name %>
+                <% end %>
+
                 <% if dataset.remarks %>
                 <br/>
                 <p style='font-size:10px'><%= dataset.remarks %></p>
                 <% end %>
               </div>
-              <span style='width:30px;float:right;margin-left:1em;margin-top:-5px'>
-                <%= link_to 'Edit', edit_dataset_path(dataset), class: 'btn btn-primary btn-sm' if can? :edit, dataset%>
-              </span>
+
               <span class='clearfix' style='float:right;width:100px'>
                 <%= "#{pluralize dataset.results.published.count, "Datapoint"} " %>
+              </span>
+              <span style='width:30px;float:right;margin-right:1em;margin-top:-5px'>
+                <%= link_to 'Edit', edit_dataset_path(dataset), class: 'btn btn-warning btn-xs' if can? :edit, dataset%>
               </span>
               <span class='clearfix'/>
             </div>
@@ -36,16 +44,16 @@
               <div class='panel table-responsive'>
               	<table class="table table-striped">
               	  <thead>
-                    <th><%= sortable "measures.type", "Measure" %></th>
-              			<th><%= sortable "measures.name", "Name" %></th>
-                    <th><%= sortable "measures.delta_notation", "Notation" %></th>
-              	    <th><%= sortable 'value' %></th>
+                    <!-- <th>Measure</th> -->
+              			<th>Name</th>
+                    <th>Notation</th>
+              	    <th>value</th>
                     <!-- <th><%#= sortable 'unit' %></th> -->
               	  </thead>
               	  <tbody>
               	    <% dataset.results.published.each do |result| %>
               	    <tr>
-                    	<td><%= result.measure.try :type %></td>
+                      <!-- <td><%= result.measure.try :type %></td> -->
               				<td><%= result.measure.try :name %></td>
                     	<td><%= link_to_if result.measure.is_a?(FattyAcid), result.measure.try(:delta_notation), result.measure %></td>
               	      <td><%= result.value.to_f.round(2) %></td>

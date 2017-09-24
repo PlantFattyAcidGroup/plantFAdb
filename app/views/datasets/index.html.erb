@@ -107,53 +107,14 @@
 		<div class='pull-right'><%= page_entries_info @datasets %></div>
 	</div>
 	
-  <table class='table table-striped'>
-    <thead>
-      <tr>
-				<th style='width:15%'><%= sortable "pubs.wos_authors", "Authors" %></th>
-				<th><%= sortable "pubs.wos_year", "Year"%></th>
-				<th style='width: 20px'></th>
-				<th style='width:15%'><%= sortable "pubs.wos_title", "Title" %></th>
-				<th><%= sortable "pubs.wos_journal", "Journal" %></th>
-				<th><%= sortable "pubs.doi", "DOI" %></th>
-        <th><%= sortable('plants.genus','Genus') %></th>
-        <th><%= sortable('plants.species','Species') %></th>
-				<th><%= sortable('plants.variety', 'Variety') %></th>
-				<th><%= sortable('plants.common_name','Common Name') %></th>
-        <th><%= sortable('res.result_count','Data points') %></th>
-        <th><%= sortable('res.result_total','Total Value') %></th>
-        <th></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @datasets.each do |dataset| %>
-        <% publication = dataset.plants_pub.pub || Pub.new %>
-        <% plant = dataset.plants_pub.plant || Plant.new %>
-        <tr>
-					<td><%= link_to publication.wos_authors||"Unknown", publication %></td>
-          <td><%= link_to publication.wos_year||'-', publication %></td>
-					<td class='pub-tooltip'>
-						<% if publication.abstract %>
-							<a tabindex="0" class="glyphicon glyphicon-text-color" role="button" data-toggle="popover" data-trigger="focus" title="Abstract" data-content="<%= publication.abstract %>"></a>
-						<% end %>
-					</td>
-					<td><%= publication.wos_title %></td>
-					<td><%= publication.wos_journal %></td>
-					<td><%= link_to publication.doi, "https://doi.org/#{publication.doi}", target: '_blank' if publication.doi && publication.doi.downcase != 'none' %></td>
-					<td><%= link_to plant.genus||'-', plant %></td>
-					<td><%= link_to plant.species||'-', plant %></td>
-					<td><%= plant.variety %></td>
-					<td><%= plant.common_name %></td>
-          <td><%= link_to dataset.result_count, results_path(plant_id: plant.id, pub_id: publication.id) if dataset.result_count %></td>
-          <td><%= dataset.result_total.round(2) if dataset.result_total %></td>
-          <td>
-            <%= link_to 'Details', dataset %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <% @datasets.each do |d| %>
+    <%= render partial: 'datasets/result_panel', locals: {
+      dataset: d,
+      expanded: (@datasets.length < 2),
+      skip_plant: @plant.present?,
+      skip_pub: @pub.present?}
+    %>
+  <% end %>
 </div>
 <div class='row'>
 	<div class='col-xs-12 col-sm-7 col-md-8'>

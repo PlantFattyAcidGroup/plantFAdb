@@ -127,37 +127,11 @@
 				In other cases the same species may have multiple graphs because of differences in names recorded for the plant.
 				
 			</small><br/><br/>
-      <% pub_tables = @plant.published? ? @plant.plants_pubs.published : @plant.plants_pubs %>
-			<span> 
-				<%= link_to "Show #{pluralize pub_tables.uniq.count,"Publication"}", pubs_path(plant_id: @plant.id), onclick: '$("#publication_table").slideToggle();return false;' %>
-			</span> |
-			<span>
-				<%= link_to "View #{pluralize @plant.results.published.viewable.count, "Data Point"}", results_path(plant_id: @plant.id) %>
-			</span>
+      <% datasets = @plant.published? ? @plant.datasets.published : @plant.datasets %>
       
-      <div id='publication_table' style='display:none'>
-  			<legend><h5>Publications</h5></legend>				
-    		<table class="table">
-    		  <thead>
-            <th>Year</th>
-    		    <th>Authors</th>
-    		    <th>Title</th>
-    		  </thead>
-    		  <tbody>
-    		    <% pub_tables.includes(:pub).order("pubs.wos_year desc, pubs.wos_authors asc").each do |pb| %>
-    		    <tr>
-              <td><%= pb.pub.try(:wos_year)||"Unknown" %></td>
-    		      <td><%= link_to pb.pub.try(:wos_authors)||"Unknown", plants_pub_path(pb) %></td>
-    		      <td><%= link_to pb.pub.try(:wos_title)||"Unknown", plants_pub_path(pb) %></td>
-              <% results = pb.published? ? pb.results.published.viewable : pb.results.viewable %>
-    					<td>
-                <%= results.count %>
-              </td>
-    		    </tr>
-    		    <% end %>
-    		  </tbody>
-    		</table>
-      </div>
+			<span> 
+				<%= link_to "View #{pluralize datasets.count,"Datasets"}", datasets_path(plant_id: @plant.id) %>
+			</span>
         
 			<% unless @fatty_acid_data.empty? %>
 				<legend><h5>Fatty Acid Data</h5></legend>

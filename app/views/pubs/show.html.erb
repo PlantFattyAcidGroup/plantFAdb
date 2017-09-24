@@ -17,7 +17,7 @@
 	<%= link_to 'Back', pubs_path, class: 'btn btn-primary' %>
   <% if can? :edit, @pub %>
     <%= link_to 'Edit', edit_pub_path(@pub), class: 'btn btn-primary' %>
-    <%= link_to "Add Data", new_plants_pub_path(pub_id: @pub.id), class: 'btn btn-primary' %>
+    <%= link_to "Add Plant", new_plants_pub_path(pub_id: @pub.id), class: 'btn btn-primary' %>
   <% end %>
 <% end %>
 
@@ -124,22 +124,24 @@
 
 	<div class='col-sm-12 col-md-7 well'>
 		<legend>Plants</legend>
+    <% if @pub.datasets.count > 1 %>
+		<span> 
+			<%= link_to "View All #{@pub.datasets.count} Datasets", datasets_path(pub_id: @pub.id) %>
+		</span>
+    <% end %>
 		<table class="table">
 		  <thead>
 		    <th>Genus</th>
 		    <th>Species</th>
-				<th>Order</th>
-		    <th>Family</th>
 				<th>Data Points</th>
+        <th></th>
         <th></th>
 		  </thead>
 		  <tbody>
 		    <% @plants_pubs.order("plants.genus, plants.species").each do |pb| %>
 		    <tr>
-		      <td><%= link_to pb.plant.genus||"Unknown", plants_pub_path(pb) %></td>
-		      <td><%= link_to pb.plant.species||"Unknown", plants_pub_path(pb) %></td>
-		      <td><%= pb.plant.order_name %></td>
-		      <td><%= pb.plant.family %></td>
+		      <td><%= link_to pb.plant.genus||"Unknown", datasets_path(plant_id: pb.plant_id, pub_id: pb.pub_id) %></td>
+		      <td><%= link_to pb.plant.species||"Unknown", datasets_path(plant_id: pb.plant_id, pub_id: pb.pub_id) %></td>
           <% results = pb.published? ? pb.results.published.viewable : pb.results %>
 					<td><%= results.count %>
             <% unless pb.remarks.blank? and pb.datasets_with_remarks.empty? %>
@@ -148,6 +150,11 @@
                 <%= pb.datasets_with_remarks.map{|d| "#{d.dbxref.try(:name)}:#{d.dbxref_value}<br/>#{d.remarks}<br/>"}.join("<br/>") %>
               "></a>
             <% end %>
+            <td>
+              <% if can? :edit, pb %>
+                <%= link_to 'Edit', edit_plants_pub_path(pb), class: 'btn btn-warning btn-xs' %>
+              <% end %>
+            </td>
           </td>
 		    </tr>
 		    <% end %>

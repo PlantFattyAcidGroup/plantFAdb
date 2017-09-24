@@ -5,7 +5,7 @@ class Dataset < ActiveRecord::Base
   validates :plants_pub, presence: true
   validates :dbxref, presence: true, if: "dbxref_value.present?"
   
-  delegate :plant_id, :pub_id, to: :plants_pub
+  delegate :plant_id, :pub_id, :plant, :pub, to: :plants_pub
   scope :with_remarks, -> {where.not(remarks: nil)}
   has_paper_trail
   has_drafts

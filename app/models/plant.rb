@@ -1,6 +1,7 @@
 class Plant < ActiveRecord::Base
   has_many :publications, dependent: :destroy
   has_many :plants_pubs, dependent: :destroy
+  has_many :datasets, through: :plants_pubs
   has_many :pubs, through: :plants_pubs
   has_many :results, through: :plants_pubs
   validates :order_name, :family, :genus, :species, presence: true

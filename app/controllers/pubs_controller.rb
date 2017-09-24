@@ -17,6 +17,8 @@ class PubsController < ApplicationController
                            
     if (params[:plant_id] && @plant=Plant.find_by(id: params[:plant_id].to_i))
       result_count = result_count.where(plants: {id: @plant.id})
+      @pubs = @pubs.joins(plants_pubs: [:plant])
+                   .where(plants_plants_pubs: {id: @plant.id})
     end
     
     if params[:genus].present? && params[:species].present?
