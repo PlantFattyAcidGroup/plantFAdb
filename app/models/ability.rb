@@ -26,6 +26,7 @@ class Ability
       can [:read,:plant_yield], Result
       can [:read, :update], User, id: user.id
       can :read, PlantsPub
+      can :read, Dataset
       can :read, :species
     end
     #
