@@ -10,8 +10,8 @@ class Dataset < ActiveRecord::Base
   has_paper_trail
   has_drafts
   def display_name
-    s="#{id}:"
-    s+=" #{tissue}" if tissue.present? && tissue != '-'
+    s=""#"#{id}:"
+    s+="#{tissue}" if tissue.present? && tissue != '-'
     s+=" #{lipid_type}" if lipid_type.present? && lipid_type != '-'
     return s
   end

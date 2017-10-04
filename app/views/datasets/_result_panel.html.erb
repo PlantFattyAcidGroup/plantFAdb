@@ -5,17 +5,17 @@
             <div style='width:100%;color:#333'>
               <i class="more-less glyphicon glyphicon-<%=  ((defined? expanded) && expanded) ? 'minus' : 'plus' %>"></i>
               <div style='float:left;width:calc(90% - 170px)'>
-                <%= dataset.display_name %>
+                <span style='font-size:75%'><%= dataset.display_name %></span>
                 <% unless (defined? skip_pub) && skip_pub %>
-                  - <%= dataset.pub.wos_title %>
+                  <i><b>Pub: </b><%= dataset.pub.wos_title %></i>
                 <% end %>
                 <% unless (defined? skip_plant) && skip_plant %>
-                  - <%= dataset.plant.display_name %>
+                   - <%= dataset.plant.display_name %>
                 <% end %>
 
                 <% if dataset.remarks %>
                 <br/>
-                <p style='font-size:10px'><%= dataset.remarks %></p>
+                <p style='font-size:10px'><b>Remarks: </b><%= dataset.remarks %></p>
                 <% end %>
               </div>
 
@@ -47,8 +47,8 @@
                     <!-- <th>Measure</th> -->
               			<th>Name</th>
                     <th>Notation</th>
-              	    <th>value</th>
-                    <!-- <th><%#= sortable 'unit' %></th> -->
+              	    <th>Value</th>
+                    <th></th>
               	  </thead>
               	  <tbody>
               	    <% dataset.results.published.each do |result| %>
@@ -57,7 +57,7 @@
               				<td><%= result.measure.try :name %></td>
                     	<td><%= link_to_if result.measure.is_a?(FattyAcid), result.measure.try(:delta_notation), result.measure %></td>
               	      <td><%= result.value.to_f.round(2) %></td>
-                      <!-- <td><%#= '*' if result.old_mol_val %> <%#= result.unit %></td> -->
+                      <td><%= '*' if result.old_mol_val %> <%= result.unit %></td>
               	    </tr>
               	    <% end %>
               	  </tbody>
