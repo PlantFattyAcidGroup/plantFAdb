@@ -1,2 +1,0 @@
-class TrivialName < Name
-end

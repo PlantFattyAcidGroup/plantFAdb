@@ -1,3 +1,33 @@
+# == Schema Information
+#
+# Table name: pubs
+#
+#  id            :integer          not null, primary key
+#  year          :string
+#  authors       :string
+#  journal       :string
+#  volume        :string
+#  page          :string
+#  remarks       :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  wos_uid       :string
+#  wos_journal   :string
+#  wos_title     :string(500)
+#  wos_volume    :string
+#  wos_authors   :string
+#  wos_pages     :string
+#  wos_year      :string
+#  doi           :string
+#  original_pubs :text
+#  abstract      :string(4000)
+#  url           :string(1000)
+#  draft_id      :integer
+#  published_at  :datetime
+#  trashed_at    :datetime
+#  user_id       :integer
+#
+
 class Pub < ActiveRecord::Base
   has_many :plants_pubs, dependent: :destroy
   has_many :datasets, through: :plants_pubs

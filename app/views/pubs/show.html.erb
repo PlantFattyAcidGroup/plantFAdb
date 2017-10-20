@@ -76,53 +76,11 @@
 			  <%= link_to @pub.doi, "https://doi.org/#{@pub.doi}", target: '_blank'%>
 			</p>
 		<% end %>
-		
-		<div style='overflow:auto'>
-			<legend>SOFA citation(s)</legend>
-			<% if @pub.original_pubs.empty? %>
-				<% pubs = [@pub]  %>
-			<% else %>
-				<% pubs = @pub.original_pubs %>
-			<% end %>
-			<% pubs.each do |pub| %>
-				<div class='well'>
-					<p>
-					  <strong>Authors:</strong>
-					  <%= pub.authors %>
-					</p>
-			
-					<p>
-					  <strong>Journal:</strong>
-					  <%= pub.journal %>
-					</p>
-			
-					<p>
-					  <strong>Year:</strong>
-					  <%= pub.year %>
-					</p>
-
-					<p>
-					  <strong>Volume:</strong>
-					  <%= pub.volume %>
-					</p>
-
-					<p>
-					  <strong>Page:</strong>
-					  <%= pub.page %>
-					</p>
-				</div>
-			<% end %>
-		</div>
-		
-		<div style=''>
-			<legend>SOFA Table(s)</legend>
-			<% @pub.sofa_tabs.each do |tab| %>
-				<div style='float:left;margin:0.25em'><%= link_to (tab.sofa_tab_id||'#'), tab.sofa_url, target: '_blank' %></div>
-			<% end %>
-		</div>
 	</div>
 
-	<div class='col-sm-12 col-md-7 well'>
+
+    
+	<div class='col-sm-12 col-md-7 well pull-right'>
 		<legend>Plants</legend>
     <% if @pub.datasets.count > 1 %>
 		<span> 
@@ -161,6 +119,15 @@
 		  </tbody>
 		</table>
 	</div>
+  
+  <% if @pub.sofa_tabs.present? %>
+	<div class='col-sm-12 col-md-5 pull-left well'>
+		<legend>SOFA Table(s)</legend>
+		<% @pub.sofa_tabs.each do |tab| %>
+			<div style='float:left;margin:0.25em'><%= link_to (tab.sofa_tab_id||'#'), tab.sofa_url, target: '_blank' %></div>
+		<% end %>
+	</div>
+  <% end %>
 </div>
 
 

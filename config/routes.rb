@@ -1,12 +1,5 @@
 Rails.application.routes.draw do
   resources :dbxrefs
-  #resources :trivial_names
-  #resources :systematic_names
-  #resources :parameters
-  #resources :names
-  #resources :triacylglycerols
-  #resources :tocopherols
-  #resources :sterols
   resources :fatty_acids
   resources :results do
     get 'plant_yield', on: :collection
@@ -14,7 +7,6 @@ Rails.application.routes.draw do
   resources :measures do
     get :autocomplete_measure_name, :on => :collection
   end
-  #resources :publications
   resources :plants do
     get :autocomplete_plant_name, :on => :collection
   end

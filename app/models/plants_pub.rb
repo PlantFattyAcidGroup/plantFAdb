@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: plants_pubs
+#
+#  id           :integer          not null, primary key
+#  pub_id       :integer
+#  plant_id     :integer
+#  remarks      :string
+#  notes        :string
+#  draft_id     :integer
+#  published_at :datetime
+#  trashed_at   :datetime
+#  created_at   :datetime
+#  updated_at   :datetime
+#  user_id      :integer
+#
+# Indexes
+#
+#  index_plants_pubs_on_plant_id  (plant_id)
+#  index_plants_pubs_on_pub_id    (pub_id)
+#
+
 class PlantsPub < ActiveRecord::Base
   belongs_to :plant
   belongs_to :pub

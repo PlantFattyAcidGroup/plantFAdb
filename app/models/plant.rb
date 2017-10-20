@@ -1,3 +1,36 @@
+# == Schema Information
+#
+# Table name: plants
+#
+#  id                  :integer          not null, primary key
+#  sofa_name           :string
+#  sofa_family         :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  tnrs_name           :string
+#  tnrs_family         :string
+#  note                :string(3999)
+#  tnrs_match          :string
+#  name_status         :string
+#  family              :string
+#  genus               :string
+#  species             :string
+#  tropicos_url        :string
+#  ott_id              :integer
+#  accepted_rank       :string
+#  matched_rank        :string
+#  order_name          :string
+#  common_name         :string
+#  draft_id            :integer
+#  published_at        :datetime
+#  trashed_at          :datetime
+#  variety             :string
+#  tissue              :string           default("Unknown")
+#  user_id             :integer
+#  authority           :string
+#  tnrs_name_submitted :string
+#
+
 class Plant < ActiveRecord::Base
   has_many :publications, dependent: :destroy
   has_many :plants_pubs, dependent: :destroy

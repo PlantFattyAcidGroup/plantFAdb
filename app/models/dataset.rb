@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: datasets
+#
+#  id            :integer          not null, primary key
+#  remarks       :string
+#  notes         :string
+#  lipid_type    :string
+#  dbxref_value  :string
+#  plants_pub_id :integer
+#  created_at    :datetime
+#  updated_at    :datetime
+#  draft_id      :integer
+#  published_at  :datetime
+#  trashed_at    :datetime
+#  dbxref_id     :integer
+#  tissue        :string
+#
+
 class Dataset < ActiveRecord::Base
   belongs_to :dbxref
   belongs_to :plants_pub
