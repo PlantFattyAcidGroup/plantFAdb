@@ -24,33 +24,15 @@
 #  index_results_on_publication_id  (publication_id)
 #
 
-class Result < ActiveRecord::Base
-  belongs_to :measure
-  belongs_to :publication
-  belongs_to :dataset
-  delegate :plants_pub, to: :dataset
-  delegate :plant, to: :plants_pub
-  delegate :pub, to: :plants_pub
-  
-  has_paper_trail
-  has_drafts
-  scope :viewable, -> { where(unit: ['GLC-Area-%','weight-%']) }
-  validates :value, :measure_id, :unit, presence: true
-  
-  def display_name
-    "#{measure.display_name}"
+FactoryGirl.define do
+  factory :result do
+    dataset
+    measure
+    published_at Date.today
+    trait :draft do
+      published_at nil
+    end
+    value {Faker::Number.decimal(2, 2)}
+    unit {['GLC-Area-%','weight-%'].sample}
   end
-  
-  def sofa_tab_id
-    publication.try(:sofa_tab_id)
-  end
-  
-  def draft_publication_dependencies
-    []
-  end
-  
-  def draft_reversion_dependencies
-    []
-  end
-  
 end

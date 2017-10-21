@@ -105,7 +105,7 @@
 	</div>
 
   <div class='container'>
-    <%= @page.content.try(:html_safe) %>
+    <%= @page.try(:content).try(:html_safe) %>
   </div>
   
 <% end -%>

@@ -33,16 +33,18 @@ class PubsController < ApplicationController
     if(params[:query].present?)
       q = UnicodeUtils.upcase(params[:query])
       @pubs = @pubs.where('
-        upper(wos_year) LIKE ?
-        OR upper(wos_authors) LIKE ?
-        OR upper(wos_journal) LIKE ?
-        OR upper(wos_volume) LIKE ?
-        OR upper(wos_pages) LIKE ?
-        OR upper(wos_uid) LIKE ?
-        OR upper(wos_title) LIKE ?
-        OR upper(abstract) LIKE ?
-        OR upper(doi) LIKE ?',
-        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%" )
+        upper(wos_year) LIKE :q
+        OR upper(wos_authors) LIKE :q
+        OR upper(wos_journal) LIKE :q
+        OR upper(wos_volume) LIKE :q
+        OR upper(wos_pages) LIKE :q
+        OR upper(wos_uid) LIKE :q
+        OR upper(wos_title) LIKE :q
+        OR upper(abstract) LIKE :q
+        OR upper(doi) LIKE :q
+        OR upper(note) LIKE :q',
+        {q: "%#{q}%"}
+      )
     end
     
     unless params[:title_query].blank?
@@ -80,7 +82,7 @@ class PubsController < ApplicationController
         render_csv do |out|
           out << CSV.generate_line([
             "ID","WOS_Authors","WOS_Year","WOS_Title","WOS_Journal","WOS_Volume","WOS_Pages",
-            "DOI","WOS_UID","Abstract","URL",
+            "DOI","WOS_UID","Abstract","URL", "NOTE",
             "SOFA Authors","SOFA Year","SOFA Journal","SOFA Volume","SOFA Page",
             "SOFA TABS"
             ])
@@ -98,6 +100,7 @@ class PubsController < ApplicationController
               item.wos_uid,
               item.abstract,
               item.url,
+              item.note,
               all_pubs.map(&:authors).join("; "),
               all_pubs.map(&:year).join("; "),
               all_pubs.map(&:journal).join("; "),
@@ -194,7 +197,7 @@ class PubsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def resource_params
       params.require(:pub).permit(:doi,:wos_uid,:wos_title,:wos_year,:wos_authors,:wos_journal,:wos_volume,:wos_pages,
-      :year, :authors, :journal, :volume, :page, :url, :abstract)
+      :year, :authors, :journal, :volume, :page, :url, :abstract, :note)
     end
   
     def sort_column

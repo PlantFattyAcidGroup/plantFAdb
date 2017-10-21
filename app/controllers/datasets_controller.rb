@@ -59,6 +59,7 @@ class DatasetsController < ApplicationController
       @datasets = @datasets.where(plants_pubs: {pub_id: params[:pub_id]})
     end
     
+    @datasets = @datasets.published
     respond_to do |format|
       # Base html query
       format.html{ @datasets = @datasets.page params[:page]}

@@ -10,7 +10,9 @@ class FattyAcidsController < ApplicationController
       @fatty_acids = @fatty_acids.order(sort_column + ' ' + sort_direction + ' nulls last, measures.id asc')
     end
     
-    result_count = Result.viewable.published.group("measures.id")
+    result_count = Result.viewable.published
+                         .joins(:measure)
+                         .group("measures.id")
                          .select("count(distinct(results.id)) result_count, measures.id measure_id")
                          
     @fatty_acids = @fatty_acids.published
@@ -20,19 +22,19 @@ class FattyAcidsController < ApplicationController
     if(params[:query].present?)
       q = UnicodeUtils.upcase(params[:query])
       @fatty_acids = @fatty_acids.where('
-        upper(name) like ?
-        OR upper(other_names) LIKE ?
-        OR result_count like ?
-        OR upper(delta_notation) LIKE ?
-        OR upper(cas_number) LIKE ?
-        OR upper(sofa_mol_id) LIKE ?
-        OR upper(lipidmap_id) LIKE ?
-        OR upper(formula) LIKE ?
-        OR upper(category) LIKE ?
-        OR upper(common_name) LIKE ?
-        OR upper(iupac_name) LIKE ?
-        OR mass = ?',
-        "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", q.to_f
+        upper(name) like :q
+        OR upper(other_names) LIKE :q
+        OR result_count like :q
+        OR upper(delta_notation) LIKE :q
+        OR upper(cas_number) LIKE :q
+        OR upper(sofa_mol_id) LIKE :q
+        OR upper(lipidmap_id) LIKE :q
+        OR upper(formula) LIKE :q
+        OR upper(category) LIKE :q
+        OR upper(common_name) LIKE :q
+        OR upper(iupac_name) LIKE :q
+        OR mass = :f',
+        {q: "%#{q}%", f: q.to_f}, 
       )
     end
     unless params[:mass_min].blank?
@@ -159,7 +161,7 @@ class FattyAcidsController < ApplicationController
     def sort_column
       if params[:action] == 'index'
         col = ['mass','name', 'delta_notation', 'formula', 'sofa_mol_id','result_count'].find{|c| c==params[:sort]}
-        col ||"mass"
+        col || "mass"
       else
         col = ['plants.genus','unit', 'value', 'pubs.was_authors'].find{|c| c==params[:sort]}
         col || "results.value"

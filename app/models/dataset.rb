@@ -29,10 +29,7 @@ class Dataset < ActiveRecord::Base
   has_paper_trail
   has_drafts
   def display_name
-    s=""#"#{id}:"
-    s+="#{tissue}" if tissue.present? && tissue != '-'
-    s+=" #{lipid_type}" if lipid_type.present? && lipid_type != '-'
-    return s
+    ["##{id}",tissue,lipid_type].reject{|s| s=='-'}.compact.join(' | ')
   end
   
   def draft_publication_dependencies

@@ -5,12 +5,12 @@
             <div style='width:100%;color:#333'>
               <i class="more-less glyphicon glyphicon-<%=  ((defined? expanded) && expanded) ? 'minus' : 'plus' %>"></i>
               <div style='float:left;width:calc(90% - 170px)'>
-                <span style='font-size:75%'><%= dataset.display_name %></span>
+                <%= dataset.display_name %>
                 <% unless (defined? skip_pub) && skip_pub %>
-                  <i><b>Pub: </b><%= dataset.pub.wos_title %></i>
+                    | <%= dataset.pub.wos_title %>
                 <% end %>
                 <% unless (defined? skip_plant) && skip_plant %>
-                   - <%= dataset.plant.display_name %>
+                    | <i><%= dataset.plant.display_name %></i>
                 <% end %>
 
                 <% if dataset.remarks %>

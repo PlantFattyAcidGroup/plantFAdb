@@ -166,13 +166,7 @@
 					<td><%= publication.wos_pages %></td>
 					<td><%= link_to publication.doi, "https://doi.org/#{publication.doi}", target: '_blank' if publication.doi && publication.doi.downcase != 'none' %></td>
 					<td><%= publication.wos_uid %></td>
-          <% if @plant && (pb = publication.plants_pubs.where(plant_id: @plant.id).first) %>
-            <td><%= link_to publication.result_count||0, plants_pub_path(pb) %></td>
-          <% elsif @species %>
-            <td><%= link_to publication.result_count||0, results_path(genus: @species.genus, species: @species.species, pub_id: publication.id) %></td>
-          <% else %>
-            <td><%= link_to publication.result_count||0, results_path(pub_id: publication.id) %></td>
-          <% end %>
+          <td><%= link_to publication.result_count||0, datasets_path(pub_id: publication.id, plant_id: @plant) %></td>
         </tr>
       <% end %>
     </tbody>

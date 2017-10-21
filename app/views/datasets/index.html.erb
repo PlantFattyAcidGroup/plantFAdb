@@ -23,7 +23,7 @@
 <% end %>
 
 <% content_for :item_bar do %>
-    <%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
+    <%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary' if can? :edit, Dataset%>
 <% end %>
 
 <div class='row'>

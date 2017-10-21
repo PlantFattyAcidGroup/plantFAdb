@@ -26,6 +26,7 @@
 #  published_at  :datetime
 #  trashed_at    :datetime
 #  user_id       :integer
+#  note          :string
 #
 
 class Pub < ActiveRecord::Base

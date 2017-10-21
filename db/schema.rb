@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170821222639) do
+ActiveRecord::Schema.define(version: 20171021030228) do
 
   create_table "datasets", force: :cascade do |t|
     t.string   "remarks"
@@ -185,6 +185,7 @@ ActiveRecord::Schema.define(version: 20170821222639) do
     t.datetime "published_at"
     t.datetime "trashed_at"
     t.integer  "user_id"
+    t.string   "note"
   end
 
   create_table "results", force: :cascade do |t|
