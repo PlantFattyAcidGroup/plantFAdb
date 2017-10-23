@@ -30,7 +30,7 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'home#index'
-  
+  get 'stats' => 'stats#index'
   get 'history' => 'history#index'
   get 'species' => 'species#index', as: 'species'
   get ':genus/:species' => 'species#show', as: 'species_page'
