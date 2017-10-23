@@ -1,5 +1,5 @@
 # If the regressor gem is inside a group wrap your initializer in
-# if defined?(Regressor) do .. end
+if defined?(Regressor) do
 Regressor.configure do |config|
   # Defines the path where the generated files for your models will be placed
   config.regression_path = 'spec/models/'
@@ -19,4 +19,5 @@ Regressor.configure do |config|
   # If your Rails version is =< Rails 3 set this option to false.
   # Default this option is set to true.
   # config.include_enums = true
+end
 end
