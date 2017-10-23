@@ -36,7 +36,7 @@
         <%= f.label :tissue %>
         <%= f.select :tissue, options_for_select(Dataset.pluck('distinct tissue')+['-'],d.tissue||'-'), {}, class: 'form-control input-sm', disabled: destroyed %>
     </div>
-    <%= f.hidden_field :plants_pub_id, value: dataset.plants_pub_id || (defined? plants_pub_id ? plants_pub_id : nil) %>
+    <%= f.hidden_field :plants_pub_id, value: dataset.plants_pub_id %>
   </div>
   <div class='row'>
     <div class='pull-right'>

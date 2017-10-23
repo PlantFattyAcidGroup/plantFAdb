@@ -9,21 +9,23 @@ class AddPlantsPubIdToResult < ActiveRecord::Migration
     reversible do |dir|
       dir.up do
         PaperTrail.enabled=false
-        pbar = ProgressBar.new(Result.count)
-        tables = []
-        ActiveRecord::Base.uncached do
-          Result.find_each do |r|
-            if r.plant_id.blank? || r.pub_id.blank?
-              puts "invalid result: #{r.inspect}"
-              next
+        if Result.count > 0
+          pbar = ProgressBar.new(Result.count)
+          tables = []
+          ActiveRecord::Base.uncached do
+            Result.find_each do |r|
+              if r.plant_id.blank? || r.pub_id.blank?
+                puts "invalid result: #{r.inspect}"
+                next
+              end
+              tables = PlantsPub.where(plant_id: r.plant_id, pub_id: r.pub_id)
+              unless tables.length ==1
+                puts "table count invalid: #{tables.length}\n#{r.inspect}"
+                next
+              end
+              r.update_attribute(:plants_pub_id, tables.first.id)
+              pbar.increment!
             end
-            tables = PlantsPub.where(plant_id: r.plant_id, pub_id: r.pub_id)
-            unless tables.length ==1
-              puts "table count invalid: #{tables.length}\n#{r.inspect}"
-              next
-            end
-            r.update_attribute(:plants_pub_id, tables.first.id)
-            pbar.increment!
           end
         end
       end

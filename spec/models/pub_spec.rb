@@ -89,5 +89,12 @@ RSpec.describe Pub, regressor: true do
   
   # === Enums ===
   
+  it 'removes pub table on destroy' do
+    pb = create(:plants_pub)
+    expect(PlantsPub.find_by(id: pb.id)).to_not be nil
+    pb.pub.draft_destruction
+    pb.pub.draft.publish!
+    expect(PlantsPub.find_by(id: pb.id)).to be nil
+  end
   
 end

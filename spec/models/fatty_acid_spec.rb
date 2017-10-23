@@ -93,5 +93,4 @@ RSpec.describe FattyAcid, regressor: true do
   
   # === Enums ===
   
-  
 end

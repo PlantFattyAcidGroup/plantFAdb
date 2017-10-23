@@ -51,5 +51,12 @@ FactoryGirl.define do
       formula "C10H2"
       mass Faker::Number.decimal(3,2)
     end
+    factory :parameter, class: Parameter do
+      name Faker::Name.name
+      trait :oil_content do
+        name 'Oil Content'
+        delta_notation 'Oil Content'
+      end
+    end
   end
 end

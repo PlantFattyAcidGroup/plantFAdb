@@ -112,40 +112,6 @@ class PubsController < ApplicationController
       }
     end
   end
-
-  def condense_doi
-    result = Pub.condense_doi
-    text = "Condense Complete:<br/><br/>
-        Beginning Pub Count: #{result[:begin_count]}<br/>
-        --<br/>
-        Pub with DOI: #{result[:found]}<br/>
-        Pub with unique DOI: #{result[:unique]}<br/>
-        --<br/>
-        Condensed: #{result[:removed]} <br/>
-        New: #{result[:created]}<br/>
-        --<br/>
-        Ending Pub Count: #{result[:end_count]}
-      "
-    Rails.logger.info { text }
-    redirect_to pubs_path, notice: text
-  end
-  
-  def condense_wos
-    result = Pub.condense_wos
-    text = "Condense Complete:<br/><br/>
-        Beginning Pub Count: #{result[:begin_count]}<br/>
-        --<br/>
-        Pub with UID: #{result[:found]}<br/>
-        Pub with unique UID: #{result[:unique]}<br/>
-        --<br/>
-        Condensed: #{result[:removed]} <br/>
-        New: #{result[:created]}<br/>
-        --<br/>
-        Ending Pub Count: #{result[:end_count]}
-      "
-    Rails.logger.info { text }
-    redirect_to pubs_path, notice: text
-  end
   
   # GET /publications/1
   def show
@@ -166,7 +132,7 @@ class PubsController < ApplicationController
   # POST /publications
   def create
     @pub.user_id = current_user.try(:id)
-    if @pub.draft_creation
+    if @pub.save_draft
       redirect_to @pub, notice: 'A draft of the new Publication was successfully created.'
     else
       render :new
@@ -176,7 +142,7 @@ class PubsController < ApplicationController
   # PATCH/PUT /publications/1
   def update
     @pub.attributes = resource_params
-    if @pub.draft_update
+    if @pub.save_draft
       redirect_to @pub, notice: 'A draft of the Publication update was saved.'
     else
       render :edit
@@ -193,6 +159,40 @@ class PubsController < ApplicationController
     end
   end
 
+  # def condense_doi
+  #   result = Pub.condense_doi
+  #   text = "Condense Complete:<br/><br/>
+  #       Beginning Pub Count: #{result[:begin_count]}<br/>
+  #       --<br/>
+  #       Pub with DOI: #{result[:found]}<br/>
+  #       Pub with unique DOI: #{result[:unique]}<br/>
+  #       --<br/>
+  #       Condensed: #{result[:removed]} <br/>
+  #       New: #{result[:created]}<br/>
+  #       --<br/>
+  #       Ending Pub Count: #{result[:end_count]}
+  #     "
+  #   Rails.logger.info { text }
+  #   redirect_to pubs_path, notice: text
+  # end
+  #
+  # def condense_wos
+  #   result = Pub.condense_wos
+  #   text = "Condense Complete:<br/><br/>
+  #       Beginning Pub Count: #{result[:begin_count]}<br/>
+  #       --<br/>
+  #       Pub with UID: #{result[:found]}<br/>
+  #       Pub with unique UID: #{result[:unique]}<br/>
+  #       --<br/>
+  #       Condensed: #{result[:removed]} <br/>
+  #       New: #{result[:created]}<br/>
+  #       --<br/>
+  #       Ending Pub Count: #{result[:end_count]}
+  #     "
+  #   Rails.logger.info { text }
+  #   redirect_to pubs_path, notice: text
+  # end
+  
   private
     # Only allow a trusted parameter "white list" through.
     def resource_params

@@ -34,7 +34,7 @@
 
 class Measure < ActiveRecord::Base
   has_many :names
-  has_many :results
+  has_many :results, dependent: :destroy
   
   has_paper_trail
   has_drafts

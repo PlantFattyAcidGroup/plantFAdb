@@ -95,7 +95,7 @@ class PlantsController < ApplicationController
   # POST /plants
   def create
     @plant.user_id = current_user.try(:id)
-    if @plant.draft_creation
+    if @plant.save_draft
       redirect_to @plant, notice: 'A draft of the new Plant was successfully created.'
     else
       render :new
@@ -105,7 +105,7 @@ class PlantsController < ApplicationController
   # PATCH/PUT /plants/1
   def update
     @plant.attributes = resource_params
-    if @plant.draft_update
+    if @plant.save_draft
       redirect_to [:edit,@plant], notice: 'A draft of the Plant update was saved successfully.'
     else
       render :edit

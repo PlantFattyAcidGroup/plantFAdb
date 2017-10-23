@@ -17,6 +17,16 @@ Draftsman.draft_class_name = 'Draft'
 # Override
 # Add dependencies function call to draft item
 class Draft < Draftsman::Draft
+  
+  # Always revert results when a dataset is reverted, not just for the 'destroy' event
+  def revert!
+    super
+    if self.destroyed? && self.item.class == Dataset
+      self.item.draft_reversion_dependencies.each(&:revert!)
+    end
+  end
+  
+  # allow custom dependencies so datasets can always list results
   def draft_publication_dependencies
     if defined? self.item.draft_publication_dependencies
       return self.item.draft_publication_dependencies

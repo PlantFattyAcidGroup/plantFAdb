@@ -123,7 +123,7 @@ class FattyAcidsController < ApplicationController
   # POST /fatty_acids
   def create
     @fatty_acid.user_id = current_user.try(:id)
-    if @fatty_acid.draft_creation
+    if @fatty_acid.save_draft
       redirect_to @fatty_acid, notice: 'A draft of the new Fatty Acid was successfully created.'
     else
       render :new
@@ -133,7 +133,7 @@ class FattyAcidsController < ApplicationController
   # PATCH/PUT /fatty_acids/1
   def update
     @fatty_acid.attributes = resource_params
-    if @fatty_acid.draft_update
+    if @fatty_acid.save_draft
       redirect_to @fatty_acid, notice: 'A draft of the Fatty acid update was saved successfully.'
     else
       render :edit

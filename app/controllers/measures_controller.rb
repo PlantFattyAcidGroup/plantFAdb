@@ -1,4 +1,5 @@
 class MeasuresController < ApplicationController
+  skip_authorization_check
   def autocomplete_measure_name
     q = UnicodeUtils.upcase(params[:term]||'')
     measures = Measure.where('

@@ -84,11 +84,12 @@ class DatasetsController < ApplicationController
   
   # GET /results/new
   def new
+    @dataset.plants_pub_id ||= params[:plants_pub_id]
   end
 
   # GET /results/1/edit
   def edit
-    default_measures = Measure.find([10027,10035,10046,10051,10066,10074,10077,10090,10114,10127,10131,10147,10152,10000])
+    default_measures = Measure.where(id: [10027,10035,10046,10051,10066,10074,10077,10090,10114,10127,10131,10147,10152,10000])
     
     @results = @dataset.results.to_a    
     ### Used measures from this dataset
@@ -99,7 +100,7 @@ class DatasetsController < ApplicationController
     end
     
     r_mol = @results.select{|r| r.measure.try(:sofa_mol_id).present?}.sort_by{|r| r.measure.sofa_mol_id}
-    r_new = @results.reject{|r| r.measure.try(:sofa_mol_id).present?}.sort_by{|r| r.measure.try(:mass)||0}
+    r_new = @results.reject{|r| r.measure.try(:sofa_mol_id).present?}.sort_by{|r| r.measure.try(:mass).to_f}
     @results = r_mol+r_new
   
     5.times do |i|
@@ -109,9 +110,7 @@ class DatasetsController < ApplicationController
 
   # POST /results
   def create
-    if @dataset.draft_creation
-      @dataset.plants_pub.attributes = {updated_at: Time.now}
-      @dataset.plants_pub.draft_update
+    if @dataset.save_draft
       redirect_to edit_dataset_path(@dataset)
     else
       render :new
@@ -121,9 +120,7 @@ class DatasetsController < ApplicationController
   # PATCH/PUT /results/1
   def update
     @dataset.attributes = resource_params
-    if @dataset.draft_update
-      @dataset.plants_pub.attributes = {updated_at: Time.now}
-      @dataset.plants_pub.draft_update
+    if @dataset.save_draft
       redirect_to edit_dataset_path(@dataset)
     else
       render :edit
@@ -133,11 +130,6 @@ class DatasetsController < ApplicationController
   # DELETE /results/1
   def destroy
     if @dataset.draft_destruction
-      @dataset.plants_pub.attributes = {updated_at: Time.now}
-      @dataset.plants_pub.draft_update
-      @dataset.results.each do |r|
-        r.draft_destruction
-      end
       redirect_to edit_plants_pub_path(@dataset.plants_pub_id), notice: 'Dataset removed.'
     else
       redirect_to edit_plants_pub_path(@dataset.plants_pub_id), notice: 'Error removing dataset.'

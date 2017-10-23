@@ -17,7 +17,7 @@ module Features
       fill_in 'Email', with: @user.email
       fill_in 'Password', with: @user.password
       click_button 'Sign in'
-      expect(current_path).to eq(root_path)
+      expect(page).to have_content(@user.email)
       @user
     end
 

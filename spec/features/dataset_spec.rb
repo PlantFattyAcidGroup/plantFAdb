@@ -4,6 +4,39 @@ feature 'Dataset' do
     sign_in_as(user)
   end
 
+  describe 'Create' do
+    
+    let!(:pb) {create(:plants_pub, :with_data)}
+    background do
+      click_link 'Literature'
+      click_link pb.pub.wos_authors
+      within('tr', text: pb.plant.species) do
+        click_link 'Edit'
+      end
+      click_link 'New Dataset'
+    end
+
+    scenario 'with no attributes' do
+      click_button 'Start'
+      expect(page).to have_content "Editing Dataset"
+    end
+
+    scenario 'with basic attributes' do
+      fill_in 'Remarks', with: "Test remarks"
+      select 'Total Oil', from: 'Lipid type'
+      click_button 'Start'
+      expect(page).to have_content "Test remarks"
+    end
+    
+    scenario 'dbxref_value requires dbxref selection' do
+      fill_in 'Dbxref value', with: 'test123'
+      click_button 'Start'
+      expect(page).to have_content "can't be blank"
+    end
+  end
+  
+  
+  
   describe 'Search' do
     let!(:data1) {create(:dataset, :with_data, result_count: 5)}
     

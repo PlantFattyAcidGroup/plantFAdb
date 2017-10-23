@@ -30,7 +30,17 @@ FactoryGirl.define do
       end
 
       after(:create) do |ds, evaluator|
-        create_list :result, evaluator.result_count, dataset: ds
+        fa = create(:fatty_acid)
+        create_list :result, evaluator.result_count-1, dataset: ds, measure: fa
+        oil = create(:parameter, :oil_content)
+        create :result, dataset: ds, measure: oil
+      end
+    end
+    
+    trait :draft_result do
+      after(:create) do |ds, evaluator|
+        r = build :result, dataset: ds
+        r.save_draft
       end
     end
   end

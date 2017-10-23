@@ -33,10 +33,10 @@
 
 FactoryGirl.define do
   factory :plant do
-    order_name "Amborellales"
-    family "Brassicaceae"
-    genus "Brassica"
-    sequence(:species){|n| "napus #{n}"}
+    order_name "Dilleniales"
+    family "Dilleniaceae"
+    genus "Dillenia"
+    sequence(:species){|n| "indica #{n}"}
     sequence(:variety){|n| "var. #{n}"}
     published_at Date.today
     trait :draft do

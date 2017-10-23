@@ -40,9 +40,9 @@
                     <% if @dataset.persisted? %>
                 	    <% @results.each_with_index do |r,i| %>
                       <% result = (r.draft? ? r.draft.reify : r) %>
-                      <tr id="result_<%= result.id || i %>">
+                      <tr id="result_<%= result.id || 'idx_'+i.to_s %>">
                         <td colspan='6'>
-                        <%= render partial: 'result_form', locals: {result: result, original_result: r, dataset_id: @dataset.id, form_id: "form_#{@dataset.id}_#{result.id || i}"} %>
+                        <%= render partial: 'result_form', locals: {result: result, original_result: r, dataset_id: @dataset.id, form_id: "form_#{@dataset.id}_#{result.id || 'idx_'+i.to_s}"} %>
                         </td>
                       </tr>
                 	    <% end %>

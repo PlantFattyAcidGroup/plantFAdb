@@ -43,7 +43,7 @@ gem 'summernote-rails'
 gem 'codemirror-rails'
 gem 'friendly_id'
 gem 'unicode_utils'
-gem 'draftsman'
+gem 'draftsman', '0.7.0'
 gem 'local_time'
 gem 'jquery-ui-rails'
 gem 'rails-jquery-autocomplete'
@@ -58,8 +58,6 @@ gem 'roo'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 group :development do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
   gem 'better_errors'
   gem 'binding_of_caller'
   # Access an IRB console on exception pages or by using <%= console %> in views
@@ -78,6 +76,7 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'regressor'
   gem 'launchy'
+  gem 'byebug'
 end
 
 group :test do

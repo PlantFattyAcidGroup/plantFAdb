@@ -34,6 +34,9 @@ class Result < ActiveRecord::Base
   
   has_paper_trail
   has_drafts
+  after_save_draft :touch_dataset
+  after_draft_destruction :touch_dataset
+  
   scope :viewable, -> { where(unit: ['GLC-Area-%','weight-%']) }
   validates :value, :measure_id, :unit, presence: true
   
@@ -45,6 +48,14 @@ class Result < ActiveRecord::Base
     publication.try(:sofa_tab_id)
   end
   
+  # Results are published/reverted by parent dataset
+  # Always update parent when this item is drafted unless its already a draft
+  def touch_dataset
+    dataset.attributes = {updated_at: Time.now}
+    dataset.save_draft
+  end
+  
+  # Avoid circular dependency
   def draft_publication_dependencies
     []
   end

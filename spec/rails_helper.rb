@@ -18,7 +18,17 @@ require 'capybara/rspec'
 require 'shoulda/matchers'
 require 'devise'
 require 'capybara/poltergeist'
+
+Capybara.register_driver :poltergeist do |app|
+    options = {
+                js_errors: false,
+                timeout: 5
+              }
+  Capybara::Poltergeist::Driver.new(app, options)
+end
 Capybara.javascript_driver = :poltergeist
+
+
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -94,6 +104,7 @@ RSpec.configure do |config|
   end
   
   # session helpers
+  config.include Features::SearchHelpers, type: :feature
   config.include Features::SessionHelpers, type: :feature
   config.include Requests::SessionHelpers, type: :request
 

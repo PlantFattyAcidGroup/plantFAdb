@@ -20,20 +20,25 @@
 class Dataset < ActiveRecord::Base
   belongs_to :dbxref
   belongs_to :plants_pub
-  has_many :results, autosave: true
+  has_many :results, autosave: true, dependent: :destroy
   validates :plants_pub, presence: true
   validates :dbxref, presence: true, if: "dbxref_value.present?"
   
   delegate :plant_id, :pub_id, :plant, :pub, to: :plants_pub
+  delegate :species, to: :plant
   scope :with_remarks, -> {where.not(remarks: nil)}
   has_paper_trail
   has_drafts
+  
   def display_name
     ["##{id}",tissue,lipid_type].reject{|s| s=='-'}.compact.join(' | ')
   end
   
   def draft_publication_dependencies
-    results.map(&:draft).compact
+    dependent_drafts = results.map(&:draft).compact
+    pbd = plants_pub.draft
+    dependent_drafts << pbd if draft.create? && pbd.try(:create?)
+    return dependent_drafts
   end
   
   def draft_reversion_dependencies

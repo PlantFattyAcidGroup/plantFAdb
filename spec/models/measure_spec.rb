@@ -90,6 +90,12 @@ RSpec.describe Measure, regressor: true do
 
   
   # === Enums ===
-  
+  it 'removes results on destroy' do
+    result = create(:result)
+    expect(Result.find_by(id: result.id)).to_not be nil
+    result.measure.draft_destruction
+    result.measure.draft.publish!
+    expect(Result.find_by(id: result.id)).to be nil
+  end
   
 end

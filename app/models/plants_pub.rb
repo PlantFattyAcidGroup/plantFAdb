@@ -24,7 +24,7 @@ class PlantsPub < ActiveRecord::Base
   belongs_to :plant
   belongs_to :pub
   has_many :publications,  -> { distinct }, through: :results
-  has_many :datasets
+  has_many :datasets, dependent: :destroy
   has_many :results, through: :datasets
   validates :plant_id, uniqueness: {scope: :pub_id}
   validates :pub, :plant, presence: true

@@ -66,6 +66,12 @@ RSpec.describe PlantsPub, regressor: true do
 
   
   # === Enums ===
-  
+  it 'removes datasets on destroy' do
+    dataset = create(:dataset)
+    expect(Dataset.find_by(id: dataset.id)).to_not be nil
+    dataset.plants_pub.draft_destruction
+    dataset.plants_pub.draft.publish!
+    expect(Dataset.find_by(id: dataset.id)).to be nil
+  end
   
 end
