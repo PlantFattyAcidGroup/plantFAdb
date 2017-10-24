@@ -7,15 +7,10 @@
               <div style='float:left;width:calc(90% - 170px)'>
                 <%= dataset.display_name %>
                 <% unless (defined? skip_pub) && skip_pub %>
-                    | <%= dataset.pub.wos_title %>
+                    | <%= dataset.pub.wos_title %> (<%= dataset.pub.wos_year %>)
                 <% end %>
                 <% unless (defined? skip_plant) && skip_plant %>
                     | <i><%= dataset.plant.display_name %></i>
-                <% end %>
-
-                <% if dataset.remarks %>
-                <br/>
-                <p style='font-size:10px'><b>Remarks: </b><%= dataset.remarks %></p>
                 <% end %>
               </div>
 
@@ -33,7 +28,22 @@
           
           <div class='panel'>
             <% if (xref = dataset.dbxref_value) && dataset.dbxref %>
-              <div class='pull-left'>External Reference: <%= dataset.dbxref.generate_link(xref) %></div>
+              <div class='pull-left'>
+                External Reference: <%= dataset.dbxref.generate_link(xref) %>                
+                  <p style='font-size:75%'>
+                    <br/>
+                    <% if dataset.remarks %>
+                    <b>Remarks:</b> <%= dataset.remarks %>
+                    <% end %>
+                    <% unless (defined? skip_pub) && skip_pub %>
+                      <br/><b>Publication:</b>
+                      <%= link_to "#{dataset.pub.wos_title} (#{dataset.pub.wos_year})", dataset.pub if dataset.pub %>    
+                    <% end %>
+                    <% unless (defined? skip_plant) && skip_plant %>
+                        <br/><b>Plant:</b> <i><%= link_to dataset.plant.display_name, dataset.plant if dataset.plant %></i>
+                    <% end %>
+                  </p>
+              </div>
             <% end %>
             <div class='pull-right'><%= "Total Value: #{dataset.total_percent(dataset.results.published)}" %></div>
             <br/>

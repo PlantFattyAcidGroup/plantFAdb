@@ -47,6 +47,7 @@ class Result < Thor
       @results.pluck(:id).each_slice(999) do |ids|
         puts ::Result.all.where(id: ids).delete_all
       end
+      ::Measure.all.where.not(type: ['FattyAcid', 'Parameter']).delete_all
     end
     
   end
