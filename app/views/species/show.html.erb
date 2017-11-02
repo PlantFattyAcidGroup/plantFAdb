@@ -1,0 +1,236 @@
+<% content_for :title do -%>
+ PhyloFAdb: <%= @species.name_and_common_name %>
+<% end -%>
+
+<% content_for :description do -%>
+ Plant fatty acid compositions and phylogenetics. <%= @species.name_and_common_name %>
+<% end -%>
+
+<h1 class='pagetitle'>
+  <%= @species.name %>
+  <small style='white-space:nowrap'><%= @species.common_name %></small>
+</h1>
+
+<div class='container'>
+	<div class='col-md-4'>
+		<div class='well' style='overflow:scroll'>
+			<legend>Classification</legend>
+			<div style='min-height:300px'>
+				<p>
+				  <strong>Order:</strong>
+				  <%= @species.order_name %>
+				</p>
+				<p>
+				  <strong>Family:</strong>
+				  <%= @species.family %>
+				</p>
+				<p>
+				  <strong>Genus:</strong>
+				  <%= @species.genus %>
+				</p>
+				<p>
+				  <strong>Species:</strong>
+				  <%= @species.species %>
+				</p>
+				<% unless @species.common_name.blank? %>
+					<p>
+					  <strong>Common Name:</strong>
+					  <%= @species.common_name %>
+					</p>
+				<% end %>
+			</div>
+		</div>
+
+	</div>
+	<div class='col-md-8'>
+		<div class='well' style='overflow:scroll'>
+			<legend>Data</legend>
+			<small>
+				Mouse over individual data points for link to data and publication.<br/>
+				The graphs are built from data from all publications in the database with this species name.
+				In some cases this results in data from more than one variety included in the graph.
+				In other cases the same species may have multiple graphs because of differences in names recorded for the plant.
+				
+			</small><br/><br/>
+			<span> 
+				<%= link_to "Show #{pluralize @species.plants.count,"Plant Varieties"}", "#0", onclick: '$("#plant_table").slideToggle();return false;' %>
+			</span> |
+			<span>
+				<%= link_to "View #{pluralize @species.results.published.viewable.count, "Data Point"}", results_path(genus: @species.genus, species: @species.species) %>
+			</span>
+      
+      <div id='plant_table' style='display:none'>
+  			<legend><h5>Plant Varieties</h5></legend>				
+    		<table class="table">
+    		  <thead>
+            <th>Name</th>
+            <th>Variety</th>
+    		    <th>Tissue</th>
+            <th></th>
+            <th>Data</th>
+    		  </thead>
+    		  <tbody>
+    		    <% @species.plants.order("created_at asc").each do |plant| %>
+    		    <tr>
+              <td><%= link_to plant.display_name, plant_path(plant) %></td>
+    		      <td><%= link_to plant.variety, plant_path(plant) if plant.variety%></td>
+    		      <td><%= plant.tissue %></td>
+              <td><%= plant.sofa_name %></td>
+    					<td>
+                <%= plant.results.count %>
+              </td>
+    		    </tr>
+    		    <% end %>
+    		  </tbody>
+    		</table>
+      </div>
+        
+			<% unless @fatty_acid_data.empty? %>
+				<legend><h5>Fatty Acid Data</h5></legend>
+					<div id='fa_plant_data_viz_0' style='min-width:700px;height:350px;position:relative'>
+						
+					</div>
+					<div style='margin-left:5em;margin-right:3em'>
+						<small><i>
+						In cases where some publications report, for example 18:1, and other publications report 18:1-delta-9c (oleic),
+						data are presented separately on the x-axis.
+						</i></small>
+					</div>
+			<% end %>
+			<% unless @parameter_data.empty? %>
+			<legend><h5>Parameters</h5></legend>
+			<p>Each bar represents data from a different publication or analysis within a publication</p>
+				<% @parameter_data.each_with_index do |(key, subdata),index| %>
+					<div id='p_plant_data_viz_<%= index %>' style='min-width:700px;height:350px'></div>
+				<% end %>
+			<% end %>
+		</div>
+	</div>
+</div>
+
+<hr/>
+
+<style>
+.scatter {
+  font: 10px sans-serif;
+}
+
+.scatter {
+  font: 10px sans-serif;
+}
+
+.scatter line,
+
+.scatter .point {
+  fill: steelblue;
+  stroke: none;
+	opacity: .65;
+	pointer-events: none;
+}
+
+.scatter rect {
+/*	fill: #e4e4e7;*/
+	fill: none;
+	stroke: none;
+	cursor: pointer;
+	pointer-events:all;
+}
+.axis {
+  font: 12px sans-serif;
+}
+ 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+ 
+.x.axis path { 
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+</style>
+
+<script>
+function drawBoxPlot(data,el,unit){
+	var  width = $(el.node()).width() //- margin.left - margin.right;
+	var height = $(el.node()).height() //- margin.top - margin.bottom;
+
+	var chart = d3.scatter()
+		.height(height)
+		.width(width)
+		.ylabel(unit)
+		.categoryMethod('delta_notation')
+		.hoverMessage(function(d,el){
+      var text = '<legend><h5>'+d.object.name+'</h5></legend>'
+			text += 'Delta Notation: '+d.object.delta_notation+'<br/>'
+			if(d.values.length ==1){
+				text += 'Value: '+d.values[0]+'<br/><br/>'
+			}else{
+				text += 'Max: '+d3.max(d.values)+'<br/>'
+				text += 'Min: '+d3.min(d.values)+'<br/><br/>'
+				text += 'Click to view ' + d.values.length+' datapoints'
+			}
+      
+      el.style('display','')
+      .html(text)
+		})
+		.click(function(d){
+			window.open('<%= results_path(genus: @species.genus, species: @species.species) %>'+'&measure_id='+d.object.id,'_blank')
+		})
+		
+	el.datum(data).call(chart)
+	
+}
+
+
+//https://bl.ocks.org/mbostock/4061502
+$(document).ready(function(){
+
+	// fatty acid graph
+	var fa_data_0 = <%= "#{@fatty_acid_data.to_json}".html_safe %>
+	var fa_el_0 = d3.select('#fa_plant_data_viz_0')
+	drawBoxPlot(fa_data_0,fa_el_0,'GC-Area% or Weight%')
+	
+	
+	// Oil Content parameter first
+	
+	<% if oil = @parameter_data["Oil content - weight-%"] %>
+		<% @parameter_data.delete("Oil content - weight-%") %>
+    var p_data_0 = <%= "#{oil.to_json}".html_safe %>
+		var chart = c3.generate({
+			bindto: '#p_plant_data_viz_0',
+			data: {
+        json: p_data_0,
+				type: 'bar',
+        keys: {value: ['value']},
+        names: {value: "Oil content - weight-%"},
+        onclick: function (d, element) { 
+          window.open('<%= results_path %>'+'/'+p_data_0[d.index].id,'_blank')
+        }
+			}
+		})
+	<% end %>
+	
+	
+	<% @parameter_data.each_with_index do |(key, subdata),index| %>
+		<% index +=1 if oil %>
+		<%= "var p_data_#{index} = #{subdata.to_json}".html_safe %>
+		var chart = c3.generate({
+			bindto: '<%= "#p_plant_data_viz_#{index}" %>',
+			data: {
+				json: p_data_<%= index %>,
+        type: 'bar',
+        keys: {value: ['value']},
+				names: {value: '<%= key %>'},
+        onclick: function (d, element) { 
+          window.open('<%= results_path %>'+'/'+p_data_<%= index %>[d.index].id,'_blank')
+        }
+			}
+		})
+	<% end %>
+	
+});
+</script>

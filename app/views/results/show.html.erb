@@ -1,5 +1,5 @@
 <% content_for :top_bar do %>
-	<h1 class="pagetitle">Result: <%= @result.id %></h1>
+	<h1 class="pagetitle"><%= @result.measure.display_name %>: <%= @result.value %> <span class='small'><%= @result.unit %></span></h1>
 <% end %>
 
 <% content_for :top_bar do -%>
@@ -11,18 +11,4 @@
   <%= link_to 'Edit', edit_result_path(@result), class: 'btn btn-primary' %>
 <% end %>
 
-<p>
-  <strong><%= @result.measure.display_name %></strong>
-</p>
-
-<p>
-  <strong>Value:</strong>
-  <%= @result.value %>
-</p>
-
-<p>
-  <strong>Unit:</strong>
-  <%= @result.unit %>
-</p>
-
-<%= link_to "View Publication Table", plants_pub_path(@result.plants_pub) %>
+<%= link_to "View Dataset", plants_pub_path(@result.plants_pub), class: 'btn btn-primary' %>

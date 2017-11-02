@@ -1,0 +1,89 @@
+<% content_for :title do -%>
+ PhyloFAdb: Plant Species
+<% end -%>
+
+<% content_for :description do -%>
+  Fatty acid analysis for more than 6000 plant species including fatty acid composition, oil content, links to publications and individual data sets.
+<% end -%>
+
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Species</h1>
+<% end %>
+
+<% content_for :item_bar do %>
+    <%#= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
+<% end %>
+	
+<div class='row'>
+	<div class='col-xs-12 col-sm-7 col-md-8 pull-left'>
+		<ul class="pagination">
+			<%= paginate @species %>
+		</ul>
+	</div>
+	<div class='col-xs-12 col-sm-5 col-md-4 search'>
+    <%= form_tag nil, method: :get do %>
+		<% params.except(:commit,:action,:controller,:utf8,:query).each do |parameter, val| %>
+			<%= hidden_field_tag parameter, val %>
+		<% end %>
+      <div class='form-inline pull-left-sm pull-right-md'>
+				<div class='form-group'>
+          <a href='<%= Page.path('help') %>'class='glyphicon glyphicon-question-sign' data-toggle='tooltip' data-html='true' title="
+            Search includes Order, family, Genus, species, common names and names from the SOFA database.<br/><br/>
+            
+            Click for more details.
+          "></a>
+			    <label for="query">Search:</label>
+					<%= text_field_tag :query, params[:query], class: 'form-control' %>
+					<%= submit_tag "Go", class: "btn btn-info"%>
+				</div>
+			</div>
+    <% end %>
+	</div>
+</div>
+
+<div class='panel table-responsive'>
+	
+	<div class="panel-heading clearfix">
+		<div class='pull-right'><%= page_entries_info @species %></div>
+	</div>
+	
+  <table class='table table-striped'>
+    <thead>
+      <tr>
+        <th><%= sortable('genus','Genus') %></th>
+        <th><%= sortable('species','Species') %></th>
+				<th>Common Name</th>
+				<th>Family</th>
+				<th>Order</th>
+				<th><%= sortable('avg_oil_content', 'Oil Content') %></th>
+        <th><%= sortable('pub_count','Publications') %></th>
+        <th><%= sortable('result_count','Data points') %></th>
+        <th><%= sortable('plant_count','Plants') %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @species.each do |sp| %>
+        <% s = Species.new(sp.genus, sp.species) %>
+        <tr>
+					<td><%= link_to s.genus, species_page_path(genus: s.genus, species: s.species) %></td>
+					<td><%= link_to s.species, species_page_path(genus: s.genus, species: s.species) %></td>
+					<td style='max-width:150px;overflow:auto;white-space:nowrap'><%= s.common_name %></td>
+					<td style='max-width:150px;overflow:auto;white-space:nowrap'><%= s.family %></td>
+					<td style='max-width:150px;overflow:auto;white-space:nowrap'><%= s.order_name %></td>
+					<td><%= sp.avg_oil_content.try(:round,1) %></td>
+          <td><%= link_to sp.pub_count, pubs_path(genus: s.genus, species: s.species) if sp.pub_count %></td>
+          <td><%= link_to sp.result_count, results_path(genus: s.genus, species: s.species) if sp.result_count %></td>
+          <td><%= link_to s.plants.length, plants_path(genus: s.genus, species: s.species, target: '_blank') %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class='row'>
+	<div class='col-xs-12 col-sm-7 col-md-8'>
+		<ul class="pagination pull-left">
+			<%= paginate @species %>
+		</ul>
+	</div>
+</div>

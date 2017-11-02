@@ -1,0 +1,42 @@
+<% if result.destroyed? %>
+<div class='col-md-5'>Result has been removed</div>
+<% else %>
+<% destroyed = original_result.draft? && original_result.draft.destroy? %>
+<%= form_for result, html: {id: form_id, class: 'result_form'} do |f| %>
+  <input type="hidden" value="<%= form_id %>" name="form_id"/>  
+  <div class='col-md-5'>
+      <%= autocomplete_field_tag :measure, result.measure.try(:display_name), autocomplete_measure_name_measures_path,
+            placeholder: 'Select a measure...',
+            class: 'form-control input-sm',
+            id_element: "#result_measure_id_#{result.id||form_id}", required: true, disabled: (result.persisted? ? true : false) %>
+      <%= f.hidden_field :measure_id, value: result.measure_id, id: "result_measure_id_#{result.id||form_id}"%>
+  </div>
+  <div class='col-md-2'>
+      <%= f.select :unit, options_for_select(['weight-%','GLC-Area-%','Mol%']), {}, class: 'form-control input-sm units',
+         disabled: destroyed %>
+      <% if result.persisted? && !['weight-%','GLC-Area-%','Mol%'].include?(result.unit) %>
+        <span style='color:#822'><%= result.unit %></span>
+      <% end %>
+  </div>
+  <div class='col-md-2'>
+      <%= f.number_field :value, class: 'form-control input-sm values', step: :any, disabled: destroyed %>
+  </div>
+  <%= f.hidden_field :dataset_id, value: dataset_id %>
+  <div class='col-md-3'>
+    <% if result.errors.any? %>
+      Error: <%= result.errors.full_messages.to_sentence %>
+    <% end %>
+    <% if result.persisted? %>
+      <% unless destroyed %>
+        <%= f.submit 'Save', class: 'btn btn-info input-sm' %>
+      <% end %>
+      <% if original_result.draft? %>
+        <%= link_to "<span style='margin-right:1em' class='#{original_result.draft.event}-tag'>#{original_result.draft.create? ? "New" : destroyed ? "Delete" : "Update" }</span>".html_safe, draft_path(original_result.draft)%>
+      <% end %>
+      <% unless destroyed %>
+        <%= link_to "<i class='glyphicon glyphicon-remove-circle'></i>".html_safe, result_url(result, form_id: form_id), method: :delete, data: {remote: true, confirm: 'Remove this result from the table?'} %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+<% end %>

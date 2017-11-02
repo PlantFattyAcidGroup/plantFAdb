@@ -1,0 +1,36 @@
+<%= form_for(@dbxref) do |f| %>
+  <% if @dbxref.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@dbxref.errors.count, "error") %> prohibited this dbxref from being saved:</h2>
+
+      <ul>
+      <% @dbxref.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+	<div class='row'>
+		<div class="pull-right">
+		  <%= f.submit class: 'btn btn-primary' %>
+		</div>
+	</div>
+  
+  <div class='row'>
+    <p>If you add a link it will be used to generate links for dbxref values by appending the value to the end of the link</p>
+    <div class="field">
+      <%= f.label :name %><br>
+      <%= f.text_field :name, class: 'form-control' %>
+    </div>
+    <div class="field">
+      <%= f.label :description %><br>
+      <%= f.text_area :description, class: 'form-control' %>
+    </div>
+    <div class="field">
+      <%= f.label :link %><br>
+      <%= f.text_field :link, class: 'form-control' %>
+    </div>
+  </div>
+
+<% end %>

@@ -9,24 +9,32 @@ class FattyAcidsController < ApplicationController
     else
       @fatty_acids = @fatty_acids.order(sort_column + ' ' + sort_direction + ' nulls last, measures.id asc')
     end
-    @fatty_acids = @fatty_acids.joins("left outer join (select count(r.id) result_count, m.id measure_id from results r left outer join measures m on r.measure_id = m.id where unit in ('GLC-Area-%','weight-%') group by m.id) res on res.measure_id = measures.id ")
-    .select("measures.*, res.result_count")
-    if(params[:query])
+    
+    result_count = Result.viewable.published
+                         .joins(:measure)
+                         .group("measures.id")
+                         .select("count(distinct(results.id)) result_count, measures.id measure_id")
+                         
+    @fatty_acids = @fatty_acids.published
+                               .joins("left outer join (#{result_count.to_sql}) res on res.measure_id = measures.id")
+                               .select("measures.*, res.result_count")
+    
+    if(params[:query].present?)
       q = UnicodeUtils.upcase(params[:query])
       @fatty_acids = @fatty_acids.where('
-        upper(name) like ?
-        OR upper(other_names) LIKE ?
-        OR result_count like ?
-        OR upper(delta_notation) LIKE ?
-        OR upper(cas_number) LIKE ?
-        OR upper(sofa_mol_id) LIKE ?
-        OR upper(lipidmap_id) LIKE ?
-        OR upper(formula) LIKE ?
-        OR upper(category) LIKE ?
-        OR upper(common_name) LIKE ?
-        OR upper(iupac_name) LIKE ?
-        OR mass = ?',
-        "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", q.to_f
+        upper(name) like :q
+        OR upper(other_names) LIKE :q
+        OR result_count like :q
+        OR upper(delta_notation) LIKE :q
+        OR upper(cas_number) LIKE :q
+        OR upper(sofa_mol_id) LIKE :q
+        OR upper(lipidmap_id) LIKE :q
+        OR upper(formula) LIKE :q
+        OR upper(category) LIKE :q
+        OR upper(common_name) LIKE :q
+        OR upper(iupac_name) LIKE :q
+        OR mass = :f',
+        {q: "%#{q}%", f: q.to_f}, 
       )
     end
     unless params[:mass_min].blank?
@@ -46,25 +54,19 @@ class FattyAcidsController < ApplicationController
       OR upper(common_name) LIKE ?",
       "%#{q}%","%#{q}%","%#{q}%")
     end
-    
-    #params[:has_data]||='true'
-    case params[:has_data]
-    when 'true'
-      @fatty_acids = @fatty_acids.where("res.result_count is not null")
+    case params[:has_data]||='true'
     when 'false'
       @fatty_acids = @fatty_acids.where("res.result_count is null")
+    when 'true'
+      params[:has_data]='true'
+      @fatty_acids = @fatty_acids.where("res.result_count is not null")
     end
-    # case params[:has_cas]
-    # when 'true'
-    #   @fatty_acids = @fatty_acids.where("cas_number is not null")
-    # when 'false'
-    #   @fatty_acids = @fatty_acids.where("cas_number is null")
-    # end
     unless params[:category].blank?
       @fatty_acids = @fatty_acids.where(category: params[:category])
     end
     
-    @fatty_acids = @fatty_acids.published
+    
+    
     respond_to do |format|
       # Base html query
       format.html{
@@ -73,7 +75,7 @@ class FattyAcidsController < ApplicationController
       # TXT download
       format.csv{
         render_csv do |out|
-          out << CSV.generate_line(["ID","Delta notation","Name","Common Name","Other Names","Category","Formula","Mass","IUPAC Name","inchi","stdinchi","stdinchikey","smiles","Cas number", "Sofa mol ID", "LipidMaps ID", "PubChem ID", "ChEBI ID","SOFA Systematic Names(s)", "SOFA Trivial Name(s)","Result Count"])
+          out << CSV.generate_line(["ID","Delta notation","Name","Common Name","Other Names","Category","Formula","Mass","IUPAC Name","inchi","stdinchi","stdinchikey","smiles","Cas number", "Sofa mol ID", "LipidMaps ID", "PubChem ID", "ChEBI ID","Result Count"])
           @fatty_acids.find_each(batch_size: 500) do |item|
             out << CSV.generate_line([
               (can? :edit, item) ? "=HYPERLINK(\"#{root_url}js_redirect.html?page=#{edit_fatty_acid_path(item.id)}\",\"#{item.id}\")" : item.id,
@@ -94,8 +96,6 @@ class FattyAcidsController < ApplicationController
               item.lipidmap_id,
               item.pubchem_id,
               item.chebi_id,
-              item.systematic_names.map(&:name).join("; "),
-              item.trivial_names.map(&:name).join("; "),
               item.result_count
             ])
           end
@@ -106,9 +106,9 @@ class FattyAcidsController < ApplicationController
 
   # GET /fatty_acids/1
   def show
-    @results = @fatty_acid.results.includes(plants_pub: [:pub, :plant])
+    @results = @fatty_acid.results.includes(dataset:[plants_pub: [:pub, :plant]])
     .order(sort_column + ' ' + sort_direction)
-    .page(params[:page])
+    .page(params[:page]).per(50)
     #.joins("left outer join (select count(pub_results.id) result_count, this_result.id result_id from publications p left outer join results this_result on p.id = this_result.publication_id left outer join results pub_results on pub_results.publication_id = p.id group by this_result.id) res on res.result_id = results.id ")  
   end
 
@@ -123,7 +123,7 @@ class FattyAcidsController < ApplicationController
   # POST /fatty_acids
   def create
     @fatty_acid.user_id = current_user.try(:id)
-    if @fatty_acid.draft_creation
+    if @fatty_acid.save_draft
       redirect_to @fatty_acid, notice: 'A draft of the new Fatty Acid was successfully created.'
     else
       render :new
@@ -133,7 +133,7 @@ class FattyAcidsController < ApplicationController
   # PATCH/PUT /fatty_acids/1
   def update
     @fatty_acid.attributes = resource_params
-    if @fatty_acid.draft_update
+    if @fatty_acid.save_draft
       redirect_to @fatty_acid, notice: 'A draft of the Fatty acid update was saved successfully.'
     else
       render :edit
@@ -142,8 +142,12 @@ class FattyAcidsController < ApplicationController
 
   # DELETE /fatty_acids/1
   def destroy
-    @fatty_acid.destroy
-    redirect_to fatty_acids_url, notice: 'Fatty acid was successfully destroyed.'
+    if @fatty_acid.results.empty?  
+      @fatty_acid.draft_destruction
+      redirect_to fatty_acids_url, notice: 'Fatty acid marked for destruction.'
+    else
+      redirect_to fatty_acids_url, notice: 'Fatty acid still has data. You must move or delete all datapoints first.'
+    end
   end
 
   private
@@ -155,10 +159,11 @@ class FattyAcidsController < ApplicationController
     end
     
     def sort_column
-      col = ['mass','name', 'delta_notation', 'formula', 'sofa_mol_id','result_count'].find{|c| c==params[:sort]}
       if params[:action] == 'index'
-        col ||"mass"
+        col = ['mass','name', 'delta_notation', 'formula', 'sofa_mol_id','result_count'].find{|c| c==params[:sort]}
+        col || "mass"
       else
+        col = ['plants.genus','unit', 'value', 'pubs.was_authors'].find{|c| c==params[:sort]}
         col || "results.value"
       end
       

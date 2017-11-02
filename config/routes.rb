@@ -1,23 +1,12 @@
 Rails.application.routes.draw do
-  
-  resources :pages
-  resources :trivial_names
-  resources :trivial_names
-  resources :systematic_names
-  resources :parameters
-  resources :names
-  resources :triacylglycerols
-  resources :tocopherols
-  resources :sterols
+  resources :dbxrefs
   resources :fatty_acids
   resources :results do
     get 'plant_yield', on: :collection
   end
-  resources :names
   resources :measures do
     get :autocomplete_measure_name, :on => :collection
   end
-  resources :publications
   resources :plants do
     get :autocomplete_plant_name, :on => :collection
   end
@@ -35,11 +24,21 @@ Rails.application.routes.draw do
   resources :tree, only: :index do
     get 'data', on: :collection
   end
+  resources :datasets
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   root 'home#index'
+  get 'stats' => 'stats#index'
+  get 'history' => 'history#index'
+  get 'species' => 'species#index', as: 'species'
+  get ':genus/:species' => 'species#show', as: 'species_page'
+  
+  get 'bulk_uploads' => 'bulk_uploads#index'
+  post 'check_file' => 'bulk_uploads#check_file'
+  post 'process_file' => 'bulk_uploads#process_file'
+  
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

@@ -1,0 +1,27 @@
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Dbxref: <%= @dbxref.id %></h1>
+<% end %>
+
+<% content_for :item_bar do %>
+	<%= link_to 'Back', dbxrefs_path, class: 'btn btn-primary' %>
+  <%= link_to 'Edit', edit_dbxref_path(@dbxref), class: 'btn btn-primary' %>
+<% end %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @dbxref.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @dbxref.description %>
+</p>
+
+<p>
+  <strong>Link:</strong>
+  <%= @dbxref.link %>
+</p>
+
+
+
+

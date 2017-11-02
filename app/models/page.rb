@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: pages
+#
+#  id          :integer          not null, primary key
+#  title       :string
+#  description :string
+#  content     :text
+#
+
 class Page < ActiveRecord::Base
   validates :title, presence: true, uniqueness: true
   

@@ -4,6 +4,7 @@
 
 <% content_for :item_bar do %>
   <%= link_to 'Back', plants_path, class: 'btn btn-primary' %>
+  <%= link_to 'Delete', @plant, class: 'btn btn-warning', method: :delete, data: {confirm: 'This item will be marked for deletion. You can apply this change by publishing it under the Data tab. Continue?'} if can? :delete, @plant %>
 <% end %>
 
 <div class='well'>

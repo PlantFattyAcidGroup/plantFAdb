@@ -338,6 +338,19 @@ th .sortable {
   background-image:none ;
 }
 
+
+a .create-tag {
+  border: 2px solid $navbar-inverse-link-color;
+}
+
+a .update-tag {
+  border: 2px solid $navbar-inverse-link-color;
+}
+
+a .destroy-tag {
+  border: 2px solid $navbar-inverse-link-color;
+}
+
 .info-tag {
   background-color: $brand-info;
   padding: 2px 5px;
@@ -365,3 +378,20 @@ th .sortable {
   color: white;
   border-radius: 5px;
 }
+
+.title-note {
+  font-size: 10px;
+  color: #555;
+}
+
+.more-less {
+  float:left;
+  width: 30px;
+  height: 100%;
+  color: $link-color;
+}
+
+.more-less:hover {
+  color: $link-hover-color;
+}
+  

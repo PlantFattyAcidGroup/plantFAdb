@@ -3,13 +3,13 @@
 <% end -%>
 
 <% content_for :description do -%>
-  Information on more than 2000 publications on plant fatty acids with links to species analyzed, analytical data, and full text of publications
+  Information on more than 3000 publications on plant fatty acids with links to species analyzed, analytical data, and full text of publications
 <% end -%>
 
 <% content_for :top_bar do %>
 	<h1 class="pagetitle">Literature Listing</h1>
   <p>
-    Information on more than 2000 publications on plant fatty acids with links to species analyzed, analytical data, and full text of publications
+    Information on more than 3000 publications on plant fatty acids with links to species analyzed, analytical data, and full text of publications
   </p>
 	<% if @plant %>
 		<p>
@@ -30,6 +30,11 @@
 	<% end %>
 	<% unless params[:year_query].blank? %>
 		<p>Filtering on Year: <b><%= params[:year_query] %></b></p>
+	<% end %>
+	<% if @species %>
+		<p>
+			Filtering on: <b><%= link_to @species.name, species_page_path(genus: @species.genus, species: @species.species) %></b>
+		</p>
 	<% end %>
 <% end %>
 
@@ -53,7 +58,7 @@
 	</div>
 	<div class='col-xs-12 col-sm-5 col-md-4 search'>
     <%= form_tag nil, method: :get do %>
-		<% params.except(:commit,:action,:controller,:utf8,:query).each do |parameter, val| %>
+		<% params.except(:commit,:action,:controller,:utf8,:query,:page).each do |parameter, val| %>
 			<%= hidden_field_tag parameter, val %>
 		<% end %>
       <div class='form-inline pull-left-sm pull-right-md'>
@@ -161,11 +166,7 @@
 					<td><%= publication.wos_pages %></td>
 					<td><%= link_to publication.doi, "https://doi.org/#{publication.doi}", target: '_blank' if publication.doi && publication.doi.downcase != 'none' %></td>
 					<td><%= publication.wos_uid %></td>
-          <% if @plant && (pb = publication.plants_pubs.where(plant_id: @plant.id).first) %>
-            <td><%= link_to publication.result_count||0, plants_pub_path(pb) %></td>
-          <% else %>
-            <td><%= link_to publication.result_count||0, results_path(pub_id: publication.id) %></td>
-          <% end %>
+          <td><%= link_to publication.result_count||0, datasets_path(pub_id: publication.id, plant_id: @plant) %></td>
         </tr>
       <% end %>
     </tbody>

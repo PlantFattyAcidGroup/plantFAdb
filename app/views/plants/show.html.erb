@@ -1,9 +1,9 @@
 <% content_for :title do -%>
- PlantFAdb: <%= @plant.genus %> <%= @plant.species %> <%= "(var. #{@plant.variety})" if @plant.variety %> <%= "- #{@plant.common_name}" if @plant.common_name %>
+ PlantFAdb: <%= @plant.name_string %>
 <% end -%>
 
 <% content_for :description do -%>
- Plant fatty acid compositions and phylogenetics. <%= @plant.genus %> <%= @plant.species %> <%= "(var. #{@plant.variety})" if @plant.variety %> <%= "- #{@plant.common_name}" if @plant.common_name %>
+ Plant fatty acid compositions and phylogenetics. <%= @plant.name_string %>
 <% end -%>
 
 <% content_for :top_bar do %>
@@ -11,13 +11,12 @@
     <p class='bg-warning'>This is an unpublished draft. <%= link_to 'Click here to view all draft data', drafts_path %></p>
   <% end %>
 	<h1 class="pagetitle">
-		<% if @plant.genus.blank? && @plant.species.blank? %>
-		 <%= @plant.family || @plant.order_name || @plant.sofa_family || @plant.sofa_name %>
-		<% else %>
-			<%= @plant.genus %> <%= @plant.species %> <%= "(var. #{@plant.variety})" if @plant.variety %>
-		<% end %>
-		<small style='white-space:nowrap'><%= @plant.common_name %></small>
+    <%= @plant.name_html.html_safe %>
 	</h1>
+  <span class='title-note'><%= @plant.note %></span>
+  <% if (@plant.genus||@plant.species) && (s_count = Species.new(@plant.genus,@plant.species).plants.count) > 1 %>
+    <%#= link_to "View species page (#{pluralize(s_count, "variety")})", species_page_path(genus: @plant.genus, species: @plant.species) %>
+  <% end %>
 <% end %>
 
 <% content_for :item_bar do %>
@@ -66,18 +65,17 @@
 			    	<%= link_to url, url, target: '_blank' %><br/>
 					<% end %>
 				<% end %>
-		
-				<% unless @plant.note.blank? %>
-				   <legend>Note</legend><br>
-				   <%= @plant.note %>
-				<% end %>
 			</div>
 		</div>
 		<div class='well'>
 			<legend>Name Resolution</legend>
 			<div class='row'>
 				<div class='col-md-12  col-sm-12 col-xs-12'>
-						<legend><h5>TNRS Accepted data</h5></legend>
+						<legend><h5>TNRS data</h5></legend>
+					  <p>
+					    <b>Name Submitted:</b>
+							<%= @plant.tnrs_name_submitted %>
+					  </p>
 					  <p>
 					    <b>Family:</b>
 							<%= @plant.tnrs_family %>
@@ -86,25 +84,30 @@
 					    <b>Name:</b>
 							<%= @plant.tnrs_name %>
 					  </p>
+					  <p>
+					    <b>Match:</b>
+							<%= @plant.tnrs_match %>
+					  </p>
 				</div>
 			</div>
-			<div class='row'>
-				<div class='col-md-12 col-sm-12 col-xs-12'>
-						<legend><h5>Original SOFA Data</h5></legend>
-					  <p>
-					    <b>Family:</b>
-					    <%= @plant.sofa_family %>
-					  </p>
+      <% if @plant.sofa_family.present? || @plant.sofa_name.present? %>
+  			<div class='row'>
+  				<div class='col-md-12 col-sm-12 col-xs-12'>
+  						<legend><h5>Original SOFA Data</h5></legend>
+  					  <p>
+  					    <b>Family:</b>
+  					    <%= @plant.sofa_family %>
+  					  </p>
 
-					  <p>
-					    <b>Name:</b>
-					    <%= @plant.sofa_name %>
-					  </p>
-						<br/>
-				</div>
+  					  <p>
+  					    <b>Name:</b>
+  					    <%= @plant.sofa_name %>
+  					  </p>
+  						<br/>
+  				</div>
 		
-			</div>
-				
+  			</div>
+			<% end %>
 			<div class='clearfix row small'>
 				<div class='col-md-12'>
 					<br/>
@@ -124,37 +127,11 @@
 				In other cases the same species may have multiple graphs because of differences in names recorded for the plant.
 				
 			</small><br/><br/>
-      <% pub_tables = @plant.published? ? @plant.plants_pubs.published : @plant.plants_pubs %>
-			<span> 
-				<%= link_to "Show #{pluralize pub_tables.uniq.count,"Publication"}", pubs_path(plant_id: @plant.id), onclick: '$("#publication_table").slideToggle();return false;' %>
-			</span> |
-			<span>
-				<%= link_to "View #{pluralize @plant.results.published.viewable.count, "Data Point"}", results_path(plant_id: @plant.id) %>
-			</span>
+      <% datasets = @plant.published? ? @plant.datasets.published : @plant.datasets %>
       
-      <div id='publication_table' style='display:none'>
-  			<legend><h5>Publications</h5></legend>				
-    		<table class="table">
-    		  <thead>
-            <th>Year</th>
-    		    <th>Authors</th>
-    		    <th>Title</th>
-    		  </thead>
-    		  <tbody>
-    		    <% pub_tables.includes(:pub).order("pubs.wos_year desc, pubs.wos_authors asc").each do |pb| %>
-    		    <tr>
-              <td><%= pb.pub.wos_year||"Unknown" %></td>
-    		      <td><%= link_to pb.pub.wos_authors||"Unknown", plants_pub_path(pb) %></td>
-    		      <td><%= link_to pb.pub.wos_title||"Unknown", plants_pub_path(pb) %></td>
-              <% results = pb.published? ? pb.results.published.viewable : pb.results.viewable %>
-    					<td>
-                <%= results.count %>
-              </td>
-    		    </tr>
-    		    <% end %>
-    		  </tbody>
-    		</table>
-      </div>
+			<span> 
+				<%= link_to "View #{pluralize datasets.count,"Datasets"}", datasets_path(plant_id: @plant.id) %>
+			</span>
         
 			<% unless @fatty_acid_data.empty? %>
 				<legend><h5>Fatty Acid Data</h5></legend>

@@ -1,0 +1,62 @@
+<% content_for :top_bar do %>
+  <h1 class="pagetitle">Editing Dataset: <i><%= @dataset.display_name %></i></h1>
+<% end %>
+
+
+<% content_for :item_bar do %>
+  <%= link_to 'Done', @dataset.plants_pub, class: 'btn btn-primary' %>
+<% end %>
+
+    <div class='container'>
+      <div class='panel panel-default'>
+        <div class="panel-heading">
+          <span style='width:100%'>
+            <div style='width:100%;color:#333'>
+              <% if @dataset.draft? %>
+                <%= link_to "<span style='margin-right:1em' class='#{@dataset.draft.event}-tag'>#{@dataset.draft.create? ? "New" : (@dataset.draft? && @dataset.draft.destroy?) ? "Delete" : "Update" }</span>".html_safe, draft_path(@dataset.draft)%>
+              <% end %>
+              <span style='float:right'>
+                <%= "Total Value #{@dataset.total_percent}" %>
+              </span>
+              <br class='clear'/>
+            </div>
+          </span>
+        </div>
+        <div class='panel-body' id='dataset-panel-<%= @dataset.id %>'>
+          <div class='row'>
+            <%= render partial: 'form', locals: {dataset: @dataset} %>
+          </div>
+          <div class='row'>
+            <div class='col-lg-12'>
+              <div class='panel table-responsive'>
+              	<table class="table table-sm">
+              	  <thead>
+                    <th width="45%">Measure</th>
+              	    <th width="15%">Unit</th>
+              	    <th width="20%">Value</th>
+                    <th width="20%"></th>
+              	  </thead>
+              	  <tbody>
+                    <% if @dataset.persisted? %>
+                	    <% @results.each_with_index do |r,i| %>
+                      <% result = (r.draft? ? r.draft.reify : r) %>
+                      <tr id="result_<%= result.id || 'idx_'+i.to_s %>">
+                        <td colspan='6'>
+                        <%= render partial: 'result_form', locals: {result: result, original_result: r, dataset_id: @dataset.id, form_id: "form_#{@dataset.id}_#{result.id || 'idx_'+i.to_s}"} %>
+                        </td>
+                      </tr>
+                	    <% end %>
+                      <tr>
+                        <td colspan='6'>
+                          <%= link_to 'Refresh for more rows...', edit_dataset_path(@dataset), class: 'btn btn-primary btn-block' %>
+                        </td>
+                      </tr>
+                    <% end %>
+              	  </tbody>
+              	</table>
+              </div>  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

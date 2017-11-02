@@ -3,27 +3,53 @@ class Result < Thor
   
   method_option :measure_type, aliases: '-m'
   method_option :skip_units, aliases: '-s', type: :array
+  method_option :skip_measure_types, aliases: '-n', type: :array
   desc 'dump', "dump result data"
   def dump
     require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
-    @results = ::Result.includes(:measure,:publication,:plant).references(:measure,:publication,:plant)
+    # IGNORE MEASURE STI
+    Measure.inheritance_column = nil
+    # Grab all the results
+    @results = ::Result.includes(:measure, dataset: [plants_pub: [:plant, :pub]]).references(:measure, dataset: [plants_pub: [:plant, :pub]])
     @results = @results.where(measures: {type: options[:measure_type]}) if options[:measure_type]
+    @results = @results.where.not(measures: {type: options[:skip_measure_types]}) if options[:skip_measure_types]
     @results = @results.where("unit not in ('#{options[:skip_units].join("','")}') or unit is null") if options[:skip_units]
-    
-    puts "ID\tDelta Notation\tPublication\tSofa Table\tOrder\tSpecies\tValue\tUnit"
-    @results.find_each do |r|
+    @results = @results.order("pubs.wos_title asc, measures.type asc")
+    puts "ID\tType\tDelta Notation\tPublication\tDOI\tUID\tDBxref\tOrder\tFamily\tGenus\tSpecies\tValue\tUnit"
+    @results.each do |r|
       row =  [
         r.id,
+        r.measure.type,
         r.measure.delta_notation,
         r.pub.display_name,
-        r.publication.sofa_tab_id,
+        r.pub.doi,
+        r.pub.wos_uid,
+        r.dataset.dbxref_value,
         r.plant.order_name,
-        r.plant.display_name,
+        r.plant.family,
+        r.plant.genus,
+        r.plant.species,
         r.value,
         r.unit
       ]
       puts row.join("\t")
     end
+  end
+  
+  # Remove the old SOFA Sterol datapoints
+  desc 'remove_sterols', 'delete all datapoints that are not a fatty acid or parameter'
+  def remove_sterols
+    require File.expand_path("#{File.expand_path File.dirname(__FILE__)}/../../config/environment.rb")
+    @results = ::Result.includes(:measure).references(:measure)
+                       .where.not(measures: {type: ['FattyAcid', 'Parameter']})
+    if yes?("Remove #{@results.count} items? (y or yes to continue): ")
+      puts '..deleting'
+      @results.pluck(:id).each_slice(999) do |ids|
+        puts ::Result.all.where(id: ids).delete_all
+      end
+      ::Measure.all.where.not(type: ['FattyAcid', 'Parameter']).delete_all
+    end
+    
   end
   
   desc 'mol_to_wt FILE', "replace mol% with wt% values"

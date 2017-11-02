@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: sofa_tabs
+#
+#  id          :integer          not null, primary key
+#  pub_id      :integer
+#  sofa_tab_id :string
+#
+
 class SofaTab < ActiveRecord::Base
   belongs_to :pub
   

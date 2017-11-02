@@ -1,0 +1,124 @@
+<% content_for :title do -%>
+ PlantFAdb: Datasets
+<% end -%>
+
+<!-- <% content_for :description do -%>
+<% end -%> -->
+
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Dataset Listing</h1>
+  <p>
+    <!-- Information on more than 2000 publications on plant fatty acids with links to species analyzed, analytical data, and full text of publications -->
+  </p>
+	<% if @plant %>
+		<p>
+			Filtering on plant: <b><%= link_to @plant.display_name, @plant %></b>
+		</p>
+	<% end %>
+	<% if @pub %>
+		<p>
+			Filtering on publication: <b><%= link_to @pub.display_name, @pub %></b>
+		</p>
+	<% end %>
+<% end %>
+
+<% content_for :item_bar do %>
+    <%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary' if can? :edit, Dataset%>
+<% end %>
+
+<div class='row'>
+	<div class='col-xs-12 col-sm-7 col-md-8 pull-left'>
+		<ul class="pagination">
+			<%= paginate @datasets %>
+		</ul>
+	</div>
+	<div class='col-xs-12 col-sm-5 col-md-4 search'>
+    <%= form_tag nil, method: :get do %>
+		<% params.except(:commit,:action,:controller,:utf8,:query).each do |parameter, val| %>
+			<%= hidden_field_tag parameter, val %>
+		<% end %>
+      <div class='form-inline pull-left-sm pull-right-md'>
+				<div class='form-group'>
+          <a href='<%= Page.path('help') %>' class='glyphicon glyphicon-question-sign' data-toggle='tooltip' data-html='true' title="
+            Simple search includes Author, title, journal, abstract, and year from publication. Order, family, Genus, species and common name from plant. Tissue, lipid type and external reference ID from the dataset.<br/><br/>
+            
+            Click for more details.
+          "></a>
+			    <label for="query">Search:</label>
+					<%= text_field_tag :query, params[:query], class: 'form-control' %>
+					<%= submit_tag "Go", class: "btn btn-info"%>
+				</div>
+					<br/>
+					<div class='pull-left-sm pull-right-md'>
+						<%#= link_to "Advanced Query", '#', onclick: "$('#advanced_search').toggle()"%>
+					</div>
+			</div>
+    <% end %>
+	</div>
+</div>
+
+<div id='advanced_search' class='well form-horizontal' style='display:none;width:100%'>
+	<%= form_tag nil, method: :get do %>
+		
+		<div class='form-group'>
+			<%= label_tag :title_query, "Title", class: 'col-sm-2' %>
+			<div class='col-sm-8'>
+				<%= text_field_tag :title_query, params[:title_query], class: 'form-control' %>
+			</div>
+		</div>
+    
+		<div class='form-group'>
+			<%= label_tag :author_query, "Author", class: 'col-sm-2' %>
+			<div class='col-sm-8'>
+				<%= text_field_tag :author_query, params[:author_query], class: 'form-control' %>
+			</div>
+		</div>
+		
+		<div class='form-group'>
+			<%= label_tag :abstract_query, "Abstract", class: 'col-sm-2' %>
+			<div class='col-sm-8'>
+				<%= text_field_tag :abstract_query, params[:abstract_query], class: 'form-control' %>
+			</div>
+		</div>
+    
+		<div class='form-group'>
+			<%= label_tag :journal_query, "Journal", class: 'col-sm-2' %>
+			<div class='col-sm-8'>
+				<%= text_field_tag :journal_query, params[:journal_query], class: 'form-control' %>
+			</div>
+		</div>
+    
+		<div class='form-group'>
+			<%= label_tag :year_query, "Year", class: 'col-sm-2' %>
+			<div class='col-sm-8'>
+				<%= text_field_tag :year_query, params[:year_query], class: 'form-control' %>
+			</div>
+		</div>
+		
+		<%= submit_tag "Search", class: "btn btn-info"%>
+		<%= link_to "Clear Query", pubs_path, class: 'btn btn-warning pull-right' %>
+	<% end %>
+</div>
+
+<div class='panel table-responsive'>
+	
+	<div class="panel-heading clearfix">
+		<div class='pull-right'><%= page_entries_info @datasets %></div>
+	</div>
+	
+  <% @datasets.each do |d| %>
+    <%= render partial: 'datasets/result_panel', locals: {
+      dataset: d,
+      expanded: (@datasets.length < 2),
+      skip_plant: @plant.present?,
+      skip_pub: @pub.present?}
+    %>
+  <% end %>
+</div>
+<div class='row'>
+	<div class='col-xs-12 col-sm-7 col-md-8'>
+		<ul class="pagination pull-left">
+			<%= paginate @datasets %>
+		</ul>
+	</div>
+</div>

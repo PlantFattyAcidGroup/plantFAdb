@@ -1,0 +1,65 @@
+
+<% content_for :title do -%>
+  Bulk Upload
+<% end -%>
+
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Bulk Upload</h1>
+<% end %>
+
+<div class='container'>
+  <div class='well pull-left col-md-5'>
+    <legend>Validate File</legend>
+    <%= form_tag check_file_path, multipart: true do |f| %>
+      <%= file_field_tag :file %>
+      <br/>Type:<br/>
+      <%= select_tag :datatype, options_for_select([['Publication','Pub'],['Plant', 'Plant']]) %>
+      <br/><br/>
+      <%= submit_tag 'Check File', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+
+    <div class='well pull-right col-md-5' style='background: #F0F5F9'>
+      <legend>Upload File</legend>
+      <%= form_tag process_file_path, multipart: true do |f| %>
+        <%= file_field_tag :file %>
+        <br/>
+        <div class='row'>
+          <div class='col-md-6'>
+            Type:<br/>
+            <%= select_tag :datatype, options_for_select([['Publication','Pub'],['Plant','Plant']]) %>
+          </div>
+          <div class='col-md-6'>
+            Ignore errors:<br/>
+            <%= check_box_tag :ignore_errors %>
+          </div>
+        </div>
+        <br/>
+        <%= submit_tag 'Process File', class: 'btn btn-warning' %>
+      <% end %>
+    </div>
+</div>
+
+
+<hr/>
+<% if @error %>
+  <div class='alert-danger' style='max-height:500px;overflow:auto'>
+    <%= @error.html_safe %>
+  </div>
+<% end %>
+<br/>
+<% if @message %>
+  <div class='alert-success'>
+    <%= @message.html_safe %>
+  </div>
+<% end %>
+
+<p>
+  <ul>
+    <li>Expects Excel XLSX spreadsheet</li>
+    <li>Leading Rows will be skipped until a header row is found where the first column matches an object attribute.</li>
+    <li>Column header fields must match the data type fields exactly (e.g. authors, abstract, title for Publication). Non-matching fields will be ignored.</li>
+  </ul>
+   
+  
+</p>

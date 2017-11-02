@@ -17,14 +17,29 @@ Draftsman.draft_class_name = 'Draft'
 # Override
 # Add dependencies function call to draft item
 class Draft < Draftsman::Draft
-  def draft_publication_dependencies
-    #results are forcefully published with plants_pubs. Clear dependents to avoid looping
-    return [] if self.item.class==Result
-    dependencies = super
-    if defined? self.item.draft_publication_dependencies
-      dependencies += self.item.draft_publication_dependencies
+  
+  # Always revert results when a dataset is reverted, not just for the 'destroy' event
+  def revert!
+    super
+    if self.destroyed? && self.item.class == Dataset
+      self.item.draft_reversion_dependencies.each(&:revert!)
     end
-    dependencies.compact.uniq
+  end
+  
+  # allow custom dependencies so datasets can always list results
+  def draft_publication_dependencies
+    if defined? self.item.draft_publication_dependencies
+      return self.item.draft_publication_dependencies
+    else
+      return super
+    end
+  end
+  def draft_reversion_dependencies
+    if defined? self.item.draft_reversion_dependencies
+      return self.item.draft_reversion_dependencies
+    else
+      return super
+    end
   end
 end
 

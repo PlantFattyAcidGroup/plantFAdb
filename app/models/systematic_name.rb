@@ -1,2 +1,0 @@
-class SystematicName < Name
-end

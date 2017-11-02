@@ -10,30 +10,41 @@ class PubsController < ApplicationController
       @pubs = @pubs.order(sort_column + ' ' + sort_direction + " nulls last, pubs.id ASC")
     end
 
-    if params[:plant_id] && @plant=Plant.find_by(id: params[:plant_id].to_i)
-      @pubs = @pubs.joins('
-        LEFT OUTER JOIN "PLANTS_PUBS" ON "PLANTS_PUBS"."PUB_ID" = "PUBS"."ID"'
-      )
-      .where('plants_pubs.plant_id = ?',params[:plant_id])
-      .joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join plants_pubs pl_tbl on pl_tbl.id = r.plants_pub_id AND pl_tbl.plant_id = #{params[:plant_id].to_i} left outer join pubs p on pl_tbl.pub_id = p.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by p.id) res on res.pub_id = pubs.id ")
-    else
-      @pubs = @pubs.joins("left outer join (select count(r.id) result_count, p.id pub_id from results r left outer join plants_pubs pl_tbl on pl_tbl.id = r.plants_pub_id left outer join pubs p on pl_tbl.pub_id = p.id left outer join measures m on m.id = r.measure_id where unit in ('GLC-Area-%','weight-%') AND m.type in ('FattyAcid','Parameter') group by p.id) res on res.pub_id = pubs.id ")
+    result_count = Result.viewable.published
+                         .joins(:measure, dataset: [plants_pub: [:pub, :plant]])
+                         .group("pubs.id")
+                         .select("count(distinct(results.id)) result_count, pubs.id pub_id")
+                           
+    if (params[:plant_id] && @plant=Plant.find_by(id: params[:plant_id].to_i))
+      result_count = result_count.where(plants: {id: @plant.id})
+      @pubs = @pubs.joins(plants_pubs: [:plant])
+                   .where(plants_plants_pubs: {id: @plant.id})
     end
     
-    @pubs = @pubs.select("pubs.*, res.result_count")
-    if(params[:query])
+    if params[:genus].present? && params[:species].present?
+      @species = Species.new(params[:genus],params[:species])
+      plant_ids = @species.plants.select("plants.id")
+      result_count = result_count.where(plants: {id: plant_ids})
+    end
+    
+    @pubs = @pubs.joins("left outer join (#{result_count.to_sql}) res on res.pub_id = pubs.id")
+                 .published.select("pubs.*, res.result_count")
+                 
+    if(params[:query].present?)
       q = UnicodeUtils.upcase(params[:query])
       @pubs = @pubs.where('
-        upper(wos_year) LIKE ?
-        OR upper(wos_authors) LIKE ?
-        OR upper(wos_journal) LIKE ?
-        OR upper(wos_volume) LIKE ?
-        OR upper(wos_pages) LIKE ?
-        OR upper(wos_uid) LIKE ?
-        OR upper(wos_title) LIKE ?
-        OR upper(abstract) LIKE ?
-        OR upper(doi) LIKE ?',
-        "%#{q}%","%#{q}%","%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%" )
+        upper(wos_year) LIKE :q
+        OR upper(wos_authors) LIKE :q
+        OR upper(wos_journal) LIKE :q
+        OR upper(wos_volume) LIKE :q
+        OR upper(wos_pages) LIKE :q
+        OR upper(wos_uid) LIKE :q
+        OR upper(wos_title) LIKE :q
+        OR upper(abstract) LIKE :q
+        OR upper(doi) LIKE :q
+        OR upper(note) LIKE :q',
+        {q: "%#{q}%"}
+      )
     end
     
     unless params[:title_query].blank?
@@ -60,7 +71,9 @@ class PubsController < ApplicationController
       q = UnicodeUtils.upcase(params[:year_query])
       @pubs = @pubs.where("upper(wos_year) like ?","%#{q}%")
     end
-    @pubs = @pubs.published
+    
+
+                 
     respond_to do |format|
       # Base html query
       format.html{ @pubs = @pubs.page params[:page]}
@@ -69,7 +82,7 @@ class PubsController < ApplicationController
         render_csv do |out|
           out << CSV.generate_line([
             "ID","WOS_Authors","WOS_Year","WOS_Title","WOS_Journal","WOS_Volume","WOS_Pages",
-            "DOI","WOS_UID","Abstract","URL",
+            "DOI","WOS_UID","Abstract","URL", "NOTE",
             "SOFA Authors","SOFA Year","SOFA Journal","SOFA Volume","SOFA Page",
             "SOFA TABS"
             ])
@@ -87,6 +100,7 @@ class PubsController < ApplicationController
               item.wos_uid,
               item.abstract,
               item.url,
+              item.note,
               all_pubs.map(&:authors).join("; "),
               all_pubs.map(&:year).join("; "),
               all_pubs.map(&:journal).join("; "),
@@ -98,45 +112,13 @@ class PubsController < ApplicationController
       }
     end
   end
-
-  def condense_doi
-    result = Pub.condense_doi
-    text = "Condense Complete:<br/><br/>
-        Beginning Pub Count: #{result[:begin_count]}<br/>
-        --<br/>
-        Pub with DOI: #{result[:found]}<br/>
-        Pub with unique DOI: #{result[:unique]}<br/>
-        --<br/>
-        Condensed: #{result[:removed]} <br/>
-        New: #{result[:created]}<br/>
-        --<br/>
-        Ending Pub Count: #{result[:end_count]}
-      "
-    Rails.logger.info { text }
-    redirect_to pubs_path, notice: text
-  end
-  
-  def condense_wos
-    result = Pub.condense_wos
-    text = "Condense Complete:<br/><br/>
-        Beginning Pub Count: #{result[:begin_count]}<br/>
-        --<br/>
-        Pub with UID: #{result[:found]}<br/>
-        Pub with unique UID: #{result[:unique]}<br/>
-        --<br/>
-        Condensed: #{result[:removed]} <br/>
-        New: #{result[:created]}<br/>
-        --<br/>
-        Ending Pub Count: #{result[:end_count]}
-      "
-    Rails.logger.info { text }
-    redirect_to pubs_path, notice: text
-  end
   
   # GET /publications/1
   def show
     @plants_pubs = @pub.published? ? @pub.plants_pubs.published : @pub.plants_pubs
-    @plants_pubs = @plants_pubs.includes(:plant, results: [:publication]).references(:plant, results: [:publication])
+    @plants_pubs = @plants_pubs.includes(:plant, datasets: [:dbxref])
+                               .references(:plant, datasets: [:dbxref])
+                        
   end
 
   # GET /publications/new
@@ -150,7 +132,7 @@ class PubsController < ApplicationController
   # POST /publications
   def create
     @pub.user_id = current_user.try(:id)
-    if @pub.draft_creation
+    if @pub.save_draft
       redirect_to @pub, notice: 'A draft of the new Publication was successfully created.'
     else
       render :new
@@ -160,7 +142,7 @@ class PubsController < ApplicationController
   # PATCH/PUT /publications/1
   def update
     @pub.attributes = resource_params
-    if @pub.draft_update
+    if @pub.save_draft
       redirect_to @pub, notice: 'A draft of the Publication update was saved.'
     else
       render :edit
@@ -169,15 +151,53 @@ class PubsController < ApplicationController
 
   # DELETE /publications/1
   def destroy
-    @pub.destroy
-    redirect_to pubs_url, notice: 'Pub was successfully destroyed.'
+    if @pub.plants_pubs.empty?  
+      @pub.draft_destruction
+      redirect_to pubs_url, notice: 'Publication marked for destruction.'
+    else
+      redirect_to pubs_url, notice: 'Publication still has data. You must move or delete all publication tables first.'
+    end
   end
 
+  # def condense_doi
+  #   result = Pub.condense_doi
+  #   text = "Condense Complete:<br/><br/>
+  #       Beginning Pub Count: #{result[:begin_count]}<br/>
+  #       --<br/>
+  #       Pub with DOI: #{result[:found]}<br/>
+  #       Pub with unique DOI: #{result[:unique]}<br/>
+  #       --<br/>
+  #       Condensed: #{result[:removed]} <br/>
+  #       New: #{result[:created]}<br/>
+  #       --<br/>
+  #       Ending Pub Count: #{result[:end_count]}
+  #     "
+  #   Rails.logger.info { text }
+  #   redirect_to pubs_path, notice: text
+  # end
+  #
+  # def condense_wos
+  #   result = Pub.condense_wos
+  #   text = "Condense Complete:<br/><br/>
+  #       Beginning Pub Count: #{result[:begin_count]}<br/>
+  #       --<br/>
+  #       Pub with UID: #{result[:found]}<br/>
+  #       Pub with unique UID: #{result[:unique]}<br/>
+  #       --<br/>
+  #       Condensed: #{result[:removed]} <br/>
+  #       New: #{result[:created]}<br/>
+  #       --<br/>
+  #       Ending Pub Count: #{result[:end_count]}
+  #     "
+  #   Rails.logger.info { text }
+  #   redirect_to pubs_path, notice: text
+  # end
+  
   private
     # Only allow a trusted parameter "white list" through.
     def resource_params
       params.require(:pub).permit(:doi,:wos_uid,:wos_title,:wos_year,:wos_authors,:wos_journal,:wos_volume,:wos_pages,
-      :year, :authors, :journal, :volume, :page, :url, :abstract)
+      :year, :authors, :journal, :volume, :page, :url, :abstract, :note)
     end
   
     def sort_column

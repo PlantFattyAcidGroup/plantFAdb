@@ -1,0 +1,56 @@
+<% d = (dataset.draft? ? dataset.draft.reify : dataset)  %>
+<% destroyed = dataset.draft? && dataset.draft.destroy? %>
+  <% if dataset.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(dataset.errors.count, "error") %> prohibited this Dataset from being saved:</h2>
+
+      <ul>
+      <% dataset.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div class='container'>
+
+<%= form_for d do |f| %>
+  <div class='row'>
+    <div class='col-md-6'>
+      <%= f.label :remarks %>
+      <%= f.text_area :remarks, class: 'form-control', disabled: destroyed %>
+      <br/>
+      <%= f.label :notes %>
+      <%= f.text_area :notes, class: 'form-control', disabled: destroyed %>
+    </div>
+    <div class='col-md-3'>
+      <%= f.label :dbxref_id %>
+      <%= f.select :dbxref_id, options_from_collection_for_select(Dbxref.all,:id, :name, d.dbxref_id),{prompt: 'Select one...'}, class: 'form-control input-sm', disabled: destroyed %>
+      <br/>
+      <%= f.label :dbxref_value %>
+      <%= f.text_field :dbxref_value, class: 'form-control input-sm', disabled: destroyed %>
+    </div>
+    <div class='col-md-3'>
+        <%= f.label :lipid_type %>
+        <%= f.select :lipid_type, options_for_select(['Total Oil','Cyanolipid','Triacylglycerol','Acetyltriacylglycerol','-'],d.lipid_type||'-'), {}, class: 'form-control input-sm', disabled: destroyed %>
+        <br/>
+        <%= f.label :tissue %>
+        <%= f.select :tissue, options_for_select(Dataset.pluck('distinct tissue')+['-'],d.tissue||'-'), {}, class: 'form-control input-sm', disabled: destroyed %>
+    </div>
+    <%= f.hidden_field :plants_pub_id, value: dataset.plants_pub_id %>
+  </div>
+  <div class='row'>
+    <div class='pull-right'>
+    <% if dataset.persisted? %>
+      <% unless destroyed %>
+        <%= f.submit 'Update Dataset', class: 'btn btn-info' %>
+      <% end %>
+      <% unless destroyed %>
+        <%= link_to 'Remove', dataset, method: :delete, data: {confirm: 'Remove this Dataset from the table?'}, class: 'btn btn-danger' %>
+      <% end %>
+    <% else %>
+      <%= f.submit 'Start New Dataset', class: 'btn btn-info' %>
+    <% end %>
+    </div>
+  </div>
+<% end %>
+</div>

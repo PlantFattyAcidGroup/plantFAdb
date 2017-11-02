@@ -1,2 +1,0 @@
-class Tocopherol < Measure
-end

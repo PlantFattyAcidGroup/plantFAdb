@@ -1,0 +1,86 @@
+    <div class='container'>
+      <div class='panel panel-default dataset-panel'>
+        <div class="panel-heading">
+          <span style='width:100%' data-toggle='collapse' data-target="#dataset-panel-<%= dataset.id %>" role="button" aria-haspopup="true" aria-expanded="false">
+            <div style='width:100%;color:#333'>
+              <i class="more-less glyphicon glyphicon-<%=  ((defined? expanded) && expanded) ? 'minus' : 'plus' %>"></i>
+              <div style='float:left;width:calc(90% - 170px)'>
+                <%= dataset.display_name %>
+                <% unless (defined? skip_pub) && skip_pub %>
+                    | <%= dataset.pub.wos_title %> (<%= dataset.pub.wos_year %>)
+                <% end %>
+                <% unless (defined? skip_plant) && skip_plant %>
+                    | <i><%= dataset.plant.display_name %></i>
+                <% end %>
+              </div>
+
+              <span class='clearfix' style='float:right;width:100px'>
+                <%= "#{pluralize dataset.results.published.count, "Datapoint"} " %>
+              </span>
+              <span style='width:30px;float:right;margin-right:1em;margin-top:-5px'>
+                <%= link_to 'Edit', edit_dataset_path(dataset), class: 'btn btn-warning btn-xs' if can? :edit, dataset%>
+              </span>
+              <span class='clearfix'/>
+            </div>
+          </span>
+        </div>
+        <div class='panel-body collapse <%= ((defined? expanded) && expanded) ? 'in' : '' %>' id='dataset-panel-<%= dataset.id %>'>
+          
+          <div class='panel'>
+            <% if (xref = dataset.dbxref_value) && dataset.dbxref %>
+              <div class='pull-left'>
+                External Reference: <%= dataset.dbxref.generate_link(xref) %>                
+                  <p style='font-size:75%'>
+                    <br/>
+                    <% if dataset.remarks %>
+                    <b>Remarks:</b> <%= dataset.remarks %>
+                    <% end %>
+                    <% unless (defined? skip_pub) && skip_pub %>
+                      <br/><b>Publication:</b>
+                      <%= link_to "#{dataset.pub.wos_title} (#{dataset.pub.wos_year})", dataset.pub if dataset.pub %>    
+                    <% end %>
+                    <% unless (defined? skip_plant) && skip_plant %>
+                        <br/><b>Plant:</b> <i><%= link_to dataset.plant.display_name, dataset.plant if dataset.plant %></i>
+                    <% end %>
+                  </p>
+              </div>
+            <% end %>
+            <div class='pull-right'><%= "Total Value: #{dataset.total_percent(dataset.results.published)}" %></div>
+            <br/>
+          </div>
+          
+          <div class='row'>
+            <div class='col-lg-12'>
+              <div class='panel table-responsive'>
+              	<table class="table table-striped">
+              	  <thead>
+                    <!-- <th>Measure</th> -->
+              			<th>Name</th>
+                    <th>Notation</th>
+              	    <th>Value</th>
+                    <th></th>
+              	  </thead>
+              	  <tbody>
+              	    <% dataset.results.published.each do |result| %>
+              	    <tr>
+                      <!-- <td><%= result.measure.try :type %></td> -->
+              				<td><%= result.measure.try :name %></td>
+                    	<td><%= link_to_if result.measure.is_a?(FattyAcid), result.measure.try(:delta_notation), result.measure %></td>
+              	      <td><%= result.value.to_f.round(2) %></td>
+                      <td><%= '*' if result.old_mol_val %> <%= result.unit %></td>
+              	    </tr>
+              	    <% end %>
+              	  </tbody>
+              	</table>
+              </div>  
+            </div>
+          </div>
+          <% unless dataset.results.map(&:old_mol_val).compact.empty? %>
+            <div class='pull-right'>
+              <i>* some results were converted from mol % to weight-%</i>
+            </div>
+          <% end %>
+        </div>
+        
+      </div>
+    </div>

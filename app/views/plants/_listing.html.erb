@@ -6,7 +6,7 @@
 	</div>
 	<div class='col-xs-12 col-sm-5 col-md-4 search'>
     <%= form_tag nil, method: :get do %>
-		<% params.except(:commit,:action,:controller,:utf8,:query).each do |parameter, val| %>
+		<% params.except(:commit,:action,:controller,:utf8,:query,:page).each do |parameter, val| %>
 			<%= hidden_field_tag parameter, val %>
 		<% end %>
       <div class='form-inline pull-left-sm pull-right-md'>
@@ -57,7 +57,7 @@
 					<td><%= plant.order_name %></td>
 					<td><%= plant.avg_oil_content.try(:round,1) %></td>
           <td><%= link_to plant.pub_count, pubs_path(plant_id: plant.id) if plant.pub_count %></td>
-          <td><%= link_to plant.result_count, results_path(plant_id: plant.id) if plant.result_count %></td>
+          <td><%= link_to plant.result_count, datasets_path(plant_id: plant.id) if plant.result_count %></td>
         </tr>
       <% end %>
     </tbody>

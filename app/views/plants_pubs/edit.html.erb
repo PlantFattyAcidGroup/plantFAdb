@@ -4,6 +4,16 @@
 
 <% content_for :item_bar do %>
   <%= link_to 'Cancel', @plants_pub, class: 'btn btn-primary' %>
+  <%= link_to 'Delete', @plants_pub, class: 'btn btn-warning', method: :delete, data: {confirm: "This table and #{pluralize(@plants_pub.results.count,'result')} will be marked for deletion. You can apply this change by publishing it under the Data tab. Continue?"} if can? :delete, @plants_pub %>
 <% end %>
 
 <%= render 'form' %>
+
+<br/><br/>
+<h2>Datasets</h2>
+<%= link_to "Add New Dataset", new_dataset_path(plants_pub_id: @plants_pub.id), class: 'btn btn-primary' %>  
+<br/><hr/>
+
+<% @plants_pub.datasets.each do |d|%>
+  <%= render partial: 'datasets/result_panel', locals: {dataset: d} %>
+<% end %>

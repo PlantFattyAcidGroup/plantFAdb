@@ -13,7 +13,9 @@ class Ability
       can [:read, :create, :update], FattyAcid
       can [:read, :create, :update, :plant_yield], Result
       can [:read, :create, :update], PlantsPub
+      can [:read, :create, :update], Dataset
       can [:read, :update], User, id: user.id
+      
       # cannot update draft (update is used for 'publish')
       can [:read, :create, :destroy], Draftsman::Draft, whodunnit: user.id.to_s
     else
@@ -24,6 +26,8 @@ class Ability
       can [:read,:plant_yield], Result
       can [:read, :update], User, id: user.id
       can :read, PlantsPub
+      can :read, Dataset
+      can :read, :species
     end
     #
     # The first argument to `can` is the action you are giving the user

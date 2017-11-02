@@ -1,0 +1,10 @@
+<% content_for :top_bar do %>
+  <h1 class="pagetitle">Editing Dbxref</h1>
+<% end %>
+
+<% content_for :item_bar do %>
+  <%= link_to 'Back', dbxrefs_path, class: 'btn btn-primary' %>
+  <%= link_to 'Delete', @dbxref, class: 'btn btn-warning', method: :delete, data: { confirm: "Delete database reference: #{@dbxref.name} ?" } %>
+<% end %>
+
+<%= render 'form' %>

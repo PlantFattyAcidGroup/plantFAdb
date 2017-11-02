@@ -1,0 +1,40 @@
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Stats</h1>
+<% end %>
+
+<b>Plants: </b><%= Plant.count %><br/>
+-- with no publication: <%= Plant.includes(plants_pubs: [:pub]).where(plants_pubs: {pub: {id: nil}}).count %><br/><br/>
+
+<b>Pubs: </b><%= Pub.count %><br/>
+-- with no plant: <%= Pub.includes(plants_pubs: [:plant]).where(plants_pubs: {plant: {id: nil}}).count %><br/><br/>
+
+<b>FattyAcids: </b><%= FattyAcid.count %><br/>
+-- with no results: <%= FattyAcid.includes(:results).where(results: {id: nil}).count %><br/><br/>
+
+<b>Other Parameters: </b><%= Parameter.count %><br/>
+-- <%= Parameter.all.sort_by{|p| p.results.count}.reverse.map{|p| "#{p.delta_notation}(#{p.results.count})"}.to_sentence %><br/><br/>
+
+<b>Datasets: </b><%= Dataset.count %><br/>
+-- average total result: <%= @dataset_fa_average.round(2) %><br/>
+-- Max dataset: <%= @dataset_max[1] %> - <%= link_to @dataset_max[0].try(:display_name), edit_dataset_path(@dataset_max[0]), target: '_blank' if @dataset_max[0]%><br/>
+-- Min dataset: <%= @dataset_min[1] %> - <%= link_to @dataset_min[0].try(:display_name), edit_dataset_path(@dataset_min[0]), target: '_blank' if @dataset_min[0]%><br/>
+<br/>
+
+<b>Results: </b><%= Result.count %><br/>
+-- with no dataset: <%= Result.includes(:dataset).where(datasets: {id: nil}).count %>
+
+
+<h3>Plants vs Tree</h3>
+<%= Plant.select(:order_name).distinct.count %> distinct order names
+<br/><br/>
+<% if @missing_plant_orders.empty? %>
+All plant orders are represented in the Tree!
+<% else %>
+The following plant orders are not found in the Tree.<br/>
+(Order: plant count)
+  <% @missing_plant_orders.each do |order, count| %>
+    <ul>
+      <li><%= order %>: <%= count %></li>
+    </ul>
+  <% end %>
+<% end %>

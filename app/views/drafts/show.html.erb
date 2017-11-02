@@ -7,16 +7,28 @@
 	<%= link_to 'Back', drafts_path, class: 'btn btn-primary' %>
 <% end %>
 
+<div class='container'>
 <div class='pull-left'>
-  <%= User.find_by(id: @draft.whodunnit).try(:email)  %>
-</div>
-<div class='pull-right'>
-  <%= link_to 'Publish', draft_path(@draft), method: :put, class: 'btn btn-success', style: 'margin-right:1em' %>
-  <%= link_to 'Revert', draft_path(@draft), method: :delete, class: 'btn btn-default' %>
+  <b>User</b>: <%= User.find_by(id: @draft.whodunnit).try(:email)  %>
 </div>
 
+<div class='col-md-6  pull-right'>
+  <% if @draft.item_type=='Result'%>
+    <div>
+      This Result is managed by the parent dataset.<br/>
+      Publish the dataset to publish this draft: <br/>
+      <%= link_to "View dataset: #{@draft.item.dataset.display_name}", @draft.item.dataset.try(:draft) ? draft_path(@draft.item.dataset.draft) : @draft.item.dataset, class: 'btn btn-success' %>
+      <%= link_to 'Revert', draft_path(@draft), method: :delete, class: 'btn btn-default' %>
+    </div>
+    
+  <% else %>
+    <%= link_to 'Publish', draft_path(@draft), method: :put, class: 'btn btn-success', style: 'margin-right:1em' %>
+    <%= link_to 'Revert', draft_path(@draft), method: :delete, class: 'btn btn-default' %>
+  <% end %>
+</div>
 
-<br/>
+</div>
+
 <br/>
 
 <div class='container'>
