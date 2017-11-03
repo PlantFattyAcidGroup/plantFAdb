@@ -49,6 +49,7 @@ class Result < Thor
       end
       # IGNORE MEASURE STI
       Measure.inheritance_column = nil
+      Name.inheritance_column = nil
       PaperTrail.enabled = false
       ::Measure.all.where.not(type: ['FattyAcid', 'Parameter']).destroy_all
     end
