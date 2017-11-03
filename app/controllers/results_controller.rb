@@ -1,6 +1,86 @@
 class ResultsController < ApplicationController
   load_and_authorize_resource
 
+  # GET /results
+  def index
+    @measure_types = Measure.select(:type).distinct.map(&:type)
+    @results = @results.order(sort_column + ' ' + sort_direction).order("results.id ASC")
+                       .includes(:measure, :publication, dataset: [plants_pub: [:plant, :pub]])
+                       .references(:measure, :publication, dataset: [plants_pub: [:plant, :pub]])
+                       .published.viewable
+                       
+    if params[:query]
+      q = params[:query].upcase
+      @results = @results.where('
+        upper(value) LIKE ?
+        OR upper(measures.type) LIKE ?
+        OR upper(measures.delta_notation) LIKE ?
+        OR upper(unit) LIKE ?
+        OR upper(pubs.wos_year) LIKE ?
+        OR upper(pubs.wos_authors) LIKE ?
+        OR upper(pubs.wos_journal) LIKE ?
+        OR upper(pubs.wos_volume) LIKE ?
+        OR upper(pubs.wos_pages) LIKE ?
+        OR upper(pubs.wos_title) LIKE ?
+        OR upper(pubs.wos_uid) LIKE ?
+        OR upper(pubs.remarks) LIKE ?
+        OR upper(publications.sofa_tab_id) LIKE ?
+        OR upper(plants.common_name) LIKE ?
+        OR upper(plants.variety) LIKE ?
+        OR upper(plants.species) LIKE ?
+        OR upper(plants.genus) LIKE ?
+        OR upper(plants.family) LIKE ?
+        OR upper(plants.order_name) LIKE ?
+        OR upper(plants.sofa_name) LIKE ?',
+        "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%", "%#{q}%","%#{q}%","%#{q}%", "%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%","%#{q}%"
+      )
+    end
+    unless params[:taxon].blank?
+      taxon = params[:taxon].split(',').map(&:strip)
+      @results = apply_taxon(@results,taxon)
+    end
+    if params[:measure_type]
+      @results = @results.where("measures.type =?",params[:measure_type])
+    end
+    if params[:plant_id] && @plant = Plant.find_by(id: params[:plant_id])
+      @results = @results.where(plants_pubs: {plant_id: params[:plant_id]})
+    end
+    if params[:pub_id] && @pub = Pub.find_by(id: params[:pub_id])
+      @results = @results.where(plants_pubs: {pub_id: params[:pub_id]})
+    end
+    if params[:measure_id] && @measure = Measure.find_by(id: params[:measure_id])
+      @results = @results.where(measure_id: params[:measure_id])
+    end
+    if params[:category]
+      @results = @results.where("measures.category = ?", params[:category])
+    end
+    if params[:genus].present? && params[:species].present?
+      @species = Species.new(params[:genus],params[:species])
+      @results = @results.where(plants: {id: @species.plants})
+    end
+    
+    respond_to do |format|
+      # Base html query
+      format.html{ @results = @results.page params[:page]}
+      # CSV download
+      format.csv{
+        render_csv do |out|
+          out << CSV.generate_line(["Measure", "Notation", "Publication", "Value", "Unit"])
+          @results.find_each(batch_size: 500) do |item|
+            out << CSV.generate_line([
+              item.measure.type,
+              item.measure.name,
+              item.measure.delta_notation,
+              item.pub.display_name,
+              item.value,
+              item.unit
+            ])
+          end
+        end
+      }
+    end
+  end
+
   def plant_yield
     @results = Result.includes(:measure, dataset: [plants_pub: [:plant, :pub]]).published
     .references(:measure, dataset: [plants_pub: [:plant, :pub]])

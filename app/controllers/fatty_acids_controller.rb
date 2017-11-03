@@ -107,9 +107,11 @@ class FattyAcidsController < ApplicationController
   # GET /fatty_acids/1
   def show
     @results = @fatty_acid.results.includes(dataset:[plants_pub: [:pub, :plant]])
-    .order(sort_column + ' ' + sort_direction)
-    .page(params[:page]).per(50)
-    #.joins("left outer join (select count(pub_results.id) result_count, this_result.id result_id from publications p left outer join results this_result on p.id = this_result.publication_id left outer join results pub_results on pub_results.publication_id = p.id group by this_result.id) res on res.result_id = results.id ")  
+    if params[:plant_id].present? && @plant = Plant.find_by(id: params[:plant_id].to_i)
+      @results = @results.where(plants_pubs: {plant_id: @plant.id})
+    end
+    @results = @results.order(sort_column + ' ' + sort_direction)
+                       .page(params[:page]).per(50) 
   end
 
   # GET /fatty_acids/new

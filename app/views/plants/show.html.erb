@@ -228,7 +228,7 @@ function drawBoxPlot(data,el,unit){
       .html(text)
 		})
 		.click(function(d){
-			window.open('<%= results_path(plant_id: @plant.id) %>'+'&measure_id='+d.object.id,'_blank')
+			window.open('/fatty_acids/'+d.object.id+'?plant_id=<%= @plant.id %>')
 		})
 		
 	el.datum(data).call(chart)
