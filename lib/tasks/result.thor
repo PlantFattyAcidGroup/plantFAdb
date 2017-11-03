@@ -47,6 +47,8 @@ class Result < Thor
       @results.pluck(:id).each_slice(999) do |ids|
         puts ::Result.all.where(id: ids).delete_all
       end
+      # IGNORE MEASURE STI
+      Measure.inheritance_column = nil
       PaperTrail.enabled = false
       ::Measure.all.where.not(type: ['FattyAcid', 'Parameter']).destroy_all
     end
