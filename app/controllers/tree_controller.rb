@@ -38,33 +38,8 @@ class TreeController < ApplicationController
   end
   
   def data
-		phyloColors ={
-      plantae: "#EEE",
-      gymnosperms: "#BE9FE6",
-      lycophytes: "#D0D0D0",
-      monilophytes: "#CCC",
-	    spermatophyte: "#E0E0E0",
-	    anita: "#D0ECF2",
-	    angiosperms: "#D3EEF5",
-	    magnoliids: "#86C0CE",
-	    monocots: "#B0D4B7",
-	    commelinids: "#63B384",
-	    eudicots: "#FFF27B",
-	    core_eudicots: "#C6D979",
-	    rosids: "#F4D2DD",
-	    fabids: "#ECB5CA",
-	    malvids: "#E58BAF",
-	    asterids: "#F6D7BA",
-	    lamiids: "#EEB688",
-	    campanulids: "#E6955E",
-      dilleniales: "#FAE7EC",
-      santalales: "#FBEBD7",
-      berberidopsidales: "#FBEBD7",
-      caryophyllales: "#FBEBD7"
-      
-		}
-    tree = TreeNode.arrange_serializable(:order => :id) do |parent, children|
-      max = avg = count = color = nil
+    tree = TreeNode.arrange_serializable(:order => :pos) do |parent, children|
+      max = avg = count = nil
       if children.empty?
         if !params[:measure_id].blank?
           results = Result.joins(:measure, dataset: [plants_pub: [:plant]])
@@ -87,7 +62,6 @@ class TreeController < ApplicationController
         avg = results.average(:value).to_f.try(:round,4)
       end
       name = parent.name.downcase.gsub(' ','_').to_sym
-      color = phyloColors[name]
       {
         id: parent.name,
         name: parent.name,
@@ -96,11 +70,11 @@ class TreeController < ApplicationController
         avg: avg, 
         count: count,
         children: children,
-        color: color,
+        color: parent.color,
         taxon: [parent.name]
       }
     end
-    expires_in 24.hours
+    expires_in 2.hours
     render json: tree
   end
 end

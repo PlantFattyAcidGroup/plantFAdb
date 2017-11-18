@@ -13,6 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui/autocomplete
+//= require jquery-ui/sortable
+//= require jquery.mjs.nestedSortable.js
 //= require autocomplete-rails
 //= require bootstrap-sprockets
 //= require codemirror

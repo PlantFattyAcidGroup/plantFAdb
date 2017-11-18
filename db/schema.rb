@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171021030228) do
+ActiveRecord::Schema.define(version: 20171118155137) do
 
   create_table "datasets", force: :cascade do |t|
     t.string   "remarks"
@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 20171021030228) do
     t.string   "name"
     t.string   "other_names",    limit: 3999
     t.string   "formula"
-    t.string   "cml"
+    t.text     "cml"
     t.string   "inchi"
     t.string   "stdinchi"
     t.string   "stdinchikey"
@@ -189,7 +189,7 @@ ActiveRecord::Schema.define(version: 20171021030228) do
   end
 
   create_table "results", force: :cascade do |t|
-    t.string   "value"
+    t.decimal  "value",          precision: 8, scale: 2
     t.string   "unit"
     t.integer  "measure_id"
     t.integer  "publication_id"
@@ -214,11 +214,14 @@ ActiveRecord::Schema.define(version: 20171021030228) do
   end
 
   create_table "tree_nodes", force: :cascade do |t|
-    t.string "name"
-    t.string "common_name"
-    t.string "note",        limit: 3999
-    t.string "ancestry"
-    t.string "string"
+    t.string  "name"
+    t.string  "common_name"
+    t.string  "note",           limit: 3999
+    t.string  "ancestry"
+    t.string  "string"
+    t.integer "ancestry_depth",              default: 0
+    t.integer "pos",                         default: 0
+    t.string  "color"
   end
 
   add_index "tree_nodes", ["ancestry"], name: "index_tree_nodes_on_ancestry"

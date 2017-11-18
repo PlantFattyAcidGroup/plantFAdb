@@ -1,0 +1,5 @@
+<% if item.color %>
+  <i class='glyphicon glyphicon-record' style='color: <%= item.color %>'></i>
+<% end %>
+<%= link_to 'Edit', edit_tree_node_url(item) %>
+<%= link_to 'Delete', tree_node_url(item), :method => :delete, :data => { :confirm => 'Are you sure?' } %>

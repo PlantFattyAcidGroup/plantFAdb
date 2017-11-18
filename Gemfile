@@ -48,7 +48,8 @@ gem 'local_time'
 gem 'jquery-ui-rails'
 gem 'rails-jquery-autocomplete'
 gem 'roo'
-
+gem 'sortable_tree_rails'
+gem 'haml'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

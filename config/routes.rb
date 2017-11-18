@@ -25,6 +25,12 @@ Rails.application.routes.draw do
     get 'data', on: :collection
   end
   resources :datasets
+  resources :tree_nodes do
+    get :manage, on: :collection
+    collection do
+       post :sort
+    end
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

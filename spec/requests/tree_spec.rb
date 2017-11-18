@@ -1,7 +1,7 @@
 describe 'Tree', :type => :request do
-  let!(:seed_plants) {TreeNode.create name: 'Spermatophyte', note: 'Seed Plants'}
-  let!(:dill) {seed_plants.children.create name: 'Dilleniales'}
-  let!(:gymno) {seed_plants.children.create name: 'Gymnosperms'}
+  let!(:seed_plants) {TreeNode.create name: 'Spermatophyte', note: 'Seed Plants', color: '#E0E0E0'}
+  let!(:dill) {seed_plants.children.create name: 'Dilleniales', color: '#FAE7EC'}
+  let!(:gymno) {seed_plants.children.create name: 'Gymnosperms', color: '#BE9FE6'}
   let!(:d1) {create(:dataset)}
   let!(:d2) {create(:dataset)}
   let!(:fa1) {create(:fatty_acid, category: 'foo')}
@@ -38,6 +38,7 @@ describe 'Tree', :type => :request do
             "children"=> [],"color"=> "#FAE7EC","taxon"=> ["Dilleniales"]},
           {"id"=> "Gymnosperms","name"=> "Gymnosperms","note"=> nil,"max"=>0.0,"avg"=> 0.0,"count"=> 0,"children"=> [],"color"=> "#BE9FE6","taxon"=> ["Gymnosperms"]}
         ],"color"=>"#E0E0E0","taxon"=>["Spermatophyte"]}].to_json
+      expect(data).to eq expected
     end
     scenario 'by category' do
       get data_tree_index_path(category: 'bar')
@@ -51,6 +52,7 @@ describe 'Tree', :type => :request do
             "children"=> [],"color"=> "#FAE7EC","taxon"=> ["Dilleniales"]},
           {"id"=> "Gymnosperms","name"=> "Gymnosperms","note"=> nil,"max"=>0.0,"avg"=> 0.0,"count"=> 0,"children"=> [],"color"=> "#BE9FE6","taxon"=> ["Gymnosperms"]}
         ],"color"=>"#E0E0E0","taxon"=>["Spermatophyte"]}].to_json
+      expect(data).to eq expected
     end
   end
   context 'Plant Yield' do
@@ -91,6 +93,7 @@ describe 'Tree', :type => :request do
         "id"=>["Dillenia",d2.species],"name"=>"Dillenia #{d2.species}","common_name"=>["Dillenia",d2.species],
         "max"=>20.0,"avg"=>17.5,"count"=>2,"taxon"=>["Dilleniales","Dilleniaceae",["Dillenia",d2.species]
       ]}].to_json
+      expect(data).to eq expected
     end
   end
 end

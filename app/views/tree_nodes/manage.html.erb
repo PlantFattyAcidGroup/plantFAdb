@@ -1,0 +1,22 @@
+<% content_for :title do -%>
+ Manage Tree Nodes
+<% end -%>
+
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Manage Tree Nodes</h1>
+  <p>
+    Use the table below to manage the Tree. You can drag and drop rows to move items in the tree. The tree graphic will match what is displayed here.
+  </p>
+  <p>
+    You can edit nodes to change name, note and color. Name is displayed on the tree. Note is displayed on mouseover.
+  </p>
+  <p>
+    Any Node without a color will default to the parent's color.
+  </p>
+<% end %>
+
+<% content_for :item_bar do -%>
+  <%= link_to 'Add Tree Node', new_tree_node_path, class: 'btn btn-primary' %>
+<% end -%>
+
+<%= render_sortable_tree(@items, {name_method: :name, sort_url: sort_tree_nodes_url, max_levels: 10, controls_partial: 'controls'}) %>
