@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20171118155137) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "datasets", force: :cascade do |t|
     t.string   "remarks"
     t.string   "notes"
@@ -48,12 +51,12 @@ ActiveRecord::Schema.define(version: 20171118155137) do
     t.text     "object_changes"
   end
 
-  add_index "drafts", ["created_at"], name: "index_drafts_on_created_at"
-  add_index "drafts", ["event"], name: "index_drafts_on_event"
-  add_index "drafts", ["item_id"], name: "index_drafts_on_item_id"
-  add_index "drafts", ["item_type"], name: "index_drafts_on_item_type"
-  add_index "drafts", ["updated_at"], name: "index_drafts_on_updated_at"
-  add_index "drafts", ["whodunnit"], name: "index_drafts_on_whodunnit"
+  add_index "drafts", ["created_at"], name: "index_drafts_on_created_at", using: :btree
+  add_index "drafts", ["event"], name: "index_drafts_on_event", using: :btree
+  add_index "drafts", ["item_id"], name: "index_drafts_on_item_id", using: :btree
+  add_index "drafts", ["item_type"], name: "index_drafts_on_item_type", using: :btree
+  add_index "drafts", ["updated_at"], name: "index_drafts_on_updated_at", using: :btree
+  add_index "drafts", ["whodunnit"], name: "index_drafts_on_whodunnit", using: :btree
 
   create_table "measures", force: :cascade do |t|
     t.string   "type"
@@ -66,7 +69,7 @@ ActiveRecord::Schema.define(version: 20171118155137) do
     t.string   "pubchem_id"
     t.string   "chebi_id"
     t.text     "structure"
-    t.string   "mass"
+    t.float    "mass"
     t.string   "name"
     t.string   "other_names",    limit: 3999
     t.string   "formula"
@@ -92,8 +95,6 @@ ActiveRecord::Schema.define(version: 20171118155137) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
-
-  add_index "names", ["measure_id"], name: "index_names_on_measure_id"
 
   create_table "pages", force: :cascade do |t|
     t.string "title"
@@ -143,8 +144,8 @@ ActiveRecord::Schema.define(version: 20171118155137) do
     t.integer  "user_id"
   end
 
-  add_index "plants_pubs", ["plant_id"], name: "index_plants_pubs_on_plant_id"
-  add_index "plants_pubs", ["pub_id"], name: "index_plants_pubs_on_pub_id"
+  add_index "plants_pubs", ["plant_id"], name: "index_plants_pubs_on_plant_id", using: :btree
+  add_index "plants_pubs", ["pub_id"], name: "index_plants_pubs_on_pub_id", using: :btree
 
   create_table "publications", force: :cascade do |t|
     t.string   "year"
@@ -159,7 +160,7 @@ ActiveRecord::Schema.define(version: 20171118155137) do
     t.string   "sofa_tab_id"
   end
 
-  add_index "publications", ["plant_id"], name: "index_publications_on_plant_id"
+  add_index "publications", ["plant_id"], name: "index_publications_on_plant_id", using: :btree
 
   create_table "pubs", force: :cascade do |t|
     t.string   "year"
@@ -205,8 +206,8 @@ ActiveRecord::Schema.define(version: 20171118155137) do
     t.integer  "dataset_id"
   end
 
-  add_index "results", ["measure_id"], name: "index_results_on_measure_id"
-  add_index "results", ["publication_id"], name: "index_results_on_publication_id"
+  add_index "results", ["measure_id"], name: "index_results_on_measure_id", using: :btree
+  add_index "results", ["publication_id"], name: "index_results_on_publication_id", using: :btree
 
   create_table "sofa_tabs", force: :cascade do |t|
     t.integer "pub_id"
@@ -224,7 +225,7 @@ ActiveRecord::Schema.define(version: 20171118155137) do
     t.string  "color"
   end
 
-  add_index "tree_nodes", ["ancestry"], name: "index_tree_nodes_on_ancestry"
+  add_index "tree_nodes", ["ancestry"], name: "index_tree_nodes_on_ancestry", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -249,10 +250,10 @@ ActiveRecord::Schema.define(version: 20171118155137) do
     t.datetime "locked_at"
   end
 
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true
+  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false
@@ -264,6 +265,8 @@ ActiveRecord::Schema.define(version: 20171118155137) do
     t.datetime "created_at"
   end
 
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  add_foreign_key "results", "measures"
+  add_foreign_key "results", "publications"
 end

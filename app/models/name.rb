@@ -9,10 +9,6 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-# Indexes
-#
-#  index_names_on_measure_id  (measure_id)
-#
 
 class Name < ActiveRecord::Base
   belongs_to :measure

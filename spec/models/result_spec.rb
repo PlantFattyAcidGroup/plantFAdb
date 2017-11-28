@@ -3,7 +3,7 @@
 # Table name: results
 #
 #  id             :integer          not null, primary key
-#  value          :string
+#  value          :decimal(8, 2)
 #  unit           :string
 #  measure_id     :integer
 #  publication_id :integer
@@ -22,6 +22,11 @@
 #
 #  index_results_on_measure_id      (measure_id)
 #  index_results_on_publication_id  (publication_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (measure_id => measures.id)
+#  fk_rails_...  (publication_id => publications.id)
 #
 
 require 'rails_helper'

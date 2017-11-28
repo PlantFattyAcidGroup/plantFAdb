@@ -151,7 +151,7 @@ class PlantsController < ApplicationController
     end
     
     def sort_column
-      col = ['genus','species', 'common_name', 'family', 'order_name','avg_oil_content','pub_count', 'result_count'].find{|c| c==params[:sort]}
+      col = ['genus','species', 'common_name', 'family', 'order_name','avg_oil_content','pub_count', 'result_count', 'variety'].find{|c| c==params[:sort]}
       col || "plants.genus, plants.species"
     end
 end

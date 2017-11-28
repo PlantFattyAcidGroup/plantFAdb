@@ -7,7 +7,7 @@ class CreatePublications < ActiveRecord::Migration
       t.string :volume
       t.string :page
       t.string :remarks
-      t.belongs_to :plant, index: true, foreign_key: true
+      t.belongs_to :plant, index: true
 
       t.timestamps null: false
     end

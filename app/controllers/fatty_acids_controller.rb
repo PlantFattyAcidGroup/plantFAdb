@@ -24,7 +24,7 @@ class FattyAcidsController < ApplicationController
       @fatty_acids = @fatty_acids.where('
         upper(name) like :q
         OR upper(other_names) LIKE :q
-        OR result_count like :q
+        OR result_count = :f
         OR upper(delta_notation) LIKE :q
         OR upper(cas_number) LIKE :q
         OR upper(sofa_mol_id) LIKE :q

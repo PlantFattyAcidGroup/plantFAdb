@@ -184,6 +184,7 @@ GEM
       activesupport (>= 3.0, < 6.0)
       request_store (~> 1.1.0)
     parallel (1.6.1)
+    pg (0.21.0)
     poltergeist (1.16.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -358,6 +359,7 @@ DEPENDENCIES
   nokogiri
   paper_trail (~> 4.0.0.rc)
   parallel
+  pg
   poltergeist
   progress_bar
   puma

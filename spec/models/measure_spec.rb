@@ -13,11 +13,11 @@
 #  pubchem_id     :string
 #  chebi_id       :string
 #  structure      :text
-#  mass           :string
+#  mass           :float
 #  name           :string
 #  other_names    :string(3999)
 #  formula        :string
-#  cml            :string
+#  cml            :text
 #  inchi          :string
 #  stdinchi       :string
 #  stdinchikey    :string

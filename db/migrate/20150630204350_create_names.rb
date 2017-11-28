@@ -3,7 +3,7 @@ class CreateNames < ActiveRecord::Migration
     create_table :names do |t|
       t.string :type
       t.string :name
-      t.references :measure, index: true, foreign_key: true
+      t.references :measure
 
       t.timestamps null: false
     end
